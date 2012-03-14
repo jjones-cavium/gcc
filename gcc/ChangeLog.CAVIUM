@@ -1,3 +1,16 @@
+2015-03-17  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #8304
+	Back ported
+
+	2012-03-14  Richard Guenther  <rguenther@suse.de>
+
+	PR middle-end/52584
+	* tree-vect-generic.c (type_for_widest_vector_mode): Take
+	element type instead of mode, use build_vector_type_for_mode
+	instead of the langhook, build a vector of proper signedness.
+	(expand_vector_operations_1): Adjust.
+
 2015-01-28  Andrew Pinski  <apinski@cavium.com>
 
 	* config.gcc (arm*-*-linux*): Recognize all of montavista vendor.

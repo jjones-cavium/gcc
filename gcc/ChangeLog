@@ -507,6 +507,14 @@
 	from DECL_BIT_FIELD_REPRESENTATIVE.
 	(expand_assignment): Adjust call to get_bit_range.
 
+2012-03-14  Richard Guenther  <rguenther@suse.de>
+
+	PR middle-end/52584
+	* tree-vect-generic.c (type_for_widest_vector_mode): Take
+	element type instead of mode, use build_vector_type_for_mode
+	instead of the langhook, build a vector of proper signedness.
+	(expand_vector_operations_1): Adjust.
+
 2012-11-14  Jan Hubicka  <jh@suse.cz>
 
 	* tree.c (set_call_expr_flags): New function.
