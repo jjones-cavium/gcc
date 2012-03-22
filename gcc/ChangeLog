@@ -1,5 +1,12 @@
 2012-03-22  Jakub Jelinek  <jakub@redhat.com>
 
+	PR middle-end/52547
+	* tree-nested.c (convert_tramp_reference_stmt): Call declare_vars
+	on any new_local_var_chain vars declared during recursing on
+	GIMPLE_OMP_PARALLEL or GIMPLE_OMP_TASK body.
+
+2012-03-22  Jakub Jelinek  <jakub@redhat.com>
+
 	Backported from mainline
 	2012-03-13  Jakub Jelinek  <jakub@redhat.com>
  
