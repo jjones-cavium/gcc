@@ -1,3 +1,8 @@
+2012-03-27  Richard Guenther  <rguenther@suse.de>
+
+	PR middle-end/52720
+	* gcc.dg/torture/pr52720.c: New testcase.
+
 2013-11-26  Yufeng  <yufeng.zhang@arm.com>
 
 	* gcc.target/arm/20131120.c: New test.

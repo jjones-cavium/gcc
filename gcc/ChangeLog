@@ -1,3 +1,9 @@
+2012-03-27  Richard Guenther  <rguenther@suse.de>
+
+	PR middle-end/52720
+	* fold-const.c (try_move_mult_to_index): Handle &x.array more
+	explicitely.
+
 2013-11-26  Yufeng  <yufeng.zhang@arm.com>
 
 	* config/arm/arm.c (arm_legitimize_address): Check xop1 is not
