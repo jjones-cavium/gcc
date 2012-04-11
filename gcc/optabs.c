@@ -3032,6 +3032,47 @@ expand_unop (enum machine_mode mode, optab unoptab, rtx op0, rtx target,
   if (unoptab == bswap_optab)
     {
       /* FIXME: Handle floating point modes here */
+      /* HImode is special because in this mode BSWAP is equivalent to ROTATE
+	 or ROTATERT.  First try these directly; if this fails, then try the
+	 obvious pair of shifts with allowed widening, as this will probably
+	 be always more efficient than the other fallback methods.  */
+      if (mode == HImode)
+	{
+	  rtx last, temp1, temp2;
+
+	  if (optab_handler (rotl_optab, mode) != CODE_FOR_nothing)
+	    {
+	      temp = expand_binop (mode, rotl_optab, op0, GEN_INT (8), target,
+				   unsignedp, OPTAB_DIRECT);
+	      if (temp)
+		return temp;
+	     }
+
+	  if (optab_handler (rotr_optab, mode) != CODE_FOR_nothing)
+	    {
+	      temp = expand_binop (mode, rotr_optab, op0, GEN_INT (8), target,
+				   unsignedp, OPTAB_DIRECT);
+	      if (temp)
+		return temp;
+	    }
+
+	  last = get_last_insn ();
+
+	  temp1 = expand_binop (mode, ashl_optab, op0, GEN_INT (8), NULL_RTX,
+			        unsignedp, OPTAB_WIDEN);
+	  temp2 = expand_binop (mode, lshr_optab, op0, GEN_INT (8), NULL_RTX,
+			        unsignedp, OPTAB_WIDEN);
+	  if (temp1 && temp2)
+	    {
+	      temp = expand_binop (mode, ior_optab, temp1, temp2, target,
+				   unsignedp, OPTAB_WIDEN);
+	      if (temp)
+		return temp;
+	    }
+
+	  delete_insns_since (last);
+	}
+
       temp = widen_bswap (mode, op0, target);
       if (temp)
 	return temp;
@@ -3223,10 +3264,10 @@ expand_unop (enum machine_mode mode, optab unoptab, rtx op0, rtx target,
 	      /* For certain operations, we need not actually extend
 		 the narrow operand, as long as we will truncate the
 		 results to the same narrowness.  */
-
 	      xop0 = widen_operand (xop0, wider_mode, mode, unsignedp,
 				    (unoptab == neg_optab
-				     || unoptab == one_cmpl_optab)
+				     || unoptab == one_cmpl_optab
+				     || unoptab == bswap_optab)
 				    && mclass == MODE_INT);
 
 	      temp = expand_unop (wider_mode, unoptab, xop0, NULL_RTX,
@@ -3240,6 +3281,20 @@ expand_unop (enum machine_mode mode, optab unoptab, rtx op0, rtx target,
 				     GEN_INT (GET_MODE_PRECISION (wider_mode)
 					      - GET_MODE_PRECISION (mode)),
 				     target, true, OPTAB_DIRECT);
+
+	      /* Likewise for bswap.  */
+	      if (unoptab == bswap_optab && temp != 0)
+		{
+		  gcc_assert (GET_MODE_PRECISION (wider_mode)
+			      == GET_MODE_BITSIZE (wider_mode)
+			      && GET_MODE_PRECISION (mode)
+				 == GET_MODE_BITSIZE (mode));
+
+		  temp = expand_shift (RSHIFT_EXPR, wider_mode, temp,
+				       GET_MODE_BITSIZE (wider_mode)
+				       - GET_MODE_BITSIZE (mode),
+				       NULL_RTX, true);
+		}
 
 	      if (temp)
 		{
