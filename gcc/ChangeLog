@@ -1,5 +1,10 @@
 2012-04-24  Andrew Pinski  <apinski@cavium.com>
 
+	* tree-ssa-forwprop.c (simplify_bitwise_binary):
+	Don't directly use def1/def2.
+
+2012-04-24  Andrew Pinski  <apinski@cavium.com>
+
 	PR tree-opt/33512
 	* tree-ssa-forwprop.c (defcodefor_name): New function.
 	(simplify_bitwise_binary): Use defcodefor_name instead of manually
