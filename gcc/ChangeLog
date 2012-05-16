@@ -1,3 +1,8 @@
+2012-05-16  Andrew Pinski  <apinski@cavium.com>
+
+	* gimple-fold.c (get_maxval_strlen): Move COND_EXPR handling under
+	GIMPLE_ASSIGN.
+
 2012-03-12  Andrew Pinski  <apinski@cavium.com>
 
 	* tree-ssa-phiopt.c (single_non_singleton_phi_for_edges): New function.
