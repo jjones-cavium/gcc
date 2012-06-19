@@ -14,6 +14,13 @@
 	* combine.c (force_to_mode): Fix comment typo.  Don't destructively
 	modify x for ROTATE, ROTATERT and IF_THEN_ELSE.
 
+2012-06-19  Joseph Myers  <joseph@codesourcery.com>
+
+	* config/rs6000/spe.md (*mov_si<mode>_e500_subreg0): Rename to
+	mov_si<mode>_e500_subreg0.
+	(*mov_si<mode>_e500_subreg0_elf_low)
+	(*mov_si<mode>_e500_subreg4_elf_low): New patterns.
+
 2012-09-26  Ian Lance Taylor  <iant@google.com>
 
 	* diagnostic.c (bt_callback): Cast pc when calling fprintf.

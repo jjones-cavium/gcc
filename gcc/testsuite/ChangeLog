@@ -255,6 +255,11 @@
 	* g++.dg/asan/asan_test.cc: Sync from upstream.
 	* g++.dg/asan/asan_test_utils.h: Likewise.
 
+2012-06-19  Joseph Myers  <joseph@codesourcery.com>
+
+	* gcc.c-torture/compile/vector-5.c,
+	gcc.c-torture/compile/vector-6.c: New tests.
+
 2012-06-04  Richard Guenther  <rguenther@suse.de>
 	Eric Botcazou  <ebotcazou@adacore.com>
 
