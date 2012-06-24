@@ -1,3 +1,8 @@
+2012-06-24  Richard Sandiford  <rdsandiford@googlemail.com>
+
+	* config/mips/mips.c (mips_process_sync_loop): Add missing
+	enum cast.
+
 2012-09-03  Andrew Pinski  <apinski@cavium.com>
 
 	PR tree-opt/53395
