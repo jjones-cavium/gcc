@@ -1,3 +1,8 @@
+2012-06-25  Jason Merrill  <jason@redhat.com>
+
+	PR c++/53202
+	* g++.dg/cpp0x/constexpr-tuple.C: New.
+
 2012-08-31  Ollie Wild  <aaw@google.com>
 
 	PR c++/54197
