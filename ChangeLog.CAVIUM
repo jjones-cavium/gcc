@@ -1,5 +1,0 @@
-2012-07-13  Andrew Pinski  <apinski@cavium.com>
-
-        * configure.ac: Set PLUGIN_LD to just "ld" if it was "ld-new".
-        * configure: Regenerate.
-
