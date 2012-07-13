@@ -1224,6 +1224,7 @@ init_optimization_passes (void)
 	  NEXT_PASS (pass_build_ealias);
 	  NEXT_PASS (pass_sra_early);
 	  NEXT_PASS (pass_fre);
+	  NEXT_PASS (pass_merge_common_code);
 	  NEXT_PASS (pass_copy_prop);
 	  NEXT_PASS (pass_merge_phi);
 	  NEXT_PASS (pass_cd_dce);
@@ -1299,6 +1300,7 @@ init_optimization_passes (void)
       NEXT_PASS (pass_return_slot);
       NEXT_PASS (pass_phiprop);
       NEXT_PASS (pass_fre);
+      NEXT_PASS (pass_merge_common_code);
       NEXT_PASS (pass_copy_prop);
       NEXT_PASS (pass_merge_phi);
       NEXT_PASS (pass_vrp);
@@ -1337,6 +1339,7 @@ init_optimization_passes (void)
       NEXT_PASS (pass_optimize_bswap);
       NEXT_PASS (pass_split_crit_edges);
       NEXT_PASS (pass_pre);
+      NEXT_PASS (pass_merge_common_code);
       NEXT_PASS (pass_sink_code);
       NEXT_PASS (pass_tree_loop);
 	{
