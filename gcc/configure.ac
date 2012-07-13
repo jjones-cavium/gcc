@@ -2010,6 +2010,11 @@ fi])
 
 ORIGINAL_PLUGIN_LD_FOR_TARGET=$gcc_cv_ld
 PLUGIN_LD=`basename $gcc_cv_ld`
+# if the PLUGIN_LD is set ld-new, just have it as ld
+# as that is the installed named.
+if test x$PLUGIN_LD == xld-new; then
+  PLUGIN_LD=ld
+fi
 AC_ARG_WITH(plugin-ld,
 [AS_HELP_STRING([[--with-plugin-ld=[ARG]]], [specify the plugin linker])],
 [if test x"$withval" != x; then
