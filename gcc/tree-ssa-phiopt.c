@@ -343,26 +343,42 @@ tree_ssa_phiopt_worker (bool do_store_elim)
 	  gimple_seq phis = phi_nodes (bb2);
 	  gimple_stmt_iterator gsi;
 	  bool candorest = true;
+	  tree rhs;
 
 	  /* Value replacement can work with more than one PHI
 	     so try that first. */
-	  for (gsi = gsi_start (phis); !gsi_end_p (gsi); gsi_next (&gsi))
+	  for (gsi = gsi_start (phis); !gsi_end_p (gsi); )
 	    {
+	      int result;
 	      phi = gsi_stmt (gsi);
 	      arg0 = gimple_phi_arg_def (phi, e1->dest_idx);
 	      arg1 = gimple_phi_arg_def (phi, e2->dest_idx);
-	      if (value_replacement (bb, bb1, e1, e2, phi, arg0, arg1) == 2)
+	      result = value_replacement (bb, bb1, e1, e2, phi, arg0, arg1);
+	      if (result == 2)
 		{
 		  candorest = false;
 	          cfgchanged = true;
 		  break;
 		}
+	      if (result == 1 && (rhs = degenerate_phi_result (phi)))
+		{
+		  tree lhs = PHI_RESULT (phi);
+		  if (is_gimple_reg (lhs)
+		      && may_propagate_copy (lhs, rhs)
+		      && loop_depth_of_name (lhs) >= loop_depth_of_name (rhs))
+		    replace_uses_by (lhs, rhs);
+		  remove_phi_node (&gsi, true);
+		}
+	      else
+		gsi_next (&gsi);
 	    }
 
 	  if (!candorest)
 	    continue;
 	  
 	  phi = single_non_singleton_phi_for_edges (phis, e1, e2);
+
+	  /* Check to make sure that there is only one PHI node. */
 	  if (!phi)
 	    continue;
 

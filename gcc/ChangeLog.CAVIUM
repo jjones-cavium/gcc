@@ -1,0 +1,10 @@
+2012-07-13  Andrew Pinski  <apinski@cavium.com>
+
+	* tree-ssa-phiopt.c (tree_ssa_phiopt_worker): Prop
+	the phi result if value_remplacement returns 1.
+
+2012-07-13  Andrew Pinski  <apinski@cavium.com>
+
+        * configure.ac: Set PLUGIN_LD to just "ld" if it was "ld-new".
+        * configure: Regenerate.
+
