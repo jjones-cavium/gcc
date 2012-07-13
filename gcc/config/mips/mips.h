@@ -1133,6 +1133,7 @@ struct mips_cpu_info {
 %{msmartmips} %{mno-smartmips} \
 %{mmt} %{mno-mt} \
 %{mfix-vr4120} %{mfix-vr4130} \
+%{mfix-cn63xxp1} %{mno-fix-cn63xxp1} \
 %{mfix-24k} \
 %{noasmopt:-O0; O0|fno-delayed-branch:-O1; O*:-O2; :-O1} \
 %(subtarget_asm_debugging_spec) \
