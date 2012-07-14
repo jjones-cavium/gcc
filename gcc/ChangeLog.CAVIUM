@@ -1,4 +1,10 @@
 2012-07-13  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4258
+	* config/mips/mips.c (mips_delegitimize_address): New function.
+	(TARGET_DELEGITIMIZE_ADDRESS): Define.
+
+2012-07-13  Andrew Pinski  <apinski@cavium.com>
             Chandrakala Chavva  <cchavva@caviumnetworks.com>
 
 	* config/mips/mips.opt (mfix-cn63xxp1): New option.
