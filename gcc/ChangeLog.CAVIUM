@@ -1,3 +1,8 @@
+2012-07-15  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.c-torture/unsorted/dump-noaddr.x (dump_compare): Use
+        an absolute dump base instead of a relative one.
+
 2012-07-13  Andrew Pinski  <apinski@cavium.com>
  
 	* opts.c (default_options_table): Enable unroll-loops at -O3 and above.
