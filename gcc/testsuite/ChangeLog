@@ -1,3 +1,7 @@
+2012-07-16  Andrew Pinski  <apinski@cavium.com>
+
+	* gcc.dg/torture/builtins-1.c: New testcase.
+
 2012-07-13  Andrew Pinski  <apinski@cavium.com>
 
 	* gcc.target/mips/octeon2-pipe-1.c: Use cleanup-rtl-dump
