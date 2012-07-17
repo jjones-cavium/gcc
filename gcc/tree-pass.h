@@ -383,6 +383,7 @@ extern struct gimple_opt_pass pass_vectorize;
 extern struct gimple_opt_pass pass_slp_vectorize;
 extern struct gimple_opt_pass pass_complete_unroll;
 extern struct gimple_opt_pass pass_complete_unrolli;
+extern struct gimple_opt_pass pass_profile_loop_bounds;
 extern struct gimple_opt_pass pass_parallelize_loops;
 extern struct gimple_opt_pass pass_loop_prefetch;
 extern struct gimple_opt_pass pass_iv_optimize;

@@ -1288,6 +1288,7 @@ init_optimization_passes (void)
 	 They ensure memory accesses are not indirect wherever possible.  */
       NEXT_PASS (pass_strip_predict_hints);
       NEXT_PASS (pass_rename_ssa_copies);
+      NEXT_PASS (pass_profile_loop_bounds);
       NEXT_PASS (pass_complete_unrolli);
       NEXT_PASS (pass_ccp);
       NEXT_PASS (pass_forwprop);
