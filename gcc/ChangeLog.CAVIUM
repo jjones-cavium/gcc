@@ -1,3 +1,8 @@
+2012-07-16  Andrew Pinski  <apinski@cavium.com>
+
+	* expmed.c (store_fixed_bit_field): Special case the storing
+        of the whole field.
+
 2012-07-16  Adam Nemet  <anemet@caviumnetworks.com>
             Andrew Pinski  <apinski@cavium.com>
 

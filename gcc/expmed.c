@@ -1055,6 +1055,14 @@ store_fixed_bit_field (rtx op0, unsigned HOST_WIDE_INT offset,
 			      bitpos, NULL_RTX, 1);
     }
 
+  /* Handle the case where we are storing all
+     of the value into op0. */
+  if (bitpos == 0 && GET_MODE_BITSIZE (mode) == bitsize)
+    {
+      emit_move_insn (op0, value);
+      return;
+    }
+
   /* Now clear the chosen bits in OP0,
      except that if VALUE is -1 we need not bother.  */
   /* We keep the intermediates in registers to allow CSE to combine
