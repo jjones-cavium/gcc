@@ -1,3 +1,9 @@
+2012-07-16  Andrew Pinski  <apinski@cavium.com>
+
+        * opts.c (default_options_table): Turn on
+        register pressure sensitive instruction
+        scheduling at -O3 and above.
+
 2012-07-16  Adam Nemet  <anemet@caviumnetworks.com>
             Andrew Pinski  <apinski@cavium.com>
 

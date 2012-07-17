@@ -492,6 +492,7 @@ static const struct default_options default_options_table[] =
 
     /* -O3 optimizations.  */
     { OPT_LEVELS_3_PLUS, OPT_ftree_loop_distribute_patterns, NULL, 1 },
+    { OPT_LEVELS_3_PLUS, OPT_fsched_pressure, NULL, 1 },
     { OPT_LEVELS_3_PLUS, OPT_fpredictive_commoning, NULL, 1 },
     /* Inlining of functions reducing size is a good idea with -Os
        regardless of them being declared inline.  */
