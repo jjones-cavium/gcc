@@ -2857,6 +2857,27 @@
   "nor\t%0,%1,%2"
   [(set_attr "alu_type" "nor")
    (set_attr "mode" "<MODE>")])
+
+
+;; Endian byte swaps
+;; FIXME: Use a split
+(define_insn "bswapdi2"
+  [(set (match_operand:DI 0 "register_operand" "=&d")
+	(bswap:DI (match_operand:DI 1 "register_operand" "d")))]
+  "TARGET_64BIT && ISA_HAS_SBWH"
+  "dsbh\t%0,%1\n\tdshd\t%0,%0"
+  [(set_attr "type" "logical")
+   (set_attr "mode" "DI")
+   (set_attr "length" "8")])
+
+(define_insn "bswapsi2"
+  [(set (match_operand:SI 0 "register_operand" "=&d")
+	(bswap:SI (match_operand:SI 1 "register_operand" "d")))]
+  "ISA_HAS_SBWH"
+  "wsbh\t%0,%1\n\trotr\t%0,%0,16"
+  [(set_attr "type" "logical")
+   (set_attr "mode" "SI")
+   (set_attr "length" "8")])
 
 ;;
 ;;  ....................

@@ -1,3 +1,12 @@
+2012-07-15  Andrew Pinski  <apinski@caviumnetworks.com>
+
+        Bug #3154
+        * config/mips/mips.md (bswapdi2): New instruction pattern.
+        (bswapsi2): Likewise.
+        * config/mips/mips.h (ISA_HAS_SBWH): New ISA define.
+        * testsuite/gcc.c-torture/execute/bswap-1.c: New test.
+        * testsuite/gcc.target/mips/bswap-1.c: New test.
+
 2012-07-15  Andrew Pinski  <apinski@cavium.com>
 
         Bug #4290
