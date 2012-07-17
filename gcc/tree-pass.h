@@ -416,6 +416,7 @@ extern struct gimple_opt_pass pass_object_sizes;
 extern struct gimple_opt_pass pass_strlen;
 extern struct gimple_opt_pass pass_fold_builtins;
 extern struct gimple_opt_pass pass_merge_common_code;
+extern struct gimple_opt_pass pass_merge_const_bfstores;
 extern struct gimple_opt_pass pass_stdarg;
 extern struct gimple_opt_pass pass_early_warn_uninitialized;
 extern struct gimple_opt_pass pass_late_warn_uninitialized;
