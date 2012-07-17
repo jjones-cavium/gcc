@@ -989,6 +989,11 @@ struct mips_cpu_info {
 				  || ISA_MIPS64R2)	\
 				 && !TARGET_MIPS16)
 
+/* ISA includes the MIPS32/64 rev 2 Swap Bytes Within Halfwords. */
+#define ISA_HAS_SBWH		((ISA_MIPS32R2		\
+				  || ISA_MIPS64R2)	\
+				 && !TARGET_MIPS16)
+
 /* ISA has instructions for accessing top part of 64-bit fp regs.  */
 #define ISA_HAS_MXHC1		(TARGET_FLOAT64		\
 				 && (ISA_MIPS32R2	\
