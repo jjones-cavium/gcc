@@ -1,10 +1,16 @@
+2012-05-24  Andrew Pinski  <apinski@cavium.com>
+
+        start of bug #4296
+        * config/mips/mips.c (mips_rtx_cost_data): Add movz cost.
+	(mips_cpu_info_table): Set movz for Octeon to 2 and Octeon2 to 3.
+	(mips_rtx_costs <case IF_THEN_ELSE>): Return mips_cost->movz.
+
 2012-07-15  Andrew Pinski  <apinski@caviumnetworks.com>
 
         Bug #3154
         * config/mips/mips.md (bswapdi2): New instruction pattern.
         (bswapsi2): Likewise.
         * config/mips/mips.h (ISA_HAS_SBWH): New ISA define.
-        * testsuite/gcc.c-torture/execute/bswap-1.c: New test.
         * testsuite/gcc.target/mips/bswap-1.c: New test.
 
 2012-07-15  Andrew Pinski  <apinski@cavium.com>

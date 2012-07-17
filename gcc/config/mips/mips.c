@@ -476,6 +476,7 @@ struct mips_rtx_cost_data
   unsigned short int_mult_di;
   unsigned short int_div_si;
   unsigned short int_div_di;
+  unsigned short movz;
   unsigned short branch_cost;
   unsigned short memory_latency;
 };
@@ -693,6 +694,7 @@ static const struct mips_cpu_info mips_cpu_info_table[] = {
                       COSTS_N_INSNS (10), /* int_mult_di */  \
                       COSTS_N_INSNS (69), /* int_div_si */   \
                       COSTS_N_INSNS (69), /* int_div_di */   \
+		      COSTS_N_INSNS (1),  /* movz */         \
                                        2, /* branch_cost */  \
                                        4  /* memory_latency */
 
@@ -715,6 +717,7 @@ static const struct mips_rtx_cost_data mips_rtx_cost_optimize_size = {
   COSTS_N_INSNS (1),            /* int_mult_di */
   COSTS_N_INSNS (1),            /* int_div_si */
   COSTS_N_INSNS (1),            /* int_div_di */
+  COSTS_N_INSNS (1),		/* movz */
 		   2,           /* branch_cost */
 		   4            /* memory_latency */
 };
@@ -732,6 +735,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (12),           /* int_mult_di */
     COSTS_N_INSNS (35),           /* int_div_si */
     COSTS_N_INSNS (35),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -741,6 +745,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (6),            /* int_mult_di */
     COSTS_N_INSNS (36),           /* int_div_si */
     COSTS_N_INSNS (36),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -750,6 +755,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (36),           /* int_mult_di */
     COSTS_N_INSNS (37),           /* int_div_si */
     COSTS_N_INSNS (37),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -759,6 +765,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (11),           /* int_mult_di */
     COSTS_N_INSNS (36),           /* int_div_si */
     COSTS_N_INSNS (68),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -772,6 +779,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (11),           /* int_mult_di */
     COSTS_N_INSNS (36),           /* int_div_si */
     COSTS_N_INSNS (68),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -785,6 +793,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (7),            /* int_mult_di */
     COSTS_N_INSNS (42),           /* int_div_si */
     COSTS_N_INSNS (72),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -794,6 +803,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (41),           /* int_div_si */
     COSTS_N_INSNS (41),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -807,6 +817,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (41),           /* int_div_si */
     COSTS_N_INSNS (41),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -820,6 +831,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (41),           /* int_div_si */
     COSTS_N_INSNS (41),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -829,6 +841,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (41),           /* int_div_si */
     COSTS_N_INSNS (41),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -842,6 +855,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (41),           /* int_div_si */
     COSTS_N_INSNS (41),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -855,6 +869,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (41),           /* int_div_si */
     COSTS_N_INSNS (41),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -868,6 +883,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (41),           /* int_div_si */
     COSTS_N_INSNS (41),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -890,7 +906,8 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (72),           /* int_div_si */
     COSTS_N_INSNS (72),           /* int_div_di */
-                     1,		  /* branch_cost */
+    COSTS_N_INSNS (2),		  /* movz */
+                     4,		  /* branch_cost */
                      4		  /* memory_latency */
   },
     /* Octeon II */
@@ -900,6 +917,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (6),            /* int_mult_di */
     COSTS_N_INSNS (18),           /* int_div_si */
     COSTS_N_INSNS (35),           /* int_div_di */
+    COSTS_N_INSNS (3),		  /* movz */
                      4,		  /* branch_cost */
                      4		  /* memory_latency */
   },
@@ -913,6 +931,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (2),            /* int_mult_di */
     COSTS_N_INSNS (35),           /* int_div_si */
     COSTS_N_INSNS (35),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -926,6 +945,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (17),           /* int_mult_di */
     COSTS_N_INSNS (38),           /* int_div_si */
     COSTS_N_INSNS (38),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     2,           /* branch_cost */
 		     6            /* memory_latency */
   },
@@ -939,6 +959,7 @@ static const struct mips_rtx_cost_data
      COSTS_N_INSNS (10),          /* int_mult_di */
      COSTS_N_INSNS (69),          /* int_div_si */
      COSTS_N_INSNS (69),          /* int_div_di */
+     COSTS_N_INSNS (1),		  /* movz */
 		      2,          /* branch_cost */
 		      6           /* memory_latency */
   },
@@ -959,6 +980,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (6),            /* int_mult_di */
     COSTS_N_INSNS (69),           /* int_div_si */
     COSTS_N_INSNS (69),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -981,6 +1003,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (5),            /* int_mult_di */
     COSTS_N_INSNS (36),           /* int_div_si */
     COSTS_N_INSNS (36),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -994,6 +1017,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (4),            /* int_mult_di */
     COSTS_N_INSNS (42),           /* int_div_si */
     COSTS_N_INSNS (74),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -1007,6 +1031,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (9),            /* int_mult_di */
     COSTS_N_INSNS (42),           /* int_div_si */
     COSTS_N_INSNS (74),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -1022,6 +1047,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (9),            /* int_mult_di */
     COSTS_N_INSNS (69),           /* int_div_si */
     COSTS_N_INSNS (69),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -1040,6 +1066,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (8),            /* int_mult_di */
     COSTS_N_INSNS (69),           /* int_div_si */
     COSTS_N_INSNS (69),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -1053,6 +1080,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (9),            /* int_mult_di */
     COSTS_N_INSNS (34),           /* int_div_si */
     COSTS_N_INSNS (66),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -1067,6 +1095,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (4),            /* int_mult_di */
     COSTS_N_INSNS (36),           /* int_div_si */
     COSTS_N_INSNS (68),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -1081,6 +1110,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (4),            /* int_mult_di */
     COSTS_N_INSNS (36),           /* int_div_si */
     COSTS_N_INSNS (68),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   },
@@ -1093,6 +1123,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (8),            /* int_mult_di */
     COSTS_N_INSNS (72),           /* int_div_si */
     COSTS_N_INSNS (72),           /* int_div_di */
+    COSTS_N_INSNS (1),		  /* movz */
 		     1,           /* branch_cost */
 		     4            /* memory_latency */
   }
@@ -3939,6 +3970,10 @@ mips_rtx_costs (rtx x, int code, int outer_code, int opno ATTRIBUTE_UNUSED,
     case FLOAT_EXTEND:
     case FLOAT_TRUNCATE:
       *total = mips_cost->fp_add;
+      return false;
+
+    case IF_THEN_ELSE:
+      *total = mips_cost->movz;
       return false;
 
     default:
