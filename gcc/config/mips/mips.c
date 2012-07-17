@@ -16529,6 +16529,16 @@ mips_mulsidi3_gen_fn (enum rtx_code ext_code)
       return signed_p ? gen_mulsidi3_32bit : gen_umulsidi3_32bit;
     }
 }
+
+/* Return a list of modes that can be used for insv and extv.  */
+static enum machine_mode *
+mips_mode_for_extraction_insv (void)
+{
+  static enum machine_mode modes64[] = {SImode, DImode, BLKmode};
+  static enum machine_mode modes32[] = {SImode, BLKmode};
+  return TARGET_64BIT ? modes64 : modes32;
+}
+
 
 /* Return the size in bytes of the trampoline code, padded to
    TRAMPOLINE_ALIGNMENT bits.  The static chain pointer and target
@@ -17646,6 +17656,9 @@ mips_expand_vec_minmax (rtx target, rtx op0, rtx op1,
 #endif
 #undef TARGET_DWARF_REGISTER_SPAN
 #define TARGET_DWARF_REGISTER_SPAN mips_dwarf_register_span
+
+#undef TARGET_MODE_FOR_EXTRACTION_INSV
+#define TARGET_MODE_FOR_EXTRACTION_INSV mips_mode_for_extraction_insv
 
 #undef TARGET_ASM_FINAL_POSTSCAN_INSN
 #define TARGET_ASM_FINAL_POSTSCAN_INSN mips_final_postscan_insn

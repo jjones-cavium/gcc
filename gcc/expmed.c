@@ -333,29 +333,35 @@ mode_for_extraction (enum extraction_pattern pattern, int opno)
   return data->operand[opno].mode;
 }
 
-/* A subroutine of store_bit_field, with the same arguments.  Return true
-   if the operation could be implemented.
+static bool
+store_bit_field_1 (rtx str_rtx, unsigned HOST_WIDE_INT bitsize,
+		   unsigned HOST_WIDE_INT bitnum, 
+		   unsigned HOST_WIDE_INT bitregion_start,
+		   unsigned HOST_WIDE_INT bitregion_end,
+		   enum machine_mode fieldmode,
+		   rtx value, bool fallback_p);
+
+/* A subroutine of store_bit_field, with the same arguments, except OP_MODE is the
+   mode which tried to use for the inseration.  Return true if the operation
+   could be implemented.
 
    If FALLBACK_P is true, fall back to store_fixed_bit_field if we have
    no other way of implementing the operation.  If FALLBACK_P is false,
    return false instead.  */
 
 static bool
-store_bit_field_1 (rtx str_rtx, unsigned HOST_WIDE_INT bitsize,
+store_bit_field_2 (rtx str_rtx, unsigned HOST_WIDE_INT bitsize,
 		   unsigned HOST_WIDE_INT bitnum,
 		   unsigned HOST_WIDE_INT bitregion_start,
 		   unsigned HOST_WIDE_INT bitregion_end,
 		   enum machine_mode fieldmode,
-		   rtx value, bool fallback_p)
+		   rtx value, enum machine_mode op_mode, bool fallback_p)
 {
-  unsigned int unit
-    = (MEM_P (str_rtx)) ? BITS_PER_UNIT : BITS_PER_WORD;
   unsigned HOST_WIDE_INT offset, bitpos;
   rtx op0 = str_rtx;
   int byte_offset;
   rtx orig_value;
-
-  enum machine_mode op_mode = mode_for_extraction (EP_insv, 3);
+  unsigned int unit = (MEM_P (str_rtx)) ? BITS_PER_UNIT : GET_MODE_BITSIZE (op_mode);
 
   while (GET_CODE (op0) == SUBREG)
     {
@@ -804,6 +810,46 @@ store_bit_field_1 (rtx str_rtx, unsigned HOST_WIDE_INT bitsize,
   store_fixed_bit_field (op0, offset, bitsize, bitpos,
 			 bitregion_start, bitregion_end, value);
   return true;
+}
+
+/* A subroutine of store_bit_field, with the same arguments.  Return true
+   if the operation could be implemented.
+
+   If FALLBACK_P is true, fall back to store_fixed_bit_field if we have
+   no other way of implementing the operation.  If FALLBACK_P is false,
+   return false instead.  */
+static bool
+store_bit_field_1 (rtx str_rtx, unsigned HOST_WIDE_INT bitsize,
+		   unsigned HOST_WIDE_INT bitnum, 
+		   unsigned HOST_WIDE_INT bitregion_start,
+		   unsigned HOST_WIDE_INT bitregion_end,
+		   enum machine_mode fieldmode,
+		   rtx value, bool fallback_p)
+{
+  enum machine_mode *modes;
+  enum machine_mode op_mode = mode_for_extraction (EP_insv, 3);
+  if (MEM_P (str_rtx) || targetm.mode_for_extraction_insv == NULL)
+    return store_bit_field_2 (str_rtx, bitsize,
+		   bitnum, bitregion_start,
+		   bitregion_end, fieldmode,
+		   value, op_mode, fallback_p);
+  modes = targetm.mode_for_extraction_insv();
+  gcc_assert (*modes != BLKmode);
+  while (modes[1] != BLKmode)
+    {
+      if (GET_MODE (str_rtx) == *modes)
+	if (store_bit_field_2 (str_rtx, bitsize,
+			       bitnum, bitregion_start,
+			       bitregion_end, fieldmode,
+			       value, *modes, false))
+	  return true;
+      modes++;
+    }
+  
+  return store_bit_field_2 (str_rtx, bitsize,
+			    bitnum, bitregion_start,
+			    bitregion_end, fieldmode,
+			    value, *modes, fallback_p);
 }
 
 /* Generate code to store value from rtx VALUE
