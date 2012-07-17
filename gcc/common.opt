@@ -1602,6 +1602,10 @@ fprofile-values
 Common Report Var(flag_profile_values)
 Insert code to profile values of expressions
 
+fpropagate-block-prob
+Common Var(flag_propagate_block_prob) Init(1)
+Propagate __builtin_block_prob probabilities to preceding blocks
+
 frandom-seed
 Common Var(common_deferred_options) Defer
 

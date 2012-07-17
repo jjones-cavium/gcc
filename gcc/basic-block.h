@@ -170,6 +170,14 @@ struct GTY((chain_next ("%h.next_bb"), chain_prev ("%h.prev_bb"))) basic_block_d
 
   /* Various flags.  See BB_* below.  */
   int flags;
+
+  /* Overall likelyhood of arriving to this bb from all of its predecessors.
+     It is less descriptive as than edge probabilities if there are multiple
+     predecessors.  It's equally descriptive if there is only one predecessor.
+     And it is more descriptive if the predecessor has more than two
+     successors.  The value is biased with REG_BR_PROB_BASE or -1 if
+     unset.  */
+  int probability;
 };
 
 struct GTY(()) rtl_bb_info {
