@@ -475,6 +475,7 @@ static const struct default_options default_options_table[] =
     { OPT_LEVELS_2_PLUS, OPT_freorder_blocks, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_freorder_functions, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_ftree_vrp, NULL, 1 },
+    { OPT_LEVELS_2_PLUS, OPT_fpostreload_load, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_ftree_builtin_call_dce, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_ftree_pre, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_ftree_switch_conversion, NULL, 1 },
