@@ -1493,6 +1493,7 @@ init_optimization_passes (void)
       NEXT_PASS (pass_postreload);
 	{
 	  struct opt_pass **p = &pass_postreload.pass.sub;
+	  NEXT_PASS (pass_postreload_load);
 	  NEXT_PASS (pass_postreload_cse);
 	  NEXT_PASS (pass_gcse2);
 	  NEXT_PASS (pass_split_after_reload);

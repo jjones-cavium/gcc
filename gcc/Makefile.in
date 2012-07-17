@@ -1309,6 +1309,7 @@ OBJS = \
 	pointer-set.o \
 	postreload-gcse.o \
 	postreload.o \
+	postreload-load.o \
 	predict.o \
 	print-rtl.o \
 	print-tree.o \
@@ -3250,6 +3251,9 @@ postreload.o : postreload.c $(CONFIG_H) $(SYSTEM_H) coretypes.h $(TM_H) \
    hard-reg-set.h insn-config.h $(BASIC_BLOCK_H) $(RECOG_H) output.h \
    $(FUNCTION_H) $(DIAGNOSTIC_CORE_H) cselib.h $(TM_P_H) $(EXCEPT_H) $(TREE_H) $(MACHMODE_H) \
    $(OBSTACK_H) $(TARGET_H) $(TIMEVAR_H) $(TREE_PASS_H) $(DF_H) $(DBGCNT_H)
+postreload-load.o : postreload-load.c $(CONFIG_H) $(SYSTEM_H) coretypes.h \
+   $(TM_H) $(RTL_H) $(OBSTACK_H) $(BASIC_BLOCK_H) $(FLAGS_H) $(HASHTAB_H) \
+   timevar.h tree-pass.h $(TM_P_H)
 postreload-gcse.o : postreload-gcse.c $(CONFIG_H) $(SYSTEM_H) coretypes.h \
    $(TM_H) $(RTL_H) $(REGS_H) hard-reg-set.h $(FLAGS_H) insn-config.h \
    $(RECOG_H) $(EXPR_H) $(BASIC_BLOCK_H) $(FUNCTION_H) output.h $(DIAGNOSTIC_CORE_H) \
