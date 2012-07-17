@@ -486,6 +486,7 @@ static const struct default_options default_options_table[] =
     { OPT_LEVELS_2_PLUS, OPT_falign_jumps, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_falign_labels, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_falign_functions, NULL, 1 },
+    { OPT_LEVELS_2_PLUS, OPT_fmerge_const_bfstores, NULL, 1 },
     { OPT_LEVELS_2_PLUS, OPT_ftree_tail_merge, NULL, 1 },
     { OPT_LEVELS_2_PLUS_SPEED_ONLY, OPT_foptimize_strlen, NULL, 1 },
 

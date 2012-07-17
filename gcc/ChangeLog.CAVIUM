@@ -1,6 +1,11 @@
 2012-07-16  Adam Nemet  <anemet@caviumnetworks.com>
             Andrew Pinski  <apinski@cavium.com>
 
+	* opts.c (default_options_table): Enable fmerge-const-bfstores at -O2.
+
+2012-07-16  Adam Nemet  <anemet@caviumnetworks.com>
+            Andrew Pinski  <apinski@cavium.com>
+
 	* opts.c (default_options_table): Enable fpostreload-load at -O2.
 
 2012-07-16  Adam Nemet  <anemet@caviumnetworks.com>
