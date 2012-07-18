@@ -1,3 +1,9 @@
+2012-07-18  Jason Merrill  <jason@redhat.com>
+
+	* cp-demangle.c (cplus_demangle_operators): Add *_cast.
+	(op_is_new_cast): New.
+	(d_expression, d_print_comp): Check it.
+
 2012-05-22  Tom Tromey  <tromey@redhat.com>
 
 	http://sourceware.org/bugzilla/show_bug.cgi?id=14065
