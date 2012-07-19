@@ -1,3 +1,8 @@
+2012-07-18  Andrew Pinski  <apinski@cavium.com>
+
+	* cfgloop.h (exact_loop_iterations_unbounded): Add Prototype.
+	* cfgloopanal.c (exact_loop_iterations_unbounded): New function.
+
 2012-07-16  Andrew Pinski  <apinski@cavium.com>
 
         * tree-pass.h (pass_profile_loop_bounds): New variable.
