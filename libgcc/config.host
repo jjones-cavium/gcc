@@ -744,14 +744,9 @@ mips-sgi-irix6.5*)
 	;;
 mips*-*-netbsd*)			# NetBSD/mips, either endian.
 	;;
-mips64*-*-linux* | mipsisa64*-*-linux*)
-	extra_parts="$extra_parts crtfastmath.o"
-	tmake_file="${tmake_file} t-crtfm mips/t-mips16 mips/t-tpbit"
-	md_unwind_header=mips/linux-unwind.h
-	;;
 mips*-*-linux*)				# Linux MIPS, either endian.
 	extra_parts="$extra_parts crtfastmath.o"
-	tmake_file="${tmake_file} t-crtfm mips/t-mips16"
+	tmake_file="${tmake_file} mips/t-crtstuff t-crtfm mips/t-mips16 mips/t-tpbit"
 	md_unwind_header=mips/linux-unwind.h
 	;;
 mips*-*-openbsd*)
@@ -768,6 +763,11 @@ mips*-sde-elf*)
 	    ;;
 	esac
 	extra_parts="$extra_parts crti.o crtn.o"
+	;;
+mipsisa64-octeon-elf*)
+	tmake_file="$tmake_file mips/t-elf mips/t-crtstuff mips/t-mips16 mips/t-tpbit"
+	extra_parts="$extra_parts crti.o crtn.o"
+	md_unwind_header=mips/octeon-elf-unwind.h
 	;;
 mipsisa32-*-elf* | mipsisa32el-*-elf* | \
 mipsisa32r2-*-elf* | mipsisa32r2el-*-elf* | \
