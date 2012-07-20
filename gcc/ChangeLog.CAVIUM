@@ -1,4 +1,10 @@
 2012-07-19  Andrew Pinski  <apinski@cavium.com>
+
+        * testsuite/gcc.target/mips/mips.exp (mips_option_tests): New test.
+	(mips-dg-options): Treat all
+	cases of -mhard-float as not being able to compile.
+
+2012-07-19  Andrew Pinski  <apinski@cavium.com>
             Adam Nemet  <anemet@caviumnetworks.com>
             Chandrakala Chavva  <cchavva@caviumnetworks.com>
 
