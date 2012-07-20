@@ -1,3 +1,14 @@
+2012-07-20  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #2056
+	* config/mips/mips-protos.h (mips_expand_ext_as_unaligned_load):
+	Add a bool argument.
+	* config/mips/mips.c (mips_block_move_straight): Update call to
+	mips_expand_ext_as_unaligned_load.
+	(mips_expand_ext_as_unaligned_load): Add unsigned_p argument.
+	Accept DImode dest when the width is that of SImode.
+	* testsuite/gcc.target/mips/unaligned-1.c: New testcase.
+
 2012-07-19  Adam Nemet  <anemet@caviumnetworks.com>
 
 	* testsuite/gcc.dg/octeon/README: New file about this directory.
