@@ -1,5 +1,12 @@
 2012-07-20  Andrew Pinski  <apinski@caviumnetworks.com>
 
+        Bug #2942
+        * config/mips/mips.md (*popcountdi2_trunc): New pattern
+        to handle popcount pf a truncation.
+	* testsuite/gcc.target/mips/octeon-pop-2.c: New testcase.
+
+2012-07-20  Andrew Pinski  <apinski@caviumnetworks.com>
+
         Bug #380
         * config/mips/mips.c (mips_expand_ext_as_unaligned_load): Handle
         unaligned loads of 16bits too.

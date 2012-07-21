@@ -2632,6 +2632,14 @@
   "<d>pop\t%0,%1"
   [(set_attr "type" "pop")
    (set_attr "mode" "<MODE>")])
+
+(define_insn "*popcountdi2_trunc"
+  [(set (match_operand:SI 0 "register_operand" "=d")
+	(popcount:SI (truncate:SI (match_operand:DI 1 "register_operand" "d"))))]
+  "ISA_HAS_POP"
+  "pop\t%0,%1"
+  [(set_attr "type" "pop")
+   (set_attr "mode" "SI")])
 
 ;;
 ;;  ....................
