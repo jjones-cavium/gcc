@@ -22,17 +22,17 @@ void bar(void)
   int i;
   str_t s;
 
-  d = ((double (*) (int)) foo1) (i);  /* { dg-warning "33:non-compatible|abort" } */
-  i = ((int (*) (double)) foo1) (d);  /* { dg-warning "33:non-compatible|abort" } */
-  s = ((str_t (*) (int)) foo1) (i);   /* { dg-warning "32:non-compatible|abort" } */
-  ((void (*) (int)) foo1) (d);        /* { dg-warning "non-compatible|abort" } */
+  d = ((double (*) (int)) foo1) (i);  /* { dg-error "33:non-compatible|abort" } */
+  i = ((int (*) (double)) foo1) (d);  /* { dg-error "33:non-compatible|abort" } */
+  s = ((str_t (*) (int)) foo1) (i);   /* { dg-error "32:non-compatible|abort" } */
+  ((void (*) (int)) foo1) (d);        /* { dg-error "non-compatible|abort" } */
   i = ((int (*) (int)) foo1) (i);     /* { dg-bogus "non-compatible|abort" } */
   (void) foo1 (i);                    /* { dg-bogus "non-compatible|abort" } */
 
-  d = ((double (*) (int)) foo2) (i);  /* { dg-warning "33:non-compatible|abort" } */
+  d = ((double (*) (int)) foo2) (i);  /* { dg-error "33:non-compatible|abort" } */
   i = ((int (*) (double)) foo2) (d);  /* { dg-bogus "non-compatible|abort" } */
-  s = ((str_t (*) (int)) foo2) (i);   /* { dg-warning "non-compatible|abort" } */
-  ((void (*) (int)) foo2) (d);        /* { dg-warning "non-compatible|abort" } */
+  s = ((str_t (*) (int)) foo2) (i);   /* { dg-error "non-compatible|abort" } */
+  ((void (*) (int)) foo2) (d);        /* { dg-error "non-compatible|abort" } */
   i = ((int (*) (int)) foo2) (i);     /* { dg-bogus "non-compatible|abort" } */
   (void) foo2 (i);                    /* { dg-bogus "non-compatible|abort" } */
 }

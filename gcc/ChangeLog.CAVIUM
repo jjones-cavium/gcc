@@ -1,3 +1,15 @@
+2012-07-23  Adam Nemet  <anemet@caviumnetworks.com>
+            Andrew Pinski  <apinski@caviumnetworks.com>
+
+        * c-typeck.c (build_function_call): Issue an error rather than
+        a warning when function is called through a non-compatible
+        type and the program would abort at run-time.
+	* testsuite/gcc.c-torture/execute/call-trap-1.c: Remove testcase.
+	* testsuite/gcc.dg/call-diag-2.c: Update the testcase for the error
+	instead of warning.
+	* testsuite/gcc.dg/cast-function-1.c: Likewise.
+	* testsuite/gcc.dg/invalid-call-1.c: Likewise.
+
 2012-07-20  Adam Nemet  <anemet@caviumnetworks.com>
 
 	* testsuite/gcc.dg/octeon/test-backtrace.h: New header.

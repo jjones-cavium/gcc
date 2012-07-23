@@ -2776,6 +2776,7 @@ build_function_call_vec (location_t loc, tree function, VEC(tree,gc) *params,
       tree trap = build_function_call (loc,
 				       builtin_decl_explicit (BUILT_IN_TRAP),
 				       NULL_TREE);
+#if 0
       int i;
 
       /* This situation leads to run-time undefined behavior.  We can't,
@@ -2790,6 +2791,13 @@ build_function_call_vec (location_t loc, tree function, VEC(tree,gc) *params,
       for (i = 0; i < nargs; i++)
 	trap = build2 (COMPOUND_EXPR, void_type_node,
 		       VEC_index (tree, params, i), trap);
+
+#else
+      /* Here we trade standard conformance for user-friendliness
+	 because you can just emit more useful diagnosis at
+	 compile-time.  */
+      error_at (loc, "function %qE called through a non-compatible type", tem);
+#endif
 
       if (VOID_TYPE_P (return_type))
 	{
