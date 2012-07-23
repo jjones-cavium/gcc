@@ -1,3 +1,8 @@
+2012-07-23  Andrew Pinski  <apinski@cavium.com>
+
+        * tree-pretty-print.c (dump_generic_node): Handle MEM_REF
+        with first argument whos type is NULL.
+
 2012-07-23  Andrew Pinski  <apinski@caviumnetworks.com>
 
         Bug #2022
