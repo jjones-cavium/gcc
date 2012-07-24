@@ -80,12 +80,34 @@ recognize_if_then_else (basic_block cond_bb,
     return false;
 
   /* Check if the edge destinations point to the required block.  */
-  if (*then_bb
-      && t->dest != *then_bb)
-    return false;
-  if (*else_bb
-      && e->dest != *else_bb)
-    return false;
+  if ((*then_bb
+       && t->dest != *then_bb)
+      || (*else_bb
+          && e->dest != *else_bb))
+    {
+      gimple stmt;
+      tree cond;
+      edge ee;
+      if ((*then_bb
+       	   && e->dest != *then_bb)
+          || (*else_bb
+	      && t->dest != *else_bb))
+	return false;
+      stmt = last_stmt (cond_bb);
+      cond = fold_build2 (gimple_cond_code (stmt), boolean_type_node,
+			  gimple_cond_lhs (stmt), gimple_cond_rhs (stmt));
+      cond = fold_build1 (TRUTH_NOT_EXPR, TREE_TYPE (cond), cond);
+      /* The opposite of the condition does not reduce so we cannot flip around the condition. */
+      if (!is_gimple_condexpr (cond))
+	return false;
+      e->flags ^= (EDGE_TRUE_VALUE|EDGE_FALSE_VALUE);
+      t->flags ^= (EDGE_TRUE_VALUE|EDGE_FALSE_VALUE);
+      gimple_cond_set_condition_from_tree (stmt, unshare_expr (cond));
+      update_stmt (stmt);
+      ee = e;
+      e = t;
+      t = ee;
+    }
 
   if (!*then_bb)
     *then_bb = t->dest;
@@ -592,12 +614,56 @@ tree_ssa_ifcombine_bb (basic_block inner_cond_bb)
 	  return ifcombine_ifandif (inner_cond_bb, outer_cond_bb);
 	}
 
+      /* The && form is characterized by a common else_bb with
+	 the two edges leading to it mergable.  The latter is
+	 guaranteed by matching PHI arguments in the else_bb and
+	 the inner cond_bb having no side-effects.  */
+      if (empty_block_p (else_bb)
+	  && single_succ_p (else_bb)
+	  && single_succ_edge (else_bb)->dest == then_bb
+	  && recognize_if_then_else (outer_cond_bb, &inner_cond_bb, &then_bb)
+	  && same_phi_args_p (outer_cond_bb, else_bb, then_bb)
+	  && bb_no_side_effects_p (inner_cond_bb))
+	{
+	  /* We have
+	       <outer_cond_bb>
+		 if (q) goto inner_cond_bb; else goto else_bb;
+	       <inner_cond_bb>
+		 if (p) goto ...; else goto else_bb;
+		 ...
+	       <else_bb>
+		 ...
+	   */
+	  return ifcombine_ifandif (inner_cond_bb, outer_cond_bb);
+	}
+
       /* The || form is characterized by a common then_bb with the
 	 two edges leading to it mergable.  The latter is guaranteed
          by matching PHI arguments in the then_bb and the inner cond_bb
 	 having no side-effects.  */
       if (recognize_if_then_else (outer_cond_bb, &then_bb, &inner_cond_bb)
 	  && same_phi_args_p (outer_cond_bb, inner_cond_bb, then_bb)
+	  && bb_no_side_effects_p (inner_cond_bb))
+	{
+	  /* We have
+	       <outer_cond_bb>
+		 if (q) goto then_bb; else goto inner_cond_bb;
+	       <inner_cond_bb>
+		 if (q) goto then_bb; else goto ...;
+	       <then_bb>
+		 ...
+	   */
+	  return ifcombine_iforif (inner_cond_bb, outer_cond_bb);
+	}
+      /* The || form is characterized by a common then_bb with the
+	 two edges leading to it mergable.  The latter is guaranteed
+         by matching PHI arguments in the then_bb and the inner cond_bb
+	 having no side-effects.  */
+      if (empty_block_p (then_bb)
+	  && single_succ_p (then_bb)
+	  && single_succ_edge (then_bb)->dest == else_bb
+	  && recognize_if_then_else (outer_cond_bb, &else_bb, &inner_cond_bb)
+	  && same_phi_args_p (outer_cond_bb, inner_cond_bb, else_bb)
 	  && bb_no_side_effects_p (inner_cond_bb))
 	{
 	  /* We have

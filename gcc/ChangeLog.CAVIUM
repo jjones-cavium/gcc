@@ -1,3 +1,14 @@
+2012-01-26  Andrew Pinski  <apinski@cavium.com>
+
+        FSF PR 52005
+        * tree-ssa-ifcombine.c (recognize_if_then_else): Handle the case
+        where the the then and else are spawed.
+        (tree_ssa_ifcombine_bb): Handle the case were we have an empty basic block
+        for either then or else.
+
+        * testsuite/gcc.dg/tree-ssa/ssa-ifcombine-8.c: New testcase.
+        * testsuite/gcc.dg/tree-ssa/ssa-ifcombine-9.c: New testcase.
+
 2012-07-23  Andrew Pinski  <apinski@cavium.com>
 
         * tree-pretty-print.c (dump_generic_node): Handle MEM_REF
