@@ -1,4 +1,21 @@
 2012-07-24  Adam Nemet  <anemet@caviumnetworks.com>
+            Andrew pinski  <apinski@cavium.com>
+
+        * Makefile.in (LANGUAGES): Include merge-gcda.
+        (MERGE_GCDA_INSTALL_NAME): New variable.
+        (install-common): Install merge-gcda.
+        (merge-gcda.o): New rule.
+        (MERGE_GCDA_OBJS): New variable.
+        (merge-gcda$(exeext)): New rule.
+
+        * merge-gcda.c: New file.  Define IN_GOV_MERGE.
+        * gcov-io.h (GCOV_FACTORED_MERGE_FUNCTIONS): New macro.
+        (gcov_var): Include it if IN_GOV_MERGE.
+        * gcov-io.c (gcov_write_counter, gcov_write_tag_length,
+        gcov_write_summary): Likewise.
+
+
+2012-07-24  Adam Nemet  <anemet@caviumnetworks.com>
 
 	* Makefile.in (GCOV_DUMP_INSTALL_NAME): New variable.
 	(install-common): Install gcov-dump also.

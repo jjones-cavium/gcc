@@ -271,7 +271,7 @@ gcov_write_unsigned (gcov_unsigned_t value)
 /* Write counter VALUE to coverage file.  Sets error flag
    appropriately.  */
 
-#if IN_LIBGCOV
+#if IN_LIBGCOV || IN_GCOV_MERGE
 GCOV_LINKAGE void
 gcov_write_counter (gcov_type value)
 {
@@ -349,7 +349,8 @@ gcov_write_length (gcov_position_t position)
     gcov_write_block (gcov_var.offset);
 }
 
-#else /* IN_LIBGCOV */
+#endif	/* !IN_LIBGCOV */
+#if IN_LIBGCOV || IN_GCOV_MERGE
 
 /* Write a tag TAG and length LENGTH.  */
 

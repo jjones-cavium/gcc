@@ -355,6 +355,16 @@ typedef HOST_WIDEST_INT gcov_type;
 				 "__gcov_merge_add",	\
 				 "__gcov_merge_ior"}
 
+/* Has to match GCOV_MERGE_FUNCTIONS.  */
+#define GCOV_FACTORED_MERGE_FUNCTIONS	{&factored_merge_add,		\
+					 &factored_merge_add,		\
+					 &factored_merge_add,		\
+					 &factored_merge_single,	\
+					 &factored_merge_delta,		\
+					 &factored_merge_single,	\
+					 &factored_merge_add,		\
+					 &factored_merge_ior}
+  
 /* Convert a counter index to a tag.  */
 #define GCOV_TAG_FOR_COUNTER(COUNT)				\
 	(GCOV_TAG_COUNTER_BASE + ((gcov_unsigned_t)(COUNT) << 17))
@@ -493,7 +503,7 @@ extern int __gcov_execve (const char *, char  *const [], char *const [])
 
 #endif /* IN_LIBGCOV */
 
-#if IN_LIBGCOV >= 0
+#if IN_LIBGCOV >= 0 || IN_GCOV_MERGE
 
 /* Optimum number of gcov_unsigned_t's read from or written to disk.  */
 #define GCOV_BLOCK_SIZE (1 << 10)
@@ -547,7 +557,7 @@ GCOV_LINKAGE gcov_unsigned_t gcov_read_unsigned (void) ATTRIBUTE_HIDDEN;
 GCOV_LINKAGE gcov_type gcov_read_counter (void) ATTRIBUTE_HIDDEN;
 GCOV_LINKAGE void gcov_read_summary (struct gcov_summary *) ATTRIBUTE_HIDDEN;
 
-#if IN_LIBGCOV
+#if IN_LIBGCOV || IN_GCOV_MERGE
 /* Available only in libgcov */
 GCOV_LINKAGE void gcov_write_counter (gcov_type) ATTRIBUTE_HIDDEN;
 GCOV_LINKAGE void gcov_write_tag_length (gcov_unsigned_t, gcov_unsigned_t)
@@ -555,9 +565,12 @@ GCOV_LINKAGE void gcov_write_tag_length (gcov_unsigned_t, gcov_unsigned_t)
 GCOV_LINKAGE void gcov_write_summary (gcov_unsigned_t /*tag*/,
 				      const struct gcov_summary *)
     ATTRIBUTE_HIDDEN;
-static void gcov_rewrite (void);
 GCOV_LINKAGE void gcov_seek (gcov_position_t /*position*/) ATTRIBUTE_HIDDEN;
-#else
+#endif
+#if IN_LIBGCOV
+static void gcov_rewrite (void);
+#endif
+#if !IN_LIBGCOV
 /* Available outside libgcov */
 GCOV_LINKAGE const char *gcov_read_string (void);
 GCOV_LINKAGE void gcov_sync (gcov_position_t /*base*/,

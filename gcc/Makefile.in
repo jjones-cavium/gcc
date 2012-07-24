@@ -125,7 +125,8 @@ SUBDIRS =@subdirs@ build
 
 # Selection of languages to be made.
 CONFIG_LANGUAGES = @all_selected_languages@
-LANGUAGES = c gcov$(exeext) gcov-dump$(exeext) $(CONFIG_LANGUAGES)
+LANGUAGES = c gcov$(exeext) merge-gcda$(exeext) gcov-dump$(exeext) \
+  $(CONFIG_LANGUAGES)
 
 # Default values for variables overridden in Makefile fragments.
 # CFLAGS is for the user to override to, e.g., do a cross build with -O2.
@@ -754,6 +755,8 @@ CPP_INSTALL_NAME := $(shell echo cpp|sed '$(program_transform_name)')
 GCOV_DUMP_INSTALL_NAME := \
   $(shell echo gcov-dump|sed '$(program_transform_name)')
 GCOV_INSTALL_NAME := $(shell echo gcov|sed '$(program_transform_name)')
+MERGE_GCDA_INSTALL_NAME := \
+  $(shell echo merge-gcda|sed '$(program_transform_name)')
 
 # Setup the testing framework, if you have one
 EXPECT = `if [ -f $${rootme}/../expect/expect ] ; then \
@@ -1494,7 +1497,7 @@ MOSTLYCLEANFILES = insn-flags.h insn-config.h insn-codes.h \
  $(EXTRA_PROGRAMS) gcc-cross$(exeext) \
  $(SPECS) collect2$(exeext) gcc-ar$(exeext) gcc-nm$(exeext) \
  gcc-ranlib$(exeext) \
- gcov-iov$(build_exeext) gcov$(exeext) gcov-dump$(exeext) \
+ gcov-iov$(build_exeext) gcov$(exeext) merge-gcda$(exeext) gcov-dump$(exeext) \
  gengtype$(exeext) *.[0-9][0-9].* *.[si] *-checksum.c libbackend.a \
  libcommon-target.a libcommon.a libgcc.mk
 
@@ -4036,6 +4039,8 @@ gcov.o: gcov.c gcov-io.c $(GCOV_IO_H) intl.h $(SYSTEM_H) coretypes.h $(TM_H) \
    $(CONFIG_H) version.h $(DIAGNOSTIC_H)
 gcov-dump.o: gcov-dump.c gcov-io.c $(GCOV_IO_H) $(SYSTEM_H) coretypes.h \
    $(TM_H) $(CONFIG_H) version.h intl.h $(DIAGNOSTIC_H)
+merge-gcda.o: merge-gcda.c gcov-io.c $(GCOV_IO_H) intl.h $(SYSTEM_H) \
+   coretypes.h $(TM_H) $(CONFIG_H) version.h
 
 GCOV_OBJS = gcov.o
 gcov$(exeext): $(GCOV_OBJS) $(LIBDEPS)
@@ -4043,6 +4048,10 @@ gcov$(exeext): $(GCOV_OBJS) $(LIBDEPS)
 GCOV_DUMP_OBJS = gcov-dump.o
 gcov-dump$(exeext): $(GCOV_DUMP_OBJS) $(LIBDEPS)
 	+$(LINKER) $(ALL_LINKERFLAGS) $(LDFLAGS) $(GCOV_DUMP_OBJS) \
+		$(LIBS) -o $@
+MERGE_GCDA_OBJS = merge-gcda.o intl.o version.o errors.o
+merge-gcda$(exeext): $(MERGE_GCDA_OBJS) $(LIBDEPS)
+	$(LINKER) $(ALL_LINKERFLAGS) $(LDFLAGS) $(MERGE_GCDA_OBJS) \
 		$(LIBS) -o $@
 #
 # Build the include directories.  The stamp files are stmp-* rather than
@@ -4620,6 +4629,12 @@ install-common: native lang.install-common installdirs
 	then \
 	    rm -f $(DESTDIR)$(bindir)/$(GCOV_INSTALL_NAME)$(exeext); \
 	    $(INSTALL_PROGRAM) gcov$(exeext) $(DESTDIR)$(bindir)/$(GCOV_INSTALL_NAME)$(exeext); \
+	fi
+	-if [ -f merge-gcda$(exeext) ]; \
+	then \
+	    rm -f $(DESTDIR)$(bindir)/$(MERGE_GCDA_INSTALL_NAME)$(exeext); \
+	    $(INSTALL_PROGRAM) merge-gcda$(exeext) \
+	      $(DESTDIR)$(bindir)/$(MERGE_GCDA_INSTALL_NAME)$(exeext); \
 	fi
 
 # Install the driver program as $(target_noncanonical)-gcc,
