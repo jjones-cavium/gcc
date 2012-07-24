@@ -1,4 +1,8 @@
-2012-07-28  Andrew Pinski  <apinski@cavium.com>
+2012-07-24  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/lib/profopt.exp: Delete also the .gcda on the build machine.
+
+2012-07-24  Andrew Pinski  <apinski@cavium.com>
 
         * testsuite/gcc.dg/vect/dump-tree-dceloop-pr26359.c: Update to look at
         dceloop4 after the patch adding one more.
