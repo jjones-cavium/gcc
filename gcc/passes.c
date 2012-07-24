@@ -1310,6 +1310,7 @@ init_optimization_passes (void)
       NEXT_PASS (pass_tree_ifcombine);
       NEXT_PASS (pass_phiopt);
       NEXT_PASS (pass_tail_recursion);
+      NEXT_PASS (pass_merge_phi);
       NEXT_PASS (pass_ch);
       NEXT_PASS (pass_stdarg);
       NEXT_PASS (pass_lower_complex);
@@ -1342,6 +1343,7 @@ init_optimization_passes (void)
       NEXT_PASS (pass_pre);
       NEXT_PASS (pass_merge_common_code);
       NEXT_PASS (pass_sink_code);
+      NEXT_PASS (pass_merge_phi);
       NEXT_PASS (pass_tree_loop);
 	{
 	  struct opt_pass **p = &pass_tree_loop.pass.sub;
@@ -1355,6 +1357,7 @@ init_optimization_passes (void)
 	  NEXT_PASS (pass_check_data_deps);
 	  NEXT_PASS (pass_loop_distribution);
 	  NEXT_PASS (pass_copy_prop);
+	  NEXT_PASS (pass_dce_loop);
 	  NEXT_PASS (pass_graphite);
 	    {
 	      struct opt_pass **p = &pass_graphite.pass.sub;

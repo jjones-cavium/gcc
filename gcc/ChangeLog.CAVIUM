@@ -1,5 +1,17 @@
 2012-12-24  Andrew Pinski  <apinski@cavium.com>
 
+	* cfgloop.c (skip_to_exit): New function.
+	(find_subloop_latch_edge_by_ivs): Rewrite to better detect subloop
+	latches by IVs.  Also look at the cfg for those IVs to check for a
+	better choice.
+	* passes.c (init_optimization_passes): Add pass_dce_loop
+        after the second pass_copy_prop.  Add pass_merge_phi
+	before pass_ch and pass_tree_loop.
+	
+
+
+2012-12-24  Andrew Pinski  <apinski@cavium.com>
+
         * testsuite/gcc.dg/tree-ssa/ssa-fre-9.c: Update the number of
         eliminatations that happen.
 

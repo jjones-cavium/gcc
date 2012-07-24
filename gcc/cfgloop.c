@@ -548,6 +548,61 @@ find_subloop_latch_edge_by_profile (VEC (edge, heap) *latches)
   return me;
 }
 
+static basic_block
+skip_to_exit (basic_block b, struct loop *loop, unsigned succ_edge_count)
+{
+  /* Skip to the begining of the loop if possible, we don't need to check
+     succ_edge count for loops. */
+  if (b->loop_father != loop)
+    {
+      edge e;
+      edge_iterator ei;
+      edge preheader_e = NULL;
+
+      struct loop *oloop = b->loop_father;
+      /* There are multiple latches, we can't figure out the preheader,
+	 just return b. */
+      if (oloop->latch == NULL)
+	return NULL;
+      FOR_EACH_EDGE (e, ei, oloop->header->preds)
+        if (e->src != oloop->latch && preheader_e == NULL)
+          preheader_e = e;
+	else if (e->src != oloop->latch && preheader_e != NULL)
+	  {
+	    preheader_e = NULL;
+	    break;
+	  }
+      /* Only one preheader edge.  */
+      if (preheader_e != NULL)
+        return skip_to_exit (preheader_e->src, loop, 1);
+      else
+	return NULL;
+    }
+  if (EDGE_COUNT (b->succs) != succ_edge_count)
+    return b;
+  /* Skip basic blocks where it is just a passthrough. */
+  if (single_pred_p (b))
+    return skip_to_exit (single_pred_edge (b)->src, loop, 1);
+  /* A join point, find the point where the join was from. */
+  if (EDGE_COUNT (b->preds) == 2)
+    {
+      basic_block c, d;
+      if (EDGE_PRED (b, 0)->flags & EDGE_ABNORMAL
+	  || EDGE_PRED (b, 1)->flags & EDGE_ABNORMAL)
+	return NULL;
+      c = skip_to_exit (EDGE_PRED (b, 0)->src, loop, 1);
+      if (c == NULL)
+	return NULL;
+      d = skip_to_exit (EDGE_PRED (b, 1)->src, loop, 1);
+      if (c == NULL)
+	return NULL;
+      if (c != d)
+	return NULL;
+      return skip_to_exit (d, loop, 2);
+    }
+  return b;
+}
+
 /* Among LATCHES, guesses a latch edge of LOOP corresponding to subloop, based
    on the structure of induction variables.  Returns this edge, or NULL if we
    do not find any.
@@ -563,48 +618,127 @@ find_subloop_latch_edge_by_profile (VEC (edge, heap) *latches)
 static edge
 find_subloop_latch_edge_by_ivs (struct loop *loop ATTRIBUTE_UNUSED, VEC (edge, heap) *latches)
 {
-  edge e, latch = VEC_index (edge, latches, 0);
-  unsigned i;
+  edge latch = NULL, e;
+  unsigned i, j;
   gimple phi;
   gimple_stmt_iterator psi;
   tree lop;
   basic_block bb;
+  VEC (edge, heap) *extra_latches = NULL;
 
-  /* Find the candidate for the latch edge.  */
-  for (i = 1; VEC_iterate (edge, latches, i, e); i++)
-    if (dominated_by_p (CDI_DOMINATORS, latch->src, e->src))
-      latch = e;
-
-  /* Verify that it dominates all the latch edges.  */
-  FOR_EACH_VEC_ELT (edge, latches, i, e)
-    if (!dominated_by_p (CDI_DOMINATORS, e->src, latch->src))
-      return NULL;
-
-  /* Check for a phi node that would deny that this is a latch edge of
-     a subloop.  */
-  for (psi = gsi_start_phis (loop->header); !gsi_end_p (psi); gsi_next (&psi))
+  if (VEC_length (edge, latches) != 1)
     {
-      phi = gsi_stmt (psi);
-      lop = PHI_ARG_DEF_FROM_EDGE (phi, latch);
-
-      /* Ignore the values that are not changed inside the subloop.  */
-      if (TREE_CODE (lop) != SSA_NAME
-	  || SSA_NAME_DEF_STMT (lop) == phi)
-	continue;
-      bb = gimple_bb (SSA_NAME_DEF_STMT (lop));
-      if (!bb || !flow_bb_inside_loop_p (loop, bb))
-	continue;
-
-      FOR_EACH_VEC_ELT (edge, latches, i, e)
-	if (e != latch
-	    && PHI_ARG_DEF_FROM_EDGE (phi, e) == lop)
-	  return NULL;
+       if (dump_file)
+	{
+	  fprintf (dump_file, "trying latches:");
+	  FOR_EACH_VEC_ELT (edge, latches, i, e)
+	    fprintf (dump_file, " %d", e->src->index);
+	  fprintf (dump_file, " that might be a IV subloop.\n");
+	}
     }
+
+  FOR_EACH_VEC_ELT (edge, latches, i, latch)
+    {
+      /* Check for a phi node that would deny that this is a latch edge of
+         a subloop.  */
+      for (psi = gsi_start_phis (loop->header); !gsi_end_p (psi); gsi_next (&psi))
+	{
+	  phi = gsi_stmt (psi);
+	  lop = PHI_ARG_DEF_FROM_EDGE (phi, latch);
+
+	  /* Ignore the values that are not changed inside the subloop.  */
+	  if (TREE_CODE (lop) != SSA_NAME
+	      || SSA_NAME_DEF_STMT (lop) == phi)
+	    continue;
+	  if (lop == PHI_RESULT (phi))
+	    continue;
+	  bb = gimple_bb (SSA_NAME_DEF_STMT (lop));
+	  if (!bb || !flow_bb_inside_loop_p (loop, bb))
+	    continue;
+	  /* Ignore virtual operands PHIs as they will always
+	     be different. */
+	  if (!is_gimple_reg (lop))
+	    continue;
+	  FOR_EACH_VEC_ELT (edge, latches, j, e)
+	    if (e != latch
+		&& PHI_ARG_DEF_FROM_EDGE (phi, e) == lop)
+	      {
+		latch = NULL;
+		goto next_latch;
+	      }
+	}
+      next_latch:
+      if (latch != NULL)
+        VEC_safe_push (edge, heap, extra_latches, latch);
+    }
+  if (VEC_empty (edge, extra_latches))
+    {
+       if (dump_file)
+	fprintf (dump_file, "no latches for IV sublub.\n");
+      return NULL;
+    }
+
+  if (VEC_length (edge, extra_latches) != 1)
+    {
+      if (dump_file)
+	{
+	  fprintf (dump_file, "more one latches:");
+	  FOR_EACH_VEC_ELT (edge, extra_latches, i, e)
+	    fprintf (dump_file, " %d", e->src->index);
+	  fprintf (dump_file, " that might be a IV subloop.\n");
+	}
+      /* Try to look for the subloop where the accessor of the latch is
+	 the header.  */
+      FOR_EACH_VEC_ELT (edge, extra_latches, i, latch)
+	{
+	  basic_block b = latch->src;
+          b = skip_to_exit (b, loop, 1);
+	  if (b == NULL)
+	    continue;
+          if (b == loop->header)
+	    {
+	      if (dump_file)
+		{
+		  fprintf (dump_file, "Guessing %d as latch of the subloop.\n",
+			   latch->src->index);
+		  fprintf (dump_file, "Because its immediate accessor"
+			   " is the header.\n");
+		}
+	      return latch;
+	    }
+	}
+      /* Try to look for the subloop where the accessor of the latch
+	 is a different loop but only do this if the header has only one
+	 successor.  */
+      if (EDGE_COUNT (loop->header->succs) == 1)
+	FOR_EACH_VEC_ELT (edge, extra_latches, i, latch)
+	  {
+	    basic_block b = latch->src;
+	    b = skip_to_exit (b, loop, 1);
+	    if (b == NULL)
+	      continue;
+	    b = skip_to_exit (b, loop, 2);
+	    if (b == loop->header)
+	      {
+		if (dump_file)
+		  {
+		    fprintf (dump_file, "Guessing %d as latch of the subloop.\n",
+			     latch->src->index);
+		    fprintf (dump_file, "Because condition reaches the header.\n");
+		  }
+		return latch;
+	      }
+	  }
+      return NULL;
+    }
+
+  latch = VEC_index (edge, extra_latches, 0);
 
   if (dump_file)
     fprintf (dump_file,
 	     "Found latch edge %d -> %d using iv structure.\n",
 	     latch->src->index, latch->dest->index);
+  VEC_free (edge, heap, extra_latches);
   return latch;
 }
 
