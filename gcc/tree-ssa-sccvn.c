@@ -3304,6 +3304,19 @@ visit_use (tree use)
 		    case GIMPLE_UNARY_RHS:
 		    case GIMPLE_BINARY_RHS:
 		    case GIMPLE_TERNARY_RHS:
+		      /* First try to lookup the simplified expression. */
+		      if (simplified && valid_gimple_rhs_p (simplified))
+			{
+			  tree result = vn_nary_op_lookup (simplified, NULL);
+			  if (result)
+			    {
+			      changed = set_ssa_val_to (lhs, result);
+			      goto done;
+			    }
+			  changed = set_ssa_val_to (lhs, lhs);
+			  vn_nary_op_insert (simplified, lhs);
+			}
+		      /* Otherwise visit the original statement. */
 		      changed = visit_nary_op (lhs, stmt);
 		      break;
 		    case GIMPLE_SINGLE_RHS:
