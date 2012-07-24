@@ -11,6 +11,6 @@ foo () {
   }
 }
 
-/* { dg-final { scan-tree-dump-times "Deleting : vect_" 0 "dceloop3" } } */
-/* { dg-final { cleanup-tree-dump "dceloop\[1-3\]" } } */
+/* { dg-final { scan-tree-dump-times "Deleting : vect_" 0 "dceloop4" } } */
+/* { dg-final { cleanup-tree-dump "dceloop\[1-4\]" } } */
 /* { dg-final { cleanup-tree-dump "vect" } } */

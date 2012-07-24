@@ -1,4 +1,9 @@
-2012-12-24  Andrew Pinski  <apinski@cavium.com>
+2012-07-28  Andrew Pinski  <apinski@cavium.com>
+
+        * testsuite/gcc.dg/vect/dump-tree-dceloop-pr26359.c: Update to look at
+        dceloop4 after the patch adding one more.
+
+2012-07-24  Andrew Pinski  <apinski@cavium.com>
 
 	* cfgloop.c (skip_to_exit): New function.
 	(find_subloop_latch_edge_by_ivs): Rewrite to better detect subloop
@@ -12,17 +17,17 @@
         latch edge"/"Merged latch edges" tests.
         * gcc.dg/tree-ssa/loop-38.c: New testcase.
 
-2012-12-24  Andrew Pinski  <apinski@cavium.com>
+2012-07-24  Andrew Pinski  <apinski@cavium.com>
 
         * testsuite/gcc.dg/tree-ssa/ssa-fre-9.c: Update the number of
         eliminatations that happen.
 
-2012-12-24  Andrew Pinski  <apinski@cavium.com>
+2012-07-24  Andrew Pinski  <apinski@cavium.com>
 
 	* tree-ssa-sccvn.c (visit_use): Look up the simplified
 	expression before visting the original one.
 
-2012-12-23  Andrew Pinski  <apinski@cavium.com>
+2012-07-23  Andrew Pinski  <apinski@cavium.com>
 
         FSF PR 52005
         * tree-ssa-ifcombine.c (recognize_if_then_else): Handle the case
