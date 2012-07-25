@@ -1,5 +1,14 @@
 2012-07-24  Andrew Pinski  <apinski@cavium.com>
 
+        Bug #2849
+        * simplify-rtx.c (simplify_unary_operation_1 <case TRUNCATE>):
+        A truncate of a memory is just loading the low part of the memory.
+
+	* testsuite/gcc.target/mips/truncate-7.c: New testcase.
+	* testsuite/gcc.target/mips/truncate-8.c: New testcase.
+
+2012-07-24  Andrew Pinski  <apinski@cavium.com>
+
         Start of Bug #4220
         * tree-ssa-sccvn.c (simplify_binary_expression): Add looked_up argument.
         Get the first operand full expression for PLUS, IOR, and AND expressions also.
