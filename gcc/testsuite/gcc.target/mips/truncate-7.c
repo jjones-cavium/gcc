@@ -1,5 +1,4 @@
-/* { dg-do compile { target *-octeon-* } } */
-/* { dg-options "-O2" } */
+/* { dg-options "-O2 -mgp64" } */
 /* We should not have a truncation here as the memory load should be truncated. */
 /* { dg-final { scan-assembler-not "sll\t" } } */
 
