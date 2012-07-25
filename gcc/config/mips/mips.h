@@ -878,7 +878,8 @@ struct mips_cpu_info {
 				  || ISA_MIPS32R2			\
 				  || ISA_MIPS64				\
 				  || ISA_MIPS64R2)			\
-				 && !TARGET_MIPS16)
+				 && !TARGET_MIPS16			\
+				 && TARGET_MADD)
 
 /* Integer multiply-accumulate instructions should be generated.  */
 #define GENERATE_MADD_MSUB      (ISA_HAS_MADD_MSUB && !TUNE_74K)
