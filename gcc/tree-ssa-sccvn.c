@@ -2988,12 +2988,13 @@ valueize_expr (tree expr)
    simplified. */
 
 static tree
-simplify_binary_expression (gimple stmt)
+simplify_binary_expression (gimple stmt, bool *looked_up)
 {
   tree result = NULL_TREE;
   tree op0 = gimple_assign_rhs1 (stmt);
   tree op1 = gimple_assign_rhs2 (stmt);
   enum tree_code code = gimple_assign_rhs_code (stmt);
+  *looked_up = false;
 
   /* This will not catch every single case we could combine, but will
      catch those with constants.  The goal here is to simultaneously
@@ -3003,6 +3004,9 @@ simplify_binary_expression (gimple stmt)
     {
       if (VN_INFO (op0)->has_constants
 	  || TREE_CODE_CLASS (code) == tcc_comparison
+	  || code == PLUS_EXPR
+	  || code == BIT_AND_EXPR
+	  || code == BIT_IOR_EXPR
 	  || code == COMPLEX_EXPR)
 	op0 = valueize_expr (vn_get_expr_for (op0));
       else
@@ -3033,6 +3037,35 @@ simplify_binary_expression (gimple stmt)
       && op1 == gimple_assign_rhs2 (stmt))
     return NULL_TREE;
 
+  /* Try simplifying (type)t + CST to (type)(t+CST) if the type is the
+     opposite signed type of t and t+CST exists already. */
+  if ((code == PLUS_EXPR
+       || code == BIT_IOR_EXPR
+       || code == BIT_AND_EXPR)
+      && host_integerp (op1, 1)
+      && CONVERT_EXPR_P (op0)
+      && INTEGRAL_TYPE_P (TREE_TYPE (op0))
+      && INTEGRAL_TYPE_P (TREE_TYPE (TREE_OPERAND (op0, 0))))
+    {
+      tree outertype = TREE_TYPE (op0);
+      tree inner = TREE_OPERAND (op0, 0);
+      tree innertype = TREE_TYPE (TREE_OPERAND (op0, 0));
+      if (TYPE_PRECISION (outertype) == TYPE_PRECISION (innertype))
+	{
+	  tree newop1 = fold_convert (innertype, op1);
+	  tree newinnerexpr = fold_build2 (gimple_assign_rhs_code (stmt), innertype, inner, newop1);
+	  if (TREE_CODE (newinnerexpr) != SSA_NAME)
+	    {
+	      tree result = vn_nary_op_lookup (newinnerexpr, NULL);
+	      if (result)
+		{
+		  *looked_up = true;
+		  return fold_convert (outertype, result);
+		}
+	    }
+	}
+    }
+
   fold_defer_overflow_warnings ();
 
   result = fold_binary (code, gimple_expr_type (stmt), op0, op1);
@@ -3056,11 +3089,12 @@ simplify_binary_expression (gimple stmt)
    simplified. */
 
 static tree
-simplify_unary_expression (gimple stmt)
+simplify_unary_expression (gimple stmt, bool *looked_up)
 {
   tree result = NULL_TREE;
   tree orig_op0, op0 = gimple_assign_rhs1 (stmt);
   enum tree_code code = gimple_assign_rhs_code (stmt);
+  *looked_up = false;
 
   /* We handle some tcc_reference codes here that are all
      GIMPLE_ASSIGN_SINGLE codes.  */
@@ -3094,6 +3128,35 @@ simplify_unary_expression (gimple stmt)
 	op0 = tem;
     }
 
+  /* Try simplifying (type)(t + CST) to (type)t+CST if the type is the
+     opposite signed type of t and t+CST exists already. */
+  if (gimple_assign_cast_p (stmt)
+      && INTEGRAL_TYPE_P (gimple_expr_type (stmt))
+      && INTEGRAL_TYPE_P (TREE_TYPE (op0))
+      && (TREE_CODE (op0) == PLUS_EXPR
+	  || TREE_CODE (op0) == BIT_IOR_EXPR
+	  || TREE_CODE (op0) == BIT_AND_EXPR)
+      && host_integerp (TREE_OPERAND (op0, 1), 1))
+    {
+      tree outertype = gimple_expr_type (stmt);
+      tree innertype = TREE_TYPE (op0);
+      if (TYPE_PRECISION (outertype) == TYPE_PRECISION (innertype))
+	{
+	  tree inner = TREE_OPERAND (op0, 0);
+	  tree newinner = fold_convert (outertype, inner);
+	  if (TREE_CODE (newinner) != SSA_NAME)
+	    {
+	      tree result = vn_nary_op_lookup (newinner, NULL);
+	      if (result)
+		{
+		  return fold_build2 (TREE_CODE (op0), outertype, result,
+				      fold_convert (outertype,
+						    TREE_OPERAND (op0, 1)));
+		}
+	    }
+	}
+    }
+
   /* Avoid folding if nothing changed, but remember the expression.  */
   if (op0 == orig_op0)
     return NULL_TREE;
@@ -3119,7 +3182,7 @@ simplify_unary_expression (gimple stmt)
 /* Try to simplify RHS using equivalences and constant folding.  */
 
 static tree
-try_to_simplify (gimple stmt)
+try_to_simplify (gimple stmt, bool *looked_up)
 {
   enum tree_code code = gimple_assign_rhs_code (stmt);
   tree tem;
@@ -3149,11 +3212,11 @@ try_to_simplify (gimple stmt)
       /* We could do a little more with unary ops, if they expand
 	 into binary ops, but it's debatable whether it is worth it. */
     case tcc_unary:
-      return simplify_unary_expression (stmt);
+      return simplify_unary_expression (stmt, looked_up);
 
     case tcc_comparison:
     case tcc_binary:
-      return simplify_binary_expression (stmt);
+      return simplify_binary_expression (stmt, looked_up);
 
     default:
       break;
@@ -3169,6 +3232,7 @@ static bool
 visit_use (tree use)
 {
   bool changed = false;
+  bool looked_up = false;
   gimple stmt = SSA_NAME_DEF_STMT (use);
 
   VN_INFO (use)->use_processed = true;
@@ -3208,7 +3272,7 @@ visit_use (tree use)
 	      changed = visit_copy (lhs, rhs1);
 	      goto done;
 	    }
-	  simplified = try_to_simplify (stmt);
+	  simplified = try_to_simplify (stmt, &looked_up);
 	  if (simplified)
 	    {
 	      if (dump_file && (dump_flags & TDF_DETAILS))
@@ -3252,6 +3316,7 @@ visit_use (tree use)
 		  /* We have to unshare the expression or else
 		     valuizing may change the IL stream.  */
 		  VN_INFO (lhs)->expr = unshare_expr (simplified);
+		  VN_INFO (lhs)->was_simplified = looked_up;
 		}
 	    }
 	  else if (stmt_has_constants (stmt)

@@ -4270,7 +4270,8 @@ eliminate (void)
 		  tree val = VN_INFO (lhs)->valnum;
 		  if (val != VN_TOP
 		      && TREE_CODE (val) == SSA_NAME
-		      && VN_INFO (val)->needs_insertion
+		      && (VN_INFO (val)->needs_insertion
+			  || VN_INFO (val)->was_simplified)
 		      && can_PRE_operation (vn_get_expr_for (val)))
 		    sprime = do_SCCVN_insertion (stmt, val);
 		}
