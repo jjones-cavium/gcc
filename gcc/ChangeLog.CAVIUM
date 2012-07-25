@@ -1,4 +1,13 @@
 2012-07-24  Andrew Pinski  <apinski@cavium.com>
+            Adam Nemet  <anemet@caviumnetworks.com>
+
+        * tree-ssa-loop-ivopts.c (rewrite_use_address): Create an aligned type
+        of the use type of the correct alignment.
+
+	* testsuite/gcc.target/mips/unaligned-4.c: New testcase.
+	* testsuite/gcc.target/mips/unaligned-3.c: New testcase.
+
+2012-07-24  Andrew Pinski  <apinski@cavium.com>
 
         * tree-cfg.c (print_loop): Allow for NULL latch.
 
