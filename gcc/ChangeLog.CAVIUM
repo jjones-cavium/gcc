@@ -4,7 +4,6 @@
 	* testsuite/gcc.target/mips/ext-12.c: New test.
 	* testsuite/gcc.target/mips/ext-13.c: New test.
 
-
 2012-07-25  Andrew Pinski  <apinski@cavium.com>
             Adam Nemet  <anemet@caviumnetworks.com>
 
