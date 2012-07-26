@@ -2732,12 +2732,12 @@
 ;;  register =op1                      x
 
 (define_insn "*and<mode>3"
-  [(set (match_operand:GPR 0 "register_operand" "=d,d,d,d,d,d,d")
-	(and:GPR (match_operand:GPR 1 "nonimmediate_operand" "o,o,W,d,d,d,d")
-		 (match_operand:GPR 2 "and_operand" "Yb,Yh,Yw,K,Yx,Yw,d")))]
+  [(set (match_operand:GPR 0 "register_operand" "=d,d,d,d,d,d,d,d")
+	(and:GPR (match_operand:GPR 1 "nonimmediate_operand" "o,o,W,d,d,d,d,d")
+		 (match_operand:GPR 2 "and_operand" "Yb,Yh,Yw,K,Yx,Yw,d,Yy")))]
   "!TARGET_MIPS16 && and_operands_ok (<MODE>mode, operands[1], operands[2])"
 {
-  int len;
+  int len, pos;
 
   switch (which_alternative)
     {
@@ -2760,12 +2760,27 @@
       return "#";
     case 6:
       return "and\t%0,%1,%2";
+    case 7:
+      if (REGNO (operands[0]) != REGNO (operands[1]))
+	return "#";
+      pos = mips_bitmask (~ INTVAL (operands[2]), &len, <MODE>mode);
+      operands[2] = GEN_INT (pos);
+      operands[3] = GEN_INT (len);
+      return "<d>ins\\t%0,$0,%2,%3";
     default:
       gcc_unreachable ();
     }
 }
-  [(set_attr "move_type" "load,load,load,andi,ext_ins,shift_shift,logical")
+  [(set_attr "move_type" "load,load,load,andi,ext_ins,shift_shift,logical,ext_ins")
    (set_attr "mode" "<MODE>")])
+
+(define_split
+  [(set (match_operand:GPR 0 "register_operand")
+	(and:GPR (match_operand:GPR 1 "register_operand")
+		(match_operand:GPR 2 "inverse_bitmask_operand")))]
+  "ISA_HAS_EXT_INS && reload_completed && REGNO (operands[0]) != REGNO (operands[1])"
+  [(set (match_dup 0) (match_dup 1))
+    (set (match_dup 0) (and:GPR (match_dup 0) (match_dup 2)))])
 
 (define_insn "*and<mode>3_mips16"
   [(set (match_operand:GPR 0 "register_operand" "=d,d,d,d,d")

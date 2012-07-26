@@ -231,3 +231,7 @@
 (define_constraint "Yx"
    "@internal"
    (match_operand 0 "low_bitmask_operand"))
+
+(define_constraint "Yy"
+   "@internal"
+   (match_operand 0 "inverse_bitmask_operand"))
