@@ -1,3 +1,12 @@
+2012-07-26  Adam Nemet  <anemet@caviumnetworks.com>
+
+	* config/mips/mips.md (ior<mode>3): Use uns_arith_or_bitmask_operand.
+	Expand early bitmask_operand cases.
+	* config/mips/predicates.md (uns_arith_or_bitmask_operand): New predicate.
+
+	* testsuite/gcc.target/mips/ins-8.c: New testcase.
+	* testsuite/gcc.target/mips/ins-9.c: New testcase.
+
 2012-07-26  Andrew Pinski  <apinski@cavium.com>
             Adam Nemet  <anemet@caviumnetworks.com>
 
