@@ -1,3 +1,8 @@
+2012-07-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	* gcc.target/arm/neon/vld1Q_dupu64.c: Regenerate.
+	* gcc.target/arm/neon/vld1Q_dups64.c: Likewise.
+
 2012-07-24  Julian Brown  <julian@codesourcery.com>
 
 	* lib/target-supports.exp (check_effective_target_arm_hf_eabi): New.

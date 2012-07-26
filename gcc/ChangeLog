@@ -1,3 +1,8 @@
+2012-07-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	* config/arm/neon.ml (ops): Fix regexp for vld1Q_dups64 and
+	vld1Q_dupu64 tests.
+
 2012-07-24  Julian Brown  <julian@codesourcery.com>
 
 	* doc/sourcebuild.texi (arm_hf_eabi): Document effective-target
