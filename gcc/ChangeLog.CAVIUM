@@ -1,5 +1,12 @@
 2012-07-25  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #4249
+	* expr.c (expand_assignment): Set the correct alignment on the mem
+	when doing a movemisalign.
+
+
+2012-07-25  Andrew Pinski  <apinski@cavium.com>
+
 	* config/mips/mips.md (movmisalign<mode>): New expand
 	for expanding unaligned load/stores.
 

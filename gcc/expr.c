@@ -4656,6 +4656,9 @@ expand_assignment (tree to, tree from, bool nontemporal)
 	}
       else
 	gcc_unreachable ();
+
+      /* Set the alignment to what the correct alignment is. */
+      set_mem_align (mem, align);
       if (TREE_THIS_VOLATILE (to))
 	MEM_VOLATILE_P (mem) = 1;
 
