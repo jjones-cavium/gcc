@@ -1,5 +1,16 @@
 2012-07-26  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #3261
+	* config/mips/mips.md (*mov<GPR:mode>_on_<MOVECC:mode>):
+	Remove mode check from comparisons.
+	(*mov<SCALARF:mode>_on_<MOVECC:mode>): Likewise.
+	(*mov<GPR:mode>_on_<GPR2:mode>_ne): New pattern to match
+	when (ne A 0) can be just A.
+
+	* testsuite/gcc.target/mips/movcc-4.c: New testcase.
+
+2012-07-26  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #2854
 	Bug #2965
 	* config/mips/mips.md (*<optab><mode>3_trunc): New pattern.
