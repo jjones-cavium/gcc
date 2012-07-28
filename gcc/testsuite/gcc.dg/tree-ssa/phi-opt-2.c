@@ -13,10 +13,7 @@ _Bool f1(_Bool a, _Bool b)
   return 0;
 }
 
-
-/* There should be only one if, the outer one; the inner one
-   should have been changed to straight line code with the
-   value of b (except that we don't fold ! (b != 0) into b
-   which can be fixed in a different patch).  */
-/* { dg-final { scan-tree-dump-times "if" 1 "optimized"} } */
+/* There should be only no ifs; both of them should have
+   been changed into straight line code (a & b).  */
+/* { dg-final { scan-tree-dump-times "if" 0 "optimized"} } */
 /* { dg-final { cleanup-tree-dump "optimized" } } */
