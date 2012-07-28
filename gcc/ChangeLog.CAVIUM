@@ -1,5 +1,17 @@
 2012-07-27  Andrew Pinski  <apinski@cavium.com>
 
+	* expr.c (get_condition_from_operand): New function.
+	(get_def_noter_for_expr_with_code): New function.
+	(expand_cond_expr_using_addcc): New function.
+	(expand_cond_expr_using_cmove): Use get_condition_from_operand
+	instead of doing it inline.
+	(expand_expr_real_2 <case COND_EXPR>): Try expanding using
+	addcc before using cmove.
+	* optabs.c (emit_conditional_add): Correct comment about the arguments.
+	Remove code which might swap op2 and op3 since they cannot be swapped.
+
+2012-07-27  Andrew Pinski  <apinski@cavium.com>
+
 	* optabs.c (emit_conditional_move): Allow libcalls too for the
 	comparison (allows conditional moves for soft-float).
 
