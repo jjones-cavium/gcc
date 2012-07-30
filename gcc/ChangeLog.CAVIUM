@@ -1,3 +1,10 @@
+2012-07-29  Andrew Pinski  <apinski@cavium.com>
+
+	* loop-unroll.c (decide_unroll_constant_iterations): Add more
+	debugging output for when the loop does not roll.
+	(decide_unroll_runtime_iterations): Use expected_loop_iterations
+	when it might be trying to peel instead of unroll.
+
 2012-07-27  Adam Nemet  <anemet@caviumnetworks.com>
 
         * cfgloopanal.c (init_set_costs): Exclude call-used registers
