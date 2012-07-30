@@ -1,5 +1,10 @@
 2012-07-30  Andrew Pinski  <apinski@cavium.com>
 
+        * passes.c (init_optimization_passes): Move pass_initialize_regs before
+        the first RTL CSE.
+
+2012-07-30  Andrew Pinski  <apinski@cavium.com>
+
         * tree-pass.h (pass_late_phiopt): New variable.
         * passes.c (init_optimization_passes): Use pass_late_phiopt for the
         last pass_phiopt.

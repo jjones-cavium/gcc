@@ -1447,6 +1447,7 @@ init_optimization_passes (void)
       NEXT_PASS (pass_jump2);
       NEXT_PASS (pass_lower_subreg);
       NEXT_PASS (pass_df_initialize_opt);
+      NEXT_PASS (pass_initialize_regs);
       NEXT_PASS (pass_cse);
       NEXT_PASS (pass_rtl_fwprop);
       NEXT_PASS (pass_rtl_cprop);
@@ -1477,7 +1478,6 @@ init_optimization_passes (void)
       NEXT_PASS (pass_rtl_dse1);
       NEXT_PASS (pass_rtl_fwprop_addr);
       NEXT_PASS (pass_inc_dec);
-      NEXT_PASS (pass_initialize_regs);
       NEXT_PASS (pass_ud_rtl_dce);
       NEXT_PASS (pass_combine);
       NEXT_PASS (pass_if_after_combine);
