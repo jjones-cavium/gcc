@@ -429,6 +429,7 @@ extern struct gimple_opt_pass pass_warn_function_return;
 extern struct gimple_opt_pass pass_warn_function_noreturn;
 extern struct gimple_opt_pass pass_cselim;
 extern struct gimple_opt_pass pass_phiopt;
+extern struct gimple_opt_pass pass_late_phiopt;
 extern struct gimple_opt_pass pass_forwprop;
 extern struct gimple_opt_pass pass_phiprop;
 extern struct gimple_opt_pass pass_tree_ifcombine;
