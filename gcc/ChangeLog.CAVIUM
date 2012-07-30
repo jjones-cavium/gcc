@@ -1,5 +1,18 @@
 2012-07-30  Andrew Pinski  <apinski@cavium.com>
 
+	* config/mips/mips.c (mips_rtx_costs): Provide the correct cost of an
+	expanded ins/dins.
+
+2012-07-30  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #3210
+	* combine.c (simplify_comparison): Use gen_lowpart_or_truncate when
+	truncating for the comparision.
+
+	* testsuite/gcc.c-torture/execute/20110418-1.c: New testcase.
+
+2012-07-30  Andrew Pinski  <apinski@cavium.com>
+
         * passes.c (init_optimization_passes): Move pass_initialize_regs before
         the first RTL CSE.
 
