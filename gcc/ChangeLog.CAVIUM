@@ -1,5 +1,10 @@
 2012-07-30  Andrew Pinski  <apinski@cavium.com>
 
+	* cse.c (se_insn): Optimize zero_extract even if the cost of the constant
+        is greater than the const of the register.
+
+2012-07-30  Andrew Pinski  <apinski@cavium.com>
+
 	* config/mips/mips.c (mips_zero_extend_cost): Fix
 	cost of zero extending to DImode from SImode for
 	ISA_HAS_EXT_INS.
