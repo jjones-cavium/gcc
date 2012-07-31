@@ -1,5 +1,14 @@
 2012-07-30  Andrew Pinski  <apinski@cavium.com>
 
+        Bug #4274
+        * expr.c (expand_cond_expr_using_mask): New function.
+        (expand_expr_real_2 <case COND_EXPR>): Call expand_cond_expr_using_mask
+        before trying any other case.
+
+	* testsuite/testsuite/gcc.target/mips/movcc-6.c: New testcase.
+
+2012-07-30  Andrew Pinski  <apinski@cavium.com>
+
 	* cse.c (se_insn): Optimize zero_extract even if the cost of the constant
         is greater than the const of the register.
 
