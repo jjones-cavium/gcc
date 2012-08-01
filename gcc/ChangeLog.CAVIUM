@@ -1,5 +1,12 @@
 2012-08-01  Andrew Pinski  <apinski@cavium.com>
 
+        start of bug #4296
+        * config/mips/octeon.md (octeon_arith): Don't match slt for the type.
+        (octeon_set): New reservation.
+        Add bypass between octeon_set and octeon_brj_o2.
+
+2012-08-01  Andrew Pinski  <apinski@cavium.com>
+
 	start of Bug #4290
 	* config/mips/mips.c (mips_block_move_straight): Use 32bits loads
 	if the length is equal to 4 bytes and either of the alignments
