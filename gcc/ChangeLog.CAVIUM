@@ -1,5 +1,13 @@
 2012-08-01  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #3266
+	* fold-const.c (build_range_check): Use either
+	unsigned_type_node or integer_type_node for the
+	type if the precision of the original type is smaller
+	than the precision of integer_type_node.
+
+2012-08-01  Andrew Pinski  <apinski@cavium.com>
+
         Bug #2837
         * config/mips/mips.c (TARGET_PROMOTE_PROTOTYPES): Remove definition.
 	* config/mips/mips.md (*baddu_di_eb): New pattern to handle subreg from qi
@@ -7,7 +15,6 @@
 	(*baddu_di_el): Likewise.
 
 	* testsuite/gcc.target/mips/ext-2.c: There should be no truncate here.
-
 
 2012-08-01  Andrew Pinski  <apinski@cavium.com>
 
