@@ -1,5 +1,13 @@
 2012-08-01  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #3596
+	* combine.c (simplify_shift_const_1 <case TRUNCATE>): Handle ASHIFTRT
+	like LSHIFTRT but use ASHIFTRT as the final result.
+
+	* testsuite/gcc.target/mips/shift-1.c: New testcase.
+
+2012-08-01  Andrew Pinski  <apinski@cavium.com>
+
 	* config/mips/mips.h (LOGICAL_OP_NON_SHORT_CIRCUIT): Delete define.
 	* tree-ssa-ifcombine.c (LOGICAL_OP_NON_SHORT_CIRCUIT): Define if not
 	already defined.
