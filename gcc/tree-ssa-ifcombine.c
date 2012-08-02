@@ -30,6 +30,12 @@ along with GCC; see the file COPYING3.  If not see
 #include "tree-pass.h"
 #include "tree-dump.h"
 
+#ifndef LOGICAL_OP_NON_SHORT_CIRCUIT
+#define LOGICAL_OP_NON_SHORT_CIRCUIT \
+  (BRANCH_COST (optimize_function_for_speed_p (cfun), \
+                false) >= 2)
+#endif
+
 /* This pass combines COND_EXPRs to simplify control flow.  It
    currently recognizes bit tests and comparisons in chains that
    represent logical and or logical or of two COND_EXPRs.
@@ -401,7 +407,7 @@ ifcombine_ifandif (basic_block inner_cond_bb, basic_block outer_cond_bb)
 	{
 	  tree t1, t2;
 	  gimple_stmt_iterator gsi;
-	  if (BRANCH_COST (optimize_function_for_speed_p (cfun), false) < 2)
+	  if (!LOGICAL_OP_NON_SHORT_CIRCUIT)
 	    return false;
 	  /* Only do this optimization if the inner bb contains only the conditional. */
 	  if (!gsi_one_before_end_p (gsi_start_nondebug_bb (inner_cond_bb)))
@@ -572,7 +578,7 @@ ifcombine_iforif (basic_block inner_cond_bb, basic_block outer_cond_bb)
 	{
 	  tree t1, t2;
 	  gimple_stmt_iterator gsi;
-	  if (BRANCH_COST (optimize_function_for_speed_p (cfun), false) < 2)
+	  if (!LOGICAL_OP_NON_SHORT_CIRCUIT)
 	    return false;
 	  /* Only do this optimization if the inner bb contains only the conditional. */
 	  if (!gsi_one_before_end_p (gsi_start_nondebug_bb (inner_cond_bb)))
