@@ -1,5 +1,5 @@
 /* { dg-do compile } */
-/* { dg-options "-O -fdump-tree-ifcombine" } */
+/* { dg-options "-O -fdump-tree-ifcombine1" } */
 
 void bar (void);
 
@@ -32,6 +32,6 @@ foo2 (unsigned int a)
 /* The special treatment of a & 1 != 0 in fold caused the pattern not
    to be recognized due to extra conversions inserted.  */
 
-/* { dg-final { scan-tree-dump "optimizing bits or bits test" "ifcombine" } } */
-/* { dg-final { scan-tree-dump "optimizing double bit test" "ifcombine" } } */
-/* { dg-final { cleanup-tree-dump "ifcombine" } } */
+/* { dg-final { scan-tree-dump "optimizing bits or bits test" "ifcombine1" } } */
+/* { dg-final { scan-tree-dump "optimizing double bit test" "ifcombine1" } } */
+/* { dg-final { cleanup-tree-dump "ifcombine1" } } */

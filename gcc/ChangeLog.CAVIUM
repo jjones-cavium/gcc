@@ -1,5 +1,15 @@
 2012-08-02  Andrew Pinski  <apinski@cavium.com>
 
+	* passes.c (init_optimization_passes): Add pass_tree_ifcombine
+	and pass_merge_phi before pass_late_phiopt.
+
+	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-6.c: Look at ifcombine1 instead
+	of ifcombine.
+	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-7.c: Look at optimized instead
+	of ifcombine.
+
+2012-08-02  Andrew Pinski  <apinski@cavium.com>
+
 	* config/mips/mips.md: Add to the comment about
 	"Bit field extract patterns".
 

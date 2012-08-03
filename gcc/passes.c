@@ -1408,6 +1408,8 @@ init_optimization_passes (void)
       NEXT_PASS (pass_late_warn_uninitialized);
       NEXT_PASS (pass_dse);
       NEXT_PASS (pass_forwprop);
+      NEXT_PASS (pass_tree_ifcombine);
+      NEXT_PASS (pass_merge_phi);
       NEXT_PASS (pass_late_phiopt);
       NEXT_PASS (pass_merge_const_bfstores);
       NEXT_PASS (pass_fold_builtins);
