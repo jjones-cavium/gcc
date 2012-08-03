@@ -3756,7 +3756,8 @@
 ;;
 ;;  ....................
 
-;; Bit field extract patterns which use lwl/lwr or ldl/ldr.
+;; Bit field extract patterns which use lwl/lwr, ldl/ldr, exts,
+;; ext/dext or ins/dins.
 
 (define_expand "extv"
   [(set (match_operand 0 "register_operand")
