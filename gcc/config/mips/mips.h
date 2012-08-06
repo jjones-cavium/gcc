@@ -229,6 +229,8 @@ struct mips_cpu_info {
 #define TARGET_SB1                  (mips_arch == PROCESSOR_SB1		\
 				     || mips_arch == PROCESSOR_SB1A)
 #define TARGET_SR71K                (mips_arch == PROCESSOR_SR71000)
+/* FIXME: maybe merge in XLP changes. */
+#define TARGET_XLP                  0
 
 /* Scheduling target defines.  */
 #define TUNE_20KC		    (mips_tune == PROCESSOR_20KC)
@@ -317,7 +319,7 @@ struct mips_cpu_info {
    stores.  It does not tell anything about ordering of loads and
    stores prior to and following the SC, only about the SC itself and
    those loads and stores follow it.  */
-#define TARGET_SYNC_AFTER_SC (!TARGET_OCTEON)
+#define TARGET_SYNC_AFTER_SC (!TARGET_OCTEON && !TARGET_XLP)
 
 /* IRIX specific stuff.  */
 #define TARGET_IRIX6	   0
@@ -1073,6 +1075,9 @@ struct mips_cpu_info {
   (target_flags_explicit & MASK_LLSC	\
    ? TARGET_LLSC && !TARGET_MIPS16	\
    : ISA_HAS_LL_SC)
+
+#define ISA_HAS_SWAP (TARGET_XLP)
+#define ISA_HAS_LDADD (TARGET_XLP)
 
 /* ISA includes the baddu instruction.  */
 #define ISA_HAS_BADDU		(TARGET_OCTEON && !TARGET_MIPS16)
@@ -2936,3 +2941,7 @@ extern GTY(()) struct target_globals *mips16_globals;
 #define TARGET_CAN_COPY_MODES(orig_mode, copy_mode)		\
 	(((orig_mode) == SImode && (copy_mode) == DImode)	\
 	 || (GET_MODE_SIZE (orig_mode) >= GET_MODE_SIZE (copy_mode)))
+
+/* FIXME: maybe merge in XLP changes. */
+#define PROCESSOR_XLP 0
+

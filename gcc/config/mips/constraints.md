@@ -235,3 +235,8 @@
 (define_constraint "Yy"
    "@internal"
    (match_operand 0 "inverse_bitmask_operand"))
+
+(define_memory_constraint "ZR"
+ "@internal
+  An address valid for loading/storing register exclusive"
+ (match_operand 0 "mem_noofs_operand"))
