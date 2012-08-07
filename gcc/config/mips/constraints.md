@@ -240,3 +240,14 @@
  "@internal
   An address valid for loading/storing register exclusive"
  (match_operand 0 "mem_noofs_operand"))
+
+(define_constraint "YD"
+ "@internal
+  lad operand (-1)"
+  (match_operand 0 "lad_operand"))
+
+(define_constraint "YI"
+ "@internal
+  lai operand (1)"
+  (match_operand 0 "lai_operand"))
+
