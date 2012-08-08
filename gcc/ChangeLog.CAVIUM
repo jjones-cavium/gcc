@@ -1,3 +1,11 @@
+2012-08-08  Andrew Pinski  <apinski@cavium.com>
+
+	* config/mips/sync.md (UNSPEC_MEMORY_BARRIER_R): New unspec.
+	(memory_barrier_r): New expand.
+	(*memory_barrier_r): New pattern.
+	(atomic_load<mode>): For octeon emit memory_barrier_r so
+	the load will be done at the correct location.
+
 2012-08-07  Andrew Pinski  <apinski@cavium.com>
 
 	* config/mips/sync.md (UNSPEC_ATOMIC_OP): New unspec.
