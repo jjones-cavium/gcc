@@ -1,5 +1,5 @@
 /* { dg-do compile } */
-/* { dg-options "-O2 isa>=2 -mabi=32" } */
+/* { dg-options "-O2 isa>=2 -mabi=32 forbid_cpu=octeon2" } */
 /* { dg-final { scan-assembler "addiu" } } */
 /* { dg-final { scan-assembler-not "subu" } } */
 
