@@ -6737,12 +6737,8 @@ print_loop (FILE *file, struct loop *loop, int indent, int verbosity)
   s_indent[indent] = '\0';
 
   /* Print loop's header.  */
-  if (loop->latch)
-    fprintf (file, "%sloop_%d (header = %d, latch = %d", s_indent,
-	     loop->num, loop->header->index, loop->latch->index);
-  else
-    fprintf (file, "%sloop_%d (header = %d, latch = NULL", s_indent,
-	     loop->num, loop->header->index);
+  fprintf (file, "%sloop_%d (header = %d, latch = %d", s_indent,
+	   loop->num, loop->header->index, loop->latch->index);
   fprintf (file, ", niter = ");
   print_generic_expr (file, loop->nb_iterations, 0);
 
