@@ -1,3 +1,8 @@
+2012-08-19  Joseph Myers  <joseph@codesourcery.com>
+
+	* crtstuff.c (USE_PT_GNU_EH_FRAME): Define for systems using glibc
+	even if inhibit_libc.
+
 2012-05-21  Andrew Pinski  <apinski@cavium.com>
 
 	PR bootstrap/53183
