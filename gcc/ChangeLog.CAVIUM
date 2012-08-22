@@ -1,3 +1,9 @@
+2012-08-21  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4546
+	* merge-gcda.c (merge_file): Fixup the case when coming
+	to a new function tag.
+
 2012-08-13  Andrew Pinski  <apinski@cavium.com>
 
 	* config/mips/sync.md (sync_<optab><mode>): Remove.

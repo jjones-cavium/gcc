@@ -350,6 +350,7 @@ merge_file (struct gcov_merge *merge, const char *filename, int factor,
   /* Read and the Functions. */
   do {
       gcov_unsigned_t length;
+new_function:
       if (tag == 0)
 	break;
 
@@ -359,7 +360,7 @@ merge_file (struct gcov_merge *merge, const char *filename, int factor,
           so continue. */
       if (!length)
 	{
-	  tag = gcov_read_unsigned();
+	  tag = gcov_read_unsigned ();
 	  continue;
 	}
       
@@ -387,7 +388,7 @@ merge_file (struct gcov_merge *merge, const char *filename, int factor,
 	  struct fn_counts **slot, *entry, elt;
       
 	  if (!GCOV_TAG_IS_COUNTER (tag))
-	    continue;
+	    goto new_function;
 
 	  length = gcov_read_unsigned ();
 	  n_counts = GCOV_TAG_COUNTER_NUM (length);
