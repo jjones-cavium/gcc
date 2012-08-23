@@ -1,3 +1,15 @@
+2012-08-23  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #3307
+	* config/mips/mips.md (doloop_end): New expand for
+	allowing SMS to work.
+
+	* testsuite/gcc.dg/sms-1.c: Match for MIPS* also.
+	* testsuite/gcc.dg/sms-10.c: Likewise.
+	* testsuite/gcc.dg/sms-3.c: Likewise.
+	* testsuite/gcc.dg/sms-4.c: Likewise.
+	* testsuite/gcc.dg/sms-5.c: Likewise.
+
 2012-08-22  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4550

@@ -38,6 +38,6 @@ main ()
   return 0;
 }
 
-/* { dg-final { scan-rtl-dump-times "SMS succeeded" 1 "sms" { target spu-*-* powerpc*-*-* } } } */
+/* { dg-final { scan-rtl-dump-times "SMS succeeded" 1 "sms" { target spu-*-* powerpc*-*-* mips*-*-* } } } */
 /* { dg-final { cleanup-rtl-dump "sms" } } */
 
