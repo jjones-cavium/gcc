@@ -1,3 +1,8 @@
+2012-08-25  Eric Botcazou  <ebotcazou@adacore.com>
+
+	PR rtl-optimization/54088
+	* jump.c (delete_related_insns): Robustify latest change.
+
 2012-03-15  Ulrich Weigand  <ulrich.weigand@linaro.org>
 
 	* combine.c (apply_distributive_law): Do not distribute SUBREG.
