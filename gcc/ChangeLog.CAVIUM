@@ -1,5 +1,13 @@
 2012-08-30  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #4587
+	* simplify-rtx.c (simplify_ternary_operation): Don't create
+	a lowpart for mode of VOIDmode.
+
+	* testsuite/gcc.c-torture/compile/20120830-2.c: New testcase.
+
+2012-08-30  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #4586
 	* tree-ssa-phiopt.c (tree_ssa_phiopt_worker): Only delete the phi node
 	when we actually did the propagatation for degenerate phi.
