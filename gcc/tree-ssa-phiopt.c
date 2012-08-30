@@ -378,8 +378,10 @@ tree_ssa_phiopt_worker (bool late, bool do_store_elim)
 		  if (is_gimple_reg (lhs)
 		      && may_propagate_copy (lhs, rhs)
 		      && loop_depth_of_name (lhs) >= loop_depth_of_name (rhs))
-		    replace_uses_by (lhs, rhs);
-		  remove_phi_node (&gsi, true);
+		    {
+		      replace_uses_by (lhs, rhs);
+		      remove_phi_node (&gsi, true);
+		    }
 		}
 	      else
 		gsi_next (&gsi);
