@@ -1,3 +1,8 @@
+2012-09-03  Richard Guenther  <rguenther@suse.de>
+
+	PR tree-optimization/54362
+	* tree-ssa-structalias.c (find_func_aliases): Handle COND_EXPR.
+
 2012-09-02  Eric Botcazou  <ebotcazou@adacore.com>
 
 	PR rtl-optimization/54369
