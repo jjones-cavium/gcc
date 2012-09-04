@@ -1,3 +1,12 @@
+2012-09-03  Andrew Pinski  <apinski@cavium.com>
+
+	FSF PR tree-opt/54362
+	Start of Bug #4370
+	* trans-mem.c (thread_private_new_memory): Handle
+	COND_EXPR like a PHI with two arguments.
+
+	* testsuite/gcc.dg/tm/memopt-16.c: New testcase.
+
 2012-08-30  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4587
