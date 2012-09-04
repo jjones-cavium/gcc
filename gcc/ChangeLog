@@ -1,3 +1,7 @@
+2012-09-04  Richard Henderson  <rth@redhat.com>
+
+	* alias.c (read_dependence): Return true for ALIAS_SET_MEMORY_BARRIER.
+
 2012-09-24  Eric Botcazou  <ebotcazou@adacore.com>
 
 	* tree-streamer-in.c (unpack_ts_type_common_value_fields): Stream in
