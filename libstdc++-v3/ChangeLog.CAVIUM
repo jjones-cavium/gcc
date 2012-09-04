@@ -1,0 +1,5 @@
+2012-09-04  Andrew Pinski  <apinski@cavium.com>
+
+	* include/ext/ropeimpl.h (__gnu_cxx::rope::rope): Add std:: in front
+	of __uninitialized_fill_n_a.
+
