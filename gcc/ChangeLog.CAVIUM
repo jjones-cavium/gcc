@@ -1,3 +1,8 @@
+2012-09-06  Andrew Pinski  <apinski@cavium.com>
+
+	* tree-ssa-ifcombine.c: Include rtl.h and tm_p.h.
+	* Makefile.in (tree-ssa-ifcombine.o): Update dependencies.
+
 2012-09-05  Andrew Pinski  <apinski@cavium.com>
 
 	FSF PR tree-opt/54494

@@ -22,6 +22,10 @@ along with GCC; see the file COPYING3.  If not see
 #include "system.h"
 #include "coretypes.h"
 #include "tm.h"
+/* rtl is needed only because arm back-end requires it for
+   BRANCH_COST.  */
+#include "rtl.h"
+#include "tm_p.h"
 #include "tree.h"
 #include "basic-block.h"
 #include "timevar.h"
