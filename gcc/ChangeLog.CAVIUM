@@ -1,5 +1,11 @@
 2012-09-06  Andrew Pinski  <apinski@cavium.com>
 
+	* timevar.def (TV_TREE_SSA_MERGE_COMMON): New.
+	* tree-ssa-merge-common-code.c (pass_merge_common_code): Use
+	 TV_TREE_SSA_MERGE_COMMON.
+
+2012-09-06  Andrew Pinski  <apinski@cavium.com>
+
 	* tree-ssa-ifcombine.c: Include rtl.h and tm_p.h.
 	* Makefile.in (tree-ssa-ifcombine.o): Update dependencies.
 

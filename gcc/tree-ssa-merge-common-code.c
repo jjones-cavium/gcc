@@ -285,11 +285,11 @@ struct gimple_opt_pass pass_merge_common_code =
   GIMPLE_PASS,
   "merge_code",				/* name */
   gate_merge_code,			/* gate */
-  do_merge_code,				/* execute */
+  do_merge_code,			/* execute */
   NULL,					/* sub */
   NULL,					/* next */
   0,					/* static_pass_number */
-  0,					/* tv_id */
+  TV_TREE_SSA_MERGE_COMMON,		/* tv_id */
   PROP_cfg | PROP_ssa,			/* properties_required */
   0,					/* properties_provided */
   0,					/* properties_destroyed */
