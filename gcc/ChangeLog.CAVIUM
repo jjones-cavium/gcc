@@ -1,3 +1,7 @@
+2012-09-08  Andrew Pinski  <apinski@cavium.com>
+
+	* config.gcc (arm*-*-linux*): Correct check for big-endian target.
+
 2012-09-06  Andrew Pinski  <apinski@cavium.com>
 
 	* timevar.def (TV_TREE_SSA_MERGE_COMMON): New.
