@@ -863,10 +863,7 @@ simplify_unary_operation_1 (enum rtx_code code, enum machine_mode mode, rtx op)
          since this will cause problems with the umulXi3_highpart
          patterns.  */
       if ((TRULY_NOOP_TRUNCATION_MODES_P (mode, GET_MODE (op))
-	   ? (num_sign_bit_copies (op, GET_MODE (op))
-	      > (unsigned int) (GET_MODE_PRECISION (GET_MODE (op))
-				- GET_MODE_PRECISION (mode)))
-	   : truncated_to_mode (mode, op))
+	   || truncated_to_mode (mode, op))
 	  && ! (GET_CODE (op) == LSHIFTRT
 		&& GET_CODE (XEXP (op, 0)) == MULT))
 	return rtl_hooks.gen_lowpart_no_emit (mode, op);
@@ -5607,25 +5604,36 @@ simplify_subreg (enum machine_mode outermode, rtx op,
      either operand can be simplified.  */
   if ((GET_CODE (op) == IOR || GET_CODE (op) == AND)
       && GET_MODE_SIZE (outermode) < GET_MODE_SIZE (innermode)
-      && subreg_lowpart_offset (outermode, innermode) == byte)
+      && subreg_lowpart_offset (outermode, innermode) == byte
+      && SCALAR_INT_MODE_P (outermode))
     {
       rtx op0 = XEXP (op, 0);
       rtx op1 = XEXP (op, 1);
       if (GET_CODE (op0) == CONST_INT)
 	op0 = NULL_RTX;
       else
-        op0 = simplify_subreg (outermode, op0, innermode, byte);
+	{
+          op0 = simplify_unary_operation (TRUNCATE, outermode, op0, innermode);
+	  if (op0 && (GET_CODE (op0) == TRUNCATE
+	              || GET_CODE (op0) == SUBREG))
+	    op0 = NULL_RTX;
+	}
       if (GET_CODE (op1) == CONST_INT)
 	op1 = NULL_RTX;
       else
-        op1 = simplify_subreg (outermode, op1, innermode, byte);
+	{
+          op1 = simplify_unary_operation (TRUNCATE, outermode, op1, innermode);
+	  if (op1 && (GET_CODE (op1) == TRUNCATE
+	              || GET_CODE (op1) == SUBREG))
+	    op1 = NULL_RTX;
+	}
 
       if (op0 != NULL_RTX || op1 != NULL_RTX)
 	{
 	  if (op0 == NULL_RTX)
-	    op0 = simplify_gen_subreg (outermode, XEXP (op, 0), innermode, byte);
+	    op0 = simplify_gen_unary (TRUNCATE, outermode, XEXP (op, 0), innermode);
 	  if (op1 == NULL_RTX)
-	    op1 = simplify_gen_subreg (outermode, XEXP (op, 1), innermode, byte);
+	    op1 = simplify_gen_unary (TRUNCATE, outermode, XEXP (op, 1), innermode);
 	  return simplify_gen_binary (GET_CODE (op), outermode, op0, op1);
 	}
     }

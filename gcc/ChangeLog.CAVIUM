@@ -1,5 +1,15 @@
 2012-09-10  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #4619
+	* simplify-rtx.c (simplify_unary_operation_1 <case TRUNCATE>):
+	Simplify truncate when no matter what if
+	TRULY_NOOP_TRUNCATION_MODES_P is true.
+	(simplify_subreg): When doing (subreg (ior/and)) produce
+	TRUNCATE rather than subregs of the inner operands and only
+	do it if the outer mode is a scalar integer mode.
+
+2012-09-10  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #4613
 	* expr.c (expand_cond_expr_using_xors):	Call
 	reduce_to_bit_field_precision if needed after the negation.
