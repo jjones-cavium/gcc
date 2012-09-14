@@ -1,3 +1,10 @@
+2012-09-13  Andrew Pinski  <apinski@cavium.com>
+
+	* combine.c (simplify_set): Only simplify (set (subreg (x)) (y)
+	when the subreg is a paradoxical subreg.
+
+	* testsuite/gcc.c-torture/compile/20120913-1.c: New testcase.
+
 2012-09-10  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4619
