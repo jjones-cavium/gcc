@@ -1,3 +1,8 @@
+2012-03-09  Jiangning Liu  <jiangning.liu@arm.com>
+
+	* gcc.dg/tree-ssa/scev-3.c: New.
+	* gcc.dg/tree-ssa/scev-4.c: New.
+
 2012-09-03  Jakub Jelinek  <jakub@redhat.com>
 
 	Backported from mainline
