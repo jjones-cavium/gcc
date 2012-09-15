@@ -1,3 +1,17 @@
+2012-09-14  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4618
+	* config/arm/linux-eabi.h (TARGET_DEFAULT_FLOAT_ABI): Define
+	to ARM_FLOAT_ABI_HARD.
+	(GLIBC_DYNAMIC_LINKER_DEFAULT): Change to the hard float one.
+	(MULTILIB_DEFAULT_ENDIAN): New define.
+	(MULTILIB_DEFAULTS): New define.
+	* config/arm/t-linux-eabi (MULTILIB_OPTIONS): Redefine to include hard and soft
+	float ABIs.
+	(MULTILIB_DIRNAMES): Likewise.
+	(MULTILIB_OSDIRNAMES): Likewise.
+	(MULTILIB_MATCHES): Match -msoft-float as -mfloat-abi=soft.
+
 2012-09-13  Andrew Pinski  <apinski@cavium.com>
 
 	* combine.c (simplify_set): Only simplify (set (subreg (x)) (y)
