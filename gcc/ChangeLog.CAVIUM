@@ -1,3 +1,9 @@
+2012-09-15  Andrew Pinski  <apinski@cavium.com>
+
+	* config/arm/t-linux-eabi (MULTILIB_MATCHES): Fixup
+	the mhard-float case and add mfloat-abi=softfp as
+	an alias for -mfloat-abi=soft.
+
 2012-09-14  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4618
