@@ -1,3 +1,7 @@
+2012-09-17  Ian Lance Taylor  <iant@google.com>
+
+	* config-lang.in (target_libs): Add target-libbacktrace.
+
 2012-03-22  Release Manager
 
 	* GCC 4.7.0 released.
