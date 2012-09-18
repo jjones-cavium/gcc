@@ -1,3 +1,13 @@
+2012-09-17  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4705
+	* optabs.c (emit_conditional_move): Only
+	try using the same registers for the constant
+	if the modes are equal.
+
+	* testsuite/gcc.c-torture/compile/20120917-1.c: New testcase.
+
+
 2012-09-16  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.target/arm/unsigned-extend-2.c: Use shift to
