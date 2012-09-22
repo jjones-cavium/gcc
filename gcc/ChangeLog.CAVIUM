@@ -18,6 +18,7 @@
 
 2012-09-16  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #4695
 	* testsuite/gcc.target/arm/unsigned-extend-2.c: Use shift to
 	the left rather than shift to the right so the and would not
 	be removed and the loop does not get optimized away.
