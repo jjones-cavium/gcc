@@ -1,3 +1,11 @@
+2012-09-21  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4620
+	* testsuite/gcc.dg/octeon/madd-1.c: Fix testcase.
+	* testsuite/gcc.dg/octeon/madd-2.c: Fix testcase.
+	* testsuite/gcc.dg/octeon/madd-3.c: Fix testcase.
+	* testsuite/gcc.dg/octeon/madd-4.c: Fix testcase.
+
 2012-09-17  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4705
