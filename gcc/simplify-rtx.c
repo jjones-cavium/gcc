@@ -864,6 +864,7 @@ simplify_unary_operation_1 (enum rtx_code code, enum machine_mode mode, rtx op)
          patterns.  */
       if ((TRULY_NOOP_TRUNCATION_MODES_P (mode, GET_MODE (op))
 	   || truncated_to_mode (mode, op))
+	  && !VECTOR_MODE_P (mode)
 	  && ! (GET_CODE (op) == LSHIFTRT
 		&& GET_CODE (XEXP (op, 0)) == MULT))
 	return rtl_hooks.gen_lowpart_no_emit (mode, op);
