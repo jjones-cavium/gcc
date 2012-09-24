@@ -1,3 +1,10 @@
+2012-09-24  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.target/powerpc/ppc-fma-1.c: Add -fno-unroll-loops.
+	* testsuite/gcc.target/powerpc/ppc-fma-2.c: Likewise.
+	* testsuite/gcc.target/powerpc/ppc-fma-3.c: Likewise.
+	* testsuite/gcc.target/powerpc/ppc-fma-4.c: Likewise.
+
 2012-09-22  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4737
