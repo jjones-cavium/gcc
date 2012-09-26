@@ -1,5 +1,9 @@
 2012-09-26  Ian Lance Taylor  <iant@google.com>
 
+	* diagnostic.c (bt_callback): Cast pc when calling fprintf.
+
+2012-09-26  Ian Lance Taylor  <iant@google.com>
+
 	* diagnostic.c: Include "demangle.h" and "backtrace.h".
 	(bt_stop): New static array.
 	(bt_callback, bt_err_callback): New static functions.
