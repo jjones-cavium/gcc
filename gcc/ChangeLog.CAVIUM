@@ -1,3 +1,9 @@
+2012-09-27  Alexandre Oliva  <aoliva@redhat.com>
+
+	Bug #4764
+	FSF PR 53135
+	* dwarf2out.c (value_format): Handle DW_FORM_block4.
+
 2012-09-24  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.target/powerpc/ppc-fma-1.c: Add -fno-unroll-loops.
