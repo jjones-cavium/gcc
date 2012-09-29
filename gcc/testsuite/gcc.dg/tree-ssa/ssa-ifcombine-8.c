@@ -1,5 +1,5 @@
 /* { dg-do compile } */
-/* { dg-options "-O -fno-trapping-math -fdump-tree-ifcombine" } */
+/* { dg-options "-O -fno-trapping-math -fdump-tree-ifcombine1" } */
 
 double test1 (double i, double j)
 {
@@ -21,5 +21,5 @@ plouf:
    The transformation would also be legal with -ftrapping-math.
    Instead we get u<=, which is acceptable with -fno-trapping-math.  */
 
-/* { dg-final { scan-tree-dump " u<= " "ifcombine" } } */
-/* { dg-final { cleanup-tree-dump "ifcombine" } } */
+/* { dg-final { scan-tree-dump " u<= " "ifcombine1" } } */
+/* { dg-final { cleanup-tree-dump "ifcombine1" } } */

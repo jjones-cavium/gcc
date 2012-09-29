@@ -1,5 +1,5 @@
 /* { dg-do compile } */
-/* { dg-options "-O2 -fno-trapping-math -fdump-tree-ifcombine" } */
+/* { dg-options "-O2 -fno-trapping-math -fdump-tree-ifcombine1" } */
 
 void f ();
 enum Sign { NEG=-1, ZERO, POS };
@@ -18,5 +18,5 @@ void g (double x)
 /* The above should be optimized to x < 0 by ifcombine.
    The transformation would also be legal with -ftrapping-math.  */
 
-/* { dg-final { scan-tree-dump "optimizing.* < " "ifcombine" } } */
-/* { dg-final { cleanup-tree-dump "ifcombine" } } */
+/* { dg-final { scan-tree-dump "optimizing.* < " "ifcombine1" } } */
+/* { dg-final { cleanup-tree-dump "ifcombine1" } } */

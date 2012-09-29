@@ -1,5 +1,11 @@
 2012-09-29  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-8.c: Look at ifcombine1 instead
+	of ifcombine.
+	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-9.c: Likewise.
+
+2012-09-29  Andrew Pinski  <apinski@cavium.com>
+
 	* tree-ssa-ifcombine.c: Include rtl.h and tm_p.h.
 	(ifcombine_ifandif): Handle cases where
 	maybe_fold_and_comparisons fails, combining the branches
