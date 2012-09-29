@@ -1,5 +1,22 @@
 2012-09-29  Andrew Pinski  <apinski@cavium.com>
 
+	* tree-ssa-ifcombine.c: Include rtl.h and tm_p.h.
+	(ifcombine_ifandif): Handle cases where
+	maybe_fold_and_comparisons fails, combining the branches
+	anyways.
+	(tree_ssa_ifcombine): Inverse the order of
+	the basic block walk, increases the number of combinings.
+	* Makefile.in (tree-ssa-ifcombine.o): Update dependencies.
+
+	* testsuite/gcc.dg/tree-ssa/phi-opt-2.c: Expect zero ifs as the compiler
+	produces a & b now.
+	* testsuite/gcc.dg/tree-ssa/phi-opt-9.c: Use a function call
+	to prevent conditional move to be used.
+	* testsuite/gcc.dg/tree-ssa/ssa-dom-thread-3.c: Remove check for
+	"one or more intermediate".
+
+2012-09-29  Andrew Pinski  <apinski@cavium.com>
+
 	Revert:
 	2012-07-23  Andrew Pinski  <apinski@cavium.com>
 

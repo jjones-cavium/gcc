@@ -2428,7 +2428,6 @@ typedef struct mips_args {
    1 is the default; other values are interpreted relative to that.  */
 
 #define BRANCH_COST(speed_p, predictable_p) mips_branch_cost
-#define LOGICAL_OP_NON_SHORT_CIRCUIT 0
 
 /* If defined, modifies the length assigned to instruction INSN as a
    function of the context in which it is used.  LENGTH is an lvalue
