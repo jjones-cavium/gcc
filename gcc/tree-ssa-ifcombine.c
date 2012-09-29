@@ -22,10 +22,6 @@ along with GCC; see the file COPYING3.  If not see
 #include "system.h"
 #include "coretypes.h"
 #include "tm.h"
-/* rtl is needed only because arm back-end requires it for
-   BRANCH_COST.  */
-#include "rtl.h"
-#include "tm_p.h"
 #include "tree.h"
 #include "basic-block.h"
 #include "timevar.h"
@@ -33,12 +29,6 @@ along with GCC; see the file COPYING3.  If not see
 #include "tree-flow.h"
 #include "tree-pass.h"
 #include "tree-dump.h"
-
-#ifndef LOGICAL_OP_NON_SHORT_CIRCUIT
-#define LOGICAL_OP_NON_SHORT_CIRCUIT \
-  (BRANCH_COST (optimize_function_for_speed_p (cfun), \
-                false) >= 2)
-#endif
 
 /* This pass combines COND_EXPRs to simplify control flow.  It
    currently recognizes bit tests and comparisons in chains that
@@ -408,30 +398,7 @@ ifcombine_ifandif (basic_block inner_cond_bb, basic_block outer_cond_bb)
 					    gimple_cond_code (outer_cond),
 					    gimple_cond_lhs (outer_cond),
 					    gimple_cond_rhs (outer_cond))))
-	{
-	  tree t1, t2;
-	  gimple_stmt_iterator gsi;
-	  if (!LOGICAL_OP_NON_SHORT_CIRCUIT)
-	    return false;
-	  /* Only do this optimization if the inner bb contains only the conditional. */
-	  if (!gsi_one_before_end_p (gsi_start_nondebug_bb (inner_cond_bb)))
-	    return false;
-	  t1 = fold_build2_loc (gimple_location (inner_cond),
-				gimple_cond_code (inner_cond),
-				boolean_type_node,
-				gimple_cond_lhs (inner_cond),
-				gimple_cond_rhs (inner_cond));
-	  t2 = fold_build2_loc (gimple_location (outer_cond),
-				gimple_cond_code (outer_cond),
-				boolean_type_node,
-				gimple_cond_lhs (outer_cond),
-				gimple_cond_rhs (outer_cond));
-	  t = fold_build2_loc (gimple_location (inner_cond), 
-			       TRUTH_AND_EXPR, boolean_type_node, t1, t2);
-	  gsi = gsi_for_stmt (inner_cond);
-	  t = force_gimple_operand_gsi (&gsi, t, true, NULL, true,
-					GSI_SAME_STMT);
-	}
+	return false;
       t = canonicalize_cond_expr_cond (t);
       if (!t)
 	return false;
@@ -579,30 +546,7 @@ ifcombine_iforif (basic_block inner_cond_bb, basic_block outer_cond_bb)
 					   gimple_cond_code (outer_cond),
 					   gimple_cond_lhs (outer_cond),
 					   gimple_cond_rhs (outer_cond))))
-	{
-	  tree t1, t2;
-	  gimple_stmt_iterator gsi;
-	  if (!LOGICAL_OP_NON_SHORT_CIRCUIT)
-	    return false;
-	  /* Only do this optimization if the inner bb contains only the conditional. */
-	  if (!gsi_one_before_end_p (gsi_start_nondebug_bb (inner_cond_bb)))
-	    return false;
-	  t1 = fold_build2_loc (gimple_location (inner_cond), 
-				gimple_cond_code (inner_cond),
-				boolean_type_node,
-				gimple_cond_lhs (inner_cond),
-				gimple_cond_rhs (inner_cond));
-	  t2 = fold_build2_loc (gimple_location (inner_cond), 
-				gimple_cond_code (outer_cond),
-			        boolean_type_node,
-			        gimple_cond_lhs (outer_cond),
-			        gimple_cond_rhs (outer_cond));
-	  t = fold_build2_loc (gimple_location (inner_cond), 
-			       TRUTH_OR_EXPR, boolean_type_node, t1, t2);
-	  gsi = gsi_for_stmt (inner_cond);
-	  t = force_gimple_operand_gsi (&gsi, t, true, NULL, true,
-					GSI_SAME_STMT);
-	}
+	return false;
       t = canonicalize_cond_expr_cond (t);
       if (!t)
 	return false;
@@ -749,7 +693,7 @@ tree_ssa_ifcombine (void)
   bbs = blocks_in_phiopt_order ();
   calculate_dominance_info (CDI_DOMINATORS);
 
-  for (i = n_basic_blocks - NUM_FIXED_BLOCKS -1; i >= 0; i--)
+  for (i = 0; i < n_basic_blocks - NUM_FIXED_BLOCKS; ++i)
     {
       basic_block bb = bbs[i];
       gimple stmt = last_stmt (bb);
