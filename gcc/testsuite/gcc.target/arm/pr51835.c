@@ -1,6 +1,7 @@
 /* { dg-do compile } */
 /* { dg-options "-O2 -mfloat-abi=hard -mfpu=fpv4-sp-d16" }  */
 /* { dg-require-effective-target arm_thumb2_ok } */
+/* { dg-require-effective-target arm_hard_vfp_ok } */
 
 int func1 (double d)
 {

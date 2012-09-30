@@ -1,6 +1,7 @@
 /* PR target/51915 */
 /* { dg-do compile } */
 /* { dg-options "-march=armv7-a -mfloat-abi=hard -O2" } */
+/* { dg-require-effective-target arm_hard_vfp_ok } */
 
 struct S { int s1; void *s2; };
 struct T { struct S t1; unsigned long long t2; };
