@@ -1,3 +1,9 @@
+2012-09-30  Jonathan Wakely  <jwakely.gcc@gmail.com>
+
+	* include/ext/ropeimpl.h (__uninitialized_fill_n_a): Fix using
+	declaration.
+	* testsuite/ext/rope/5.cc: New.
+
 2012-09-09  Thiago Macieira  <thiago.macieira@intel.com>
 
 	PR libstdc++/54172
