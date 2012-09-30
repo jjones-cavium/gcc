@@ -1,3 +1,13 @@
+2012-09-30  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.target/arm/pr51835.c: Require arm_hard_vfp_ok.
+	* testsuite/gcc.target/arm/pr51915.c: Likewise.
+	* testsuite/gcc.target/arm/pr52006.c: Likewise.
+	* testsuite/lib/target-supports.exp (check_effective_target_arm_vect_no_misalign):
+	Check for -mfloat-abi=soft and -msoft-float in the flag list.
+	(check_effective_target_arm_hard_vfp_ok): Likewise.
+	(check_effective_target_arm_fp16_ok_nocache): Check for -msoft-float also.
+
 2012-09-29  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-8.c: Look at ifcombine1 instead
