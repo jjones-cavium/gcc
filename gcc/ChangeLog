@@ -1,3 +1,8 @@
+2012-10-02  Andrew Pinski  <apinski@cavium.com>
+
+	* simplify-rtx.c (simplify_unary_operation_1 <case TRUNCATE>):
+	Don't optimize a truncate of a mem if it is a vector mode.
+
 2012-07-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	* config/arm/neon.ml (ops): Fix regexp for vld1Q_dups64 and
