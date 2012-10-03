@@ -1,3 +1,11 @@
+2012-10-03   Manjunath Matti  <mmatti@mvista.com>
+
+	Bug #4679
+	* config/arm/arm.md (arm_zero_extendqisi2): Added pool range.
+	(arm_zero_extendqisi2_v6): Likewise.
+	(arm_zero_extendhisi2): Likewise.
+	(arm_zero_extendhisi2_v6): Likewise.
+
 2012-09-26   Manjunath Matti  <mmatti@mvista.com>
 
 	Bug #4676
