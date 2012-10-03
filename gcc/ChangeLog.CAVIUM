@@ -1,3 +1,9 @@
+2012-09-26   Manjunath Matti  <mmatti@mvista.com>
+
+	Bug #4676
+	* config/arm/arm.md (extzv_t2): Check the operands are valid before
+	reload.
+
 2012-09-30  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.target/arm/pr51835.c: Require arm_hard_vfp_ok.
