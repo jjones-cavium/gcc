@@ -1546,7 +1546,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       else
 	{
 	  __rest_buffer = this->_Data_allocate(_S_rounded_up_size(__rest));
-	  std::__uninitialized_fill_n_a(__rest_buffer, __rest, __c,
+	  __uninitialized_fill_n_a(__rest_buffer, __rest, __c,
 				   _M_get_allocator());
 	  _S_cond_store_eos(__rest_buffer[__rest]);
 	  __try
@@ -1566,7 +1566,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	    this->_Data_allocate(_S_rounded_up_size(__exponentiate_threshold));
 	  _RopeLeaf* __base_leaf;
 	  rope __base_rope;
-	  std::__uninitialized_fill_n_a(__base_buffer, __exponentiate_threshold, __c,
+	  __uninitialized_fill_n_a(__base_buffer, __exponentiate_threshold, __c,
 				   _M_get_allocator());
 	  _S_cond_store_eos(__base_buffer[__exponentiate_threshold]);
 	  __try
