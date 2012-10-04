@@ -1,3 +1,8 @@
+2012-10-03   Khem Raj  <raj.khem@gmail.com>
+
+	* cp/lang-specs.h: Add %I when using preprocessed source.
+	* gcc.c (default_compilers): Likewise.
+
 2012-10-03   Manjunath Matti  <mmatti@mvista.com>
 
 	Bug #4679
