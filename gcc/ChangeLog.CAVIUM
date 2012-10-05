@@ -1,3 +1,8 @@
+2012-10-05  Andrew Pinski  <apinski@cavium.com>
+
+	* cp/Make-lang.in (c++.install-common): Use ln -s
+	instread of ln to save space.
+
 2012-10-04  Andrew Pinski  <apinski@cavium.com>
 
 	* Makefile.in (install-driver): Use ln -s instead of

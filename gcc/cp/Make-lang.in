@@ -176,7 +176,7 @@ c++.install-common: installdirs
 	-chmod a+x $(DESTDIR)$(bindir)/$(GXX_INSTALL_NAME)$(exeext)
 	-rm -f $(DESTDIR)$(bindir)/$(CXX_INSTALL_NAME)$(exeext)
 	-( cd $(DESTDIR)$(bindir) && \
-	      $(LN) $(GXX_INSTALL_NAME)$(exeext) $(CXX_INSTALL_NAME)$(exeext) )
+	      $(LN_S) $(GXX_INSTALL_NAME)$(exeext) $(CXX_INSTALL_NAME)$(exeext) )
 	-if [ -f cc1plus$(exeext) ] ; then \
 	  if [ -f g++-cross$(exeext) ] ; then \
 	    if [ -d $(DESTDIR)$(gcc_tooldir)/bin/. ] ; then \
@@ -184,7 +184,7 @@ c++.install-common: installdirs
 	      $(INSTALL_PROGRAM) g++-cross$(exeext) $(DESTDIR)$(gcc_tooldir)/bin/g++$(exeext); \
 	      rm -f $(DESTDIR)$(gcc_tooldir)/bin/c++$(exeext); \
 	      ( cd $(DESTDIR)$(gcc_tooldir)/bin && \
-		$(LN) g++$(exeext) c++$(exeext) ); \
+		$(LN_S) g++$(exeext) c++$(exeext) ); \
 	    else true; fi; \
 	  else \
 	    rm -f $(DESTDIR)$(bindir)/$(GXX_TARGET_INSTALL_NAME)$(exeext); \
