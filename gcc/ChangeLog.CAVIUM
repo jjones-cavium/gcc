@@ -1,3 +1,8 @@
+2012-10-04  Andrew Pinski  <apinski@cavium.com>
+
+	* Makefile.in (install-driver): Use ln -s instead of
+	ln to save space.
+
 2012-10-03   Khem Raj  <raj.khem@gmail.com>
 
 	* cp/lang-specs.h: Add %I when using preprocessed source.
