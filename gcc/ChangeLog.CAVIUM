@@ -1,3 +1,9 @@
+2012-10-06  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.dg/ucnid-8.c: Update line numbers after
+	previous patch to this file.
+	* testsuite/gcc.dg/torture/pr51106-2.c: Likewise.
+
 2012-10-05  Andrew Pinski  <apinski@cavium.com>
 
 	* cp/Make-lang.in (c++.install-common): Use ln -s
