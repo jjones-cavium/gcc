@@ -3866,30 +3866,42 @@ try_combine (rtx i3, rtx i2, rtx i1, rtx i0, int *new_direct_jump_p,
      as two separate insns.  This case occurs when some SET allows two
      other insns to combine, but the destination of that SET is still live.  */
 
-  else if (i1 && insn_code_number < 0 && asm_noperands (newpat) < 0
-	   && GET_CODE (newpat) == PARALLEL
-	   && XVECLEN (newpat, 0) == 2
-	   && GET_CODE (XVECEXP (newpat, 0, 0)) == SET
-	   && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 0))) != ZERO_EXTRACT
-	   && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 0))) != STRICT_LOW_PART
-	   && GET_CODE (XVECEXP (newpat, 0, 1)) == SET
-	   && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 1))) != ZERO_EXTRACT
-	   && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 1))) != STRICT_LOW_PART
-	   && ! reg_referenced_p (SET_DEST (XVECEXP (newpat, 0, 1)),
-				  XVECEXP (newpat, 0, 0))
-	   && ! reg_referenced_p (SET_DEST (XVECEXP (newpat, 0, 0)),
-				  XVECEXP (newpat, 0, 1))
-	   && ! (contains_muldiv (SET_SRC (XVECEXP (newpat, 0, 0)))
-		 && contains_muldiv (SET_SRC (XVECEXP (newpat, 0, 1)))))
+  else if ((i1 && insn_code_number < 0 && asm_noperands (newpat) < 0
+	    && GET_CODE (newpat) == PARALLEL
+	    && XVECLEN (newpat, 0) == 2
+	    && GET_CODE (XVECEXP (newpat, 0, 0)) == SET
+	    && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 0))) != ZERO_EXTRACT
+	    && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 0))) != STRICT_LOW_PART
+	    && GET_CODE (XVECEXP (newpat, 0, 1)) == SET
+	    && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 1))) != ZERO_EXTRACT
+	    && GET_CODE (SET_DEST (XVECEXP (newpat, 0, 1))) != STRICT_LOW_PART
+	    && ! reg_referenced_p (SET_DEST (XVECEXP (newpat, 0, 1)),
+				   XVECEXP (newpat, 0, 0))
+	    && ! reg_referenced_p (SET_DEST (XVECEXP (newpat, 0, 0)),
+				   XVECEXP (newpat, 0, 1))
+	    && ! (contains_muldiv (SET_SRC (XVECEXP (newpat, 0, 0)))
+		  && contains_muldiv (SET_SRC (XVECEXP (newpat, 0, 1)))))
+	   || (insn_code_number < 0
+	       && GET_CODE (newpat) == SEQUENCE
+	       && XVECLEN (newpat, 0) == 2
+	       && GET_CODE (XVECEXP (newpat, 0, 0)) == SET
+	       && GET_CODE (XVECEXP (newpat, 0, 1)) == SET
+	       && asm_noperands (newpat) < 0))
     {
+      /* If this is a sequence, it has to be in order of the sequence.  */
+      if (GET_CODE (newpat) == SEQUENCE)
+	{
+	  newi2pat = XVECEXP (newpat, 0, 0);
+	  newpat = XVECEXP (newpat, 0, 1);
+	}
       /* Normally, it doesn't matter which of the two is done first,
 	 but the one that references cc0 can't be the second, and
 	 one which uses any regs/memory set in between i2 and i3 can't
 	 be first.  */
-      if (!use_crosses_set_p (SET_SRC (XVECEXP (newpat, 0, 1)),
-			      DF_INSN_LUID (i2))
+      else if (!use_crosses_set_p (SET_SRC (XVECEXP (newpat, 0, 1)),
+				   DF_INSN_LUID (i2))
 #ifdef HAVE_cc0
-	  && !reg_referenced_p (cc0_rtx, XVECEXP (newpat, 0, 0))
+	       && !reg_referenced_p (cc0_rtx, XVECEXP (newpat, 0, 0))
 #endif
 	 )
 	{
@@ -9154,7 +9166,9 @@ make_field_assignment (rtx x)
   HOST_WIDE_INT pos;
   unsigned HOST_WIDE_INT len;
   rtx other;
+  rtx original = NULL_RTX;
   enum machine_mode mode;
+  rtx newpat;
 
   /* If SRC was (and (not (ashift (const_int 1) POS)) DEST), this is
      a clear of a one-bit field.  We will have changed it to
@@ -9256,6 +9270,14 @@ make_field_assignment (rtx x)
 	   && CONST_INT_P (XEXP (lhs, 1))
 	   && rtx_equal_for_field_assignment_p (XEXP (lhs, 0), dest))
     c1 = INTVAL (XEXP (lhs, 1)), other = rhs;
+  else if (GET_CODE (rhs) == AND
+	   && CONST_INT_P (XEXP (rhs, 1))
+	   && REG_P (XEXP (rhs, 0)))
+    c1 = INTVAL (XEXP (rhs, 1)), other = lhs, original = XEXP (rhs, 0);
+  else if (GET_CODE (lhs) == AND
+	   && CONST_INT_P (XEXP (lhs, 1))
+	   && REG_P (XEXP (lhs, 0)))
+    c1 = INTVAL (XEXP (lhs, 1)), other = rhs, original = XEXP (lhs, 0);
   else
     return x;
 
@@ -9298,7 +9320,20 @@ make_field_assignment (rtx x)
 	 == ((unsigned HOST_WIDE_INT) 1 << INTVAL (XEXP (assign, 1))) - 1)
     src = XEXP (src, 0);
 
-  return gen_rtx_SET (VOIDmode, assign, src);
+  if (!original)
+    return gen_rtx_SET (VOIDmode, assign, src);
+
+  /* Don't create a sequence if the dest register
+     was a hard register. */
+  if (HARD_REGISTER_P (dest))
+    return x;
+
+  newpat = gen_rtx_SEQUENCE (VOIDmode, rtvec_alloc (2));
+  XVECEXP (newpat, 0, 0) = gen_rtx_SET (VOIDmode, dest, original);
+  src = make_compound_operation (src, SET);
+  XVECEXP (newpat, 0, 1) = gen_rtx_SET (VOIDmode, assign, src);
+
+  return newpat;
 }
 
 /* See if X is of the form (+ (* a c) (* b c)) and convert to (* (+ a b) c)
