@@ -1,5 +1,9 @@
 2012-10-07  Andrew Pinski  <apinski@cavium.com>
 
+	* combine.c (try_combine): Remove forgotten debug_rtx.
+
+2012-10-07  Andrew Pinski  <apinski@cavium.com>
+
 	* combine.c (try_combine): Don't do splitting of sequence if
 	the set src of either instruction crosses a set.
 	(make_field_assignment): Create the sequence for a hard register
