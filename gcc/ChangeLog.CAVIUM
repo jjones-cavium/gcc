@@ -1,5 +1,12 @@
 2012-10-07  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.dg/octeon/trunc-10.c: Look for \tsll
+	rather than just sll as that will match dsll which is used
+	for n64 addresses.
+	* testsuite/gcc.dg/octeon/trunc-31.c: Likewise.
+
+2012-10-07  Andrew Pinski  <apinski@cavium.com>
+
 	* combine.c (try_combine): If we have a SEQUENCE, then
 	split if it was not recognized like splitting up a PARALLEL.
 	(make_field_assignment): Produce a SEQUENCE if the input
