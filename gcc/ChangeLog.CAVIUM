@@ -1,5 +1,12 @@
 2012-10-07  Andrew Pinski  <apinski@cavium.com>
 
+	* combine.c (try_combine): Don't do splitting of sequence if
+	the set src of either instruction crosses a set.
+	(make_field_assignment): Create the sequence for a hard register
+	but not for subregs or if the dest overlaps with the original.
+
+2012-10-07  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/gcc.dg/octeon/trunc-10.c: Look for \tsll
 	rather than just sll as that will match dsll which is used
 	for n64 addresses.

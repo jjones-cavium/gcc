@@ -3893,6 +3893,13 @@ try_combine (rtx i3, rtx i2, rtx i1, rtx i0, int *new_direct_jump_p,
 	{
 	  newi2pat = XVECEXP (newpat, 0, 0);
 	  newpat = XVECEXP (newpat, 0, 1);
+	  debug_rtx(i2);
+	  if (use_crosses_set_p (SET_SRC (newpat), DF_INSN_LUID (i2))
+	      || use_crosses_set_p (SET_SRC (newi2pat), DF_INSN_LUID (i2)))
+	    {
+	      undo_all ();
+	      return 0;
+	    }
 	}
       /* Normally, it doesn't matter which of the two is done first,
 	 but the one that references cc0 can't be the second, and
@@ -9323,9 +9330,10 @@ make_field_assignment (rtx x)
   if (!original)
     return gen_rtx_SET (VOIDmode, assign, src);
 
-  /* Don't create a sequence if the dest register
-     was a hard register. */
-  if (HARD_REGISTER_P (dest))
+  /* Don't create a sequence if dest is a subreg or overlaps
+     with the original.  */
+  if (GET_CODE (dest) == SUBREG
+      || reg_overlap_mentioned_p (dest, original))
     return x;
 
   newpat = gen_rtx_SEQUENCE (VOIDmode, rtvec_alloc (2));
