@@ -1,5 +1,15 @@
 2012-10-07  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #2925
+	* combine.c (gen_set_field): New function.
+	(make_field_assignment): Rewrite optimizing of setting of
+	a zero_extract.  Remove lowpart subreg and truncations.
+	Optimize IOR better by using nonzero_bits and comparing
+	both sides of the IOR.
+	Optimize extends also.
+
+2012-10-07  Andrew Pinski  <apinski@cavium.com>
+
 	* combine.c (try_combine): Remove forgotten debug_rtx.
 
 2012-10-07  Andrew Pinski  <apinski@cavium.com>
