@@ -1,3 +1,9 @@
+2012-10-10  Andrew MacLeod  <amacleod@redhat.com>
+
+	PR libstdc++/54861
+	* include/bits/atomic_base.h (atomic_signal_fence): Call
+	__atomic_signal_fence instead of __atomic_thread_fence.
+
 2012-09-30  Jonathan Wakely  <jwakely.gcc@gmail.com>
 
 	* include/ext/ropeimpl.h (__uninitialized_fill_n_a): Fix using
