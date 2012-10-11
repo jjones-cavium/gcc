@@ -9414,7 +9414,9 @@ make_field_assignment (rtx x)
   /* Don't create a sequence if dest is a subreg or overlaps
      with the original.  */
   if (GET_CODE (dest) == SUBREG
-      || reg_overlap_mentioned_p (dest, original))
+      || GET_CODE (dest) == ZERO_EXTRACT
+      || (GET_CODE (dest) == REG
+	  && reg_overlap_mentioned_p (dest, original)))
     return x;
 
   newpat = gen_rtx_SEQUENCE (VOIDmode, rtvec_alloc (2));

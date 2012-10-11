@@ -1,5 +1,12 @@
 2012-10-10  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #4906
+	* combine.c (make_field_assignment): Don't check reg_overlap_mentioned_p for
+	non REG's.  Also reject right away ZERO_EXTRACT.
+	* testsuite/gcc.c-torture/compile/20121010-1.c: New testcase.
+
+2012-10-10  Andrew Pinski  <apinski@cavium.com>
+
 	Part of bug #4903
 	* config.gcc (mips64*-*-linux*): Support mips64*-montavista-linux*
 	as an alias to mips64*-octeon-linux*.
