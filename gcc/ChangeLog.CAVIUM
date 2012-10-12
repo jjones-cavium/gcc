@@ -1,5 +1,11 @@
 2012-10-11  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #2973
+	* combine.c (make_extraction): Use the target hook mode_for_extraction_insv
+	if we are doing an insv.
+
+2012-10-11  Andrew Pinski  <apinski@cavium.com>
+
 	* combine.c (combine_simplify_rtx): Simplify SEQUENCEs.  If we have a set of zero
 	followed by a zero_extract, this can be simplified to a shift.
 

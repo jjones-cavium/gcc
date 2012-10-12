@@ -7480,9 +7480,25 @@ make_extraction (enum machine_mode mode, rtx inner, HOST_WIDE_INT pos,
      and the mode for the result.  */
   if (in_dest && mode_for_extraction (EP_insv, -1) != MAX_MACHINE_MODE)
     {
-      wanted_inner_reg_mode = mode_for_extraction (EP_insv, 0);
-      pos_mode = mode_for_extraction (EP_insv, 2);
-      extraction_mode = mode_for_extraction (EP_insv, 3);
+      if (targetm.mode_for_extraction_insv && !MEM_P (inner))
+       {
+         enum machine_mode *modes = targetm.mode_for_extraction_insv ();
+         while (modes[1] != BLKmode)
+           {
+             if (*modes == GET_MODE (inner))
+               break;
+             modes++;
+           }
+         wanted_inner_reg_mode = *modes;
+         pos_mode = *modes;
+         extraction_mode = *modes;
+       }
+      else
+       {
+          wanted_inner_reg_mode = mode_for_extraction (EP_insv, 0);
+          pos_mode = mode_for_extraction (EP_insv, 2);
+          extraction_mode = mode_for_extraction (EP_insv, 3);
+       }
     }
 
   if (! in_dest && unsignedp
