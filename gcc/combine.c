@@ -9483,12 +9483,15 @@ make_field_assignment (rtx x)
   if (!original)
     return gen_rtx_SET (VOIDmode, assign, src);
 
-  /* Don't create a sequence if dest is a subreg or overlaps
-     with the original.  */
-  if (GET_CODE (dest) == SUBREG
-      || GET_CODE (dest) == ZERO_EXTRACT
-      || (GET_CODE (dest) == REG
-	  && reg_overlap_mentioned_p (dest, original)))
+  /* If the dest was a zero extract, then we cannot handle
+     this case.  */
+  if (GET_CODE (dest) == ZERO_EXTRACT)
+    return x;
+
+  /* Don't create a sequence if dest overlaps with the original
+     or the source.  */
+  if (reg_overlap_mentioned_p (dest, original)
+      || reg_overlap_mentioned_p (dest, src))
     return x;
 
   newpat = gen_rtx_SEQUENCE (VOIDmode, rtvec_alloc (2));

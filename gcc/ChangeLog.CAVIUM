@@ -1,3 +1,9 @@
+2012-10-13  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4935
+	* combine.c (make_field_assignment): Reject Zero_extend dest.
+	Reject if the dest overlaps with either the original or the src.
+
 2012-10-11  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #2973
