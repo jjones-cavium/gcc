@@ -1,5 +1,22 @@
 2012-10-13  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #4933
+	* combine.c (reg_subword_p): Return true if we match the
+	full register after stripping off zero_extract and strict_low_part.
+	(try_combine): Generalize the case where the modifying of the
+	subregword part to handle non constant for both instructions.
+
+	* testsuite/gcc.target/mips/ins-11.c: New testcase.
+
+
+	Revert:
+	2012-10-11  Andrew Pinski  <apinski@cavium.com>
+	* combine.c (combine_simplify_rtx): Simplify SEQUENCEs.
+	If we have a set of zero followed by a zero_extract, this can
+	be simplified to a shift.
+
+2012-10-13  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #4935
 	* combine.c (make_field_assignment): Reject Zero_extend dest.
 	Reject if the dest overlaps with either the original or the src.

@@ -2386,6 +2386,9 @@ reg_subword_p (rtx x, rtx reg)
       || GET_CODE (x) == ZERO_EXTRACT)
     x = XEXP (x, 0);
 
+  if (x == reg)
+    return 1;
+
   return GET_CODE (x) == SUBREG
 	 && SUBREG_REG (x) == reg
 	 && GET_MODE_CLASS (GET_MODE (x)) == MODE_INT;
@@ -2803,16 +2806,13 @@ try_combine (rtx i3, rtx i2, rtx i1, rtx i0, int *new_direct_jump_p,
 	    }
     }
 
-  /* If I2 is setting a pseudo to a constant and I3 is setting some
-     sub-part of it to another constant, merge them by making a new
-     constant.  */
+  /* If I2 is setting a pseudo and I3 is setting some sub-part of it,
+     merge them.  */
   if (i1 == 0
       && (temp = single_set (i2)) != 0
-      && (CONST_INT_P (SET_SRC (temp))
-	  || GET_CODE (SET_SRC (temp)) == CONST_DOUBLE)
       && GET_CODE (PATTERN (i3)) == SET
-      && (CONST_INT_P (SET_SRC (PATTERN (i3)))
-	  || GET_CODE (SET_SRC (PATTERN (i3))) == CONST_DOUBLE)
+      && GET_CODE (SET_SRC (temp)) != CALL
+      && GET_CODE (SET_SRC (temp)) != REG
       && reg_subword_p (SET_DEST (PATTERN (i3)), SET_DEST (temp)))
     {
       rtx dest = SET_DEST (PATTERN (i3));
@@ -2831,7 +2831,7 @@ try_combine (rtx i3, rtx i2, rtx i1, rtx i0, int *new_direct_jump_p,
 		offset = GET_MODE_PRECISION (GET_MODE (dest)) - width - offset;
 	    }
 	}
-      else
+      else if (!REG_P (dest))
 	{
 	  if (GET_CODE (dest) == STRICT_LOW_PART)
 	    dest = XEXP (dest, 0);
@@ -2855,20 +2855,20 @@ try_combine (rtx i3, rtx i2, rtx i1, rtx i0, int *new_direct_jump_p,
 
       if (offset >= 0
 	  && (GET_MODE_PRECISION (GET_MODE (SET_DEST (temp)))
-	      <= HOST_BITS_PER_DOUBLE_INT))
+	      <= HOST_BITS_PER_WIDE_INT))
 	{
-	  double_int m, o, i;
 	  rtx inner = SET_SRC (PATTERN (i3));
+	  rtx o;
 	  rtx outer = SET_SRC (temp);
-
-	  o = rtx_to_double_int (outer);
-	  i = rtx_to_double_int (inner);
-
-	  m = double_int_mask (width);
-	  i = double_int_and (i, m);
-	  m = double_int_lshift (m, offset, HOST_BITS_PER_DOUBLE_INT, false);
-	  i = double_int_lshift (i, offset, HOST_BITS_PER_DOUBLE_INT, false);
-	  o = double_int_ior (double_int_and_not (o, m), i);
+	  enum machine_mode mode = GET_MODE (SET_DEST (temp));
+          /* (set (i2dest) (lshiftrt (and (inner) MASK) OFFSET)) */
+	  rtx mask = GEN_INT (((unsigned HOST_WIDE_INT) 1 << width) - 1);
+	  mask = simplify_gen_binary (ASHIFT, mode, mask, GEN_INT (offset));
+	  o = simplify_gen_binary (ASHIFT, mode, inner, GEN_INT (offset));
+	  o = simplify_gen_binary (AND, mode, o, mask);
+	  mask = simplify_gen_unary (NOT, mode, mask, mode);
+	  outer = simplify_gen_binary (AND, mode, outer, mask);
+	  o = simplify_gen_binary (IOR, mode, o, outer);
 
 	  combine_merges++;
 	  subst_insn = i3;
@@ -2877,11 +2877,10 @@ try_combine (rtx i3, rtx i2, rtx i1, rtx i0, int *new_direct_jump_p,
 	  i2dest = SET_DEST (temp);
 	  i2dest_killed = dead_or_set_p (i2, i2dest);
 
-	  /* Replace the source in I2 with the new constant and make the
+	  /* Replace the source in I2 with the new expression and make the
 	     resulting insn the new pattern for I3.  Then skip to where we
 	     validate the pattern.  Everything was set up above.  */
-	  SUBST (SET_SRC (temp),
-		 immed_double_int_const (o, GET_MODE (SET_DEST (temp))));
+	  SUBST (SET_SRC (temp), o);
 
 	  newpat = PATTERN (i2);
 
@@ -6053,62 +6052,6 @@ combine_simplify_rtx (rtx x, enum machine_mode op0_mode, int in_dest,
 			       << exact_log2 (GET_MODE_BITSIZE (GET_MODE (x))))
 			      - 1,
 			      0));
-      break;
-
-
-    case SEQUENCE:
-      if (XVECLEN (x, 0) == 2
-	  && GET_CODE (XVECEXP (x, 0, 0)) == SET
-	  && GET_CODE (XVECEXP (x, 0, 1)) == SET)
-	{
-	  rtx newset0, newset1;
-	  rtx set0 = XVECEXP (x, 0, 0);
-	  rtx set1 = XVECEXP (x, 0, 1);
-	  rtx lhs0 = SET_DEST (set0);
-	  rtx lhs1 = SET_DEST (set1);
-	  rtx rhs0 = SET_SRC (set0);
-	  rtx rhs1 = SET_SRC (set1);
-	  /* Simplify:
-	     (set x
-		  (const_int 0))
-	     (set (zero_extract:DI
-		    x
-		    (const_int LEN)
-		    (const_int SHIFT))
-            	  y)
-	     to just
-	     (set (x) (lshiftrt (and (y) MASK) SHIFT))
-	     Where MASK is (1<<LEN)-1.  */
-	  if (rhs0 == const0_rtx
-	      && GET_CODE (lhs1) == ZERO_EXTRACT
-	      && lhs0 == XEXP (lhs1, 0)
-	      && CONST_INT_P (XEXP (lhs1, 1))
-	      && CONST_INT_P (XEXP (lhs1, 2)))
-	    {
-	      enum machine_mode mode = GET_MODE (lhs0);
-	      HOST_WIDE_INT len = INTVAL (XEXP (lhs1, 1));
-	      rtx shift = XEXP (lhs1, 2);
-	      /* Compute a mask of LEN bits, if we can do this on the host
-		 machine.  */
-	      if (len < HOST_BITS_PER_WIDE_INT)
-		{
-		  rtx mask = GEN_INT (((unsigned HOST_WIDE_INT) 1 << len) - 1);
-		  rtx tmp = simplify_gen_binary (AND, mode, rhs1, mask);
-		  tmp = simplify_gen_binary (ASHIFT, mode, tmp, shift);
-		  tmp = gen_rtx_SET (VOIDmode, lhs0, tmp);
-		  return tmp;
-		}
-	    }
-	  newset0 = simplify_set (set0);
-	  newset1 = simplify_set (set1);
-	  if (newset0 != set0 || newset1 != set1)
-	    {
-	      rtx newpat = gen_rtx_SEQUENCE (VOIDmode, rtvec_alloc (2));
-	      XVECEXP (newpat, 0, 0) = newset0;
-	      XVECEXP (newpat, 0, 1) = newset1;
-	      return newpat;
-	    }
-	}
       break;
 
     default:
