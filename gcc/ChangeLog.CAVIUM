@@ -1,24 +1,27 @@
 2012-10-11  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #2973
-	* combine.c (make_extraction): Use the target hook mode_for_extraction_insv
-	if we are doing an insv.
+	* combine.c (make_extraction): Use the target hook
+	mode_for_extraction_insv if we are doing an insv.
 
 2012-10-11  Andrew Pinski  <apinski@cavium.com>
 
-	* combine.c (combine_simplify_rtx): Simplify SEQUENCEs.  If we have a set of zero
-	followed by a zero_extract, this can be simplified to a shift.
+	* combine.c (combine_simplify_rtx): Simplify SEQUENCEs.
+	If we have a set of zero followed by a zero_extract, this can
+	be simplified to a shift.
 
 2012-10-11  Andrew Pinski  <apinski@cavium.com>
 
-	* config.gcc (mips*-*-linux*): mips*-octeon-linux* and mips*-montavista-linux*
-	default to n64 and don't support mips16 or o32 and default to soft-float.
+	* config.gcc (mips*-*-linux*): mips*-octeon-linux* and
+	mips*-montavista-linux* default to n64 and don't support
+	mips16 or o32 and default to soft-float.
 
 2012-10-10  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4906
-	* combine.c (make_field_assignment): Don't check reg_overlap_mentioned_p for
-	non REG's.  Also reject right away ZERO_EXTRACT.
+	* combine.c (make_field_assignment): Don't check
+	reg_overlap_mentioned_p for non REG's.  Also reject
+	right away ZERO_EXTRACT.
 	* testsuite/gcc.c-torture/compile/20121010-1.c: New testcase.
 
 2012-10-10  Andrew Pinski  <apinski@cavium.com>
@@ -96,23 +99,25 @@
 2012-09-26   Manjunath Matti  <mmatti@mvista.com>
 
 	Bug #4676
-	* config/arm/arm.md (extzv_t2): Check the operands are valid before
-	reload.
+	* config/arm/arm.md (extzv_t2): Check the operands are valid
+	before reload.
 
 2012-09-30  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.target/arm/pr51835.c: Require arm_hard_vfp_ok.
 	* testsuite/gcc.target/arm/pr51915.c: Likewise.
 	* testsuite/gcc.target/arm/pr52006.c: Likewise.
-	* testsuite/lib/target-supports.exp (check_effective_target_arm_vect_no_misalign):
-	Check for -mfloat-abi=soft and -msoft-float in the flag list.
+	* testsuite/lib/target-supports.exp
+	(check_effective_target_arm_vect_no_misalign): Check for
+	-mfloat-abi=soft and -msoft-float in the flag list.
 	(check_effective_target_arm_hard_vfp_ok): Likewise.
-	(check_effective_target_arm_fp16_ok_nocache): Check for -msoft-float also.
+	(check_effective_target_arm_fp16_ok_nocache): Check for
+	-msoft-float also.
 
 2012-09-29  Andrew Pinski  <apinski@cavium.com>
 
-	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-8.c: Look at ifcombine1 instead
-	of ifcombine.
+	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-8.c: Look at ifcombine1
+	instead of ifcombine.
 	* testsuite/gcc.dg/tree-ssa/ssa-ifcombine-9.c: Likewise.
 
 2012-09-29  Andrew Pinski  <apinski@cavium.com>
@@ -125,8 +130,8 @@
 	the basic block walk, increases the number of combinings.
 	* Makefile.in (tree-ssa-ifcombine.o): Update dependencies.
 
-	* testsuite/gcc.dg/tree-ssa/phi-opt-2.c: Expect zero ifs as the compiler
-	produces a & b now.
+	* testsuite/gcc.dg/tree-ssa/phi-opt-2.c: Expect zero ifs as the
+	compiler produces a & b now.
 	* testsuite/gcc.dg/tree-ssa/phi-opt-9.c: Use a function call
 	to prevent conditional move to be used.
 	* testsuite/gcc.dg/tree-ssa/ssa-dom-thread-3.c: Remove check for
@@ -140,8 +145,8 @@
         FSF PR 52005
         * tree-ssa-ifcombine.c (recognize_if_then_else): Handle the case
         where the the then and else are spawed.
-        (tree_ssa_ifcombine_bb): Handle the case were we have an empty basic block
-        for either then or else.
+        (tree_ssa_ifcombine_bb): Handle the case were we have an empty
+	basic block for either then or else.
 
         * testsuite/gcc.dg/tree-ssa/ssa-ifcombine-8.c: New testcase.
         * testsuite/gcc.dg/tree-ssa/ssa-ifcombine-9.c: New testcase.
@@ -243,8 +248,8 @@
 	(GLIBC_DYNAMIC_LINKER_DEFAULT): Change to the hard float one.
 	(MULTILIB_DEFAULT_ENDIAN): New define.
 	(MULTILIB_DEFAULTS): New define.
-	* config/arm/t-linux-eabi (MULTILIB_OPTIONS): Redefine to include hard and soft
-	float ABIs.
+	* config/arm/t-linux-eabi (MULTILIB_OPTIONS): Redefine to include
+	hard and soft float ABIs.
 	(MULTILIB_DIRNAMES): Likewise.
 	(MULTILIB_OSDIRNAMES): Likewise.
 	(MULTILIB_MATCHES): Match -msoft-float as -mfloat-abi=soft.
