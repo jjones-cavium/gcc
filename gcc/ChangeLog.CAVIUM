@@ -1,3 +1,8 @@
+2012-10-15  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.target/arm/thumb-ltu.c: Also skip for
+	arm_hf_eabi targets.
+
 2012-10-14  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.dg/tls/pr42894.c: Don't add any options if
