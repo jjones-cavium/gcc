@@ -1,5 +1,10 @@
 2012-10-14  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.dg/tls/pr42894.c: Don't add any options if
+	this is arm_hf_eabi.
+
+2012-10-14  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/gcc.dg/builtin-apply2.c: Use arm_hf_eabi instead of
 	an explict option check.
 
