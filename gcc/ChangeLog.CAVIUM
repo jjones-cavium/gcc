@@ -1,5 +1,10 @@
 2012-10-14  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.dg/builtin-apply2.c: Use arm_hf_eabi instead of
+	an explict option check.
+
+2012-10-14  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/gcc.target/arm/pr54051.c: Use arm_neon_ok
 	instead of arm_neon for checking if neon is ok to use.
 
