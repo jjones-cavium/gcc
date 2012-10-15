@@ -1,5 +1,5 @@
 /* { dg-do assemble }  */
-/* { dg-require-effective-target arm_neon }  */
+/* { dg-require-effective-target arm_neon_ok }  */
 /* { dg-options "-O2" }  */
 /* { dg-add-options arm_neon }  */
 

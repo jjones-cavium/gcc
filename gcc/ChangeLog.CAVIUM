@@ -1,5 +1,10 @@
 2012-10-14  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.target/arm/pr54051.c: Use arm_neon_ok
+	instead of arm_neon for checking if neon is ok to use.
+
+2012-10-14  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #4936
 	* testsuite/lib/target-supports.exp (check_effective_target_vect_widen_mult_qi_to_hi):
 	Use check_effective_target_arm_neon_ok instead of check_effective_target_arm_neon.
