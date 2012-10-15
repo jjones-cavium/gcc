@@ -1,3 +1,15 @@
+2012-10-14  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4936
+	* testsuite/lib/target-supports.exp (check_effective_target_vect_widen_mult_qi_to_hi):
+	Use check_effective_target_arm_neon_ok instead of check_effective_target_arm_neon.
+	(check_effective_target_vect_widen_mult_hi_to_si): Likewise.
+	(check_effective_target_vect_widen_mult_qi_to_hi_pattern): Likewise.
+	(check_effective_target_vect_widen_mult_hi_to_si_pattern): Likewise.
+	(check_effective_target_vect_pack_trunc): Likewise.
+	(check_effective_target_vect_unpack): Likewise.
+	(check_effective_target_vect_multiple_sizes): Likewise.
+
 2012-10-13  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4933
