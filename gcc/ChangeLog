@@ -9,6 +9,11 @@
 	* gcc.target/arm/arm.exp (dg_runtest_extra_prunes): Skip all the
 	harmless warnings on architecture switch conflict.
 
+
+2012-07-23  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	* config/arm/arm.c (arm_reorg): Ensure all insns are split.
+
 2012-10-05  Jan Hubicka  <jh@suse.cz>
 	    Jakub Jelinek  <jakub@redhat.com>
 
