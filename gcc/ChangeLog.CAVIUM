@@ -1,3 +1,9 @@
+2012-10-19  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #4692
+	* config/arm/arm.c (arm_return_in_msb): Disallow return 
+	in registers if valtype is having mode TImode.
+
 2012-10-15  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.target/arm/thumb-ltu.c: Also skip for
