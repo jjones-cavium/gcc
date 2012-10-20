@@ -1,3 +1,11 @@
+2012-10-20  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #4691
+	Backport:
+	Julian Brown <julian@codesourcery.com>
+	* config/arm/arm.h (CANNOT_CHANGE_MODE_CLASS): Avoid subreg'ing
+	VFP D registers in big-endian mode.
+
 2012-10-19  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Bug #4692
