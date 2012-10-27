@@ -1,3 +1,13 @@
+2012-10-27  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #5056
+	* expr.c (expand_assignment): Set the correct alignment on the mem
+	when doing a movemisalign.
+	(expand_expr_real_1 <case TARGET_MEM_REF>): Likewise.
+	(expand_expr_real_1 <case MEM_REF>): Likewise.
+
+	* testsuite/gcc.c-torture/compile/20121027-1.c: New testcase.
+
 2012-10-20  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #4691

@@ -4734,6 +4734,8 @@ expand_assignment (tree to, tree from, bool nontemporal)
 	  mem = gen_rtx_MEM (mode, op0);
 	  set_mem_attributes (mem, tem, 0);
 	  set_mem_addr_space (mem, as);
+	  /* Set the alignment to what the correct alignment is. */
+	  set_mem_align (mem, align);
 	  if (TREE_THIS_VOLATILE (tem))
 	    MEM_VOLATILE_P (mem) = 1;
 
@@ -9849,6 +9851,9 @@ expand_expr_real_1 (tree exp, rtx target, enum machine_mode tmode,
 	set_mem_attributes (temp, exp, 0);
 	set_mem_addr_space (temp, as);
 	align = get_object_or_type_alignment (exp);
+
+	/* Set the alignment to what the correct alignment is. */
+	set_mem_align (temp, align);
 	if (mode != BLKmode
 	    && align < GET_MODE_ALIGNMENT (mode)
 	    /* If the target does not have special handling for unaligned
@@ -9935,6 +9940,9 @@ expand_expr_real_1 (tree exp, rtx target, enum machine_mode tmode,
 	temp = gen_rtx_MEM (mode, op0);
 	set_mem_attributes (temp, exp, 0);
 	set_mem_addr_space (temp, as);
+
+	/* Set the alignment to what the correct alignment is. */
+	set_mem_align (temp, align);
 	if (TREE_THIS_VOLATILE (exp))
 	  MEM_VOLATILE_P (temp) = 1;
 	if (mode != BLKmode
