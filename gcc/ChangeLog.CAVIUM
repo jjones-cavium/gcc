@@ -1,3 +1,8 @@
+2012-10-30  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.dg/octeon/test-backtrace.h (compare): Fix for LP64
+	targets where the subtraction could truncate to 0.
+
 2012-10-28  Andrew Pinski  <apinski@cavium.com>
 
 	* combine.c (try_combine): If we have a sequence, also check
