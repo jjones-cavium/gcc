@@ -3893,7 +3893,8 @@ try_combine (rtx i3, rtx i2, rtx i1, rtx i0, int *new_direct_jump_p,
 	  newi2pat = XVECEXP (newpat, 0, 0);
 	  newpat = XVECEXP (newpat, 0, 1);
 	  if (use_crosses_set_p (SET_SRC (newpat), DF_INSN_LUID (i2))
-	      || use_crosses_set_p (SET_SRC (newi2pat), DF_INSN_LUID (i2)))
+	      || use_crosses_set_p (SET_SRC (newi2pat), DF_INSN_LUID (i2))
+	      || use_crosses_set_p (SET_DEST (newi2pat), DF_INSN_LUID (i2)))
 	    {
 	      undo_all ();
 	      return 0;
