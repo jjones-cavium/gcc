@@ -1,5 +1,10 @@
 2012-11-03  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #5136
+	* testsuite/gcc.dg/tree-ssa/pr19431.c: Allow for ?: to show up also.
+
+2012-11-03  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #5134
 	* testsuite/gcc.dg/alias-10.c: Change the number of unswitching
 	that happens to 3.
