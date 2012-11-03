@@ -17,6 +17,7 @@
 /* { dg-final { scan-assembler-not "ext\t" } } */
 
 void abort (void);
+void abort1 (void);
 void exit (int);
 
 typedef unsigned long long ulong64;
@@ -38,7 +39,7 @@ f ()
   if (bar.a != 0x1)
     abort ();
   else if (!bar.c)
-    abort ();
+    abort1 ();
   else
     exit (0);
 }
