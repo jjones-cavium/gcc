@@ -1,5 +1,11 @@
 2012-11-02  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #5138
+	* testsuite/gcc.target/mips/mips32-dsp.c: Don't include stdlib.h or stdio.h.
+	Declare abort and exit.
+
+2012-11-02  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #5057
 	* testsuite/gcc.dg/octeon/bbit-10.c: Change the second call to abort to
 	call abort1 so that cross jumping does not happen.
