@@ -1,6 +1,5 @@
 // { dg-options "-std=gnu++0x" }
 // { dg-options "-DNTESTS=1 -DNSTRINGS=100 -DSTRSIZE=21 -std=gnu++0x" { target simulator } }
-// { dg-options "-DNTESTS=1 -DNSTRINGS=100 -DSTRSIZE=21 -std=gnu++0x" { target mips*-octeon-* } }
 
 // Copyright (C) 2010, 2011 Free Software Foundation, Inc.
 //

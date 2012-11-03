@@ -1,7 +1,6 @@
 // { dg-require-time "" }
 // This can take long on simulators, timing out the test.
 // { dg-options "-DITERATIONS=5" { target simulator } }
-// { dg-options "-DITERATIONS=5" { target mips*-octeon-* } }
 // { dg-timeout-factor 2.0 }
 
 // -*- C++ -*-
