@@ -1,5 +1,21 @@
 2012-11-02  Andrew Pinski  <apinski@cavium.com>
 
+	Revert:
+	2012-11-02  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/20_util/hash/chi2_quality.cc: Use the simulator samples for octeon also.
+	* testsuite/20_util/hash/quality.cc: Likewise.
+	* testsuite/ext/pb_ds/regression/hash_map_rand.cc: Likewise.
+	* testsuite/ext/pb_ds/regression/hash_set_rand.cc: Likewise.
+	* testsuite/ext/pb_ds/regression/tree_map_rand.cc: Likewise.
+	* testsuite/ext/pb_ds/regression/tree_set_rand.cc: Likewise.
+	* testsuite/ext/pb_ds/regression/trie_map_rand.cc: Likewise.
+	* testsuite/ext/pb_ds/regression/trie_set_rand.cc: Likewise.
+	* testsuite/ext/vstring/inserters_extractors/wchar_t/28277.cc: Likewise.
+	* testsuite/tr1/5_numerical_facilities/special_functions/20_riemann_zeta/check_value_pos.cc: Likewise.
+
+2012-11-02  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/20_util/hash/chi2_quality.cc: Use the simulator samples for octeon also.
 	* testsuite/20_util/hash/quality.cc: Likewise.
 	* testsuite/ext/pb_ds/regression/hash_map_rand.cc: Likewise.
