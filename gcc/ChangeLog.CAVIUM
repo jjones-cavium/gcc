@@ -1,5 +1,11 @@
 2012-11-03  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #5137
+	* testsuite/gcc.dg/tree-ssa/ssa-dom-thread-4.c: Remove the special casing for mips
+	as LOGICAL_OP_NON_SHORT_CIRCUIT is no longer 0.
+
+2012-11-03  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #5136
 	* testsuite/gcc.dg/tree-ssa/pr19431.c: Allow for ?: to show up also.
 
