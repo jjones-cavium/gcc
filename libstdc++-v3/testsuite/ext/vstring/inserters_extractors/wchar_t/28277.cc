@@ -18,6 +18,7 @@
 // <http://www.gnu.org/licenses/>.
 
 // { dg-options "-DWIDTH=500000" { target simulator } }
+// { dg-options "-DWIDTH=500000" { target mips*-octeon-* } }
 
 #include <ostream>
 #include <sstream>

@@ -2,6 +2,7 @@
 
 // Use smaller statistics when running on simulators, so it takes less time.
 // { dg-options "-std=gnu++0x -DSAMPLES=10000" { target simulator } }
+// { dg-options "-std=gnu++0x -DSAMPLES=10000" { target mips*-octeon-* } }
 
 // Copyright (C) 2010, 2011 Free Software Foundation, Inc.
 //

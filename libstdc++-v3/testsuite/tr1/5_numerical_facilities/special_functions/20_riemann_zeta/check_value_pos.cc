@@ -21,6 +21,7 @@
 
 // This can take long on simulators, timing out the test.
 // { dg-options "-DMAX_ITERATIONS=5" { target simulator } }
+// { dg-options "-DMAX_ITERATIONS=5" { target mips*-octeon-* } }
 
 #ifndef MAX_ITERATIONS
 #define MAX_ITERATIONS (sizeof(data001) / sizeof(testcase_riemann_zeta<double>))
