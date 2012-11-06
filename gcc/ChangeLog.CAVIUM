@@ -1,5 +1,40 @@
 2012-11-06  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.c-torture/execute/builtins/20010124-1.c: Disable -fno-fat-lto-objects
+	for *-elf* (bare metal) targets.
+	* testsuite/gcc.c-torture/execute/builtins/memchr.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/memcpy-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/memmove-2.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/memmove-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/memmove.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/memops-asm.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/mempcpy-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/memset-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/memset.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/pr22237.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/pr23484-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/printf.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/snprintf-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/sprintf-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/sprintf.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/stpcpy-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/stpncpy-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strcat-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strcmp.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strcpy-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strlen-2.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strlen-3.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strlen.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strncat-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strncmp-2.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strncmp.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strncpy-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/strncpy.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/vsnprintf-chk.c: Likewise.
+	* testsuite/gcc.c-torture/execute/builtins/vsprintf-chk.c: Likewise.
+
+2012-11-06  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/gcc.target/mips/inter/mips16-inter.exp: Skip for mipsisa*-octeon-elf*.
 
 2012-11-04  Andrew Pinski  <apinski@cavium.com>
