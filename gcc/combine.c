@@ -9217,9 +9217,7 @@ make_field_assignment (rtx x)
   HOST_WIDE_INT pos;
   unsigned HOST_WIDE_INT len;
   rtx other;
-  rtx original = NULL_RTX;
   enum machine_mode mode;
-  rtx newpat;
 
   /* If SRC was (and (not (ashift (const_int 1) POS)) DEST), this is
      a clear of a one-bit field.  We will have changed it to
@@ -9390,14 +9388,6 @@ make_field_assignment (rtx x)
 	   && CONST_INT_P (XEXP (lhs, 1))
 	   && rtx_equal_for_field_assignment_p (XEXP (lhs, 0), dest))
     c1 = INTVAL (XEXP (lhs, 1)), other = rhs;
-  else if (GET_CODE (rhs) == AND
-	   && CONST_INT_P (XEXP (rhs, 1))
-	   && REG_P (XEXP (rhs, 0)))
-    c1 = INTVAL (XEXP (rhs, 1)), other = lhs, original = XEXP (rhs, 0);
-  else if (GET_CODE (lhs) == AND
-	   && CONST_INT_P (XEXP (lhs, 1))
-	   && REG_P (XEXP (lhs, 0)))
-    c1 = INTVAL (XEXP (lhs, 1)), other = rhs, original = XEXP (lhs, 0);
   else
     return x;
 
@@ -9440,26 +9430,7 @@ make_field_assignment (rtx x)
 	 == ((unsigned HOST_WIDE_INT) 1 << INTVAL (XEXP (assign, 1))) - 1)
     src = XEXP (src, 0);
 
-  if (!original)
-    return gen_rtx_SET (VOIDmode, assign, src);
-
-  /* If the dest was a zero extract, then we cannot handle
-     this case.  */
-  if (GET_CODE (dest) == ZERO_EXTRACT)
-    return x;
-
-  /* Don't create a sequence if dest overlaps with the original
-     or the source.  */
-  if (reg_overlap_mentioned_p (dest, original)
-      || reg_overlap_mentioned_p (dest, src))
-    return x;
-
-  newpat = gen_rtx_SEQUENCE (VOIDmode, rtvec_alloc (2));
-  XVECEXP (newpat, 0, 0) = gen_rtx_SET (VOIDmode, dest, original);
-  src = make_compound_operation (src, SET);
-  XVECEXP (newpat, 0, 1) = gen_rtx_SET (VOIDmode, assign, src);
-
-  return newpat;
+  return gen_rtx_SET (VOIDmode, assign, src);
 }
 
 /* See if X is of the form (+ (* a c) (* b c)) and convert to (* (+ a b) c)

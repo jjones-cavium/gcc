@@ -1,6 +1,12 @@
 2012-11-08  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #5214
+	* combine.c (make_field_assignment): Don't create SEQUENCE as the rest
+	of combine are not ready yet.
+
+2012-11-08  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #5214
 	* combine.c (try_combine): After the first two subst, don't combine
 	any more if we gotten a sequence.
 	* testsuite/gcc.c-torture/execute/20121108-1.c: New testcase.
