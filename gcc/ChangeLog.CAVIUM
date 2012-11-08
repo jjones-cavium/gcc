@@ -1,3 +1,10 @@
+2012-11-08  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #5214
+	* combine.c (try_combine): After the first two subst, don't combine
+	any more if we gotten a sequence.
+	* testsuite/gcc.c-torture/execute/20121108-1.c: New testcase.
+
 2012-11-06  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.c-torture/execute/builtins/20010124-1.c: Disable -fno-fat-lto-objects
