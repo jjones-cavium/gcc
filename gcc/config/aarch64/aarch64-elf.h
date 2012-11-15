@@ -125,6 +125,8 @@
 #undef TARGET_ASM_NAMED_SECTION
 #define TARGET_ASM_NAMED_SECTION  aarch64_elf_asm_named_section
 
+#define NO_IMPLICIT_EXTERN_C
+
 /* Stabs debug not required.  */
 #undef DBX_DEBUGGING_INFO
 
