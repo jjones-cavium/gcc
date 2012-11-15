@@ -1,3 +1,7 @@
+2012-11-15  Marcus Shawcroft <marcus.shawcroft@arm.com>
+
+	* soft-fp: Updated from glibc upstream.
+
 2012-08-22  Joseph Myers  <joseph@codesourcery.com>
 
 	* Makefile.in (vis_hide, gen-hide-list): Do not make definitions
