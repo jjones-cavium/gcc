@@ -1,3 +1,7 @@
+2012-11-17  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/debug/nullptr01.C: xfail the second scan-assembler.
+
 2012-11-09  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.c-torture/compile/limits-structnest.c: Disable unless
