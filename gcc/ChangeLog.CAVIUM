@@ -6,6 +6,12 @@
 	thing back, just mark the simplification not as happened.
 	* testsuite/gcc.c-torture/compile/20121220-1.c: New testcase.
 
+2012-11-19  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/cpp0x/initlist-lifetime1.C: Fix testcase where
+	argc is always greater than 1 (octeon simulator).
+	* testsuite/g++.dg/cpp0x/initlist-lifetime2.C: Likewise.
+
 2012-11-18  Andrew Pinski  <apinski@cavium.com>
 
 	Port from the redhat branch:
