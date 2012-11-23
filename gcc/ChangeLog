@@ -1,5 +1,5 @@
 2012-06-04  Richard Guenther  <rguenther@suse.de>
-
+	
 	Backport from mainline
 	2012-04-25  Jakub Jelinek  <jakub@redhat.com>
  
@@ -200,6 +200,12 @@
 	(GLIBC_DYNAMIC_LINKER_HARD_FLOAT): Define.
 	(GLIBC_DYNAMIC_LINKER_DEFAULT): Define.
 	(GLIBC_DYNAMIC_LINKER):	Redefine to use the hard float path.
+
+2012-03-21  Andrew Stubbs  <ams@codesourcery.com>
+
+	* config/arm/arm.c (thumb2_reorg): Add complete support
+	for 16-bit instructions.
+	* config/arm/thumb2.md: Delete obsolete flag-clobbering peepholes.
 
 2012-03-09  Jiangning Liu  <jiangning.liu@arm.com>
 

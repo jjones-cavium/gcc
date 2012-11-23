@@ -1,4 +1,17 @@
 2012-11-23  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mailine:
+	2012-03-21  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config/arm/arm.c (thumb2_reorg): Add complete	support
+	for 16-bit instructions.
+	* config/arm/thumb2.md: Delete obsolete flag-clobbering peepholes.
+	
+	gcc/testsuite/
+	* gcc.target/arm/thumb-16bit-ops.c: New file.
+	* gcc.target/arm/thumb-ifcvt.c: New file.
+
+2012-11-23  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
 	2012-03-02  Ulrich Weigand  <ulrich.weigand@linaro.org>
 	
