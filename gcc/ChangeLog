@@ -201,6 +201,12 @@
 	(GLIBC_DYNAMIC_LINKER_DEFAULT): Define.
 	(GLIBC_DYNAMIC_LINKER):	Redefine to use the hard float path.
 
+2012-03-26  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR tree-optimization/52686
+	* tree-vect-data-refs.c (vect_get_smallest_scalar_type): Handle
+	WIDEN_LSHIFT_EXPR.
+
 2012-03-21  Andrew Stubbs  <ams@codesourcery.com>
 
 	* config/arm/arm.c (thumb2_reorg): Add complete support

@@ -1,3 +1,15 @@
+2012-11-26  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
+	2012-03-26  Ulrich Weigand  <ulrich.weigand@linaro.org>
+	gcc/
+	PR tree-optimization/52686
+	* tree-vect-data-refs.c (vect_get_smallest_scalar_type): Handle
+	WIDEN_LSHIFT_EXPR.
+	
+	gcc/testsuite/
+	PR tree-optimization/52686
+	* gcc.target/arm/pr52686.c: New test.
+
 2012-11-23  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mailine:
 	2012-08-20  Richard Earnshaw  <rearnsha@arm.com>
