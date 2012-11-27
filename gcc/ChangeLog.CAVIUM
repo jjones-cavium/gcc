@@ -1,3 +1,12 @@
+2012-11-27  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
+	2012-03-20  Richard Earnshaw  <rearnsha@arm.com>
+
+        * arm/predicates.md (zero_operand, reg_or_zero_operand): New predicates.
+	* arm/neon.md (neon_vceq<mode>, neon_vcge<mode>): Use 
+	reg_or_zero_operand predicate.
+	(neon_vcle<mode>, neon_vclt<mode>): Use zero_operand predicate.
+
 2012-11-26  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
 	2012-03-26  Ulrich Weigand  <ulrich.weigand@linaro.org>
