@@ -1711,6 +1711,7 @@ vect_can_advance_ivs_p (loop_vec_info loop_vinfo)
 	  return false;
 	}
 
+      STRIP_NOPS (access_fn);
       if (vect_print_dump_info (REPORT_DETAILS))
         {
 	  fprintf (vect_dump, "Access function of PHI: ");
