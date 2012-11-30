@@ -1,5 +1,21 @@
 2012-11-27  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
+	2012-03-21  Richard Earnshaw  <rearnsha@arm.com>
+	gcc/
+	* neon.md (neon_vget_lanev2di): Use gen_lowpart and gen_highpart.
+	* config/arm/neon.ml (Fixed_return_reg): Renamed to fixed_vector_reg.
+	All callers changed.
+	(Fixed_core_reg): New feature.
+	(Vget_lane [sizes S64 and U64]): Add Fixed_core_reg.  Allow fmrrd in
+	disassembly.
+	* neon-testgen.ml: Handle Fixed_core_reg.
+
+	gcc/testsuite/
+	* gcc.target/arm/neon/vgetQ_laneu64.c: Regenerated.
+	* gcc.target/arm/neon/vgetQ_lanes64.c: Likewise.
+
+2012-11-27  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
 	2012-03-20  Richard Earnshaw  <rearnsha@arm.com>
 
         * arm/predicates.md (zero_operand, reg_or_zero_operand): New predicates.

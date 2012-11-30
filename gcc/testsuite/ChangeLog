@@ -163,6 +163,11 @@
 	* gcc.target/arm/thumb-ifcvt.c: Only run for -mthumb.
 	* gcc.target/arm/thumb-16bit-ops.c: Likewise.
 
+2012-03-21  Richard Earnshaw  <rearnsha@arm.com>
+
+	* gcc.target/arm/neon/vgetQ_laneu64.c: Regenerated.
+	* gcc.target/arm/neon/vgetQ_lanes64.c: Likewise.
+
 2012-03-21  Andrew Stubbs  <ams@codesourcery.com>
 
 	* gcc.target/arm/thumb-16bit-ops.c: New file.
