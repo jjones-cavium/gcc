@@ -1,4 +1,10 @@
 2012-11-27  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline r185702:
+	libcpp/
+	2012-03-22  Richard Earnshaw  <rearnsha@arm.com>
+	* lex.c (search_line_fast): Provide Neon-optimized version for ARM.
+
+2012-11-27  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
 	2012-03-21  Richard Earnshaw  <rearnsha@arm.com>
 	gcc/
