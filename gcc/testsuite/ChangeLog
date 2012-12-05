@@ -3,6 +3,11 @@
 	PR c++/53202
 	* g++.dg/cpp0x/constexpr-tuple.C: New.
 
+2012-06-15  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR tree-optimization/53636
+	* gcc.target/arm/pr53636.c: New test.
+
 2012-08-31  Ollie Wild  <aaw@google.com>
 
 	PR c++/54197
