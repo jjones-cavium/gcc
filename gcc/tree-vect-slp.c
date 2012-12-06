@@ -2046,16 +2046,6 @@ vect_slp_analyze_bb_1 (basic_block bb)
       return NULL;
     }
 
-   if (!vect_verify_datarefs_alignment (NULL, bb_vinfo))
-    {
-      if (vect_print_dump_info (REPORT_UNVECTORIZED_LOCATIONS))
-        fprintf (vect_dump, "not vectorized: unsupported alignment in basic "
-                            "block.\n");
-
-      destroy_bb_vec_info (bb_vinfo);
-      return NULL;
-    }
-
   /* Check the SLP opportunities in the basic block, analyze and build SLP
      trees.  */
   if (!vect_analyze_slp (NULL, bb_vinfo))
@@ -2076,6 +2066,16 @@ vect_slp_analyze_bb_1 (basic_block bb)
     {
       vect_mark_slp_stmts (SLP_INSTANCE_TREE (instance), pure_slp, -1);
       vect_mark_slp_stmts_relevant (SLP_INSTANCE_TREE (instance));
+    }
+
+   if (!vect_verify_datarefs_alignment (NULL, bb_vinfo))
+    {
+      if (vect_print_dump_info (REPORT_UNVECTORIZED_LOCATIONS))
+        fprintf (vect_dump, "not vectorized: unsupported alignment in basic "
+                            "block.\n");
+
+      destroy_bb_vec_info (bb_vinfo);
+      return NULL;
     }
 
   if (!vect_slp_analyze_operations (bb_vinfo))
