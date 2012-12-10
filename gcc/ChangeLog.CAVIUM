@@ -1,3 +1,25 @@
+2012-12-10  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
+	2012-07-01  Wei Guozhi  <carrot@google.com>
+
+	gcc/
+	PR target/53447
+	* config/arm/arm-protos.h (const_ok_for_dimode_op): New prototype.
+	* config/arm/arm.c (const_ok_for_dimode_op): New function.
+	* config/arm/constraints.md (Dd): New constraint.
+	* config/arm/predicates.md (arm_adddi_operand): New predicate.
+	* config/arm/arm.md (adddi3): Extend it to handle constants.
+	(arm_adddi3): Likewise.
+	(addsi3_carryin_<optab>): Extend it to handle sbc case.
+	(addsi3_carryin_alt2_<optab>): Likewise.
+	* config/arm/neon.md (adddi3_neon): Extend it to handle constants.
+	
+	gcc/testsuite/
+	* gcc.target/arm/pr53447-1.c: New testcase.
+	* gcc.target/arm/pr53447-2.c: New testcase.
+	* gcc.target/arm/pr53447-3.c: New testcase.
+	* gcc.target/arm/pr53447-4.c: New testcase.
+	
 2012-12-06  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
 	2012-06-26  Ulrich Weigand  <ulrich.weigand@linaro.org>
