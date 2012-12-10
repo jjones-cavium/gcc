@@ -1,5 +1,37 @@
 2012-12-10  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
+	2012-06-27  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	gcc/
+	PR C++/51033
+	* semantics.c (constexpr_call): Fix typo in comment.
+	(cxx_eval_vec_perm_expr): New.
+	(cxx_eval_constant_expression): Fold VEC_PERM_EXPRs.
+
+	gcc/testsuite/
+	2012-06-27  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+	PR c++/51033.
+	* g++.dg/torture/vshuf-16.inc: New test.
+	* g++.dg/torture/vshuf-2.inc: New test.
+	* g++.dg/torture/vshuf-4.inc: New test.
+	* g++.dg/torture/vshuf-8.inc: New test.
+	* g++.dg/torture/vshuf-main.inc: New test.
+	* g++.dg/torture/vshuf-v16hi.C: New test.
+	* g++.dg/torture/vshuf-v16qi.C:	New test.
+	* g++.dg/torture/vshuf-v2df.C: New test.
+	* g++.dg/torture/vshuf-v2di.C: New test.
+	* g++.dg/torture/vshuf-v2sf.C: New test.
+	* g++.dg/torture/vshuf-v2si.C: New test.
+	* g++.dg/torture/vshuf-v4df.C: New test.
+	* g++.dg/torture/vshuf-v4di.C: New test.
+	* g++.dg/torture/vshuf-v4sf.C: New test.
+	* g++.dg/torture/vshuf-v4si.C: New test.
+	* g++.dg/torture/vshuf-v8hi.C: New test.
+	* g++.dg/torture/vshuf-v8qi.C: New test.
+	* g++.dg/torture/vshuf-v8si.C: New test.
+
+2012-12-10  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
 	2012-07-01  Wei Guozhi  <carrot@google.com>
 
 	gcc/
