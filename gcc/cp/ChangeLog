@@ -1,9 +1,16 @@
 2012-06-27  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
-
+	
 	PR C++/51033
 	* semantics.c (constexpr_call): Fix typo in comment.
 	(cxx_eval_vec_perm_expr): New.
 	(cxx_eval_constant_expression): Fold VEC_PERM_EXPRs.
+
+2012-06-15  Marc Glisse  <marc.glisse@inria.fr>
+
+	PR c++/51033
+	* semantics.c (literal_type_p): Handle VECTOR_TYPE.
+	(potential_constant_expression_1): Handle VEC_PERM_EXPR.
+	* parser.c (cp_parser_postfix_expression): Handle RID_BUILTIN_SHUFFLE.
 
 2012-06-25  Jason Merrill  <jason@redhat.com>
 

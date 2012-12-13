@@ -1,3 +1,50 @@
+2012-12-13  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
+	2012-06-15  Marc Glisse  <marc.glisse@inria.fr>
+	
+	PR c++/51033
+	* c-typeck.c (c_build_vec_perm_expr): Move to c-family/c-common.c.
+	* c-tree.h (c_build_vec_perm_expr): Move to c-family/c-common.h.
+	
+	cp/
+	2012-06-15  Marc Glisse  <marc.glisse@inria.fr>
+	
+	PR c++/51033
+	* semantics.c (literal_type_p): Handle VECTOR_TYPE.
+	(potential_constant_expression_1): Handle VEC_PERM_EXPR.
+	* parser.c (cp_parser_postfix_expression): Handle RID_BUILTIN_SHUFFLE.
+	
+	c-family
+	2012-06-15  Marc Glisse  <marc.glisse@inria.fr>
+
+	PR c++/51033
+	* c-common.h (c_build_vec_perm_expr): Move decl here.
+	* c-common.c (c_build_vec_perm_expr): Move definition
+	here.
+	
+	2012-06-15  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+	
+	PR c++/51033
+	* c-c++-common/torture/vshuf-16.inc: Move from gcc.c-torture/execute/.
+	* c-c++-common/torture/vshuf-2.inc: Likewise.
+	* c-c++-common/torture/vshuf-4.inc: Likewise.
+	* c-c++-common/torture/vshuf-8.inc: Likewise.
+	* c-c++-common/torture/vshuf-main.inc: Likewise.
+	* c-c++-common/torture/vshuf-v16hi.c: Likewise.
+	* c-c++-common/torture/vshuf-v16qi.c: Likewise.
+	* c-c++-common/torture/vshuf-v2df.c: Likewise.
+	* c-c++-common/torture/vshuf-v2di.c: Likewise.
+	* c-c++-common/torture/vshuf-v2sf.c: Likewise.
+	* c-c++-common/torture/vshuf-v2si.c: Likewise.
+	* c-c++-common/torture/vshuf-v4df.c: Likewise.
+	* c-c++-common/torture/vshuf-v4di.c: Likewise.
+	* c-c++-common/torture/vshuf-v4hi.c: Likewise.
+	* c-c++-common/torture/vshuf-v4sf.c: Likewise.
+	* c-c++-common/torture/vshuf-v4si.c: Likewise.
+	* c-c++-common/torture/vshuf-v8hi.c: Likewise.
+	* c-c++-common/torture/vshuf-v8qi.c: Likewise.
+	* c-c++-common/torture/vshuf-v8si.c: Likewise.
+
 2012-12-10  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
 	2012-06-27  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
