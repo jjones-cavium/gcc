@@ -214,16 +214,14 @@ void foo ()
   bar();
 }
 ])])
-CFLAGS_hold=$CFLAGS
-CFLAGS="--save-temps -fexceptions"
 libgcc_cv_lib_sjlj_exceptions=unknown
-AS_IF([ac_fn_c_try_compile],
-  [if grep _Unwind_SjLj_Resume conftest.s >/dev/null 2>&1; then
+if AC_TRY_COMMAND(${CC-cc} -fexceptions -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD); then
+  if grep _Unwind_SjLj_Resume conftest.s >/dev/null 2>&1; then
     libgcc_cv_lib_sjlj_exceptions=yes
   elif grep _Unwind_Resume conftest.s >/dev/null 2>&1; then
     libgcc_cv_lib_sjlj_exceptions=no
-  fi])
-CFLAGS=$CFLAGS_hold
+  fi
+fi
 rm -f conftest*
 ])
 

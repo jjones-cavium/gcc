@@ -1,13 +1,50 @@
-2012-11-17  Andrew Pinski  <apinski@cavium.com>
-
-	* testsuite/g++.dg/debug/nullptr01.C: xfail the second scan-assembler.
-
 2012-11-12  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #5253
 	* tree-merge-const-bfstores.c (compute_new_bitfield_positions): Fix
 	for little-endian.
 	(gate_merge_const_bfstores): Don't disable for little-endian targets.
+
+2012-11-29  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #5464
+	* combine.c (register_edge_assert_for_2): In the case of NAME != 0 and NAME
+	being defined as XYZ1 CMP XYZ2 we can assert XYZ1 CMP XYZ2.
+
+2012-11-20  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #5183
+	* simplify-rtx.c (simplify_subreg): For the simplification of
+	(SUBREG (AND/IOR)), if simplify_unary_operation returns the same
+	thing back, just mark the simplification not as happened.
+	* testsuite/gcc.c-torture/compile/20121220-1.c: New testcase.
+
+2012-11-19  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/cpp0x/initlist-lifetime1.C: Fix testcase where
+	argc is always greater than 1 (octeon simulator).
+	* testsuite/g++.dg/cpp0x/initlist-lifetime2.C: Likewise.
+
+2012-11-18  Andrew Pinski  <apinski@cavium.com>
+
+	Port from the redhat branch:
+	* gcc.c (execute): Free string if i is not 0.
+	(execute): Call retry_ice if the program which caused an ICE
+	started with "cc1".
+	(retry_ice): New function.
+
+2012-11-17  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.dg/octeon/ext-33.c: Xfail due to bug 2851.
+
+2012-11-17  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.dg/uninit-pred-8_b.c: xfail because of bug 4568.
+	* testsuite/gcc.dg/uninit-pred-9_b.c: Likewise.
+
+2012-11-17  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/debug/nullptr01.C: xfail the second scan-assembler.
 
 2012-11-09  Andrew Pinski  <apinski@cavium.com>
 

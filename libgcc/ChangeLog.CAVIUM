@@ -1,3 +1,9 @@
+2012-11-12  Khem Raj <raj.khem@gmail.com>
+
+	* configure.ac: Change the check for sjlj exceptions test
+	to use -S instead of -save-temps.
+	* configure: Regenerate.
+
 2012-07-19  Andrew Pinski  <apinski@cavium.com>
             Adam Nemet  <anemet@caviumnetworks.com>
 
