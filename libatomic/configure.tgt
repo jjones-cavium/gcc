@@ -27,6 +27,7 @@
 # work out any special compilation flags as necessary.
 
 case "${target_cpu}" in
+  aarch64*)		ARCH=aarch64 ;;
   alpha*)		ARCH=alpha ;;
   mips*)		ARCH=mips;;
   rs6000 | powerpc*)	ARCH=powerpc ;;
@@ -96,11 +97,6 @@ fi
 
 # Other system configury
 case "${target}" in
-  aarch64*)
-	# This is currently not supported in AArch64.
-	UNSUPPORTED=1
-	;;
-
   arm*-*-linux*)
 	# OS support for atomic primitives.
 	config_path="${config_path} linux/arm posix"

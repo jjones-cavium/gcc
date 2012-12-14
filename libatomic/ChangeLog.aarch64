@@ -1,0 +1,3 @@
+2012-12-14  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* libatomic/configure.tgt: Enable basic support for aarch64.
