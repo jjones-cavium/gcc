@@ -23,6 +23,12 @@
 	* gcc.target/arm/neon-combine-sub-abs-into-vabd.c: Make intrinsic
 	arguments non-constant.
 
+2012-07-09  Tom de Vries  <tom@codesourcery.com>
+	    Richard Guenther  <rguenther@suse.de>
+
+	* gcc.dg/builtin-unreachable-6.c: New test.
+	* gcc.dg/builtin-unreachable-5.c: New test.
+
 2012-07-01  Wei Guozhi  <carrot@google.com>
 
 	PR target/53447
