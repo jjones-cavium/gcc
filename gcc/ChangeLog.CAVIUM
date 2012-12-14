@@ -1,5 +1,12 @@
 2012-12-14  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
+	2012-07-16  Ulrich Weigand  <ulrich.weigand@linaro.org>
+	
+	* tree-ssa-ccp.c (optimize_unreachable): Check gsi_end_p 
+	before calling gsi_stmt.
+
+2012-12-14  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
 	2012-07-07  Ulrich Weigand  <ulrich.weigand@linaro.org>
 	
 	* combine.c (force_to_mode) [LSHIFTRT]: Avoid undefined behaviour
