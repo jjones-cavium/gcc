@@ -1,5 +1,21 @@
-2012-07-30  Ulrich Weigand  <ulrich.weigand@linaro.org>
+2012-09-19  Richard Guenther  <rguenther@suse.de>
 
+	* gcc.dg/builtin-object-size-10.c: Adjust.
+	* gcc.dg/builtin-unreachable-5.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-fprintf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-fprintf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-printf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-printf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vfprintf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vfprintf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vprintf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vprintf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/ssa-ccp-10.c: Adjust.
+	* gcc.dg/vect/vec-scal-opt.c: Adjust.
+	* gcc.dg/vect/vec-scal-opt1.c: Adjust.
+	* gcc.dg/vect/vec-scal-opt2.c: Adjust.
+
+2012-07-30  Ulrich Weigand  <ulrich.weigand@linaro.org>
 	* lib/target-supports.exp
 	(check_effective_target_vect_natural_alignment): New function.
 	* gcc.dg/align-2.c: Only run on targets with natural alignment
