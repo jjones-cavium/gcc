@@ -1132,6 +1132,7 @@ enum reg_class
   ((TARGET_VFP && TARGET_BIG_END			\
     && (GET_MODE_SIZE (FROM) > UNITS_PER_WORD		\
         || GET_MODE_SIZE (TO) > UNITS_PER_WORD)		\
+    && !(FROM == V2DImode && TO == DImode)		\
     && reg_classes_intersect_p (VFP_REGS, (CLASS)))	\
   || (GET_MODE_SIZE (FROM) != GET_MODE_SIZE (TO)	\
       ? reg_classes_intersect_p (FPA_REGS, (CLASS))	\
