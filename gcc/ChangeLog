@@ -1,3 +1,10 @@
+2012-09-04  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* config/arm/arm.c (arm_evpc_neon_vext): New
+	function.
+	(arm_expand_vec_perm_const_1): Add call to
+	arm_evpc_neon_vext.
+
 2012-08-17  Richard Earnshaw  <rearnsha@arm.com>
 
 	* arm.md (arm_addsi3): New variant for Thumb2 16-bit ADD instruction.

@@ -15,6 +15,11 @@
 	* gcc.dg/vect/vec-scal-opt1.c: Adjust.
 	* gcc.dg/vect/vec-scal-opt2.c: Adjust.
 
+2012-09-04  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/arm/neon-vext.c: New test.
+	* gcc.target/arm/neon-vext-execute.c: Ditto.
+
 2012-07-30  Ulrich Weigand  <ulrich.weigand@linaro.org>
 	* lib/target-supports.exp
 	(check_effective_target_vect_natural_alignment): New function.
