@@ -26017,8 +26017,7 @@ arm_validize_comparison (rtx *comparison, rtx * op1, rtx * op2)
    Input requirements:
     - It is safe for the input and output to be the same register, but
       early-clobber rules apply for the shift amount and scratch registers.
-    - Shift by register requires both scratch registers.  Shift by a constant
-      less than 32 in Thumb2 mode requires SCRATCH1 only.  In all other cases
+    - Shift by register requires both scratch registers.  In all other cases
       the scratch registers may be NULL.
     - Ashiftrt by a register also clobbers the CC register.  */
 void
