@@ -354,6 +354,9 @@ optab_for_tree_code (enum tree_code code, const_tree type,
   bool trapv;
   switch (code)
     {
+    case BYTESWAP_EXPR:
+      return bswap_optab;
+
     case BIT_AND_EXPR:
       return and_optab;
 
@@ -3028,6 +3031,7 @@ expand_unop (enum machine_mode mode, optab unoptab, rtx op0, rtx target,
   /* Widening (or narrowing) bswap needs special treatment.  */
   if (unoptab == bswap_optab)
     {
+      /* FIXME: Handle floating point modes here */
       temp = widen_bswap (mode, op0, target);
       if (temp)
 	return temp;

@@ -8175,8 +8175,9 @@ fold_builtin_bitop (tree fndecl, tree arg)
 /* Fold function call to builtin_bswap and the long and long long
    variants.  Return NULL_TREE if no simplification can be made.  */
 static tree
-fold_builtin_bswap (tree fndecl, tree arg)
+fold_builtin_bswap (location_t loc, tree fndecl, tree arg)
 {
+  tree type;
   if (! validate_arg (arg, INTEGER_TYPE))
     return NULL_TREE;
 
@@ -8185,9 +8186,8 @@ fold_builtin_bswap (tree fndecl, tree arg)
     {
       HOST_WIDE_INT hi, width, r_hi = 0;
       unsigned HOST_WIDE_INT lo, r_lo = 0;
-      tree type;
+      type = TREE_TYPE (TREE_TYPE (fndecl));
 
-      type = TREE_TYPE (arg);
       width = TYPE_PRECISION (type);
       lo = TREE_INT_CST_LOW (arg);
       hi = TREE_INT_CST_HIGH (arg);
@@ -8228,7 +8228,9 @@ fold_builtin_bswap (tree fndecl, tree arg)
 	return build_int_cst_wide (TREE_TYPE (TREE_TYPE (fndecl)), r_lo, r_hi);
     }
 
-  return NULL_TREE;
+  type = TREE_TYPE (TREE_TYPE (fndecl));
+  arg = fold_convert (type, arg);
+  return fold_build1_loc (loc, BYTESWAP_EXPR, type, arg);
 }
 
 /* A subroutine of fold_builtin to fold the various logarithmic
@@ -10580,7 +10582,7 @@ fold_builtin_1 (location_t loc, tree fndecl, tree arg0, bool ignore)
 
     case BUILT_IN_BSWAP32:
     case BUILT_IN_BSWAP64:
-      return fold_builtin_bswap (fndecl, arg0);
+      return fold_builtin_bswap (loc, fndecl, arg0);
 
     CASE_INT_FN (BUILT_IN_FFS):
     CASE_INT_FN (BUILT_IN_CLZ):
