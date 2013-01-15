@@ -1,3 +1,15 @@
+2013-01-15  Manjunath Matti <mmatti@caviumnetworks.com>
+	Backport from mainline:
+	2012-09-24  Richard Guenther  <rguenther@suse.de>
+
+	gcc/
+	PR tree-optimization/54684
+	* tree-ssa-ccp.c (optimize_unreachable): Properly update stmts.
+
+	gcc/testsuite
+	PR tree-optimization/54684
+	* g++.dg/torture/pr54684.C: New testcase.
+
 2013-01-08  Manjunath Matti <mmatti@caviumnetworks.com>
 	Backport from mainline:
 	2012-11-13  Andrew Stubbs  <ams@codesourcery.com>

@@ -14,6 +14,11 @@
 	ashrdi3_neon_imm_noclobber, lshrdi3_neon_imm_noclobber,
 	<shift>di3_neon): New patterns.
 
+2012-09-24  Richard Guenther  <rguenther@suse.de>
+
+	PR tree-optimization/54684
+	* tree-ssa-ccp.c (optimize_unreachable): Properly update stmts.
+
 2012-09-17  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 	    Ulrich Weigand  <ulrich.weigand@linaro.org>
 
