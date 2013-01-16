@@ -1,3 +1,9 @@
+2013-01-16  Janis Johnson  <janisjo@codesourcery.com>
+
+	PR testsuite/55994
+	* gcc.c-torture/execute/builtins/builtins.exp: Add
+	-Wl,--allow-multiple-definition for eabi and elf targets.
+
 2012-05-04  Richard Guenther  <rguenther@suse.de>
 
 	* gcc.dg/lto/pr53214_0.c: New testcase.
