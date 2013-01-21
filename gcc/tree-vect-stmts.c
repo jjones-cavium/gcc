@@ -979,6 +979,16 @@ vect_get_store_cost (struct data_reference *dr, int ncopies,
         break;
       }
 
+    case dr_unaligned_unsupported:
+      {
+        *inside_cost = VECT_MAX_COST;
+
+        if (vect_print_dump_info (REPORT_COST))
+          fprintf (vect_dump, "vect_model_store_cost: unsupported access.");
+
+        break;
+      }
+
     default:
       gcc_unreachable ();
     }
@@ -1127,6 +1137,16 @@ vect_get_load_cost (struct data_reference *dr, int ncopies,
         if (vect_print_dump_info (REPORT_COST))
           fprintf (vect_dump,
 		   "vect_model_load_cost: explicit realign optimized");
+
+        break;
+      }
+
+    case dr_unaligned_unsupported:
+      {
+        *inside_cost = VECT_MAX_COST;
+
+        if (vect_print_dump_info (REPORT_COST))
+          fprintf (vect_dump, "vect_model_load_cost: unsupported access.");
 
         break;
       }

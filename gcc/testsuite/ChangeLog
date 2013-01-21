@@ -16,10 +16,134 @@
 
 	* gcc.dg/lto/pr53214_0.c: New testcase.
 
-2012-06-25  Jason Merrill  <jason@redhat.com>
+2012-09-24  Richard Guenther  <rguenther@suse.de>
 
+	PR tree-optimization/54684
+	* g++.dg/torture/pr54684.C: New testcase.
+
+2012-09-19  Richard Guenther  <rguenther@suse.de>
+
+	* gcc.dg/builtin-object-size-10.c: Adjust.
+	* gcc.dg/builtin-unreachable-5.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-fprintf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-fprintf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-printf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-printf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vfprintf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vfprintf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vprintf-1.c: Adjust.
+	* gcc.dg/tree-ssa/builtin-vprintf-chk-1.c: Adjust.
+	* gcc.dg/tree-ssa/ssa-ccp-10.c: Adjust.
+	* gcc.dg/vect/vec-scal-opt.c: Adjust.
+	* gcc.dg/vect/vec-scal-opt1.c: Adjust.
+	* gcc.dg/vect/vec-scal-opt2.c: Adjust.
+
+2012-09-04  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/arm/neon-vext.c: New test.
+	* gcc.target/arm/neon-vext-execute.c: Ditto.
+
+2012-07-30  Ulrich Weigand  <ulrich.weigand@linaro.org>
+	* lib/target-supports.exp
+	(check_effective_target_vect_natural_alignment): New function.
+	* gcc.dg/align-2.c: Only run on targets with natural alignment
+	of vector types.
+	* gcc.dg/vect/slp-25.c: Adjust tests for targets without natural
+	alignment of vector types.
+
+2012-07-18  Jie Zhang  <jzhang918@gmail.com>
+	    Julian Brown  <julian@codesourcery.com>
+
+	* gcc.target/arm/neon-vdup-1.c: New test case.
+	* gcc.target/arm/neon-vdup-2.c: New test case.
+	* gcc.target/arm/neon-vdup-3.c: New test case.
+	* gcc.target/arm/neon-vdup-4.c: New test case.
+	* gcc.target/arm/neon-vdup-5.c: New test case.
+	* gcc.target/arm/neon-vdup-6.c: New test case.
+	* gcc.target/arm/neon-vdup-7.c: New test case.
+	* gcc.target/arm/neon-vdup-8.c: New test case.
+	* gcc.target/arm/neon-vdup-9.c: New test case.
+	* gcc.target/arm/neon-vdup-10.c: New test case.
+	* gcc.target/arm/neon-vdup-11.c: New test case.
+	* gcc.target/arm/neon-vdup-12.c: New test case.
+	* gcc.target/arm/neon-vdup-13.c: New test case.
+	* gcc.target/arm/neon-vdup-14.c: New test case.
+	* gcc.target/arm/neon-vdup-15.c: New test case.
+	* gcc.target/arm/neon-vdup-16.c: New test case.
+	* gcc.target/arm/neon-vdup-17.c: New test case.
+	* gcc.target/arm/neon-vdup-18.c: New test case.
+	* gcc.target/arm/neon-vdup-19.c: New test case.
+	* gcc.target/arm/neon-combine-sub-abs-into-vabd.c: Make intrinsic
+	arguments non-constant.
+
+2012-07-09  Tom de Vries  <tom@codesourcery.com>
+	    Richard Guenther  <rguenther@suse.de>
+
+	* gcc.dg/builtin-unreachable-6.c: New test.
+	* gcc.dg/builtin-unreachable-5.c: New test.
+
+2012-07-01  Wei Guozhi  <carrot@google.com>
+
+	PR target/53447
+	* gcc.target/arm/pr53447-1.c: New testcase.
+	* gcc.target/arm/pr53447-2.c: New testcase.
+	* gcc.target/arm/pr53447-3.c: New testcase.
+	* gcc.target/arm/pr53447-4.c: New testcase.
+
+2012-06-27  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	PR c++/51033.
+	* g++.dg/torture/vshuf-16.inc: New test.
+	* g++.dg/torture/vshuf-2.inc: New test.
+	* g++.dg/torture/vshuf-4.inc: New test.
+	* g++.dg/torture/vshuf-8.inc: New test.
+	* g++.dg/torture/vshuf-main.inc: New test.
+	* g++.dg/torture/vshuf-v16hi.C: New test.
+	* g++.dg/torture/vshuf-v16qi.C: New test.
+	* g++.dg/torture/vshuf-v2df.C: New test.
+	* g++.dg/torture/vshuf-v2di.C: New test.
+	* g++.dg/torture/vshuf-v2sf.C: New test.
+	* g++.dg/torture/vshuf-v2si.C: New test.
+	* g++.dg/torture/vshuf-v4df.C: New test.
+	* g++.dg/torture/vshuf-v4di.C: New test.
+	* g++.dg/torture/vshuf-v4sf.C: New test.
+	* g++.dg/torture/vshuf-v4si.C: New test.
+	* g++.dg/torture/vshuf-v8hi.C: New test.
+	* g++.dg/torture/vshuf-v8qi.C: New test.
+	* g++.dg/torture/vshuf-v8si.C: New test.
+
+2012-06-25  Jason Merrill  <jason@redhat.com>
+	
 	PR c++/53202
 	* g++.dg/cpp0x/constexpr-tuple.C: New.
+
+2012-06-15  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	PR c++/51033
+	* c-c++-common/torture/vshuf-16.inc: Move from gcc.c-torture/execute/.
+	* c-c++-common/torture/vshuf-2.inc: Likewise.
+	* c-c++-common/torture/vshuf-4.inc: Likewise.
+	* c-c++-common/torture/vshuf-8.inc: Likewise.
+	* c-c++-common/torture/vshuf-main.inc: Likewise.
+	* c-c++-common/torture/vshuf-v16hi.c: Likewise.
+	* c-c++-common/torture/vshuf-v16qi.c: Likewise.
+	* c-c++-common/torture/vshuf-v2df.c: Likewise.
+	* c-c++-common/torture/vshuf-v2di.c: Likewise.
+	* c-c++-common/torture/vshuf-v2sf.c: Likewise.
+	* c-c++-common/torture/vshuf-v2si.c: Likewise.
+	* c-c++-common/torture/vshuf-v4df.c: Likewise.
+	* c-c++-common/torture/vshuf-v4di.c: Likewise.
+	* c-c++-common/torture/vshuf-v4hi.c: Likewise.
+	* c-c++-common/torture/vshuf-v4sf.c: Likewise.
+	* c-c++-common/torture/vshuf-v4si.c: Likewise.
+	* c-c++-common/torture/vshuf-v8hi.c: Likewise.
+	* c-c++-common/torture/vshuf-v8qi.c: Likewise.
+	* c-c++-common/torture/vshuf-v8si.c: Likewise.
+
+2012-06-15  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR tree-optimization/53636
+	* gcc.target/arm/pr53636.c: New test.
 
 2012-08-31  Ollie Wild  <aaw@google.com>
 
@@ -165,10 +289,40 @@
 	* gcc.dg/tree-ssa/ssa-ifcombine-10.c: Likewise.
 	* gcc.dg/tree-ssa/ssa-ifcombine-11.c: Likewise.
 
+2012-08-20  Richard Earnshaw  <rearnsha@arm.com>
+
+	* gcc.target/arm/thumb-16bit-ops.c (f): This test uses a 16-bit
+	add instruction.
+	(f2): New test that really does need adds.
+
+2012-03-26  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR tree-optimization/52686
+	* gcc.target/arm/pr52686.c: New test.
+
+2012-03-27  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	* gcc.target/arm/thumb-ifcvt.c: Only run for -mthumb.
+	* gcc.target/arm/thumb-16bit-ops.c: Likewise.
+
+2012-03-21  Richard Earnshaw  <rearnsha@arm.com>
+
+	* gcc.target/arm/neon/vgetQ_laneu64.c: Regenerated.
+	* gcc.target/arm/neon/vgetQ_lanes64.c: Likewise.
+
+2012-03-21  Andrew Stubbs  <ams@codesourcery.com>
+
+	* gcc.target/arm/thumb-16bit-ops.c: New file.
+	* gcc.target/arm/thumb-ifcvt.c: New file.
+
 2012-03-09  Jiangning Liu  <jiangning.liu@arm.com>
 
 	* gcc.dg/tree-ssa/scev-3.c: New.
 	* gcc.dg/tree-ssa/scev-4.c: New.
+
+2012-03-02  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	* gcc.target/arm/sat-1.c: New test.
 
 2012-09-03  Jakub Jelinek  <jakub@redhat.com>
 

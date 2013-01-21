@@ -25,11 +25,148 @@
 	user-supplied alignment and alignment of decls with the used
 	attribute.
 
-2012-06-04  Richard Guenther  <rguenther@suse.de>
+2012-11-13  Andrew Stubbs  <ams@codesourcery.com>
+	    Ulrich Weigand  <ulrich.weigand@linaro.org>
 
+	* config/arm/arm.c (arm_emit_coreregs_64bit_shift): Fix comment.
+	* config/arm/arm.md (opt, opt_enabled): New attributes.
+	(enabled): Use opt_enabled.
+	(ashldi3, ashrdi3, lshrdi3): Add TARGET_NEON case.
+	(ashldi3): Allow general operands for TARGET_NEON case.
+	* config/arm/iterators.md (rshifts): New code iterator.
+	(shift, shifttype): New code attributes.
+	* config/arm/neon.md (UNSPEC_LOAD_COUNT): New unspec type.
+	(neon_load_count, ashldi3_neon_noclobber, ashldi3_neon,
+	signed_shift_di3_neon, unsigned_shift_di3_neon,
+	ashrdi3_neon_imm_noclobber, lshrdi3_neon_imm_noclobber,
+	<shift>di3_neon): New patterns.
+
+2012-09-24  Richard Guenther  <rguenther@suse.de>
+
+	PR tree-optimization/54684
+	* tree-ssa-ccp.c (optimize_unreachable): Properly update stmts.
+
+2012-09-17  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+	    Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	* config/arm/arm.c (output_move_neon): Update comment.
+	Use vld1.64/vst1.64 instead of vldm/vstm where possible.
+	(neon_vector_mem_operand): Support double-word modes.
+	* config/arm/neon.md (*neon_mov VD): Call output_move_neon
+	instead of output_move_vfp.  Change constraint from Uv to Un.
+
+2012-09-04  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* config/arm/arm.c (arm_evpc_neon_vext): New
+	function.
+	(arm_expand_vec_perm_const_1): Add call to
+	arm_evpc_neon_vext.
+
+2012-08-17  Richard Earnshaw  <rearnsha@arm.com>
+
+	* arm.md (arm_addsi3): New variant for Thumb2 16-bit ADD instruction.
+	* arm.c (thumb2_reorg): Don't convert an ADD instruction that's
+	already 16 bits.
+
+2012-08-02  Richard Earnshaw  <rearnsha@arm.com>
+
+	* arm.c (arm_gen_constant): Use UBFX for some AND operations when
+	available.
+
+2012-07-30  Ulrich Weigand  <ulrich.weigand@linaro.org>
+	    Richard Earnshaw  <rearnsha@arm.com>
+
+	* target.def (vector_alignment): New target hook.
+	* doc/tm.texi.in (TARGET_VECTOR_ALIGNMENT): Document new hook.
+	* doc/tm.texi: Regenerate.
+	* targhooks.c (default_vector_alignment): New function.
+	* targhooks.h (default_vector_alignment): Add prototype.
+	* stor-layout.c (layout_type): Use targetm.vector_alignment.
+	* config/arm/arm.c (arm_vector_alignment): New function.
+	(TARGET_VECTOR_ALIGNMENT): Define.
+
+	* tree-vect-data-refs.c (vect_update_misalignment_for_peel): Use
+	vector type alignment instead of size.
+	* tree-vect-loop-manip.c (vect_do_peeling_for_loop_bound): Use
+	element type size directly instead of computing it from alignment.
+	Fix variable naming and comment.
+
+2012-07-18  Jie Zhang  <jzhang918@gmail.com>
+	    Julian Brown  <julian@codesourcery.com>
+
+	* config/arm/arm.c (arm_rtx_costs_1): Adjust cost for
+	CONST_VECTOR.
+	(arm_size_rtx_costs): Likewise.
+	(neon_valid_immediate): Add a case for double 0.0.
+
+2012-07-18  Andrew Stubbs  <ams@codesourcery.com>
+	    Mark Shinwell  <shinwell@codesourcery.com>
+	    Julian Brown  <julian@codesourcery.com>
+
+	* config/arm/vfp.md (*arm_movsi_vfp, *thumb2_movsi_vfp)
+	(*movdi_vfp_cortexa8, *movsf_vfp, *thumb2_movsf_vfp)
+	(*movdf_vfp, *thumb2_movdf_vfp, *movsfcc_vfp)
+	(*thumb2_movsfcc_vfp, *movdfcc_vfp, *thumb2_movdfcc_vfp): Add
+	neon_type.
+	* config/arm/arm.md (neon_type): Update comment.
+
+2012-07-16  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	* tree-ssa-ccp.c (optimize_unreachable): Check gsi_end_p
+	before calling gsi_stmt.
+
+2012-07-07  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	* combine.c (force_to_mode) [LSHIFTRT]: Avoid undefined behaviour
+	due to negative shift amount.
+
+2012-07-01  Wei Guozhi  <carrot@google.com>
+	
+	PR target/53447
+	* config/arm/arm-protos.h (const_ok_for_dimode_op): New prototype.
+	* config/arm/arm.c (const_ok_for_dimode_op): New function.
+	* config/arm/constraints.md (Dd): New constraint.
+	* config/arm/predicates.md (arm_adddi_operand): New predicate.
+	* config/arm/arm.md (adddi3): Extend it to handle constants.
+	(arm_adddi3): Likewise.
+	(addsi3_carryin_<optab>): Extend it to handle sbc case.
+	(addsi3_carryin_alt2_<optab>): Likewise.
+	* config/arm/neon.md (adddi3_neon): Extend it to handle constants.
+
+2012-06-15  Marc Glisse  <marc.glisse@inria.fr>
+
+	PR c++/51033
+	* c-typeck.c (c_build_vec_perm_expr): Move to c-family/c-common.c.
+	* c-tree.h (c_build_vec_perm_expr): Move to c-family/c-common.h.
+
+2012-06-26  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR tree-optimization/53729
+	PR tree-optimization/53636
+	* tree-vect-slp.c (vect_slp_analyze_bb_1): Delay call to
+	vect_verify_datarefs_alignment until after statements have
+	been marked as relevant/irrelevant.
+	* tree-vect-data-refs.c (vect_verify_datarefs_alignment):
+	Skip irrelevant statements.
+	(vect_enhance_data_refs_alignment): Use STMT_VINFO_RELEVANT_P
+	instead of STMT_VINFO_RELEVANT.
+	(vect_get_data_access_cost): Do not check for supportable
+	alignment before calling vect_get_load_cost/vect_get_store_cost.
+	* tree-vect-stmts.c (vect_get_store_cost): Do not abort when
+	handling unsupported alignment.
+	(vect_get_load_cost): Likewise.
+
+2012-06-15  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR tree-optimization/53636
+	* tree-vect-data-refs.c (vect_compute_data_ref_alignment): Verify
+	stride when doing basic-block vectorization.
+
+2012-06-04  Richard Guenther  <rguenther@suse.de>
+	
 	Backport from mainline
 	2012-04-25  Jakub Jelinek  <jakub@redhat.com>
- 
+	
 	PR middle-end/52979
 	* stor-layout.c (get_best_mode): Don't return mode with bitsize
 	larger than maxbits.  Don't compute maxbits modulo align.
@@ -41,6 +178,18 @@
 	(store_split_bit_field): Decrease unit close to end of bitregion_end
 	if access is restricted in order to avoid mutual recursion.
 
+2012-04-28  Joern Rennecke  <joern.rennecke@embecosm.com>
+	    Steven Bosscher  <steven@gcc.gnu.org>
+	    Maxim Kuvyrkov  <maxim@codesourcery.com>
+
+	PR tree-optimization/38785
+	* common.opt (ftree-partial-pre): New option.
+	* doc/invoke.texi: Document it.
+	* opts.c (default_options_table): Initialize flag_tree_partial_pre.
+	* tree-ssa-pre.c (do_partial_partial_insertion): Insert only if it will
+	benefit speed path.
+	(execute_pre): Use flag_tree_partial_pre.
+
 2012-05-28  Bill Schmidt  <wschmidt@linux.ibm.com>
 
 	Backport from mainline
@@ -48,6 +197,24 @@
 
 	PR tree-optimization/53438
 	* tree-sra.c (analyze_access_subtree): Correct bitfield exclusion.
+
+2012-05-09  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	* tree-ssa-loop-ivopts.c (add_autoinc_candidates, get_address_cost):
+	Replace use of HAVE_{POST/PRE}_{INCREMENT/DECREMENT} with
+	USE_{LOAD/STORE}_{PRE/POST}_{INCREMENT/DECREMENT} appropriately.
+	* config/arm/arm.h (ARM_AUTOINC_VALID_FOR_MODE_P): New.
+	(USE_LOAD_POST_INCREMENT): Define.
+	(USE_LOAD_PRE_INCREMENT): Define.
+	(USE_LOAD_POST_DECREMENT): Define.
+	(USE_LOAD_PRE_DECREMENT): Define.
+	(USE_STORE_PRE_DECREMENT): Define.
+	(USE_STORE_PRE_INCREMENT): Define.
+	(USE_STORE_POST_DECREMENT): Define.
+	(USE_STORE_POST_INCREMENT): Define.
+	(arm_auto_incmodes): Add enumeration.
+	* config/arm/arm-protos.h (arm_autoinc_modes_ok_p): Declare.
+	* config/arm/arm.c (arm_autoinc_modes_ok_p): Define.
 
 2012-10-08  Terry Guo  <terry.guo@arm.com>
 
@@ -178,6 +345,15 @@
 
 	* config/arm/arm.c (arm_evpc_neon_vrev): Adjust off by one error.
 
+2012-05-18  Andrew Stubbs  <ams@codesourcery.com>
+
+	* config/arm/arm-protos.h (arm_emit_coreregs_64bit_shift): New
+	prototype.
+	* config/arm/arm.c (arm_emit_coreregs_64bit_shift): New function.
+	* config/arm/arm.md (ashldi3): Use arm_emit_coreregs_64bit_shift.
+	(ashrdi3,lshrdi3): Likewise.
+	(arm_cond_branch): Remove '*' to enable gen_arm_cond_branch.
+
 2012-05-04  Ulrich Weigand  <ulrich.weigand@linaro.org>
 
 	Backport from mainline:
@@ -220,6 +396,24 @@
 	* arm/linux-eabi.h (GLIBC_DYNAMIC_LINKER_DEFAULT): Avoid ifdef
 	comparing enumeration values.  Update comments.
 
+2012-04-30  Andrew Stubbs  <ams@codesourcery.com>
+
+	* config/arm/arm.md (negdi2): Use gen_negdi2_neon.
+	* config/arm/neon.md (negdi2_neon): New insn.
+	Also add splitters for core and NEON registers.
+
+2012-04-30  Andrew Stubbs  <ams@codesourcery.com>
+
+	* config/arm/arm.c (neon_valid_immediate): Allow const_int.
+	(arm_print_operand): Add 'x' format.
+	* config/arm/constraints.md (Dn): Allow const_int.
+	* config/arm/neon.md (neon_mov<mode>): Use VDX to allow DImode.
+	Use 'x' format to print constants.
+	* config/arm/predicates.md (imm_for_neon_mov_operand): Allow const_int.
+	* config/arm/vfp.md (movdi_vfp): Disable for const_int when neon
+	is enabled.
+	(movdi_vfp_cortexa8): Likewise.
+
 2012-04-26  Michael Hope  <michael.hope@linaro.org>
 	    Richard Earnshaw  <rearnsha@arm.com>
 
@@ -228,11 +422,55 @@
 	(GLIBC_DYNAMIC_LINKER_DEFAULT): Define.
 	(GLIBC_DYNAMIC_LINKER):	Redefine to use the hard float path.
 
+2012-03-26  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR tree-optimization/52686
+	* tree-vect-data-refs.c (vect_get_smallest_scalar_type): Handle
+	WIDEN_LSHIFT_EXPR.
+
+2012-03-21  Richard Earnshaw  <rearnsha@arm.com>
+
+	* neon.md (neon_vget_lanev2di): Use gen_lowpart and gen_highpart.
+	* config/arm/neon.ml (Fixed_return_reg): Renamed to fixed_vector_reg.
+	All callers changed.
+	(Fixed_core_reg): New feature.
+	(Vget_lane [sizes S64 and U64]): Add Fixed_core_reg.  Allow fmrrd in
+	disassembly.
+	* neon-testgen.ml: Handle Fixed_core_reg.
+
+2012-03-21  Andrew Stubbs  <ams@codesourcery.com>
+
+	* config/arm/arm.c (thumb2_reorg): Add complete support
+	for 16-bit instructions.
+	* config/arm/thumb2.md: Delete obsolete flag-clobbering peepholes.
+
+2012-03-20  Richard Earnshaw  <rearnsha@arm.com>
+
+	* arm/predicates.md (zero_operand, reg_or_zero_operand): New predicates.
+	* arm/neon.md (neon_vceq<mode>, neon_vcge<mode>): Use
+	reg_or_zero_operand predicate.
+	(neon_vcle<mode>, neon_vclt<mode>): Use zero_operand predicate.
+
 2012-03-09  Jiangning Liu  <jiangning.liu@arm.com>
 
 	* tree-scalar-evolution (interpret_rhs_expr): generate chrec for
 	array reference and component reference.
 	(analyze_scalar_evolution_for_address_of): New.
+
+2012-03-02  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	* config/arm/arm.c (arm_sat_operator_match): New function.
+	* config/arm/arm-protos.h (arm_sat_operator_match): Add prototype.
+	* config/arm/arm.md ("insn" attribute): Add "sat" value.
+	("SAT", "SATrev"): New code iterators.
+	("SATlo", "SAThi"): New code iterator attributes.
+	("*satsi_<SAT:code>"): New pattern.
+	("*satsi_<SAT:code>_shift"): Likewise.
+	* config/arm/arm-fixed.md ("arm_ssatsihi_shift"): Add "insn"
+	and "shift" attributes.
+	("arm_usatsihi"): Add "insn" attribute.
+	* config/arm/predicates.md (sat_shift_operator): Allow multiplication
+	by powers of two.  Do not allow shift by 32.
 
 2012-09-11  Richard Guenther  <rguenther@suse.de>
 

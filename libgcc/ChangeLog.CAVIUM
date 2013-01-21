@@ -1,3 +1,9 @@
+2012-11-27  Manjunath Matti  <mmatti@caviumnetworks.com>
+	Backport from mainline.
+	2012-03-05  Richard Henderson  <rth@redhat.com>
+	* longlong.h [ARM] (umul_ppmm): Use umull for arm3m and later.
+	[ARM] (count_trailing_zeros): Use the builtin.
+
 2012-11-12  Khem Raj <raj.khem@gmail.com>
 
 	* configure.ac: Change the check for sjlj exceptions test

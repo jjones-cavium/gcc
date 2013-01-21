@@ -32,6 +32,11 @@
 /* Set default optimization options.  */
 static const struct default_options arm_option_optimization_table[] =
   {
+    /* Enable -fsched-pressure using -fsched-pressure-algorithm=model
+       by default when optimizing.  */
+    { OPT_LEVELS_1_PLUS, OPT_fsched_pressure, NULL, 1 },
+    { OPT_LEVELS_1_PLUS, OPT_fsched_pressure_algorithm_,
+      NULL, SCHED_PRESSURE_MODEL },
     /* Enable section anchors by default at -O1 or higher.  */
     { OPT_LEVELS_1_PLUS, OPT_fsection_anchors, NULL, 1 },
     { OPT_LEVELS_1_PLUS, OPT_fomit_frame_pointer, NULL, 1 },

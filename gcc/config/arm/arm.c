@@ -258,6 +258,7 @@ static bool arm_array_mode_supported_p (enum machine_mode,
 					unsigned HOST_WIDE_INT);
 static enum machine_mode arm_preferred_simd_mode (enum machine_mode);
 static bool arm_class_likely_spilled_p (reg_class_t);
+static HOST_WIDE_INT arm_vector_alignment (const_tree type);
 static bool arm_vector_alignment_reachable (const_tree type, bool is_packed);
 static bool arm_builtin_support_vector_misalignment (enum machine_mode mode,
 						     const_tree type,
@@ -602,6 +603,9 @@ static const struct attribute_spec arm_attribute_table[] =
 
 #undef TARGET_CLASS_LIKELY_SPILLED_P
 #define TARGET_CLASS_LIKELY_SPILLED_P arm_class_likely_spilled_p
+
+#undef TARGET_VECTOR_ALIGNMENT
+#define TARGET_VECTOR_ALIGNMENT arm_vector_alignment
 
 #undef TARGET_VECTORIZE_VECTOR_ALIGNMENT_REACHABLE
 #define TARGET_VECTORIZE_VECTOR_ALIGNMENT_REACHABLE \
@@ -2493,6 +2497,28 @@ const_ok_for_op (HOST_WIDE_INT i, enum rtx_code code)
     }
 }
 
+/* Return true if I is a valid di mode constant for the operation CODE.  */
+int
+const_ok_for_dimode_op (HOST_WIDE_INT i, enum rtx_code code)
+{
+  HOST_WIDE_INT hi_val = (i >> 32) & 0xFFFFFFFF;
+  HOST_WIDE_INT lo_val = i & 0xFFFFFFFF;
+  rtx hi = GEN_INT (hi_val);
+  rtx lo = GEN_INT (lo_val);
+
+  if (TARGET_THUMB1)
+    return 0;
+
+  switch (code)
+    {
+    case PLUS:
+      return arm_not_operand (hi, SImode) && arm_add_operand (lo, SImode);
+
+    default:
+      return 0;
+    }
+}
+
 /* Emit a sequence of insns to handle a large constant.
    CODE is the code of the operation required, it can be any of SET, PLUS,
    IOR, AND, XOR, MINUS;
@@ -2937,6 +2963,31 @@ arm_gen_constant (enum rtx_code code, enum machine_mode mode, rtx cond,
 					  ? gen_rtx_fmt_ee (code, mode, source,
 							    GEN_INT (val))
 					  : GEN_INT (val))));
+      return 1;
+    }
+
+  /* On targets with UXTH/UBFX, we can deal with AND (2^N)-1 in a single
+     insn.  */
+  if (code == AND && (i = exact_log2 (remainder + 1)) > 0
+      && (arm_arch_thumb2 || (i == 16 && arm_arch6 && mode == SImode)))
+    {
+      if (generate)
+	{
+	  if (mode == SImode && i == 16)
+	    /* Use UXTH in preference to UBFX, since on Thumb2 it's a 
+	       smaller insn.  */
+	    emit_constant_insn (cond,
+				gen_zero_extendhisi2
+				(target, gen_lowpart (HImode, source)));
+	  else
+	    /* Extz only supports SImode, but we can coerce the operands
+	       into that mode.  */
+	    emit_constant_insn (cond,
+				gen_extzv_t2 (gen_lowpart (mode, target),
+					      gen_lowpart (mode, source),
+					      GEN_INT (i), const0_rtx));
+	}
+
       return 1;
     }
 
@@ -7630,6 +7681,28 @@ arm_rtx_costs_1 (rtx x, enum rtx_code outer, int* total, bool speed)
       return true;
 
     case SET:
+      /* The vec_extract patterns accept memory operands that require an
+        address reload.  Account for the cost of that reload to give the
+        auto-inc-dec pass an incentive to try to replace them.  */
+      if (TARGET_NEON && MEM_P (SET_DEST (x))
+         && GET_CODE (SET_SRC (x)) == VEC_SELECT)
+       {
+         *total = rtx_cost (SET_DEST (x), code, 0, speed);
+         if (!neon_vector_mem_operand (SET_DEST (x), 2))
+           *total += COSTS_N_INSNS (1);
+         return true;
+       }
+      /* Likewise for the vec_set patterns.  */
+      if (TARGET_NEON && GET_CODE (SET_SRC (x)) == VEC_MERGE
+         && GET_CODE (XEXP (SET_SRC (x), 0)) == VEC_DUPLICATE
+         && MEM_P (XEXP (XEXP (SET_SRC (x), 0), 0)))
+       {
+         rtx mem = XEXP (XEXP (SET_SRC (x), 0), 0);
+         *total = rtx_cost (mem, code, 0, speed);
+         if (!neon_vector_mem_operand (mem, 2))
+           *total += COSTS_N_INSNS (1);
+         return true;
+       }
       return false;
       
     case UNSPEC:
@@ -7639,6 +7712,17 @@ arm_rtx_costs_1 (rtx x, enum rtx_code outer, int* total, bool speed)
 	{
 	  *total = COSTS_N_INSNS (2 + ARM_NUM_REGS (mode));
 	}
+      return true;
+
+    case CONST_VECTOR:
+      if (TARGET_NEON
+	  && TARGET_HARD_FLOAT
+	  && outer == SET
+	  && (VALID_NEON_DREG_MODE (mode) || VALID_NEON_QREG_MODE (mode))
+	  && neon_immediate_valid_for_move (x, mode, NULL, NULL))
+	*total = COSTS_N_INSNS (1);
+      else
+	*total = COSTS_N_INSNS (4);
       return true;
 
     default:
@@ -7979,6 +8063,17 @@ arm_size_rtx_costs (rtx x, enum rtx_code code, enum rtx_code outer_code,
 
     case CONST_DOUBLE:
       *total = COSTS_N_INSNS (4);
+      return true;
+
+    case CONST_VECTOR:
+      if (TARGET_NEON
+	  && TARGET_HARD_FLOAT
+	  && outer_code == SET
+	  && (VALID_NEON_DREG_MODE (mode) || VALID_NEON_QREG_MODE (mode))
+	  && neon_immediate_valid_for_move (x, mode, NULL, NULL))
+	*total = COSTS_N_INSNS (1);
+      else
+	*total = COSTS_N_INSNS (4);
       return true;
 
     case HIGH:
@@ -8848,10 +8943,13 @@ vfp3_const_double_rtx (rtx x)
    vmov  i64    17    aaaaaaaa bbbbbbbb cccccccc dddddddd
                       eeeeeeee ffffffff gggggggg hhhhhhhh
    vmov  f32    18    aBbbbbbc defgh000 00000000 00000000
+   vmov  f32    19    00000000 00000000 00000000 00000000
 
    For case 18, B = !b. Representable values are exactly those accepted by
    vfp3_const_double_index, but are output as floating-point numbers rather
    than indices.
+
+   For case 19, we will change it to vmov.i32 when assembling.
 
    Variants 0-5 (inclusive) may also be used as immediates for the second
    operand of VORR/VBIC instructions.
@@ -8883,11 +8981,25 @@ neon_valid_immediate (rtx op, enum machine_mode mode, int inverse,
       break;					\
     }
 
-  unsigned int i, elsize = 0, idx = 0, n_elts = CONST_VECTOR_NUNITS (op);
-  unsigned int innersize = GET_MODE_SIZE (GET_MODE_INNER (mode));
+  unsigned int i, elsize = 0, idx = 0, n_elts;
+  unsigned int innersize;
   unsigned char bytes[16];
   int immtype = -1, matches;
   unsigned int invmask = inverse ? 0xff : 0;
+  bool vector = GET_CODE (op) == CONST_VECTOR;
+
+  if (vector)
+    {
+      n_elts = CONST_VECTOR_NUNITS (op);
+      innersize = GET_MODE_SIZE (GET_MODE_INNER (mode));
+    }
+  else
+    {
+      n_elts = 1;
+      if (mode == VOIDmode)
+	mode = DImode;
+      innersize = GET_MODE_SIZE (mode);
+    }
 
   /* Vectors of float constants.  */
   if (GET_MODE_CLASS (mode) == MODE_VECTOR_FLOAT)
@@ -8895,7 +9007,7 @@ neon_valid_immediate (rtx op, enum machine_mode mode, int inverse,
       rtx el0 = CONST_VECTOR_ELT (op, 0);
       REAL_VALUE_TYPE r0;
 
-      if (!vfp3_const_double_rtx (el0))
+      if (!vfp3_const_double_rtx (el0) && el0 != CONST0_RTX (GET_MODE (el0)))
         return -1;
 
       REAL_VALUE_FROM_CONST_DOUBLE (r0, el0);
@@ -8917,13 +9029,16 @@ neon_valid_immediate (rtx op, enum machine_mode mode, int inverse,
       if (elementwidth)
         *elementwidth = 0;
 
-      return 18;
+      if (el0 == CONST0_RTX (GET_MODE (el0)))
+	return 19;
+      else
+	return 18;
     }
 
   /* Splat vector constant out into a byte vector.  */
   for (i = 0; i < n_elts; i++)
     {
-      rtx el = CONST_VECTOR_ELT (op, i);
+      rtx el = vector ? CONST_VECTOR_ELT (op, i) : op;
       unsigned HOST_WIDE_INT elpart;
       unsigned int part, parts;
 
@@ -9634,7 +9749,11 @@ neon_vector_mem_operand (rtx op, int type)
       && REG_MODE_OK_FOR_BASE_P (XEXP (ind, 0), VOIDmode)
       && GET_CODE (XEXP (ind, 1)) == CONST_INT
       && INTVAL (XEXP (ind, 1)) > -1024
-      && INTVAL (XEXP (ind, 1)) < 1016
+      /* For quad modes, we restrict the constant offset to be slightly less
+	 than what the instruction format permits.  We have no such constraint
+	 on double mode offsets.  (This must match arm_legitimate_index_p.)  */
+      && (INTVAL (XEXP (ind, 1))
+	  < (VALID_NEON_QREG_MODE (GET_MODE (op))? 1016 : 1024))
       && (INTVAL (XEXP (ind, 1)) & 3) == 0)
     return TRUE;
 
@@ -10036,6 +10155,42 @@ minmax_code (rtx x)
     default:
       gcc_unreachable ();
     }
+}
+
+/* Match pair of min/max operators that can be implemented via usat/ssat.  */
+
+bool
+arm_sat_operator_match (rtx lo_bound, rtx hi_bound,
+			int *mask, bool *signed_sat)
+{
+  /* The high bound must be a power of two minus one.  */
+  int log = exact_log2 (INTVAL (hi_bound) + 1);
+  if (log == -1)
+    return false;
+
+  /* The low bound is either zero (for usat) or one less than the
+     negation of the high bound (for ssat).  */
+  if (INTVAL (lo_bound) == 0)
+    {
+      if (mask)
+        *mask = log;
+      if (signed_sat)
+        *signed_sat = false;
+
+      return true;
+    }
+
+  if (INTVAL (lo_bound) == -INTVAL (hi_bound) - 1)
+    {
+      if (mask)
+        *mask = log + 1;
+      if (signed_sat)
+        *signed_sat = true;
+
+      return true;
+    }
+
+  return false;
 }
 
 /* Return 1 if memory locations are adjacent.  */
@@ -13265,47 +13420,155 @@ thumb2_reorg (void)
       FOR_BB_INSNS_REVERSE (bb, insn)
 	{
 	  if (NONJUMP_INSN_P (insn)
-	      && !REGNO_REG_SET_P (&live, CC_REGNUM))
+	      && !REGNO_REG_SET_P (&live, CC_REGNUM)
+	      && GET_CODE (PATTERN (insn)) == SET)
 	    {
+	      enum {SKIP, CONV, SWAP_CONV} action = SKIP;
 	      rtx pat = PATTERN (insn);
-	      if (GET_CODE (pat) == SET
-		  && low_register_operand (XEXP (pat, 0), SImode)
-		  && thumb_16bit_operator (XEXP (pat, 1), SImode)
-		  && low_register_operand (XEXP (XEXP (pat, 1), 0), SImode)
-		  && low_register_operand (XEXP (XEXP (pat, 1), 1), SImode))
+	      rtx dst = XEXP (pat, 0);
+	      rtx src = XEXP (pat, 1);
+	      rtx op0 = NULL_RTX, op1 = NULL_RTX;
+
+	      if (!OBJECT_P (src))
+		  op0 = XEXP (src, 0);
+
+	      if (BINARY_P (src))
+		  op1 = XEXP (src, 1);
+
+	      if (low_register_operand (dst, SImode))
 		{
-		  rtx dst = XEXP (pat, 0);
-		  rtx src = XEXP (pat, 1);
-		  rtx op0 = XEXP (src, 0);
-		  rtx op1 = (GET_RTX_CLASS (GET_CODE (src)) == RTX_COMM_ARITH
-			     ? XEXP (src, 1) : NULL);
-
-		  if (rtx_equal_p (dst, op0)
-		      || GET_CODE (src) == PLUS || GET_CODE (src) == MINUS)
+		  switch (GET_CODE (src))
 		    {
-		      rtx ccreg = gen_rtx_REG (CCmode, CC_REGNUM);
-		      rtx clobber = gen_rtx_CLOBBER (VOIDmode, ccreg);
-		      rtvec vec = gen_rtvec (2, pat, clobber);
+		    case PLUS:
+		      /* Adding two registers and storing the result
+			 in the first source is already a 16-bit
+			 operation.  */
+		      if (rtx_equal_p (dst, op0)
+			  && register_operand (op1, SImode))
+			break;
 
-		      PATTERN (insn) = gen_rtx_PARALLEL (VOIDmode, vec);
-		      INSN_CODE (insn) = -1;
+		      if (low_register_operand (op0, SImode))
+			{
+			  /* ADDS <Rd>,<Rn>,<Rm>  */
+			  if (low_register_operand (op1, SImode))
+			    action = CONV;
+			  /* ADDS <Rdn>,#<imm8>  */
+			  /* SUBS <Rdn>,#<imm8>  */
+			  else if (rtx_equal_p (dst, op0)
+				   && CONST_INT_P (op1)
+				   && IN_RANGE (INTVAL (op1), -255, 255))
+			    action = CONV;
+			  /* ADDS <Rd>,<Rn>,#<imm3>  */
+			  /* SUBS <Rd>,<Rn>,#<imm3>  */
+			  else if (CONST_INT_P (op1)
+				   && IN_RANGE (INTVAL (op1), -7, 7))
+			    action = CONV;
+			}
+		      break;
+
+		    case MINUS:
+		      /* RSBS <Rd>,<Rn>,#0  
+			 Not handled here: see NEG below.  */
+		      /* SUBS <Rd>,<Rn>,#<imm3>
+			 SUBS <Rdn>,#<imm8>
+			 Not handled here: see PLUS above.  */
+		      /* SUBS <Rd>,<Rn>,<Rm>  */
+		      if (low_register_operand (op0, SImode)
+			  && low_register_operand (op1, SImode))
+			    action = CONV;
+		      break;
+
+		    case MULT:
+		      /* MULS <Rdm>,<Rn>,<Rdm>
+			 As an exception to the rule, this is only used
+			 when optimizing for size since MULS is slow on all
+			 known implementations.  We do not even want to use
+			 MULS in cold code, if optimizing for speed, so we
+			 test the global flag here.  */
+		      if (!optimize_size)
+			break;
+		      /* else fall through.  */
+		    case AND:
+		    case IOR:
+		    case XOR:
+		      /* ANDS <Rdn>,<Rm>  */
+		      if (rtx_equal_p (dst, op0)
+			  && low_register_operand (op1, SImode))
+			action = CONV;
+		      else if (rtx_equal_p (dst, op1)
+			       && low_register_operand (op0, SImode))
+			action = SWAP_CONV;
+		      break;
+
+		    case ASHIFTRT:
+		    case ASHIFT:
+		    case LSHIFTRT:
+		      /* ASRS <Rdn>,<Rm> */
+		      /* LSRS <Rdn>,<Rm> */
+		      /* LSLS <Rdn>,<Rm> */
+		      if (rtx_equal_p (dst, op0)
+			  && low_register_operand (op1, SImode))
+			action = CONV;
+		      /* ASRS <Rd>,<Rm>,#<imm5> */
+		      /* LSRS <Rd>,<Rm>,#<imm5> */
+		      /* LSLS <Rd>,<Rm>,#<imm5> */
+		      else if (low_register_operand (op0, SImode)
+			       && CONST_INT_P (op1)
+			       && IN_RANGE (INTVAL (op1), 0, 31))
+			action = CONV;
+		      break;
+
+		    case ROTATERT:
+		      /* RORS <Rdn>,<Rm>  */
+		      if (rtx_equal_p (dst, op0)
+			  && low_register_operand (op1, SImode))
+			action = CONV;
+		      break;
+
+		    case NOT:
+		    case NEG:
+		      /* MVNS <Rd>,<Rm>  */
+		      /* NEGS <Rd>,<Rm>  (a.k.a RSBS)  */
+		      if (low_register_operand (op0, SImode))
+			action = CONV;
+		      break;
+
+		    case CONST_INT:
+		      /* MOVS <Rd>,#<imm8>  */
+		      if (CONST_INT_P (src)
+			  && IN_RANGE (INTVAL (src), 0, 255))
+			action = CONV;
+		      break;
+
+		    case REG:
+		      /* MOVS and MOV<c> with registers have different
+			 encodings, so are not relevant here.  */
+		      break;
+
+		    default:
+		      break;
 		    }
-		  /* We can also handle a commutative operation where the
-		     second operand matches the destination.  */
-		  else if (op1 && rtx_equal_p (dst, op1))
-		    {
-		      rtx ccreg = gen_rtx_REG (CCmode, CC_REGNUM);
-		      rtx clobber = gen_rtx_CLOBBER (VOIDmode, ccreg);
-		      rtvec vec;
+		}
 
+	      if (action != SKIP)
+		{
+		  rtx ccreg = gen_rtx_REG (CCmode, CC_REGNUM);
+		  rtx clobber = gen_rtx_CLOBBER (VOIDmode, ccreg);
+		  rtvec vec;
+
+		  if (action == SWAP_CONV)
+		    {
 		      src = copy_rtx (src);
 		      XEXP (src, 0) = op1;
 		      XEXP (src, 1) = op0;
 		      pat = gen_rtx_SET (VOIDmode, dst, src);
 		      vec = gen_rtvec (2, pat, clobber);
-		      PATTERN (insn) = gen_rtx_PARALLEL (VOIDmode, vec);
-		      INSN_CODE (insn) = -1;
 		    }
+		  else /* action == CONV */
+		    vec = gen_rtvec (2, pat, clobber);
+
+		  PATTERN (insn) = gen_rtx_PARALLEL (VOIDmode, vec);
+		  INSN_CODE (insn) = -1;
 		}
 	    }
 
@@ -14534,15 +14797,16 @@ output_move_vfp (rtx *operands)
   return "";
 }
 
-/* Output a Neon quad-word load or store, or a load or store for
-   larger structure modes.
+/* Output a Neon double-word or quad-word load or store, or a load
+   or store for larger structure modes.
 
    WARNING: The ordering of elements is weird in big-endian mode,
-   because we use VSTM, as required by the EABI.  GCC RTL defines
-   element ordering based on in-memory order.  This can be differ
-   from the architectural ordering of elements within a NEON register.
-   The intrinsics defined in arm_neon.h use the NEON register element
-   ordering, not the GCC RTL element ordering.
+   because the EABI requires that vectors stored in memory appear
+   as though they were stored by a VSTM, as required by the EABI.
+   GCC RTL defines element ordering based on in-memory order.
+   This can be different from the architectural ordering of elements
+   within a NEON register. The intrinsics defined in arm_neon.h use the
+   NEON register element ordering, not the GCC RTL element ordering.
 
    For example, the in-memory ordering of a big-endian a quadword
    vector with 16-bit elements when stored from register pair {d0,d1}
@@ -14556,13 +14820,28 @@ output_move_vfp (rtx *operands)
      dN -> (rN+1, rN), dN+1 -> (rN+3, rN+2)
 
    So that STM/LDM can be used on vectors in ARM registers, and the
-   same memory layout will result as if VSTM/VLDM were used.  */
+   same memory layout will result as if VSTM/VLDM were used.
+
+   Instead of VSTM/VLDM we prefer to use VST1.64/VLD1.64 where
+   possible, which allows use of appropriate alignment tags.
+   Note that the choice of "64" is independent of the actual vector
+   element size; this size simply ensures that the behavior is
+   equivalent to VSTM/VLDM in both little-endian and big-endian mode.
+
+   Due to limitations of those instructions, use of VST1.64/VLD1.64
+   is not possible if:
+    - the address contains PRE_DEC, or
+    - the mode refers to more than 4 double-word registers
+
+   In those cases, it would be possible to replace VSTM/VLDM by a
+   sequence of instructions; this is not currently implemented since
+   this is not certain to actually improve performance.  */
 
 const char *
 output_move_neon (rtx *operands)
 {
   rtx reg, mem, addr, ops[2];
-  int regno, load = REG_P (operands[0]);
+  int regno, nregs, load = REG_P (operands[0]);
   const char *templ;
   char buff[50];
   enum machine_mode mode;
@@ -14574,6 +14853,7 @@ output_move_neon (rtx *operands)
 
   gcc_assert (REG_P (reg));
   regno = REGNO (reg);
+  nregs = HARD_REGNO_NREGS (regno, mode) / 2;
   gcc_assert (VFP_REGNO_OK_FOR_DOUBLE (regno)
 	      || NEON_REGNO_OK_FOR_QUAD (regno));
   gcc_assert (VALID_NEON_DREG_MODE (mode)
@@ -14590,13 +14870,23 @@ output_move_neon (rtx *operands)
   switch (GET_CODE (addr))
     {
     case POST_INC:
-      templ = "v%smia%%?\t%%0!, %%h1";
-      ops[0] = XEXP (addr, 0);
+      /* We have to use vldm / vstm for too-large modes.  */
+      if (nregs > 4)
+	{
+	  templ = "v%smia%%?\t%%0!, %%h1";
+	  ops[0] = XEXP (addr, 0);
+	}
+      else
+	{
+	  templ = "v%s1.64\t%%h1, %%A0";
+	  ops[0] = mem;
+	}
       ops[1] = reg;
       break;
 
     case PRE_DEC:
-      /* FIXME: We should be using vld1/vst1 here in BE mode?  */
+      /* We have to use vldm / vstm in this case, since there is no
+	 pre-decrement form of the vld1 / vst1 instructions.  */
       templ = "v%smdb%%?\t%%0!, %%h1";
       ops[0] = XEXP (addr, 0);
       ops[1] = reg;
@@ -14609,7 +14899,6 @@ output_move_neon (rtx *operands)
     case LABEL_REF:
     case PLUS:
       {
-	int nregs = HARD_REGNO_NREGS (REGNO (reg), mode) / 2;
 	int i;
 	int overlap = -1;
 	for (i = 0; i < nregs; i++)
@@ -14640,7 +14929,12 @@ output_move_neon (rtx *operands)
       }
 
     default:
-      templ = "v%smia%%?\t%%m0, %%h1";
+      /* We have to use vldm / vstm for too-large modes.  */
+      if (nregs > 4)
+	templ = "v%smia%%?\t%%m0, %%h1";
+      else
+	templ = "v%s1.64\t%%h1, %%A0";
+
       ops[0] = mem;
       ops[1] = reg;
     }
@@ -17253,6 +17547,19 @@ arm_print_operand (FILE *stream, rtx x, int code)
 	      break;
 	    }
 	  /* Fall through.  */
+
+	default:
+	  output_operand_lossage ("Unsupported operand for code '%c'", code);
+	}
+      return;
+
+    /* An integer that we want to print in HEX.  */
+    case 'x':
+      switch (GET_CODE (x))
+	{
+	case CONST_INT:
+	  fprintf (stream, "#" HOST_WIDE_INT_PRINT_HEX, INTVAL (x));
+	  break;
 
 	default:
 	  output_operand_lossage ("Unsupported operand for code '%c'", code);
@@ -24497,6 +24804,18 @@ arm_have_conditional_execution (void)
   return !TARGET_THUMB1;
 }
 
+/* The AAPCS sets the maximum alignment of a vector to 64 bits.  */
+static HOST_WIDE_INT
+arm_vector_alignment (const_tree type)
+{
+  HOST_WIDE_INT align = tree_low_cst (TYPE_SIZE (type), 0);
+
+  if (TARGET_AAPCS_BASED)
+    align = MIN (align, 64);
+
+  return align;
+}
+
 static unsigned int
 arm_autovectorize_vector_sizes (void)
 {
@@ -25348,6 +25667,72 @@ arm_evpc_neon_vtrn (struct expand_vec_perm_d *d)
   return true;
 }
 
+/* Recognize patterns for the VEXT insns.  */
+
+static bool
+arm_evpc_neon_vext (struct expand_vec_perm_d *d)
+{
+  unsigned int i, nelt = d->nelt;
+  rtx (*gen) (rtx, rtx, rtx, rtx);
+  rtx offset;
+
+  unsigned int location;
+
+  unsigned int next  = d->perm[0] + 1;
+
+  /* TODO: Handle GCC's numbering of elements for big-endian.  */
+  if (BYTES_BIG_ENDIAN)
+    return false;
+
+  /* Check if the extracted indexes are increasing by one.  */
+  for (i = 1; i < nelt; next++, i++)
+    {
+      /* If we hit the most significant element of the 2nd vector in
+	 the previous iteration, no need to test further.  */
+      if (next == 2 * nelt)
+	return false;
+
+      /* If we are operating on only one vector: it could be a
+	 rotation.  If there are only two elements of size < 64, let
+	 arm_evpc_neon_vrev catch it.  */
+      if (d->one_vector_p && (next == nelt))
+	{
+	  if ((nelt == 2) && (d->vmode != V2DImode))
+	    return false;
+	  else
+	    next = 0;
+	}
+
+      if (d->perm[i] != next)
+	return false;
+    }
+
+  location = d->perm[0];
+
+  switch (d->vmode)
+    {
+    case V16QImode: gen = gen_neon_vextv16qi; break;
+    case V8QImode: gen = gen_neon_vextv8qi; break;
+    case V4HImode: gen = gen_neon_vextv4hi; break;
+    case V8HImode: gen = gen_neon_vextv8hi; break;
+    case V2SImode: gen = gen_neon_vextv2si; break;
+    case V4SImode: gen = gen_neon_vextv4si; break;
+    case V2SFmode: gen = gen_neon_vextv2sf; break;
+    case V4SFmode: gen = gen_neon_vextv4sf; break;
+    case V2DImode: gen = gen_neon_vextv2di; break;
+    default:
+      return false;
+    }
+
+  /* Success! */
+  if (d->testing_p)
+    return true;
+
+  offset = GEN_INT (location);
+  emit_insn (gen (d->target, d->op0, d->op1, offset));
+  return true;
+}
+
 /* The NEON VTBL instruction is a fully variable permuation that's even
    stronger than what we expose via VEC_PERM_EXPR.  What it doesn't do
    is mask the index operand as VEC_PERM_EXPR requires.  Therefore we
@@ -25387,6 +25772,12 @@ arm_evpc_neon_vtbl (struct expand_vec_perm_d *d)
 static bool
 arm_expand_vec_perm_const_1 (struct expand_vec_perm_d *d)
 {
+  /* Check if the input mask matches vext before reordering the
+     operands.  */
+  if (TARGET_NEON)
+    if (arm_evpc_neon_vext (d))
+      return true;
+
   /* The pattern matching functions above are written to look for a small
      number to begin the sequence (0, 1, N/2).  If we begin with an index
      from the second operand, we can swap the operands.  */
@@ -25517,6 +25908,53 @@ arm_vectorize_vec_perm_const_ok (enum machine_mode vmode,
   return ret;
 }
 
+bool
+arm_autoinc_modes_ok_p (enum machine_mode mode, enum arm_auto_incmodes code)
+{
+  /* If we are soft float and we do not have ldrd 
+     then all auto increment forms are ok.  */
+  if (TARGET_SOFT_FLOAT && (TARGET_LDRD || GET_MODE_SIZE (mode) <= 4))
+    return true;
+
+  switch (code)
+    {
+      /* Post increment and Pre Decrement are supported for all
+	 instruction forms except for vector forms.  */
+    case ARM_POST_INC:
+    case ARM_PRE_DEC:
+      if (VECTOR_MODE_P (mode))
+	{
+	  if (code != ARM_PRE_DEC)
+	    return true;
+	  else 
+	    return false;
+	}
+      
+      return true;
+
+    case ARM_POST_DEC:
+    case ARM_PRE_INC:
+      /* Without LDRD and mode size greater than 
+	 word size, there is no point in auto-incrementing
+         because ldm and stm will not have these forms.  */
+      if (!TARGET_LDRD && GET_MODE_SIZE (mode) > 4)
+	return false;
+
+      /* Vector and floating point modes do not support
+	 these auto increment forms.  */
+      if (FLOAT_MODE_P (mode) || VECTOR_MODE_P (mode))
+	return false;
+
+      return true;
+     
+    default:
+      return false;
+      
+    }
+
+  return false;
+}
+
 /* Returns true if a valid comparison operation and makes 
    the operands in a form that is valid.  */
 
@@ -25565,6 +26003,257 @@ arm_validize_comparison (rtx *comparison, rtx * op1, rtx * op2)
   
   return false;
 
+}
+
+/* The default expansion of general 64-bit shifts in core-regs is suboptimal,
+   on ARM, since we know that shifts by negative amounts are no-ops.
+   Additionally, the default expansion code is not available or suitable
+   for post-reload insn splits (this can occur when the register allocator
+   chooses not to do a shift in NEON).
+   
+   This function is used in both initial expand and post-reload splits, and
+   handles all kinds of 64-bit shifts.
+
+   Input requirements:
+    - It is safe for the input and output to be the same register, but
+      early-clobber rules apply for the shift amount and scratch registers.
+    - Shift by register requires both scratch registers.  In all other cases
+      the scratch registers may be NULL.
+    - Ashiftrt by a register also clobbers the CC register.  */
+void
+arm_emit_coreregs_64bit_shift (enum rtx_code code, rtx out, rtx in,
+			       rtx amount, rtx scratch1, rtx scratch2)
+{
+  rtx out_high = gen_highpart (SImode, out);
+  rtx out_low = gen_lowpart (SImode, out);
+  rtx in_high = gen_highpart (SImode, in);
+  rtx in_low = gen_lowpart (SImode, in);
+
+  /* Terminology:
+	in = the register pair containing the input value.
+	out = the destination register pair.
+	up = the high- or low-part of each pair.
+	down = the opposite part to "up".
+     In a shift, we can consider bits to shift from "up"-stream to
+     "down"-stream, so in a left-shift "up" is the low-part and "down"
+     is the high-part of each register pair.  */
+
+  rtx out_up   = code == ASHIFT ? out_low : out_high;
+  rtx out_down = code == ASHIFT ? out_high : out_low;
+  rtx in_up   = code == ASHIFT ? in_low : in_high;
+  rtx in_down = code == ASHIFT ? in_high : in_low;
+
+  gcc_assert (code == ASHIFT || code == ASHIFTRT || code == LSHIFTRT);
+  gcc_assert (out
+	      && (REG_P (out) || GET_CODE (out) == SUBREG)
+	      && GET_MODE (out) == DImode);
+  gcc_assert (in
+	      && (REG_P (in) || GET_CODE (in) == SUBREG)
+	      && GET_MODE (in) == DImode);
+  gcc_assert (amount
+	      && (((REG_P (amount) || GET_CODE (amount) == SUBREG)
+		   && GET_MODE (amount) == SImode)
+		  || CONST_INT_P (amount)));
+  gcc_assert (scratch1 == NULL
+	      || (GET_CODE (scratch1) == SCRATCH)
+	      || (GET_MODE (scratch1) == SImode
+		  && REG_P (scratch1)));
+  gcc_assert (scratch2 == NULL
+	      || (GET_CODE (scratch2) == SCRATCH)
+	      || (GET_MODE (scratch2) == SImode
+		  && REG_P (scratch2)));
+  gcc_assert (!REG_P (out) || !REG_P (amount)
+	      || !HARD_REGISTER_P (out)
+	      || (REGNO (out) != REGNO (amount)
+		  && REGNO (out) + 1 != REGNO (amount)));
+
+  /* Macros to make following code more readable.  */
+  #define SUB_32(DEST,SRC) \
+	    gen_addsi3 ((DEST), (SRC), gen_rtx_CONST_INT (VOIDmode, -32))
+  #define RSB_32(DEST,SRC) \
+	    gen_subsi3 ((DEST), gen_rtx_CONST_INT (VOIDmode, 32), (SRC))
+  #define SUB_S_32(DEST,SRC) \
+	    gen_addsi3_compare0 ((DEST), (SRC), \
+				 gen_rtx_CONST_INT (VOIDmode, -32))
+  #define SET(DEST,SRC) \
+	    gen_rtx_SET (SImode, (DEST), (SRC))
+  #define SHIFT(CODE,SRC,AMOUNT) \
+	    gen_rtx_fmt_ee ((CODE), SImode, (SRC), (AMOUNT))
+  #define LSHIFT(CODE,SRC,AMOUNT) \
+	    gen_rtx_fmt_ee ((CODE) == ASHIFT ? ASHIFT : LSHIFTRT, \
+			    SImode, (SRC), (AMOUNT))
+  #define REV_LSHIFT(CODE,SRC,AMOUNT) \
+	    gen_rtx_fmt_ee ((CODE) == ASHIFT ? LSHIFTRT : ASHIFT, \
+			    SImode, (SRC), (AMOUNT))
+  #define ORR(A,B) \
+	    gen_rtx_IOR (SImode, (A), (B))
+  #define BRANCH(COND,LABEL) \
+	    gen_arm_cond_branch ((LABEL), \
+				 gen_rtx_ ## COND (CCmode, cc_reg, \
+						   const0_rtx), \
+				 cc_reg)
+
+  /* Shifts by register and shifts by constant are handled separately.  */
+  if (CONST_INT_P (amount))
+    {
+      /* We have a shift-by-constant.  */
+
+      /* First, handle out-of-range shift amounts.
+	 In both cases we try to match the result an ARM instruction in a
+	 shift-by-register would give.  This helps reduce execution
+	 differences between optimization levels, but it won't stop other
+         parts of the compiler doing different things.  This is "undefined
+         behaviour, in any case.  */
+      if (INTVAL (amount) <= 0)
+	emit_insn (gen_movdi (out, in));
+      else if (INTVAL (amount) >= 64)
+	{
+	  if (code == ASHIFTRT)
+	    {
+	      rtx const31_rtx = gen_rtx_CONST_INT (VOIDmode, 31);
+	      emit_insn (SET (out_down, SHIFT (code, in_up, const31_rtx)));
+	      emit_insn (SET (out_up, SHIFT (code, in_up, const31_rtx)));
+	    }
+	  else
+	    emit_insn (gen_movdi (out, const0_rtx));
+	}
+
+      /* Now handle valid shifts. */
+      else if (INTVAL (amount) < 32)
+	{
+	  /* Shifts by a constant less than 32.  */
+	  rtx reverse_amount = gen_rtx_CONST_INT (VOIDmode,
+						  32 - INTVAL (amount));
+
+	  emit_insn (SET (out_down, LSHIFT (code, in_down, amount)));
+	  emit_insn (SET (out_down,
+			  ORR (REV_LSHIFT (code, in_up, reverse_amount),
+			       out_down)));
+	  emit_insn (SET (out_up, SHIFT (code, in_up, amount)));
+	}
+      else
+	{
+	  /* Shifts by a constant greater than 31.  */
+	  rtx adj_amount = gen_rtx_CONST_INT (VOIDmode, INTVAL (amount) - 32);
+
+	  emit_insn (SET (out_down, SHIFT (code, in_up, adj_amount)));
+	  if (code == ASHIFTRT)
+	    emit_insn (gen_ashrsi3 (out_up, in_up,
+				    gen_rtx_CONST_INT (VOIDmode, 31)));
+	  else
+	    emit_insn (SET (out_up, const0_rtx));
+	}
+    }
+  else
+    {
+      /* We have a shift-by-register.  */
+      rtx cc_reg = gen_rtx_REG (CC_NOOVmode, CC_REGNUM);
+
+      /* This alternative requires the scratch registers.  */
+      gcc_assert (scratch1 && REG_P (scratch1));
+      gcc_assert (scratch2 && REG_P (scratch2));
+
+      /* We will need the values "amount-32" and "32-amount" later.
+         Swapping them around now allows the later code to be more general. */
+      switch (code)
+	{
+	case ASHIFT:
+	  emit_insn (SUB_32 (scratch1, amount));
+	  emit_insn (RSB_32 (scratch2, amount));
+	  break;
+	case ASHIFTRT:
+	  emit_insn (RSB_32 (scratch1, amount));
+	  /* Also set CC = amount > 32.  */
+	  emit_insn (SUB_S_32 (scratch2, amount));
+	  break;
+	case LSHIFTRT:
+	  emit_insn (RSB_32 (scratch1, amount));
+	  emit_insn (SUB_32 (scratch2, amount));
+	  break;
+	default:
+	  gcc_unreachable ();
+	}
+
+      /* Emit code like this:
+
+	 arithmetic-left:
+	    out_down = in_down << amount;
+	    out_down = (in_up << (amount - 32)) | out_down;
+	    out_down = ((unsigned)in_up >> (32 - amount)) | out_down;
+	    out_up = in_up << amount;
+
+	 arithmetic-right:
+	    out_down = in_down >> amount;
+	    out_down = (in_up << (32 - amount)) | out_down;
+	    if (amount < 32)
+	      out_down = ((signed)in_up >> (amount - 32)) | out_down;
+	    out_up = in_up << amount;
+
+	 logical-right:
+	    out_down = in_down >> amount;
+	    out_down = (in_up << (32 - amount)) | out_down;
+	    if (amount < 32)
+	      out_down = ((unsigned)in_up >> (amount - 32)) | out_down;
+	    out_up = in_up << amount;
+
+	  The ARM and Thumb2 variants are the same but implemented slightly
+	  differently.  If this were only called during expand we could just
+	  use the Thumb2 case and let combine do the right thing, but this
+	  can also be called from post-reload splitters.  */
+
+      emit_insn (SET (out_down, LSHIFT (code, in_down, amount)));
+
+      if (!TARGET_THUMB2)
+	{
+	  /* Emit code for ARM mode.  */
+	  emit_insn (SET (out_down,
+			  ORR (SHIFT (ASHIFT, in_up, scratch1), out_down)));
+	  if (code == ASHIFTRT)
+	    {
+	      rtx done_label = gen_label_rtx ();
+	      emit_jump_insn (BRANCH (LT, done_label));
+	      emit_insn (SET (out_down, ORR (SHIFT (ASHIFTRT, in_up, scratch2),
+					     out_down)));
+	      emit_label (done_label);
+	    }
+	  else
+	    emit_insn (SET (out_down, ORR (SHIFT (LSHIFTRT, in_up, scratch2),
+					   out_down)));
+	}
+      else
+	{
+	  /* Emit code for Thumb2 mode.
+	     Thumb2 can't do shift and or in one insn.  */
+	  emit_insn (SET (scratch1, SHIFT (ASHIFT, in_up, scratch1)));
+	  emit_insn (gen_iorsi3 (out_down, out_down, scratch1));
+
+	  if (code == ASHIFTRT)
+	    {
+	      rtx done_label = gen_label_rtx ();
+	      emit_jump_insn (BRANCH (LT, done_label));
+	      emit_insn (SET (scratch2, SHIFT (ASHIFTRT, in_up, scratch2)));
+	      emit_insn (SET (out_down, ORR (out_down, scratch2)));
+	      emit_label (done_label);
+	    }
+	  else
+	    {
+	      emit_insn (SET (scratch2, SHIFT (LSHIFTRT, in_up, scratch2)));
+	      emit_insn (gen_iorsi3 (out_down, out_down, scratch2));
+	    }
+	}
+
+      emit_insn (SET (out_up, SHIFT (code, in_up, amount)));
+    }
+
+  #undef SUB_32
+  #undef RSB_32
+  #undef SUB_S_32
+  #undef SET
+  #undef SHIFT
+  #undef LSHIFT
+  #undef REV_LSHIFT
+  #undef ORR
+  #undef BRANCH
 }
 
 #include "gt-arm.h"

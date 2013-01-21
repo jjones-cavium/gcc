@@ -196,7 +196,7 @@
 ; for ARM or Thumb-2 with arm_arch6, and nov6 for ARM without
 ; arm_arch6.  This attribute is used to compute attribute "enabled",
 ; use type "any" to enable an alternative in all cases.
-(define_attr "arch" "any,a,t,32,t1,t2,v6,nov6,onlya8,nota8"
+(define_attr "arch" "any,a,t,32,t1,t2,v6,nov6,onlya8,neon_onlya8,nota8,neon_nota8"
   (const_string "any"))
 
 (define_attr "arch_enabled" "no,yes"
@@ -235,8 +235,34 @@
 	      (eq_attr "tune" "cortexa8"))
 	 (const_string "yes")
 
+	 (and (eq_attr "arch" "neon_onlya8")
+	      (eq_attr "tune" "cortexa8")
+	      (match_test "TARGET_NEON"))
+	 (const_string "yes")
+
 	 (and (eq_attr "arch" "nota8")
 	      (not (eq_attr "tune" "cortexa8")))
+	 (const_string "yes")
+
+	 (and (eq_attr "arch" "neon_nota8")
+	      (not (eq_attr "tune" "cortexa8"))
+	      (match_test "TARGET_NEON"))
+	 (const_string "yes")]
+	(const_string "no")))
+
+(define_attr "opt" "any,speed,size"
+  (const_string "any"))
+
+(define_attr "opt_enabled" "no,yes"
+  (cond [(eq_attr "opt" "any")
+         (const_string "yes")
+
+	 (and (eq_attr "opt" "speed")
+	      (match_test "optimize_function_for_speed_p (cfun)"))
+	 (const_string "yes")
+
+	 (and (eq_attr "opt" "size")
+	      (match_test "optimize_function_for_size_p (cfun)"))
 	 (const_string "yes")]
 	(const_string "no")))
 
@@ -247,11 +273,15 @@
 
 ; Enable all alternatives that are both arch_enabled and insn_enabled.
  (define_attr "enabled" "no,yes"
-   (if_then_else (eq_attr "insn_enabled" "yes")
-               (if_then_else (eq_attr "arch_enabled" "yes")
-                             (const_string "yes")
-                             (const_string "no"))
-                (const_string "no")))
+   (cond [(eq_attr "insn_enabled" "no")
+	  (const_string "no")
+
+	  (eq_attr "arch_enabled" "no")
+	  (const_string "no")
+
+	  (eq_attr "opt_enabled" "no")
+	  (const_string "no")]
+	 (const_string "yes")))
 
 ; POOL_RANGE is how far away from a constant pool entry that this insn
 ; can be placed.  If the distance is zero, then this insn will never
@@ -283,7 +313,7 @@
 ;; scheduling information.
 
 (define_attr "insn"
-        "mov,mvn,smulxy,smlaxy,smlalxy,smulwy,smlawx,mul,muls,mla,mlas,umull,umulls,umlal,umlals,smull,smulls,smlal,smlals,smlawy,smuad,smuadx,smlad,smladx,smusd,smusdx,smlsd,smlsdx,smmul,smmulr,smmla,umaal,smlald,smlsld,clz,mrs,msr,xtab,sdiv,udiv,other"
+        "mov,mvn,smulxy,smlaxy,smlalxy,smulwy,smlawx,mul,muls,mla,mlas,umull,umulls,umlal,umlals,smull,smulls,smlal,smlals,smlawy,smuad,smuadx,smlad,smladx,smusd,smusdx,smlsd,smlsdx,smmul,smmulr,smmla,umaal,smlald,smlsld,clz,mrs,msr,xtab,sdiv,udiv,sat,other"
         (const_string "other"))
 
 ; TYPE attribute is used to detect floating point instructions which, if
@@ -356,8 +386,6 @@
 (define_attr "ldsched" "no,yes" (const (symbol_ref "arm_ld_sched")))
 
 ;; Classification of NEON instructions for scheduling purposes.
-;; Do not set this attribute and the "type" attribute together in
-;; any one instruction pattern.
 (define_attr "neon_type"
    "neon_int_1,\
    neon_int_2,\
@@ -563,7 +591,7 @@
  [(parallel
    [(set (match_operand:DI           0 "s_register_operand" "")
 	  (plus:DI (match_operand:DI 1 "s_register_operand" "")
-	           (match_operand:DI 2 "s_register_operand" "")))
+	           (match_operand:DI 2 "arm_adddi_operand"  "")))
     (clobber (reg:CC CC_REGNUM))])]
   "TARGET_EITHER"
   "
@@ -599,9 +627,9 @@
 )
 
 (define_insn_and_split "*arm_adddi3"
-  [(set (match_operand:DI          0 "s_register_operand" "=&r,&r")
-	(plus:DI (match_operand:DI 1 "s_register_operand" "%0, 0")
-		 (match_operand:DI 2 "s_register_operand" "r,  0")))
+  [(set (match_operand:DI          0 "s_register_operand" "=&r,&r,&r,&r,&r")
+	(plus:DI (match_operand:DI 1 "s_register_operand" "%0, 0, r, 0, r")
+		 (match_operand:DI 2 "arm_adddi_operand"  "r,  0, r, Dd, Dd")))
    (clobber (reg:CC CC_REGNUM))]
   "TARGET_32BIT && !(TARGET_HARD_FLOAT && TARGET_MAVERICK) && !TARGET_NEON"
   "#"
@@ -619,7 +647,7 @@
     operands[0] = gen_lowpart (SImode, operands[0]);
     operands[4] = gen_highpart (SImode, operands[1]);
     operands[1] = gen_lowpart (SImode, operands[1]);
-    operands[5] = gen_highpart (SImode, operands[2]);
+    operands[5] = gen_highpart_mode (SImode, DImode, operands[2]);
     operands[2] = gen_lowpart (SImode, operands[2]);
   }"
   [(set_attr "conds" "clob")
@@ -718,16 +746,18 @@
 ;;  (plus (reg rN) (reg sp)) into (reg rN).  In this case reload will
 ;; put the duplicated register first, and not try the commutative version.
 (define_insn_and_split "*arm_addsi3"
-  [(set (match_operand:SI          0 "s_register_operand" "=r, k,r,r, k, r, k,r, k, r")
-	(plus:SI (match_operand:SI 1 "s_register_operand" "%rk,k,r,rk,k, rk,k,rk,k, rk")
-		 (match_operand:SI 2 "reg_or_int_operand" "rI,rI,k,Pj,Pj,L, L,PJ,PJ,?n")))]
+  [(set (match_operand:SI          0 "s_register_operand" "=rk, r,k, r,r, k, r, k,k,r, k, r")
+	(plus:SI (match_operand:SI 1 "s_register_operand" "%0, rk,k, r,rk,k, rk,k,r,rk,k, rk")
+		 (match_operand:SI 2 "reg_or_int_operand" "rk, rI,rI,k,Pj,Pj,L, L,L,PJ,PJ,?n")))]
   "TARGET_32BIT"
   "@
+   add%?\\t%0, %0, %2
    add%?\\t%0, %1, %2
    add%?\\t%0, %1, %2
    add%?\\t%0, %2, %1
    addw%?\\t%0, %1, %2
    addw%?\\t%0, %1, %2
+   sub%?\\t%0, %1, #%n2
    sub%?\\t%0, %1, #%n2
    sub%?\\t%0, %1, #%n2
    subw%?\\t%0, %1, #%n2
@@ -744,9 +774,9 @@
 		      operands[1], 0);
   DONE;
   "
-  [(set_attr "length" "4,4,4,4,4,4,4,4,4,16")
+  [(set_attr "length" "2,4,4,4,4,4,4,4,4,4,4,16")
    (set_attr "predicable" "yes")
-   (set_attr "arch" "*,*,*,t2,t2,*,*,t2,t2,*")]
+   (set_attr "arch" "t2,*,*,*,t2,t2,*,*,a,t2,t2,*")]
 )
 
 (define_insn_and_split "*thumb1_addsi3"
@@ -969,22 +999,26 @@
 )
 
 (define_insn "*addsi3_carryin_<optab>"
-  [(set (match_operand:SI 0 "s_register_operand" "=r")
-	(plus:SI (plus:SI (match_operand:SI 1 "s_register_operand" "%r")
-			  (match_operand:SI 2 "arm_rhs_operand" "rI"))
+  [(set (match_operand:SI 0 "s_register_operand" "=r,r")
+	(plus:SI (plus:SI (match_operand:SI 1 "s_register_operand" "%r,r")
+			  (match_operand:SI 2 "arm_not_operand" "rI,K"))
 		 (LTUGEU:SI (reg:<cnb> CC_REGNUM) (const_int 0))))]
   "TARGET_32BIT"
-  "adc%?\\t%0, %1, %2"
+  "@
+   adc%?\\t%0, %1, %2
+   sbc%?\\t%0, %1, #%B2"
   [(set_attr "conds" "use")]
 )
 
 (define_insn "*addsi3_carryin_alt2_<optab>"
-  [(set (match_operand:SI 0 "s_register_operand" "=r")
+  [(set (match_operand:SI 0 "s_register_operand" "=r,r")
 	(plus:SI (plus:SI (LTUGEU:SI (reg:<cnb> CC_REGNUM) (const_int 0))
-			  (match_operand:SI 1 "s_register_operand" "%r"))
-		 (match_operand:SI 2 "arm_rhs_operand" "rI")))]
+			  (match_operand:SI 1 "s_register_operand" "%r,r"))
+		 (match_operand:SI 2 "arm_rhs_operand" "rI,K")))]
   "TARGET_32BIT"
-  "adc%?\\t%0, %1, %2"
+  "@
+   adc%?\\t%0, %1, %2
+   sbc%?\\t%0, %1, #%B2"
   [(set_attr "conds" "use")]
 )
 
@@ -3446,30 +3480,113 @@
 		      (const_int 12)))]
 )
 
+(define_code_iterator SAT [smin smax])
+(define_code_iterator SATrev [smin smax])
+(define_code_attr SATlo [(smin "1") (smax "2")])
+(define_code_attr SAThi [(smin "2") (smax "1")])
+
+(define_insn "*satsi_<SAT:code>"
+  [(set (match_operand:SI 0 "s_register_operand" "=r")
+        (SAT:SI (SATrev:SI (match_operand:SI 3 "s_register_operand" "r")
+                           (match_operand:SI 1 "const_int_operand" "i"))
+                (match_operand:SI 2 "const_int_operand" "i")))]
+  "TARGET_32BIT && arm_arch6 && <SAT:CODE> != <SATrev:CODE>
+   && arm_sat_operator_match (operands[<SAT:SATlo>], operands[<SAT:SAThi>], NULL, NULL)"
+{
+  int mask;
+  bool signed_sat;
+  if (!arm_sat_operator_match (operands[<SAT:SATlo>], operands[<SAT:SAThi>],
+                               &mask, &signed_sat))
+    gcc_unreachable ();
+
+  operands[1] = GEN_INT (mask);
+  if (signed_sat)
+    return "ssat%?\t%0, %1, %3";
+  else
+    return "usat%?\t%0, %1, %3";
+}
+  [(set_attr "predicable" "yes")
+   (set_attr "insn" "sat")])
+
+(define_insn "*satsi_<SAT:code>_shift"
+  [(set (match_operand:SI 0 "s_register_operand" "=r")
+        (SAT:SI (SATrev:SI (match_operator:SI 3 "sat_shift_operator"
+                             [(match_operand:SI 4 "s_register_operand" "r")
+                              (match_operand:SI 5 "const_int_operand" "i")])
+                           (match_operand:SI 1 "const_int_operand" "i"))
+                (match_operand:SI 2 "const_int_operand" "i")))]
+  "TARGET_32BIT && arm_arch6 && <SAT:CODE> != <SATrev:CODE>
+   && arm_sat_operator_match (operands[<SAT:SATlo>], operands[<SAT:SAThi>], NULL, NULL)"
+{
+  int mask;
+  bool signed_sat;
+  if (!arm_sat_operator_match (operands[<SAT:SATlo>], operands[<SAT:SAThi>],
+                               &mask, &signed_sat))
+    gcc_unreachable ();
+
+  operands[1] = GEN_INT (mask);
+  if (signed_sat)
+    return "ssat%?\t%0, %1, %4%S3";
+  else
+    return "usat%?\t%0, %1, %4%S3";
+}
+  [(set_attr "predicable" "yes")
+   (set_attr "insn" "sat")
+   (set_attr "shift" "3")
+   (set_attr "type" "alu_shift")])
 
 ;; Shift and rotation insns
 
 (define_expand "ashldi3"
   [(set (match_operand:DI            0 "s_register_operand" "")
         (ashift:DI (match_operand:DI 1 "s_register_operand" "")
-                   (match_operand:SI 2 "reg_or_int_operand" "")))]
+                   (match_operand:SI 2 "general_operand" "")))]
   "TARGET_32BIT"
   "
-  if (GET_CODE (operands[2]) == CONST_INT)
+  if (TARGET_NEON)
     {
-      if ((HOST_WIDE_INT) INTVAL (operands[2]) == 1)
+      /* Delay the decision whether to use NEON or core-regs until
+	 register allocation.  */
+      emit_insn (gen_ashldi3_neon (operands[0], operands[1], operands[2]));
+      DONE;
+    }
+  else
+    {
+      /* Only the NEON case can handle in-memory shift counts.  */
+      if (!reg_or_int_operand (operands[2], SImode))
+        operands[2] = force_reg (SImode, operands[2]);
+    }
+
+  if (!CONST_INT_P (operands[2]) && TARGET_REALLY_IWMMXT)
+    ; /* No special preparation statements; expand pattern as above.  */
+  else
+    {
+      rtx scratch1, scratch2;
+
+      if (CONST_INT_P (operands[2])
+	  && (HOST_WIDE_INT) INTVAL (operands[2]) == 1)
         {
           emit_insn (gen_arm_ashldi3_1bit (operands[0], operands[1]));
           DONE;
         }
-        /* Ideally we shouldn't fail here if we could know that operands[1] 
-           ends up already living in an iwmmxt register. Otherwise it's
-           cheaper to have the alternate code being generated than moving
-           values to iwmmxt regs and back.  */
-        FAIL;
+
+      /* Ideally we should use iwmmxt here if we could know that operands[1]
+         ends up already living in an iwmmxt register. Otherwise it's
+         cheaper to have the alternate code being generated than moving
+         values to iwmmxt regs and back.  */
+
+      /* If we're optimizing for size, we prefer the libgcc calls.  */
+      if (optimize_function_for_size_p (cfun))
+	FAIL;
+
+      /* Expand operation using core-registers.
+	 'FAIL' would achieve the same thing, but this is a bit smarter.  */
+      scratch1 = gen_reg_rtx (SImode);
+      scratch2 = gen_reg_rtx (SImode);
+      arm_emit_coreregs_64bit_shift (ASHIFT, operands[0], operands[1],
+				     operands[2], scratch1, scratch2);
+      DONE;
     }
-  else if (!TARGET_REALLY_IWMMXT && !(TARGET_HARD_FLOAT && TARGET_MAVERICK))
-    FAIL;
   "
 )
 
@@ -3514,21 +3631,44 @@
                      (match_operand:SI 2 "reg_or_int_operand" "")))]
   "TARGET_32BIT"
   "
-  if (GET_CODE (operands[2]) == CONST_INT)
+  if (TARGET_NEON)
     {
-      if ((HOST_WIDE_INT) INTVAL (operands[2]) == 1)
+      /* Delay the decision whether to use NEON or core-regs until
+	 register allocation.  */
+      emit_insn (gen_ashrdi3_neon (operands[0], operands[1], operands[2]));
+      DONE;
+    }
+
+  if (!CONST_INT_P (operands[2]) && TARGET_REALLY_IWMMXT)
+    ; /* No special preparation statements; expand pattern as above.  */
+  else
+    {
+      rtx scratch1, scratch2;
+
+      if (CONST_INT_P (operands[2])
+	  && (HOST_WIDE_INT) INTVAL (operands[2]) == 1)
         {
           emit_insn (gen_arm_ashrdi3_1bit (operands[0], operands[1]));
           DONE;
         }
-        /* Ideally we shouldn't fail here if we could know that operands[1] 
-           ends up already living in an iwmmxt register. Otherwise it's
-           cheaper to have the alternate code being generated than moving
-           values to iwmmxt regs and back.  */
-        FAIL;
+
+      /* Ideally we should use iwmmxt here if we could know that operands[1]
+         ends up already living in an iwmmxt register. Otherwise it's
+         cheaper to have the alternate code being generated than moving
+         values to iwmmxt regs and back.  */
+
+      /* If we're optimizing for size, we prefer the libgcc calls.  */
+      if (optimize_function_for_size_p (cfun))
+	FAIL;
+
+      /* Expand operation using core-registers.
+	 'FAIL' would achieve the same thing, but this is a bit smarter.  */
+      scratch1 = gen_reg_rtx (SImode);
+      scratch2 = gen_reg_rtx (SImode);
+      arm_emit_coreregs_64bit_shift (ASHIFTRT, operands[0], operands[1],
+				     operands[2], scratch1, scratch2);
+      DONE;
     }
-  else if (!TARGET_REALLY_IWMMXT)
-    FAIL;
   "
 )
 
@@ -3571,21 +3711,44 @@
                      (match_operand:SI 2 "reg_or_int_operand" "")))]
   "TARGET_32BIT"
   "
-  if (GET_CODE (operands[2]) == CONST_INT)
+  if (TARGET_NEON)
     {
-      if ((HOST_WIDE_INT) INTVAL (operands[2]) == 1)
+      /* Delay the decision whether to use NEON or core-regs until
+	 register allocation.  */
+      emit_insn (gen_lshrdi3_neon (operands[0], operands[1], operands[2]));
+      DONE;
+    }
+
+  if (!CONST_INT_P (operands[2]) && TARGET_REALLY_IWMMXT)
+    ; /* No special preparation statements; expand pattern as above.  */
+  else
+    {
+      rtx scratch1, scratch2;
+
+      if (CONST_INT_P (operands[2])
+	  && (HOST_WIDE_INT) INTVAL (operands[2]) == 1)
         {
           emit_insn (gen_arm_lshrdi3_1bit (operands[0], operands[1]));
           DONE;
         }
-        /* Ideally we shouldn't fail here if we could know that operands[1] 
-           ends up already living in an iwmmxt register. Otherwise it's
-           cheaper to have the alternate code being generated than moving
-           values to iwmmxt regs and back.  */
-        FAIL;
+
+      /* Ideally we should use iwmmxt here if we could know that operands[1]
+         ends up already living in an iwmmxt register. Otherwise it's
+         cheaper to have the alternate code being generated than moving
+         values to iwmmxt regs and back.  */
+
+      /* If we're optimizing for size, we prefer the libgcc calls.  */
+      if (optimize_function_for_size_p (cfun))
+	FAIL;
+
+      /* Expand operation using core-registers.
+	 'FAIL' would achieve the same thing, but this is a bit smarter.  */
+      scratch1 = gen_reg_rtx (SImode);
+      scratch2 = gen_reg_rtx (SImode);
+      arm_emit_coreregs_64bit_shift (LSHIFTRT, operands[0], operands[1],
+				     operands[2], scratch1, scratch2);
+      DONE;
     }
-  else if (!TARGET_REALLY_IWMMXT)
-    FAIL;
   "
 )
 
@@ -4038,7 +4201,13 @@
 	 (neg:DI (match_operand:DI 1 "s_register_operand" "")))
     (clobber (reg:CC CC_REGNUM))])]
   "TARGET_EITHER"
-  ""
+  {
+    if (TARGET_NEON)
+      {
+        emit_insn (gen_negdi2_neon (operands[0], operands[1]));
+	DONE;
+      }
+  }
 )
 
 ;; The constraints here are to prevent a *partial* overlap (where %Q0 == %R1).
@@ -4197,11 +4366,16 @@
   "")
 
 (define_insn_and_split "one_cmpldi2"
-  [(set (match_operand:DI 0 "s_register_operand" "=&r,&r")
-	(not:DI (match_operand:DI 1 "s_register_operand" "0,r")))]
+  [(set (match_operand:DI 0 "s_register_operand"	 "=w,&r,&r,?w")
+	(not:DI (match_operand:DI 1 "s_register_operand" " w, 0, r, w")))]
   "TARGET_32BIT"
-  "#"
-  "TARGET_32BIT && reload_completed"
+  "@
+   vmvn\t%P0, %P1
+   #
+   #
+   vmvn\t%P0, %P1"
+  "TARGET_32BIT && reload_completed
+   && arm_general_register_operand (operands[0], DImode)"
   [(set (match_dup 0) (not:SI (match_dup 1)))
    (set (match_dup 2) (not:SI (match_dup 3)))]
   "
@@ -4211,8 +4385,10 @@
     operands[3] = gen_highpart (SImode, operands[1]);
     operands[1] = gen_lowpart (SImode, operands[1]);
   }"
-  [(set_attr "length" "8")
-   (set_attr "predicable" "yes")]
+  [(set_attr "length" "*,8,8,*")
+   (set_attr "predicable" "no,yes,yes,no")
+   (set_attr "neon_type" "neon_int_1,*,*,neon_int_1")
+   (set_attr "arch" "neon_nota8,*,*,neon_onlya8")]
 )
 
 (define_expand "one_cmplsi2"
@@ -7648,7 +7824,7 @@
 ;; Patterns to match conditional branch insns.
 ;;
 
-(define_insn "*arm_cond_branch"
+(define_insn "arm_cond_branch"
   [(set (pc)
 	(if_then_else (match_operator 1 "arm_comparison_operator"
 		       [(match_operand 2 "cc_register" "") (const_int 0)])

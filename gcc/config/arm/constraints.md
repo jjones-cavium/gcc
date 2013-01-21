@@ -29,8 +29,8 @@
 ;; in Thumb-1 state: I, J, K, L, M, N, O
 
 ;; The following multi-letter normal constraints have been used:
-;; in ARM/Thumb-2 state: Da, Db, Dc, Dn, Dl, DL, Dv, Dy, Di, Dt, Dz
-;; in Thumb-1 state: Pa, Pb, Pc, Pd
+;; in ARM/Thumb-2 state: Da, Db, Dc, Dd, Dn, Dl, DL, Dv, Dy, Di, Dt, Dz
+;; in Thumb-1 state: Pa, Pb, Pc, Pd, Pe
 ;; in Thumb-2 state: Pj, PJ, Ps, Pt, Pu, Pv, Pw, Px, Py
 
 ;; The following memory constraints have been used:
@@ -246,6 +246,12 @@
       (match_test "TARGET_32BIT && arm_const_double_inline_cost (op) == 4
 		   && !(optimize_size || arm_ld_sched)")))
 
+(define_constraint "Dd"
+ "@internal
+  In ARM/Thumb-2 state a const_int that can be used by insn adddi."
+ (and (match_code "const_int")
+      (match_test "TARGET_32BIT && const_ok_for_dimode_op (ival, PLUS)")))
+
 (define_constraint "Di"
  "@internal
   In ARM/Thumb-2 state a const_int or const_double where both the high
@@ -255,9 +261,9 @@
 
 (define_constraint "Dn"
  "@internal
-  In ARM/Thumb-2 state a const_vector which can be loaded with a Neon vmov
-  immediate instruction."
- (and (match_code "const_vector")
+  In ARM/Thumb-2 state a const_vector or const_int which can be loaded with a
+  Neon vmov immediate instruction."
+ (and (match_code "const_vector,const_int")
       (match_test "TARGET_32BIT
 		   && imm_for_neon_mov_operand (op, GET_MODE (op))")))
 

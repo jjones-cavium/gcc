@@ -49,6 +49,7 @@ extern int arm_hard_regno_mode_ok (unsigned int, enum machine_mode);
 extern bool arm_modes_tieable_p (enum machine_mode, enum machine_mode);
 extern int const_ok_for_arm (HOST_WIDE_INT);
 extern int const_ok_for_op (HOST_WIDE_INT, enum rtx_code);
+extern int const_ok_for_dimode_op (HOST_WIDE_INT, enum rtx_code);
 extern int arm_split_constant (RTX_CODE, enum machine_mode, rtx,
 			       HOST_WIDE_INT, rtx, rtx, int);
 extern RTX_CODE arm_canonicalize_comparison (RTX_CODE, rtx *, rtx *);
@@ -107,6 +108,7 @@ extern int tls_mentioned_p (rtx);
 extern int symbol_mentioned_p (rtx);
 extern int label_mentioned_p (rtx);
 extern RTX_CODE minmax_code (rtx);
+extern bool arm_sat_operator_match (rtx, rtx, int *, bool *);
 extern int adjacent_mem_locations (rtx, rtx);
 extern bool gen_ldm_seq (rtx *, int, bool);
 extern bool gen_stm_seq (rtx *, int);
@@ -243,9 +245,14 @@ struct tune_params
 extern const struct tune_params *current_tune;
 extern int vfp3_const_double_for_fract_bits (rtx);
 extern bool arm_validize_comparison (rtx *, rtx *, rtx *);
+
+extern void arm_emit_coreregs_64bit_shift (enum rtx_code, rtx, rtx, rtx, rtx,
+					   rtx);
 #endif /* RTX_CODE */
 
 extern void arm_expand_vec_perm (rtx target, rtx op0, rtx op1, rtx sel);
 extern bool arm_expand_vec_perm_const (rtx target, rtx op0, rtx op1, rtx sel);
+
+extern bool arm_autoinc_modes_ok_p (enum machine_mode, enum arm_auto_incmodes);
 
 #endif /* ! GCC_ARM_PROTOS_H */

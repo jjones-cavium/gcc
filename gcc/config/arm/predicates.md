@@ -89,6 +89,15 @@
 		  && REGNO_REG_CLASS (REGNO (op)) == VFP_REGS)));
 })
 
+(define_predicate "zero_operand"
+  (and (match_code "const_int,const_double,const_vector")
+       (match_test "op == CONST0_RTX (mode)")))
+
+;; Match a register, or zero in the appropriate mode.
+(define_predicate "reg_or_zero_operand"
+  (ior (match_operand 0 "s_register_operand")
+       (match_operand 0 "zero_operand")))
+
 (define_special_predicate "subreg_lowpart_operator"
   (and (match_code "subreg")
        (match_test "subreg_lowpart_p (op)")))
@@ -144,6 +153,11 @@
 (define_predicate "arm_add_operand"
   (ior (match_operand 0 "arm_rhs_operand")
        (match_operand 0 "arm_neg_immediate_operand")))
+
+(define_predicate "arm_adddi_operand"
+  (ior (match_operand 0 "s_register_operand")
+       (and (match_code "const_int")
+	    (match_test "const_ok_for_dimode_op (INTVAL (op), PLUS)"))))
 
 (define_predicate "arm_addimm_operand"
   (ior (match_operand 0 "arm_immediate_operand")
@@ -243,9 +257,11 @@
 
 ;; True for shift operators which can be used with saturation instructions.
 (define_special_predicate "sat_shift_operator"
-  (and (match_code "ashift,ashiftrt")
-       (match_test "GET_CODE (XEXP (op, 1)) == CONST_INT
-		    && ((unsigned HOST_WIDE_INT) INTVAL (XEXP (op, 1)) <= 32)")
+  (and (ior (and (match_code "mult")
+                 (match_test "power_of_two_operand (XEXP (op, 1), mode)"))
+            (and (match_code "ashift,ashiftrt")
+                 (match_test "GET_CODE (XEXP (op, 1)) == CONST_INT
+		              && ((unsigned HOST_WIDE_INT) INTVAL (XEXP (op, 1)) < 32)")))
        (match_test "mode == GET_MODE (op)")))
 
 ;; True for MULT, to identify which variant of shift_operator is in use.
@@ -630,7 +646,7 @@
 })
 
 (define_predicate "imm_for_neon_mov_operand"
-  (match_code "const_vector")
+  (match_code "const_vector,const_int")
 {
   return neon_immediate_valid_for_move (op, mode, NULL, NULL);
 })
@@ -677,10 +693,6 @@
   (ior (match_operand 0 "imm_for_neon_inv_logic_operand")
        (match_operand 0 "s_register_operand")))
 
-;; TODO: We could check lane numbers more precisely based on the mode.
-(define_predicate "neon_lane_number"
-  (and (match_code "const_int")
-       (match_test "INTVAL (op) >= 0 && INTVAL (op) <= 15")))
 ;; Predicates for named expanders that overlap multiple ISAs.
 
 (define_predicate "cmpdi_operand"

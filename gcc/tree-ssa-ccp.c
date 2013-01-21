@@ -2337,6 +2337,72 @@ optimize_stdarg_builtin (gimple call)
     }
 }
 
+/* Attemp to make the block of __builtin_unreachable I unreachable by changing
+   the incoming jumps.  Return true if at least one jump was changed.  */
+
+static bool
+optimize_unreachable (gimple_stmt_iterator i)
+{
+  basic_block bb = gsi_bb (i);
+  gimple_stmt_iterator gsi;
+  gimple stmt;
+  edge_iterator ei;
+  edge e;
+  bool ret;
+
+  for (gsi = gsi_start_bb (bb); !gsi_end_p (gsi); gsi_next (&gsi))
+    {
+      stmt = gsi_stmt (gsi);
+
+      if (is_gimple_debug (stmt))
+       continue;
+
+      if (gimple_code (stmt) == GIMPLE_LABEL)
+	{
+	  /* Verify we do not need to preserve the label.  */
+	  if (FORCED_LABEL (gimple_label_label (stmt)))
+	    return false;
+
+	  continue;
+	}
+
+      /* Only handle the case that __builtin_unreachable is the first statement
+	 in the block.  We rely on DCE to remove stmts without side-effects
+	 before __builtin_unreachable.  */
+      if (gsi_stmt (gsi) != gsi_stmt (i))
+        return false;
+    }
+
+  ret = false;
+  FOR_EACH_EDGE (e, ei, bb->preds)
+    {
+      gsi = gsi_last_bb (e->src);
+      if (gsi_end_p (gsi))
+	continue;
+
+      stmt = gsi_stmt (gsi);
+      if (gimple_code (stmt) == GIMPLE_COND)
+	{
+	  if (e->flags & EDGE_TRUE_VALUE)
+	    gimple_cond_make_false (stmt);
+	  else if (e->flags & EDGE_FALSE_VALUE)
+	    gimple_cond_make_true (stmt);
+	  else
+	    gcc_unreachable ();
+	  update_stmt (stmt);
+	}
+      else
+	{
+	  /* Todo: handle other cases, f.i. switch statement.  */
+	  continue;
+	}
+
+      ret = true;
+    }
+
+  return ret;
+}
+
 /* A simple pass that attempts to fold all builtin functions.  This pass
    is run after we've propagated as many constants as we can.  */
 
