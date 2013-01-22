@@ -1,4 +1,10 @@
+2013-01-22  Andrew Pinski  <apinski@cavium.com>
+
+	* cfgexpand.c (expand_debug_expr <case BYTESWAP_EXPR>): Handle
+	BYTESWAP_EXPR.
+
 2013-01-15  Manjunath Matti <mmatti@caviumnetworks.com>
+
 	Backport from mainline:
 	2012-09-24  Richard Guenther  <rguenther@suse.de>
 
