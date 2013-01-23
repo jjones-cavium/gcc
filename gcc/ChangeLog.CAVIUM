@@ -1,3 +1,24 @@
+2013-01-23  Manjunath Matti <mmatti@caviumnetworks.com>
+	
+	Bug #5982
+
+	gcc/testsuite/
+	* gcc.dg/builtin-object-size-10.c: Adjust the 
+	testcase for gcc 4.7.
+	* gcc.dg/builtin-unreachable-5.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-fprintf-1.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-fprintf-chk-1.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-printf-1.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-printf-chk-1.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-vfprintf-1.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-vfprintf-chk-1.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-vprintf-1.c: Ditto.
+	* gcc.dg/tree-ssa/builtin-vprintf-chk-1.c: Ditto.
+	* gcc.dg/tree-ssa/ssa-ccp-10.c: Ditto.
+	* gcc.dg/vect/vec-scal-opt.c: Ditto.
+	* gcc.dg/vect/vec-scal-opt1.c: Ditto.
+	* gcc.dg/vect/vec-scal-opt2.c: Ditto.
+
 2013-01-22  Andrew Pinski  <apinski@cavium.com>
 
 	* cfgexpand.c (expand_debug_expr <case BYTESWAP_EXPR>): Handle
