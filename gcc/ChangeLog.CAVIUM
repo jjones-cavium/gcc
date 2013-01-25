@@ -1,3 +1,14 @@
+2013-01-25  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backport from mainline:
+	2012-11-22  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	gcc/
+	* config/arm/arm.md (*arm_abssi2): Define predicable attribute.
+	(*arm_neg_abssi2): Likewise.
+	* config/arm/thumb2.md (*thumb2_abssi2): Likewise.
+	(*thumb2_neg_abssi2): Likewise.
+
 2013-01-23  Manjunath Matti <mmatti@caviumnetworks.com>
 
 	Backport from mainline:
