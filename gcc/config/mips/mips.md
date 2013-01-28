@@ -2987,6 +2987,15 @@
   [(set_attr "type" "logical")
    (set_attr "mode" "SI")
    (set_attr "length" "8")])
+
+(define_insn "bswaphi2"
+  [(set (match_operand:HI 0 "register_operand" "=&d")
+	(bswap:HI (match_operand:HI 1 "register_operand" "d")))]
+  "ISA_HAS_SBWH"
+  "wsbh\t%0,%1"
+  [(set_attr "type" "logical")
+   (set_attr "mode" "SI")
+   (set_attr "length" "4")])
 
 ;;
 ;;  ....................
