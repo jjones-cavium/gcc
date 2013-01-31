@@ -16,8 +16,8 @@ foo (int a)
   return a > 0;
 }
 
-/* { dg-final { scan-tree-dump-times "if \\(" 0 "fab" } } */
-/* { dg-final { scan-tree-dump-times "goto" 0 "fab" } } */
-/* { dg-final { scan-tree-dump-times "L1:" 0 "fab" } } */
-/* { dg-final { scan-tree-dump-times "__builtin_unreachable" 0 "fab" } } */
+/* { dg-final { scan-tree-dump-times "if \\(" 1 "fab" } } */
+/* { dg-final { scan-tree-dump-times "goto" 2 "fab" } } */
+/* { dg-final { scan-tree-dump-times "L1:" 1 "fab" } } */
+/* { dg-final { scan-tree-dump-times "__builtin_unreachable" 1 "fab" } } */
 /* { dg-final { cleanup-tree-dump "fab" } } */

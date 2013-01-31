@@ -1,3 +1,9 @@
+2013-01-31  Manjunath Matti <mmatti@caviumnetworks.com>
+	
+	Bug #6037
+	* gcc/testsuite/gcc.dg/builtin-unreachable-5.c: Testcase 
+	fixed.
+
 2013-01-30  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.dg/octeon/pipeline-1.c: Add -march=octeon
