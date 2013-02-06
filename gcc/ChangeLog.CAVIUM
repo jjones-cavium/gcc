@@ -1,6 +1,63 @@
 2013-02-06  Manjunath Matti <mmatti@caviumnetworks.com>
 	
 	Backport from mainline:
+	2012-06-25  Matthew Gretton-Dann  <matthew.gretton-dann@arm.com>
+	            James Greenhalgh  <james.greenhalgh@arm.com>
+
+	gcc/
+	* config/arm/arm.h (TARGET_CPU_CPP_BUILTINS): Add new built-ins.
+	(TARGET_FMA): New macro.
+	(TARGET_ARM_QBIT, TARGET_ARM_SAT): Likewise.
+	(TARGET_ARM_ARCH): Likewise.
+	(TARGET_ARM_ARCH_ISA_THUMB): Likewise.
+	(TARGET_V6M, TARGET_V7M): Likewise.
+	(TARGET_ARM_ARCH_PROFILE): Likewise.
+	(TARGET_ARM_FEATURE_LDREX): Likewise.
+	(TARGET_ARM_FP, TARGET_NEON_FP): Likewise.
+	(ARM_MIN_ENUM_SIZE): Likewise.
+	* config/arm/arm.c (arm_file_start): Refactor appropriately.
+	(base_architecture): New enumeration.
+	(arm_base_arch): New global variable.
+	(processors): Add field base_arch.
+	(ARM_ARCH, ARM_CORE): Adjust accordingly.
+	(arm_option_override): Add initialization of arm_base_arch.
+	* doc/cpp.texi (system-specific predefined macros.): Change.
+
+	gcc/testsuite
+	* gcc.target/arm/ftest-support-arm.h New testcase.
+	* gcc.target/arm/ftest-support-thumb.h Likewise.
+	* gcc.target/arm/ftest-support.h Likewise.
+	* gcc.target/arm/ftest-armv4-arm.c: Likewise.
+	* gcc.target/arm/ftest-armv4t-arm.c: Likewise.
+	* gcc.target/arm/ftest-armv4t-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv5t-arm.c Likewise.
+	* gcc.target/arm/ftest-armv5t-thumb.c Likewise.
+	* gcc.target/arm/ftest-armv5te-arm.c: Likewise.
+	* gcc.target/arm/ftest-armv5te-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6-arm.c Likewise.
+	* gcc.target/arm/ftest-armv6-thumb.c Likewise.
+	* gcc.target/arm/ftest-armv6k-arm.c Likewise.
+	* gcc.target/arm/ftest-armv6k-thumb.c Likewise.
+	* gcc.target/arm/ftest-armv6m-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6t2-arm.c: Likewise.
+	* gcc.target/arm/ftest-armv6t2-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6z-arm.c: Likewise.
+	* gcc.target/arm/ftest-armv6z-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv7a-arm.c Likewise.
+	* gcc.target/arm/ftest-armv7a-thumb.c Likewise.
+	* gcc.target/arm/ftest-armv7m-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv7em-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv7r-arm.c Likewise.
+	* gcc.target/arm/ftest-armv7r-thumb.c Likewise.
+	* gcc/testsuite/lib/target-supports.exp
+	(check_effective_target_arm_arch_FUNC): Add support for more
+	architectures.
+	(add_options_for_arm_arch_FUNC): Likewise.
+	(check_effective_target_arm_arch_FUNC_multilib): New functions.
+
+2013-02-06  Manjunath Matti <mmatti@caviumnetworks.com>
+	
+	Backport from mainline:
 	2012-06-13  Xinyu Qi <xyqi@marvell.com>
 
 	* config/arm/arm.c (FL_IWMMXT2): New define.
