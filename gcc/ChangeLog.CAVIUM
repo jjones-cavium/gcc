@@ -906,7 +906,7 @@
 2012-11-29  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #5464
-	* combine.c (register_edge_assert_for_2): In the case of NAME != 0 and NAME
+	* tree-vrp.c (register_edge_assert_for_2): In the case of NAME != 0 and NAME
 	being defined as XYZ1 CMP XYZ2 we can assert XYZ1 CMP XYZ2.
 
 2012-11-20  Andrew Pinski  <apinski@cavium.com>
