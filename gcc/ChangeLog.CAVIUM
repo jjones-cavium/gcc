@@ -1,5 +1,11 @@
 2013-03-29  Andrew Pinski  <apinski@cavium.com>
 
+	* tree-ssa-math-opts.c (execute_optimize_bswap):
+	Fix typo.
+
+2013-03-29  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #6524
 	* gimple-pretty-print.c (dump_unary_rhs): Handle BYTESWAP_EXPR, print
 	out the precision of the type too.
 	* tree-pretty-print.c (dump_generic_node): Likewise.
