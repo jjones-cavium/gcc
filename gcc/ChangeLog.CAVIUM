@@ -1,3 +1,12 @@
+2013-03-29  Andrew Pinski  <apinski@cavium.com>
+
+	* gimple-pretty-print.c (dump_unary_rhs): Handle BYTESWAP_EXPR, print
+	out the precision of the type too.
+	* tree-pretty-print.c (dump_generic_node): Likewise.
+	* tree-ssa-math-opts.c (execute_optimize_bswap):
+	Fix the generating of the correct byteswap.  Use the precision
+	which is being byteswaped.
+
 2012-08-31  Andrew Pinski  <apinski@cavium.com>
 
 	* config/mips/octeon.md (octeon_fpu): Add to the automaton.

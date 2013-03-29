@@ -284,6 +284,14 @@ dump_unary_rhs (pretty_printer *buffer, gimple gs, int spc, int flags)
       pp_string (buffer, "))");
       break;
 
+    case BYTESWAP_EXPR:
+      pp_string (buffer, "BYTESWAP_EXPR <");
+      pp_wide_integer (buffer, TYPE_PRECISION (TREE_TYPE (rhs)));
+      pp_string (buffer, ", ");
+      dump_generic_node (buffer, rhs, spc, flags, false);
+      pp_string (buffer, ">");
+      break;
+
     case ABS_EXPR:
       pp_string (buffer, "ABS_EXPR <");
       dump_generic_node (buffer, rhs, spc, flags, false);

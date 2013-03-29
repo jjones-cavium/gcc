@@ -1873,9 +1873,23 @@ execute_optimize_bswap (void)
 	  else
 	    bswap_stats.found_64bit++;
 
+	  bswap_tmp = gimple_assign_lhs (stmt);
+	  if (type_size != TYPE_PRECISION (TREE_TYPE (bswap_src)))
+	    {
+	      gimple convert_stmt;
+	      tree type = build_nonstandard_integer_type (type_size, TYPE_UNSIGNED (TREE_TYPE (gimple_assign_lhs (stmt))));
+
+	      bswap_tmp = create_tmp_var (type, "bswapdst");
+	      add_referenced_var (bswap_tmp);
+	      bswap_tmp = make_ssa_name (bswap_tmp, NULL);
+	      convert_stmt = gimple_build_assign_with_ops (
+		               CONVERT_EXPR, bswap_tmp, bswap_src, NULL);
+	      gsi_insert_before (&gsi, convert_stmt, GSI_SAME_STMT);
+	      bswap_src = bswap_tmp;
+	    }
+
 	  call = gimple_build_assign_with_ops (BYTESWAP_EXPR, NULL,
 					       bswap_src, NULL);
-	  bswap_tmp = gimple_assign_lhs (stmt);
 
 	  /* Convert the result if necessary.  */
 	  if (!useless_type_conversion_p (TREE_TYPE (bswap_src), TREE_TYPE (bswap_tmp)))

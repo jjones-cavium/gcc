@@ -1226,6 +1226,14 @@ dump_generic_node (pretty_printer *buffer, tree node, int spc, int flags,
 	}
       break;
 
+    case BYTESWAP_EXPR:
+      pp_string (buffer, "BYTESWAP_EXPR <");
+      pp_wide_integer (buffer, TYPE_PRECISION (TREE_TYPE (node)));
+      pp_string (buffer, ", ");
+      dump_generic_node (buffer, TREE_OPERAND (node, 0), spc, flags, false);
+      pp_string (buffer, ">");
+      break;
+
     case BIT_FIELD_REF:
       pp_string (buffer, "BIT_FIELD_REF <");
       dump_generic_node (buffer, TREE_OPERAND (node, 0), spc, flags, false);
