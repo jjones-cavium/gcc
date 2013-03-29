@@ -953,6 +953,7 @@ static const struct mips_rtx_cost_data
     COSTS_N_INSNS (6),            /* int_mult_di */
     COSTS_N_INSNS (18),           /* int_div_si */
     COSTS_N_INSNS (35),           /* int_div_di */
+    COSTS_N_INSNS (3),		  /* movz */
                      4,		  /* branch_cost */
                      4		  /* memory_latency */
   },

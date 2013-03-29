@@ -1,5 +1,9 @@
 2013-03-29  Andrew Pinski  <apinski@cavium.com>
 
+	* config/mips/mips.c (mips_rtx_cost_data): Fix Octeon3's movz.
+
+2013-03-29  Andrew Pinski  <apinski@cavium.com>
+
 	* tree-ssa-math-opts.c (execute_optimize_bswap):
 	Fix typo.
 
