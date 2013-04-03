@@ -1,3 +1,8 @@
+2013-04-03  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/56501
+	* gcc.dg/torture/pr56501.c: New testcase.
+
 2012-09-07  Richard Earnshaw  <rearnsha@arm.com>
 
 	* gcc.target/arm/pr50318-1.c: Scan for smlal.
