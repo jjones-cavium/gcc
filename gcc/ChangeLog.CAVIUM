@@ -1,3 +1,18 @@
+2013-12-04  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Backported:
+	2013-04-05  Greta Yorsh  <Greta.Yorsh@arm.com>
+
+	gcc/
+        * config/arm/arm.md (negdi_extendsidi): New pattern.
+        (negdi_zero_extendsidi): Likewise.
+
+	gcc/testsuite/
+        * gcc.target/arm/negdi-1.c: New test.
+        * gcc.target/arm/negdi-2.c: Likewise.
+        * gcc.target/arm/negdi-3.c: Likewise.
+        * gcc.target/arm/negdi-4.c: Likewise.
+
 2013-12-03  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Backported:
