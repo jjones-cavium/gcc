@@ -1,3 +1,10 @@
+2013-04-26  Andrew Pinski  <apinski@cavium.com>
+
+	* reload1.c (spill_failure): Use inform instead of error
+	to force the notion that the error message is really an internal
+	compiler error message.
+	(_fatal_insn): Likewise.
+
 2013-03-29  Andrew Pinski  <apinski@cavium.com>
 
 	* config/mips/mips.c (mips_rtx_cost_data): Fix Octeon3's movz.
