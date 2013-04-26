@@ -5,6 +5,12 @@
 	compiler error message.
 	(_fatal_insn): Likewise.
 
+2013-04-24  Andrew Pinski  <apinski@cavium.com>
+
+	* acinclude.m4: Sync ld/as version with the trunk version.
+	* configure.ac: Likewise.
+	* configure: Regenerate.
+
 2013-03-29  Andrew Pinski  <apinski@cavium.com>
 
 	* config/mips/mips.c (mips_rtx_cost_data): Fix Octeon3's movz.
