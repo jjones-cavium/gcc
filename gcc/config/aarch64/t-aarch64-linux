@@ -20,3 +20,4 @@
 
 LIB1ASMSRC   = aarch64/lib1funcs.asm
 LIB1ASMFUNCS = _aarch64_sync_cache_range
+MULTILIB_OSDIRNAMES = .=../lib64
