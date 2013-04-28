@@ -363,6 +363,10 @@ store_bit_field_2 (rtx str_rtx, unsigned HOST_WIDE_INT bitsize,
   rtx orig_value;
   unsigned int unit = (MEM_P (str_rtx)) ? BITS_PER_UNIT : GET_MODE_BITSIZE (op_mode);
 
+  /* If we don't have insv, then treat this as extracting of the word width. */
+  if (op_mode == MAX_MACHINE_MODE)
+    unit = BITS_PER_WORD;
+
   while (GET_CODE (op0) == SUBREG)
     {
       /* The following line once was done only if WORDS_BIG_ENDIAN,

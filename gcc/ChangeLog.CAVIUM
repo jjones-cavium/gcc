@@ -1,5 +1,10 @@
 2013-04-27  Andrew Pinski  <apinski@cavium.com>
 
+	* expmed.c (store_bit_field_2): Fix the case where insv does
+	not exist.
+
+2013-04-27  Andrew Pinski  <apinski@cavium.com>
+
 	Backport from the aarch64-4.7 branch (FSF trunk has a different patch)
 	2012-10-02  Tejas Belagod  <tejas.belagod@arm.com>
 	    Ulrich Weigand <Ulrich.Weigand@de.ibm.com> 
