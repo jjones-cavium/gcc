@@ -493,6 +493,13 @@ proc check_profiling_available { test_what } {
 	return 0
     }
 
+    # We don't yet support profiling for AArch64.
+    if { [istarget aarch64*-*-*]
+	 && ([lindex $test_what 1] == "-p"
+	     || [lindex $test_what 1] == "-pg") } {
+	return 0
+    }
+
     # cygwin does not support -p.
     if { [istarget *-*-cygwin*] && $test_what == "-p" } {
 	return 0
@@ -508,7 +515,8 @@ proc check_profiling_available { test_what } {
     if {![info exists profiling_available_saved]} {
 	# Some targets don't have any implementation of __bb_init_func or are
 	# missing other needed machinery.
-	if {    [istarget am3*-*-linux*]
+	if {    [istarget aarch64*-*-elf]
+	     || [istarget am3*-*-linux*]
 	     || [istarget arm*-*-eabi*]
 	     || [istarget arm*-*-elf]
 	     || [istarget arm*-*-symbianelf*]
@@ -1883,6 +1891,7 @@ proc check_effective_target_vect_int { } {
 	      || [istarget sparc*-*-*]
 	      || [istarget alpha*-*-*]
 	      || [istarget ia64-*-*] 
+	      || [istarget aarch64*-*-*]
 	      || [check_effective_target_arm32]
 	      || ([istarget mips*-*-*]
 		  && [check_effective_target_mips_loongson]) } {
@@ -2001,6 +2010,15 @@ proc check_effective_target_vect_floatuint_cvt { } {
 
     verbose "check_effective_target_vect_floatuint_cvt: returning $et_vect_floatuint_cvt_saved" 2
     return $et_vect_floatuint_cvt_saved
+}
+
+# Return 1 if this is a AArch64 target supporting big endian
+proc check_effective_target_aarch64_big_endian { } {
+    return [check_no_compiler_messages aarch64_big_endian assembly {
+	#if !defined(__aarch64__) || !defined(__AARCH64EB__)
+	#error FOO
+	#endif
+    }]
 }
 
 # Return 1 is this is an arm target using 32-bit instructions
@@ -2660,6 +2678,7 @@ proc check_effective_target_vect_shift { } {
 	     || [istarget ia64-*-*]
 	     || [istarget i?86-*-*]
 	     || [istarget x86_64-*-*]
+	     || [istarget aarch64*-*-*]
 	     || [check_effective_target_arm32]
 	     || ([istarget mips*-*-*]
 		 && [check_effective_target_mips_loongson]) } {
@@ -2729,6 +2748,7 @@ proc check_effective_target_vect_float { } {
 	      || [istarget mipsisa64*-*-*]
 	      || [istarget x86_64-*-*]
 	      || [istarget ia64-*-*]
+	      || [istarget aarch64*-*-*]
 	      || [check_effective_target_arm32] } {
 	   set et_vect_float_saved 1
 	}
@@ -2750,6 +2770,7 @@ proc check_effective_target_vect_double { } {
     } else {
 	set et_vect_double_saved 0
 	if { [istarget i?86-*-*]
+	      || [istarget aarch64*-*-*]
 	      || [istarget x86_64-*-*] } {
 	   if { [check_no_compiler_messages vect_double assembly {
 		 #ifdef __tune_atom__
@@ -2866,6 +2887,7 @@ proc check_effective_target_vect_perm { } {
     } else {
         set et_vect_perm_saved 0
         if { [is-effective-target arm_neon_ok]
+	     || [istarget aarch64*-*-*]
 	     || [istarget powerpc*-*-*]
              || [istarget spu-*-*]
 	     || [istarget i?86-*-*]
@@ -2893,6 +2915,7 @@ proc check_effective_target_vect_perm_byte { } {
         set et_vect_perm_byte_saved 0
         if { ([is-effective-target arm_neon_ok]
 	      && [is-effective-target arm_little_endian])
+	     || [istarget aarch64*-*-*]
 	     || [istarget powerpc*-*-*]
              || [istarget spu-*-*] } {
             set et_vect_perm_byte_saved 1
@@ -2916,6 +2939,7 @@ proc check_effective_target_vect_perm_short { } {
         set et_vect_perm_short_saved 0
         if { ([is-effective-target arm_neon_ok]
 	      && [is-effective-target arm_little_endian])
+	     || [istarget aarch64*-*-*]
 	     || [istarget powerpc*-*-*]
              || [istarget spu-*-*] } {
             set et_vect_perm_short_saved 1
@@ -3035,6 +3059,7 @@ proc check_effective_target_vect_widen_mult_qi_to_hi { } {
 	    set et_vect_widen_mult_qi_to_hi_saved 0
 	}
         if { [istarget powerpc*-*-*]
+              || [istarget aarch64*-*-*]
               || ([istarget arm*-*-*] && [check_effective_target_arm_neon_ok]) } {
             set et_vect_widen_mult_qi_to_hi_saved 1
         }
@@ -3067,6 +3092,7 @@ proc check_effective_target_vect_widen_mult_hi_to_si { } {
         if { [istarget powerpc*-*-*]
 	      || [istarget spu-*-*]
 	      || [istarget ia64-*-*]
+	      || [istarget aarch64*-*-*]
 	      || [istarget i?86-*-*]
 	      || [istarget x86_64-*-*]
               || ([istarget arm*-*-*] && [check_effective_target_arm_neon_ok]) } {
@@ -3248,6 +3274,7 @@ proc check_effective_target_vect_pack_trunc { } {
         if { ([istarget powerpc*-*-*] && ![istarget powerpc-*-linux*paired*])
              || [istarget i?86-*-*]
              || [istarget x86_64-*-*]
+             || [istarget aarch64*-*-*]
              || [istarget spu-*-*]
              || ([istarget arm*-*-*] && [check_effective_target_arm_neon_ok]
 		 && [check_effective_target_arm_little_endian]) } {
@@ -3275,6 +3302,7 @@ proc check_effective_target_vect_unpack { } {
              || [istarget x86_64-*-*] 
              || [istarget spu-*-*]
              || [istarget ia64-*-*]
+             || [istarget aarch64*-*-*]
              || ([istarget arm*-*-*] && [check_effective_target_arm_neon_ok]
 		 && [check_effective_target_arm_little_endian]) } {
             set et_vect_unpack_saved 1
@@ -3338,6 +3366,7 @@ proc check_effective_target_vect_hw_misalign { } {
     } else {
         set et_vect_hw_misalign_saved 0
        if { ([istarget x86_64-*-*] 
+	    || [istarget aarch64*-*-*]
             || [istarget i?86-*-*]) } {
           set et_vect_hw_misalign_saved 1
        }
@@ -3507,7 +3536,8 @@ proc check_effective_target_vect_condition { } {
 	verbose "check_effective_target_vect_cond: using cached result" 2
     } else {
 	set et_vect_cond_saved 0
-	if { [istarget powerpc*-*-*]
+	if { [istarget aarch64*-*-*]
+	     || [istarget powerpc*-*-*]
 	     || [istarget ia64-*-*]
 	     || [istarget i?86-*-*]
 	     || [istarget spu-*-*]
@@ -3554,7 +3584,8 @@ proc check_effective_target_vect_char_mult { } {
 	if { [istarget ia64-*-*]
 	     || [istarget i?86-*-*]
 	     || [istarget x86_64-*-*]
-            || [check_effective_target_arm32] } {
+	     || [istarget aarch64*-*-*]
+             || [check_effective_target_arm32] } {
 	   set et_vect_char_mult_saved 1
 	}
     }
@@ -3577,6 +3608,7 @@ proc check_effective_target_vect_short_mult { } {
 	     || [istarget i?86-*-*]
 	     || [istarget x86_64-*-*]
 	     || [istarget powerpc*-*-*]
+	     || [istarget aarch64*-*-*]
 	     || [check_effective_target_arm32]
 	     || ([istarget mips*-*-*]
 		 && [check_effective_target_mips_loongson]) } {
@@ -3602,6 +3634,7 @@ proc check_effective_target_vect_int_mult { } {
 	     || [istarget i?86-*-*]
 	     || [istarget x86_64-*-*]
 	     || [istarget ia64-*-*]
+	     || [istarget aarch64*-*-*]
 	     || [check_effective_target_arm32] } {
 	   set et_vect_int_mult_saved 1
 	}
@@ -3620,8 +3653,9 @@ proc check_effective_target_vect_extract_even_odd { } {
         verbose "check_effective_target_vect_extract_even_odd: using cached result" 2
     } else {
         set et_vect_extract_even_odd_saved 0 
-        if { [istarget powerpc*-*-*] 
-            || [is-effective-target arm_neon_ok]
+	if { [istarget aarch64*-*-*]
+	     || [istarget powerpc*-*-*]
+	     || [is-effective-target arm_neon_ok]
              || [istarget i?86-*-*]
              || [istarget x86_64-*-*]
              || [istarget ia64-*-*]
@@ -3645,8 +3679,9 @@ proc check_effective_target_vect_interleave { } {
         verbose "check_effective_target_vect_interleave: using cached result" 2
     } else {
         set et_vect_interleave_saved 0
-        if { [istarget powerpc*-*-*]
-            || [is-effective-target arm_neon_ok]
+	if { [istarget aarch64*-*-*]
+	     || [istarget powerpc*-*-*]
+	     || [is-effective-target arm_neon_ok]
              || [istarget i?86-*-*]
              || [istarget x86_64-*-*]
              || [istarget ia64-*-*]
@@ -3676,7 +3711,8 @@ foreach N {2 3 4 8} {
 		     && [check_effective_target_vect_extract_even_odd] } {
 		    set et_vect_stridedN_saved 1
 		}
-		if { [istarget arm*-*-*] && N >= 2 && N <= 4 } {
+		if { ([istarget arm*-*-*]
+		      || [istarget aarch64*-*-*]) && N >= 2 && N <= 4 } {
 		    set et_vect_stridedN_saved 1
 		}
 	    }
@@ -3693,7 +3729,8 @@ proc check_effective_target_vect_multiple_sizes { } {
     global et_vect_multiple_sizes_saved
 
     set et_vect_multiple_sizes_saved 0
-    if { ([istarget arm*-*-*] && [check_effective_target_arm_neon_ok]) } {
+    if { ([istarget aarch64*-*-*]
+	  || ([istarget arm*-*-*] && [check_effective_target_arm_neon_ok])) } {
        set et_vect_multiple_sizes_saved 1
     }
     if { ([istarget x86_64-*-*] || [istarget i?86-*-*]) } {
@@ -3755,7 +3792,8 @@ proc check_effective_target_vect_call_sqrtf { } {
 	verbose "check_effective_target_vect_call_sqrtf: using cached result" 2
     } else {
 	set et_vect_call_sqrtf_saved 0
-	if { [istarget i?86-*-*]
+	if { [istarget aarch64*-*-*]
+	     || [istarget i?86-*-*]
 	     || [istarget x86_64-*-*]
 	     || ([istarget powerpc*-*-*] && [check_vsx_hw_available]) } {
 	    set et_vect_call_sqrtf_saved 1
@@ -3776,6 +3814,222 @@ proc check_effective_target_vect_call_lrint { } {
 
     verbose "check_effective_target_vect_call_lrint: returning $et_vect_call_lrint" 2
     return $et_vect_call_lrint
+}
+
+# Return 1 if the target supports vector btrunc calls.
+
+proc check_effective_target_vect_call_btrunc { } {
+    global et_vect_call_btrunc_saved
+
+    if [info exists et_vect_call_btrunc_saved] {
+	verbose "check_effective_target_vect_call_btrunc: using cached result" 2
+    } else {
+	set et_vect_call_btrunc_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_btrunc_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_btrunc: returning $et_vect_call_btrunc_saved" 2
+    return $et_vect_call_btrunc_saved
+}
+
+# Return 1 if the target supports vector btruncf calls.
+
+proc check_effective_target_vect_call_btruncf { } {
+    global et_vect_call_btruncf_saved
+
+    if [info exists et_vect_call_btruncf_saved] {
+	verbose "check_effective_target_vect_call_btruncf: using cached result" 2
+    } else {
+	set et_vect_call_btruncf_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_btruncf_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_btruncf: returning $et_vect_call_btruncf_saved" 2
+    return $et_vect_call_btruncf_saved
+}
+
+# Return 1 if the target supports vector ceil calls.
+
+proc check_effective_target_vect_call_ceil { } {
+    global et_vect_call_ceil_saved
+
+    if [info exists et_vect_call_ceil_saved] {
+	verbose "check_effective_target_vect_call_ceil: using cached result" 2
+    } else {
+	set et_vect_call_ceil_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_ceil_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_ceil: returning $et_vect_call_ceil_saved" 2
+    return $et_vect_call_ceil_saved
+}
+
+# Return 1 if the target supports vector ceilf calls.
+
+proc check_effective_target_vect_call_ceilf { } {
+    global et_vect_call_ceilf_saved
+
+    if [info exists et_vect_call_ceilf_saved] {
+	verbose "check_effective_target_vect_call_ceilf: using cached result" 2
+    } else {
+	set et_vect_call_ceilf_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_ceilf_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_ceilf: returning $et_vect_call_ceilf_saved" 2
+    return $et_vect_call_ceilf_saved
+}
+
+# Return 1 if the target supports vector floor calls.
+
+proc check_effective_target_vect_call_floor { } {
+    global et_vect_call_floor_saved
+
+    if [info exists et_vect_call_floor_saved] {
+	verbose "check_effective_target_vect_call_floor: using cached result" 2
+    } else {
+	set et_vect_call_floor_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_floor_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_floor: returning $et_vect_call_floor_saved" 2
+    return $et_vect_call_floor_saved
+}
+
+# Return 1 if the target supports vector floorf calls.
+
+proc check_effective_target_vect_call_floorf { } {
+    global et_vect_call_floorf_saved
+
+    if [info exists et_vect_call_floorf_saved] {
+	verbose "check_effective_target_vect_call_floorf: using cached result" 2
+    } else {
+	set et_vect_call_floorf_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_floorf_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_floorf: returning $et_vect_call_floorf_saved" 2
+    return $et_vect_call_floorf_saved
+}
+
+# Return 1 if the target supports vector lceil calls.
+
+proc check_effective_target_vect_call_lceil { } {
+    global et_vect_call_lceil_saved
+
+    if [info exists et_vect_call_lceil_saved] {
+	verbose "check_effective_target_vect_call_lceil: using cached result" 2
+    } else {
+	set et_vect_call_lceil_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_lceil_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_lceil: returning $et_vect_call_lceil_saved" 2
+    return $et_vect_call_lceil_saved
+}
+
+# Return 1 if the target supports vector lfloor calls.
+
+proc check_effective_target_vect_call_lfloor { } {
+    global et_vect_call_lfloor_saved
+
+    if [info exists et_vect_call_lfloor_saved] {
+	verbose "check_effective_target_vect_call_lfloor: using cached result" 2
+    } else {
+	set et_vect_call_lfloor_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_lfloor_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_lfloor: returning $et_vect_call_lfloor_saved" 2
+    return $et_vect_call_lfloor_saved
+}
+
+# Return 1 if the target supports vector nearbyint calls.
+
+proc check_effective_target_vect_call_nearbyint { } {
+    global et_vect_call_nearbyint_saved
+
+    if [info exists et_vect_call_nearbyint_saved] {
+	verbose "check_effective_target_vect_call_nearbyint: using cached result" 2
+    } else {
+	set et_vect_call_nearbyint_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_nearbyint_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_nearbyint: returning $et_vect_call_nearbyint_saved" 2
+    return $et_vect_call_nearbyint_saved
+}
+
+# Return 1 if the target supports vector nearbyintf calls.
+
+proc check_effective_target_vect_call_nearbyintf { } {
+    global et_vect_call_nearbyintf_saved
+
+    if [info exists et_vect_call_nearbyintf_saved] {
+	verbose "check_effective_target_vect_call_nearbyintf: using cached result" 2
+    } else {
+	set et_vect_call_nearbyintf_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_nearbyintf_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_nearbyintf: returning $et_vect_call_nearbyintf_saved" 2
+    return $et_vect_call_nearbyintf_saved
+}
+
+# Return 1 if the target supports vector round calls.
+
+proc check_effective_target_vect_call_round { } {
+    global et_vect_call_round_saved
+
+    if [info exists et_vect_call_round_saved] {
+	verbose "check_effective_target_vect_call_round: using cached result" 2
+    } else {
+	set et_vect_call_round_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_round_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_round: returning $et_vect_call_round_saved" 2
+    return $et_vect_call_round_saved
+}
+
+# Return 1 if the target supports vector roundf calls.
+
+proc check_effective_target_vect_call_roundf { } {
+    global et_vect_call_roundf_saved
+
+    if [info exists et_vect_call_roundf_saved] {
+	verbose "check_effective_target_vect_call_roundf: using cached result" 2
+    } else {
+	set et_vect_call_roundf_saved 0
+	if { [istarget aarch64*-*-*] } {
+	  set et_vect_call_roundf_saved 1
+	}
+    }
+
+    verbose "check_effective_target_vect_call_roundf: returning $et_vect_call_roundf_saved" 2
+    return $et_vect_call_roundf_saved
 }
 
 # Return 1 if the target supports section-anchors
@@ -3903,6 +4157,7 @@ proc check_effective_target_sync_int_long { } {
         if { [istarget ia64-*-*]
 	     || [istarget i?86-*-*]
 	     || [istarget x86_64-*-*]
+	     || [istarget aarch64*-*-*]
 	     || [istarget alpha*-*-*] 
 	     || [istarget arm*-*-linux-gnueabi] 
 	     || [istarget bfin*-*linux*]
@@ -3931,7 +4186,8 @@ proc check_effective_target_sync_char_short { } {
         set et_sync_char_short_saved 0
 # This is intentionally powerpc but not rs6000, rs6000 doesn't have the
 # load-reserved/store-conditional instructions.
-        if { [istarget ia64-*-*]
+        if { [istarget aarch64*-*-*]
+	     || [istarget ia64-*-*]
 	     || [istarget i?86-*-*]
 	     || [istarget x86_64-*-*]
 	     || [istarget alpha*-*-*] 
@@ -4652,6 +4908,8 @@ proc check_vect_support_and_set_flags { } {
         } else {
             set dg-do-what-default compile
         }
+    } elseif [istarget "aarch64*-*-*"] {
+        set dg-do-what-default run
     } else {
         return 0
     }
@@ -4688,4 +4946,46 @@ proc check_effective_target_mips_n64_abicalls {} {
 	int dummy[1];
 	#endif
     }]
+}
+
+proc check_effective_target_aarch64_tiny { } {
+    if { [istarget aarch64*-*-*] } {
+	return [check_no_compiler_messages aarch64_tiny object {
+	    #ifdef __AARCH64_CMODEL_TINY__
+	    int dummy;
+	    #else
+	    #error target not AArch64 tiny code model
+	    #endif
+	}]
+    } else {
+	return 0
+    }
+}
+
+proc check_effective_target_aarch64_small { } {
+    if { [istarget aarch64*-*-*] } {
+	return [check_no_compiler_messages aarch64_small object {
+	    #ifdef __AARCH64_CMODEL_SMALL__
+	    int dummy;
+	    #else
+	    #error target not AArch64 small code model
+	    #endif
+	}]
+    } else {
+	return 0
+    }
+}
+
+proc check_effective_target_aarch64_large { } {
+    if { [istarget aarch64*-*-*] } {
+	return [check_no_compiler_messages aarch64_large object {
+	    #ifdef __AARCH64_CMODEL_LARGE__
+	    int dummy;
+	    #else
+	    #error target not AArch64 large code model
+	    #endif
+	}]
+    } else {
+	return 0
+    }
 }
