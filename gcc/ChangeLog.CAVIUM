@@ -1,5 +1,10 @@
 2013-04-27  Andrew Pinski  <apinski@cavium.com>
 
+	* expmed.c (store_bit_field_2): Correct the case where
+	insv does not exist and this is a memory RTL.
+
+2013-04-27  Andrew Pinski  <apinski@cavium.com>
+
 	* expmed.c (store_bit_field_2): Fix the case where insv does
 	not exist.
 
