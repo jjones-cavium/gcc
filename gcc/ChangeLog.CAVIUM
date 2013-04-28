@@ -1,3 +1,19 @@
+2013-04-27  Andrew Pinski  <apinski@cavium.com>
+
+	Backport from the aarch64-4.7 branch (FSF trunk has a different patch)
+	2012-10-02  Tejas Belagod  <tejas.belagod@arm.com>
+	    Ulrich Weigand <Ulrich.Weigand@de.ibm.com> 
+
+	* reload.c (find_reloads_subreg_address): Remove FORCE_REPLACE
+	parameter.  Always replace normal subreg with memory reference
+	whenever possible.  Return NULL otherwise.
+	(find_reloads_toplev): Always call find_reloads_subreg_address
+	for subregs of registers equivalent to a memory location.
+	Only recurse further if find_reloads_subreg_address fails.
+	(find_reloads_address_1): Only call find_reloads_subreg_address
+	for subregs of registers equivalent to a memory location.
+	Properly handle failure of find_reloads_subreg_address.
+
 2013-04-26  Andrew Pinski  <apinski@cavium.com>
 
 	* reload1.c (spill_failure): Use inform instead of error
