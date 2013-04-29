@@ -7,6 +7,11 @@
 	(vld1<q>_dup_<sufp><8, 16, 32, 64>): Likewise.
 	(vld1<q>_<sufp><8, 16, 32, 64>): Likewise.
 
+2013-04-16   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.md (*adds_mul_imm_<mode>): New pattern.
+	(*subs_mul_imm_<mode>): New pattern.
+
 2013-04-12   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.c (aarch64_select_cc_mode): Allow NEG
