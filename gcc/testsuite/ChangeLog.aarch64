@@ -1,3 +1,7 @@
+2013-04-12   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* gcc.target/aarch64/negs.c: New.
+
 2013-03-21   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 	 
 	* gcc.target/aarch64/vect.c: Test and result vector added
