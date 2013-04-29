@@ -1,3 +1,8 @@
+2013-04-25  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.md (*ngc<mode>): New pattern.
+	(*ngcsi_uxtw): New pattern.
+
 2013-04-24  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	Backport from mainline.
