@@ -7,6 +7,12 @@
 	(vld1<q>_dup_<sufp><8, 16, 32, 64>): Likewise.
 	(vld1<q>_<sufp><8, 16, 32, 64>): Likewise.
 
+2013-03-21   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+	 
+	* config/aarch64/aarch64-elf.h (REGISTER_PREFIX): Remove.
+	* config/aarch64/aarch64.c (aarch64_print_operand): Remove all
+	occurrence of REGISTER_PREFIX as its empty string.
+
 2013-03-01  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/aarch64.c:
