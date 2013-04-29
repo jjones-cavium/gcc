@@ -7,6 +7,13 @@
 	(vld1<q>_dup_<sufp><8, 16, 32, 64>): Likewise.
 	(vld1<q>_<sufp><8, 16, 32, 64>): Likewise.
 
+2013-03-28   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.md (*and<mode>3_compare0): New pattern.
+	(*andsi3_compare0_uxtw): New pattern.
+	(*and_<SHIFT:optab><mode>3_compare0): New pattern.
+	(*and_<SHIFT:optab>si3_compare0_uxtw): New pattern.
+
 2013-03-21   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64-simd.md (simd_fabd): New Attribute.
