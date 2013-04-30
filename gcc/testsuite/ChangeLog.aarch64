@@ -73,6 +73,11 @@
 	instruction in assembly.
 	* gcc.target/aarch64/vect-fp.x: Add fabd test function.
 
+2013-03-19  Ian Bolton  <ian.bolton@arm.com>
+
+	* gcc.target/aarch64/extr.c: New test.
+	* gcc.target/aarch64/ror.c: New test.
+
 2013-02-13  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	Backport from mainline.
