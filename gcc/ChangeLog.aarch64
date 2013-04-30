@@ -258,6 +258,11 @@
 	* config/aarch64/aarch64.c:
 	Fix typo in `#undef TARGET_FIXED_CONDITION_CODE_REGS'
 
+2013-03-19  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.md (*extr<mode>5_insn): New pattern.
+	(*extrsi5_insn_uxtw): Likewise
+
 2013-03-14  Ian Bolton  <ian.bolton@arm.com>
 
 	* config/aarch64/aarch64.md: (*and<mode>3nr_compare0): Use CC_NZ.
