@@ -6,6 +6,10 @@
 
 	* gcc.target/aarch64/ngc.c: New.
 
+2013-04-22  James Greenhalgh  <james.greenhalgh@arm.com>
+	* gcc.target/aarch64/vrecps.c: New.
+	* gcc.target/aarch64/vrecpx.c: Likewise.
+
 2013-04-16   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* gcc.target/aarch64/adds3.c: New.
