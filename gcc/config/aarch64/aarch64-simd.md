@@ -1246,7 +1246,7 @@
 
 ;; Vector versions of the fcvt standard patterns.
 ;; Expands to lbtrunc, lround, lceil, lfloor
-(define_insn "l<fcvt_pattern><su_optab><VDQF:mode><fcvt_target>2"
+(define_insn "aarch64_fcvt<frint_suffix><su><mode>"
   [(set (match_operand:<FCVT_TARGET> 0 "register_operand" "=w")
 	(FIXUORS:<FCVT_TARGET> (unspec:<FCVT_TARGET>
 			       [(match_operand:VDQF 1 "register_operand" "w")]

@@ -1,3 +1,12 @@
+2013-04-30  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+	* config/aarch64/aarch64-builtins.c
+	(aarch64_gimple_fold_builtin): Make Static.
+	* config/aarch64/aarch64-builtins.c
+	(aarch64_gimple_fold_builtin): Remove.
+	* config/aarch64/aarch64-simd.md
+	(l<fcvt_pattern><su_optab><VDQF:mode><fcvt_target>2):
+	Modify to "aarch64_fcvt<frint_suffix><su><mode>".
+
 2013-04-29  James Greenhalgh  <james.greenhalgh@arm.com>
 	* config/aarch64/aarch64-builtins.c
 	(aarch64_builtin_vectorized_function): Vectorize over ifloorf,

@@ -1340,7 +1340,7 @@ aarch64_fold_builtin (tree fndecl, int n_args ATTRIBUTE_UNUSED, tree *args,
   return NULL_TREE;
 }
 
-bool
+static bool
 aarch64_gimple_fold_builtin (gimple_stmt_iterator *gsi)
 {
   bool changed = false;
