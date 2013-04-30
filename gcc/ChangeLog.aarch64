@@ -75,6 +75,10 @@
 	(frint_suffix): Likewise.
 
 2013-04-25  James Greenhalgh  <james.greenhalgh@arm.com>
+	* config/aarch64/aarch64.c (aarch64_print_operand): Fix asm_fprintf
+	format specifier in 'X' case.
+
+2013-04-25  James Greenhalgh  <james.greenhalgh@arm.com>
 	* config/aarch64/aarch64-simd.md
 	(aarch64_simd_bsl<mode>_internal): Rewrite RTL to not use UNSPEC_BSL.
 	(aarch64_simd_bsl<mode>): Likewise.
