@@ -7821,6 +7821,9 @@ aarch64_vectorize_vec_perm_const_ok (enum machine_mode vmode,
 #undef TARGET_FIXED_CONDITION_CODE_REGS
 #define TARGET_FIXED_CONDITION_CODE_REGS aarch64_fixed_condition_code_regs
 
+#undef TARGET_FOLD_BUILTIN
+#define TARGET_FOLD_BUILTIN aarch64_fold_builtin
+
 #undef TARGET_FUNCTION_ARG
 #define TARGET_FUNCTION_ARG aarch64_function_arg
 

@@ -177,6 +177,7 @@ rtx aarch64_simd_gen_const_vector_dup (enum machine_mode, int);
 bool aarch64_simd_mem_operand_p (rtx);
 rtx aarch64_simd_vect_par_cnst_half (enum machine_mode, bool);
 rtx aarch64_tls_get_addr (void);
+tree aarch64_fold_builtin (tree, int, tree *, bool);
 unsigned aarch64_dbx_register_number (unsigned);
 unsigned aarch64_regno_regclass (unsigned);
 unsigned aarch64_trampoline_size (void);
