@@ -2873,28 +2873,6 @@
    (set_attr "simd_mode" "<MODE>")]
 )
 
-;; vshl_n
-
-(define_expand "aarch64_sshl_n<mode>"
-  [(match_operand:VSDQ_I_DI 0 "register_operand" "=w")
-   (match_operand:VSDQ_I_DI 1 "register_operand" "w")
-   (match_operand:SI 2 "immediate_operand" "i")]
-  "TARGET_SIMD"
-{
-  emit_insn (gen_ashl<mode>3 (operands[0], operands[1], operands[2]));
-  DONE;
-})
-
-(define_expand "aarch64_ushl_n<mode>"
-  [(match_operand:VSDQ_I_DI 0 "register_operand" "=w")
-   (match_operand:VSDQ_I_DI 1 "register_operand" "w")
-   (match_operand:SI 2 "immediate_operand" "i")]
-  "TARGET_SIMD"
-{
-  emit_insn (gen_ashl<mode>3 (operands[0], operands[1], operands[2]));
-  DONE;
-})
-
 ;; vshll_n
 
 (define_insn "aarch64_<sur>shll_n<mode>"
@@ -2938,28 +2916,6 @@
   [(set_attr "simd_type" "simd_shift_imm")
    (set_attr "simd_mode" "<MODE>")]
 )
-
-;; vshr_n
-
-(define_expand "aarch64_sshr_n<mode>"
-  [(match_operand:VSDQ_I_DI 0 "register_operand" "=w")
-   (match_operand:VSDQ_I_DI 1 "register_operand" "w")
-   (match_operand:SI 2 "immediate_operand" "i")]
-  "TARGET_SIMD"
-{
-  emit_insn (gen_ashr<mode>3 (operands[0], operands[1], operands[2]));
-  DONE;
-})
-
-(define_expand "aarch64_ushr_n<mode>"
-  [(match_operand:VSDQ_I_DI 0 "register_operand" "=w")
-   (match_operand:VSDQ_I_DI 1 "register_operand" "w")
-   (match_operand:SI 2 "immediate_operand" "i")]
-  "TARGET_SIMD"
-{
-  emit_insn (gen_lshr<mode>3 (operands[0], operands[1], operands[2]));
-  DONE;
-})
 
 ;; vrshr_n
 
@@ -3117,19 +3073,6 @@
    (set_attr "simd_mode" "DI")]
 )
 
-;; v(max|min)
-
-(define_expand "aarch64_<maxmin><mode>"
- [(set (match_operand:VDQ_BHSI 0 "register_operand" "=w")
-       (MAXMIN:VDQ_BHSI (match_operand:VDQ_BHSI 1 "register_operand" "w")
-			(match_operand:VDQ_BHSI 2 "register_operand" "w")))]
- "TARGET_SIMD"
-{
-  emit_insn (gen_<maxmin><mode>3 (operands[0], operands[1], operands[2]));
-  DONE;
-})
-
-
 (define_insn "aarch64_<fmaxmin><mode>"
   [(set (match_operand:VDQF 0 "register_operand" "=w")
         (unspec:VDQF [(match_operand:VDQF 1 "register_operand" "w")
@@ -3151,16 +3094,6 @@
   [(set_attr "simd_type" "simd_fsqrt")
    (set_attr "simd_mode" "<MODE>")]
 )
-
-(define_expand "aarch64_sqrt<mode>"
-  [(match_operand:VDQF 0 "register_operand" "=w")
-   (match_operand:VDQF 1 "register_operand" "w")]
-  "TARGET_SIMD"
-{
-  emit_insn (gen_sqrt<mode>2 (operands[0], operands[1]));
-  DONE;
-})
-
 
 ;; Patterns for vector struct loads and stores.
 
