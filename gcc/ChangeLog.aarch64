@@ -179,6 +179,11 @@
 
 	* config/aarch64/aarch64.h (REVERSIBLE_CC_MODE): Define.
 
+2013-03-28  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.md (aarch64_can_eliminate): Keep frame
+	record only when desired or required.
+
 2013-03-28  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.md (*and<mode>3_compare0): New pattern.
