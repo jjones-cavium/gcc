@@ -262,6 +262,11 @@
 	* config/aarch64/aarch64.c (aarch64_print_operand): Remove all
 	occurrence of REGISTER_PREFIX as its empty string.
 
+2013-03-06  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/aarch64/t-aarch64 (TM_H, OPTIONS_H_EXTRA): Add
+	aarch64-cores.def.
+
 2013-03-01  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/aarch64.c:
