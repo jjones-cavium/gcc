@@ -1,3 +1,14 @@
+2013-04-30  Manjunath Matti <mmatti@caviumnetworks.com>
+	
+	Bug #6799
+	Backport from mainline:
+	2013-03-18  Richard Earnshaw  <rearnsha@arm.com>
+
+	PR target/56470
+	* arm.c (shift_op): Validate RTL pattern on the fly.
+	(arm_print_operand, case 'S'): Don't use shift_operator 
+	to validate the RTL.
+
 2013-04-27  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #6798
