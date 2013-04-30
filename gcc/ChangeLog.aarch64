@@ -217,6 +217,12 @@
 	* config/aarch64/constraints.md (Dh, Dq): New.
 	* config/aarch64/iterators.md (hq): New.
 
+2013-04-02  Sofiane Naci  <sofiane.naci@arm.com>
+
+	* config/aarch64/aarch64.md (*mov<mode>_aarch64): Add variants for scalar
+	load/store operations using B/H registers.
+	(*zero_extend<SHORT:mode><GPI:mode>2_aarch64): Likewise.
+
 2013-03-28  Ian Bolton  <ian.bolton@arm.com>
 
 	* config/aarch64/aarch64.md (aarch64_can_eliminate): Keep frame
