@@ -179,6 +179,11 @@
 
 	* config/aarch64/aarch64.h (REVERSIBLE_CC_MODE): Define.
 
+2012-04-10  Yufeng Zhang  <yufeng.zhang@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_print_extension): New function.
+	(aarch64_start_file): Use the new function.
+
 2013-04-03  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
 	PR target/56809
 	* config/aarch64/aarch64.c (is_jump_table): Use next_active_insn
