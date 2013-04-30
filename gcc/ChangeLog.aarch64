@@ -126,6 +126,9 @@
 	Backport from mainline.
 	2013-04-24  James Greenhalgh  <james.greenhalgh@arm.com>
 
+2013-04-23  Sofiane Naci  <sofiane.naci@arm.com>
+	* config/aarch64/aarch64.md (*mov<mode>_aarch64): Add simd attribute.
+
 2013-04-22  James Greenhalgh  <james.greenhalgh@arm.com>
 	* config/aarch64/arm_neon.h (vld1<q>_lane*): Fix constraints.
 	(vld1<q>_dup_<sufp><8, 16, 32, 64>): Likewise.
