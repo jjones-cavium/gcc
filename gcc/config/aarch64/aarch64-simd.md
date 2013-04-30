@@ -1244,7 +1244,9 @@
    (set_attr "simd_mode" "<MODE>")]
 )
 
-(define_insn "aarch64_fcvt<frint_suffix><su><mode>"
+;; Vector versions of the fcvt standard patterns.
+;; Expands to lbtrunc, lround, lceil, lfloor
+(define_insn "l<fcvt_pattern><su_optab><VDQF:mode><fcvt_target>2"
   [(set (match_operand:<FCVT_TARGET> 0 "register_operand" "=w")
 	(FIXUORS:<FCVT_TARGET> (unspec:<FCVT_TARGET>
 			       [(match_operand:VDQF 1 "register_operand" "w")]
@@ -1257,24 +1259,13 @@
 
 ;; Vector versions of the fcvt standard patterns.
 ;; Expands to lbtrunc, lround, lceil, lfloor
-(define_expand "l<fcvt_pattern><su_optab><fcvt_target><VDQF:mode>2"
+(define_expand "l<fcvt_pattern><su_optab><VDQF:mode><fcvt_target>2"
   [(set (match_operand:<FCVT_TARGET> 0 "register_operand")
 	(FIXUORS:<FCVT_TARGET> (unspec:<FCVT_TARGET>
 			       [(match_operand:VDQF 1 "register_operand")]
 			       FCVT)))]
   "TARGET_SIMD"
   {})
-
-(define_insn "aarch64_vmls<mode>"
-  [(set (match_operand:VDQF 0 "register_operand" "=w")
-       (minus:VDQF (match_operand:VDQF 1 "register_operand" "0")
-		   (mult:VDQF (match_operand:VDQF 2 "register_operand" "w")
-			      (match_operand:VDQF 3 "register_operand" "w"))))]
-  "TARGET_SIMD"
- "fmls\\t%0.<Vtype>, %2.<Vtype>, %3.<Vtype>"
-  [(set_attr "simd_type" "simd_fmla")
-   (set_attr "simd_mode" "<MODE>")]
-)
 
 ;; FP Max/Min
 ;; Max/Min are introduced by idiom recognition by GCC's mid-end.  An
