@@ -388,6 +388,16 @@
 
 	* config/aarch64/arm_neon.h: Map scalar types to standard types.
 
+2013-01-16  Ian Bolton  <ian.bolton@arm.com>
+
+	* gcc/config/aarch64/aarch64.md
+	(*cstoresi_neg_uxtw): New pattern.
+	(*cmovsi_insn_uxtw): New pattern.
+	(*<optab>si3_uxtw): New pattern.
+	(*<LOGICAL:optab>_<SHIFT:optab>si3_uxtw): New pattern.
+	(*<optab>si3_insn_uxtw): New pattern.
+	(*bswapsi2_uxtw): New pattern.
+
 2013-01-14  Tejas Belagod  <tejas.belagod@arm.com>
 
 	* config/aarch64/aarch64-simd.md (*aarch64_simd_ld1r<mode>): New. 
