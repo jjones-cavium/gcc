@@ -75,6 +75,10 @@
 
 2013-03-19  Ian Bolton  <ian.bolton@arm.com>
 
+	* gcc.target/aarch64/sbc.c: New test.
+
+2013-03-19  Ian Bolton  <ian.bolton@arm.com>
+
 	* gcc.target/aarch64/extr.c: New test.
 	* gcc.target/aarch64/ror.c: New test.
 
