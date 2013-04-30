@@ -31,6 +31,10 @@
 
 	* gcc.target/aarch64/negs.c: New.
 
+2013-03-22  Ian Bolton  <ian.bolton@arm.com>
+
+	* gcc.target/aarch64/movk.c: New test.
+
 2013-03-21   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 	 
 	* gcc.target/aarch64/vect.c: Test and result vector added

@@ -186,6 +186,13 @@
 	(*and_<SHIFT:optab><mode>3_compare0): New pattern.
 	(*and_<SHIFT:optab>si3_compare0_uxtw): New pattern.
 
+2013-03-22  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_print_operand): New
+	format specifier for printing a constant in hex.
+	* config/aarch64/aarch64.md (insv_imm<mode>): Use the X
+	format specifier for printing second operand.
+
 2013-03-21   Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64-simd.md (simd_fabd): New Attribute.
