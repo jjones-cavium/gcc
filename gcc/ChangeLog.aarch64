@@ -4,6 +4,12 @@
 	* config/aarch64/aarch64-builtins.c
 	(aarch64_gimple_fold_builtin): Remove.
 
+2013-04-29  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.md (movsi_aarch64): Support LDR/STR
+	from/to S register.
+	(movdi_aarch64): Support LDR/STR from/to D register.
+
 2013-04-29  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/arm_neon.h
