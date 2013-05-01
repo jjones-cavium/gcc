@@ -9,6 +9,15 @@
 
 2013-04-29  James Greenhalgh  <james.greenhalgh@arm.com>
 
+	* config/aarch64/aarch64-simd.md
+	(<optab><VDQF:mode><fcvt_target>2): New, maps to fix, fixuns.
+	(<fix_trunc_optab><VDQF:mode><fcvt_target>2): New, maps to
+	fix_trunc, fixuns_trunc.
+	(ftrunc<VDQF:mode>2): New.
+	* config/aarch64/iterators.md
+
+2013-04-29  James Greenhalgh  <james.greenhalgh@arm.com>
+
 	* config/aarch64/aarch64-simd-builtins.def (vec_unpacks_hi_): New.
 	(float_truncate_hi_): Likewise.
 	(float_extend_lo_): Likewise.
