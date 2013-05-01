@@ -341,6 +341,11 @@
 	* config/aarch64/aarch64.md: (*and<mode>3nr_compare0): Use CC_NZ.
 	(*and_<SHIFT:optab><mode>3nr_compare0): Likewise.
 
+2013-03-14  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_select_cc_mode): Return correct
+	CC mode for AND.
+
 2013-02-28  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/aarch64.c
