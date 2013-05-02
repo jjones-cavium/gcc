@@ -1,20 +1,7 @@
 2013-05-01  James Greenhalgh  <james.greenhalgh@arm.com>
 
-	* gcc.target/aarch64/scalar_intrinsics.c (force_simd): New.
-	(test_vceqd_s64): Force arguments to SIMD registers.
-	(test_vceqzd_s64): Likewise.
-	(test_vcged_s64): Likewise.
-	(test_vcled_s64): Likewise.
-	(test_vcgezd_s64): Likewise.
-	(test_vcged_u64): Likewise.
-	(test_vcgtd_s64): Likewise.
-	(test_vcltd_s64): Likewise.
-	(test_vcgtzd_s64): Likewise.
-	(test_vcgtd_u64): Likewise.
-	(test_vclezd_s64): Likewise.
-	(test_vcltzd_s64): Likewise.
-	(test_vtst_s64): Likewise.
-	(test_vtst_u64): Likewise.
+	* config/aarch64/aarch64-simd.md (*aarch64_fac<optab><mode>): New.
+	* config/aarch64/iterators.md (FAC_COMPARISONS): New.
 
 2013-05-01  James Greenhalgh  <james.greenhalgh@arm.com>
 
