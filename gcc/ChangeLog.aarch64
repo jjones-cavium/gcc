@@ -6,6 +6,14 @@
 	const values in the range 0-255.
 	(Dh): Likewise. 
 
+2013-05-02  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.md (*and_one_cmpl<mode>3_compare0):
+	New pattern.
+	(*and_one_cmplsi3_compare0_uxtw): Likewise.
+	(*and_one_cmpl_<SHIFT:optab><mode>3_compare0): Likewise.
+	(*and_one_cmpl_<SHIFT:optab>si3_compare0_uxtw): Likewise.
+
 2013-05-01  James Greenhalgh  <james.greenhalgh@arm.com>
 	* config/aarch64/aarch64-builtins.c
 	(aarch64_gimple_fold_builtin.c): Fold more modes for reduc_splus_.
