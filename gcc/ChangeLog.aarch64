@@ -1,3 +1,11 @@
+2013-05-03  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+	* config/aarch64/arm_neon.h (vmlsq_laneq_s16): Modify the 3rd
+	operand constraint to use x instead of w.
+	(vmlsq_laneq_u16): Likewise.
+	* config/aarch64/constraints.md (Dq): Add condition to restrict
+	const values in the range 0-255.
+	(Dh): Likewise. 
+
 2013-05-01  James Greenhalgh  <james.greenhalgh@arm.com>
 	* config/aarch64/aarch64-builtins.c
 	(aarch64_gimple_fold_builtin.c): Fold more modes for reduc_splus_.

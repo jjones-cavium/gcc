@@ -9603,7 +9603,7 @@ vmlsl_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        int16x8_t __result;						\
        __asm__ ("mls %0.8h, %2.8h, %3.h[%4]"				\
                 : "=w"(__result)					\
-                : "0"(__a_), "w"(__b_), "w"(__c_), "i"(__d)		\
+                : "0"(__a_), "w"(__b_), "x"(__c_), "i"(__d)		\
                 : /* No clobbers */);					\
        __result;							\
      })
@@ -9631,7 +9631,7 @@ vmlsl_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        uint16x8_t __result;						\
        __asm__ ("mls %0.8h, %2.8h, %3.h[%4]"				\
                 : "=w"(__result)					\
-                : "0"(__a_), "w"(__b_), "w"(__c_), "i"(__d)		\
+                : "0"(__a_), "w"(__b_), "x"(__c_), "i"(__d)		\
                 : /* No clobbers */);					\
        __result;							\
      })

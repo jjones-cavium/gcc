@@ -157,16 +157,20 @@
  A constraint that matches an immediate operand valid for\
  AdvSIMD scalar move in HImode."
  (and (match_code "const_int")
-      (match_test "aarch64_simd_scalar_immediate_valid_for_move (op,
-						 HImode)")))
+      (and (and (match_test "(unsigned HOST_WIDE_INT) ival >= 0")
+		(match_test "(unsigned HOST_WIDE_INT) ival <= 255"))
+	   (match_test "aarch64_simd_scalar_immediate_valid_for_move (op,
+						 HImode)"))))
 
 (define_constraint "Dq"
   "@internal
  A constraint that matches an immediate operand valid for\
  AdvSIMD scalar move in QImode."
  (and (match_code "const_int")
-      (match_test "aarch64_simd_scalar_immediate_valid_for_move (op,
-						 QImode)")))
+      (and (and (match_test "(unsigned HOST_WIDE_INT) ival >= 0")
+		(match_test "(unsigned HOST_WIDE_INT) ival <= 255"))
+	   (match_test "aarch64_simd_scalar_immediate_valid_for_move (op,
+						 QImode)"))))
 
 (define_constraint "Dl"
   "@internal
