@@ -1,3 +1,7 @@
+2013-05-03  Vidya Praveen <vidyapraveen@arm.com>
+
+	* gcc.target/aarch64/fabd.c: New file.
+
 2013-05-02  Ian Bolton  <ian.bolton@arm.com>
 
 	* gcc.target/aarch64/bics_1.c: New test.
