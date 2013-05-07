@@ -1,3 +1,7 @@
+2013-05-07  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+	* typeck.c (cp_build_binary_op): Move the declaration above
+	label to avoid build error.
+
 2012-09-14  Marc Glisse  <marc.glisse@inria.fr>
 
 	PR c++/54427

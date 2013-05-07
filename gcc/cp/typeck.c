@@ -4261,8 +4261,8 @@ cp_build_binary_op (location_t location,
 
       if (code0 == VECTOR_TYPE && code1 == VECTOR_TYPE)
 	{
-	vector_compare:
 	  tree intt;
+	vector_compare:
 	  if (!same_type_ignoring_top_level_qualifiers_p (TREE_TYPE (type0),
 							  TREE_TYPE (type1)))
 	    {
