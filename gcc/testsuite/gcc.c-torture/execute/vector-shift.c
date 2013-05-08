@@ -1,4 +1,3 @@
-/* { dg-do run } */
 
 #define vector __attribute__((vector_size(sizeof(int)*4) ))
 
@@ -17,7 +16,7 @@ static vector unsigned int unumbersrightshiftallones = {0, 0, 1, 1};
 
 #define TEST(result, expected) \
 do { \
-  __typeof__(result) result1 = result; \
+  typeof(result) result1 = result; \
   if(sizeof (result1) != sizeof (expected)) \
     __builtin_abort (); \
   if (__builtin_memcmp (&result1, &expected, sizeof(result1)) != 0) \
