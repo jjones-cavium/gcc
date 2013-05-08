@@ -1,3 +1,8 @@
+2013-05-07  Ian Bolton  <ian.bolton@arm.com>
+
+	* gcc.target/aarch64/ands_1.c: New test. 
+	* gcc.target/aarch64/ands_2.c: Likewise
+
 2013-05-07  Sofiane Naci  <sofiane.naci@arm.com>
 
 	* gcc.target/aarch64/scalar_intrinsics.c: Update.
