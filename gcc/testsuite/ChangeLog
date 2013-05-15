@@ -1,3 +1,9 @@
+2013-05-15  Richard Sandiford  <rdsandiford@googlemail.com>
+
+	PR target/57260
+	* gcc.target/mips/call-1.c: Restrict to o32.
+	* gcc.target/mips/call-5.c, gcc.target/mips/call-6.c: New test.
+
 2012-12-03  Richard Biener  <rguenther@suse.de>
 
 	* gcc.dg/torture/pr35634.c: Use signed char.
