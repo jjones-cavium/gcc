@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2012-09-07  Richard Earnshaw  <rearnsha@arm.com>
 
 	PR tree-ssa/54295
@@ -270,6 +271,12 @@
 	(thumb1_rev): Delete pattern.
 	(arm_revsh): New pattern to support builtin_bswap16.
 	(arm_rev16, bswaphi2): Likewise.
+
+2012-05-01  Richard Henderson  <rth@redhat.com>
+
+	* common.opt (fsync-libcalls): New.
+	* doc/invoke.texi: Document it.
+	* optabs.c (init_sync_libfuncs): Honor it.
 
 2012-04-11  Eric Botcazou  <ebotcazou@adacore.com>
 

@@ -1,3 +1,13 @@
+2013-05-23  Manjunath Matti <mmatti@caviumnetworks.com>
+	
+	Backport from mainline:
+
+	2012-05-01  Richard Henderson  <rth@redhat.com>
+
+	* common.opt (fsync-libcalls): New.
+	* doc/invoke.texi: Document it.
+	* optabs.c (init_sync_libfuncs): Honor it.
+
 2013-05-20  Andrew Pinski  <apinski@cavium.com>
 
 	* config/mips/mips.c (mips_expand_ext_as_unaligned_load):
