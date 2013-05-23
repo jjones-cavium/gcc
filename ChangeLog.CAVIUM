@@ -1,3 +1,11 @@
+2013-05-23  Manjunath Matti  <mmatti@caviumnetworks.com>
+	
+	* Makefile.def (libatomic): New target_module.
+	* configure.ac (target_libraries): Add libatomic.
+	(noconfigdirs): Check if libatomic is supported.
+	* Makefile.in, configure: Rebuild.
+	* contrib/gcc_update: Add libatomic to touch data
+
 2013-04-23  Andrew Pinski  <apinski@cavium.com>
 
 	* config.guess: Update to the latest version.
