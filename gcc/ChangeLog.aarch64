@@ -1,3 +1,8 @@
+2013-05-13  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.md (*mov<mode>_aarch64): Generate movi
+	instruction with shift values if supported by operand.
+
 2013-05-24  Ian Bolton  <ian.bolton@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_print_operand): Change the
