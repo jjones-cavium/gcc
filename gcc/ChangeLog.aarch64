@@ -1,3 +1,8 @@
+2013-05-29  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-cores.def: Add an entry for thunder.
+	* config/aarch64/aarch64-tune.md: Re-generate.
+
 2013-05-13  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.md (*mov<mode>_aarch64): Generate movi
