@@ -1,3 +1,8 @@
+2013-06-03  Andrew Pinski  <apinski@cavium.com>
+
+	* config/arm/t-linux-eabi: Disable all of the multilibs as
+	they don't work nicely with yocto.
+
 2013-05-27  Manjunath Matti <mmatti@caviumnetworks.com>
 	
 	Bug #2504
