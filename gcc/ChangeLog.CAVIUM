@@ -1,5 +1,10 @@
 2013-06-03  Manjunath Matti <mmatti@caviumnetworks.com>
 	
+	* asan.c (pass_asan_O0) Removed invalid field 
+	optinfo_flags.
+
+2013-06-03  Manjunath Matti <mmatti@caviumnetworks.com>
+	
 	Backported libsanitizer support.
 
 	2012-11-12  Jakub Jelinek  <jakub@redhat.com>

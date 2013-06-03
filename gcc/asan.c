@@ -446,7 +446,6 @@ struct gimple_opt_pass pass_asan_O0 =
  {
   GIMPLE_PASS,
   "asan0",				/* name  */
-  OPTGROUP_NONE,                        /* optinfo_flags */
   gate_asan_O0,				/* gate  */
   asan_instrument,			/* execute  */
   NULL,					/* sub  */
