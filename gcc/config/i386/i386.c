@@ -5338,6 +5338,14 @@ ix86_return_pops_args (tree fundecl, tree funtype, int size)
   return 0;
 }
 
+/* Implement the TARGET_ASAN_SHADOW_OFFSET hook.  */
+
+static unsigned HOST_WIDE_INT
+ix86_asan_shadow_offset (void)
+{
+  return (unsigned HOST_WIDE_INT) 1 << (TARGET_LP64 ? 44 : 29);
+}
+
 /* Argument support functions.  */
 
 /* Return true when register may be used to pass function parameters.  */
@@ -38643,6 +38651,9 @@ ix86_autovectorize_vector_sizes (void)
 #define TARGET_TRAMPOLINE_INIT ix86_trampoline_init
 #undef TARGET_RETURN_POPS_ARGS
 #define TARGET_RETURN_POPS_ARGS ix86_return_pops_args
+
+#undef TARGET_ASAN_SHADOW_OFFSET
+#define TARGET_ASAN_SHADOW_OFFSET ix86_asan_shadow_offset
 
 #undef TARGET_GIMPLIFY_VA_ARG_EXPR
 #define TARGET_GIMPLIFY_VA_ARG_EXPR ix86_gimplify_va_arg
