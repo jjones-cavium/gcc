@@ -1,3 +1,8 @@
+2013-05-30  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.md (insv<mode>): New define_expand.
+	(*insv_reg<mode>): New define_insn.
+
 2012-05-29  Chris Schlumberger-Socha <chris.schlumberger-socha@arm.com>
 	    Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
