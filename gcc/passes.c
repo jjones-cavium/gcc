@@ -1344,6 +1344,7 @@ init_optimization_passes (void)
       NEXT_PASS (pass_merge_common_code);
       NEXT_PASS (pass_sink_code);
       NEXT_PASS (pass_merge_phi);
+      NEXT_PASS (pass_asan);
       NEXT_PASS (pass_tree_loop);
 	{
 	  struct opt_pass **p = &pass_tree_loop.pass.sub;
