@@ -1,5 +1,12 @@
 2013-06-04  Manjunath Matti  <mmatti@caviumnetworks.com>
 
+	2012-11-13  Dodji Seketeli  <dodji@redhat.com>
+
+	* configure.ac: Enable libsanitizer just on x86 linux for now.
+	* configure: Re-generate.
+
+2013-06-04  Manjunath Matti  <mmatti@caviumnetworks.com>
+
 	Backported
 
 	2012-11-13  Hans-Peter Nilsson  <hp@axis.com>

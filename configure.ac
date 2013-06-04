@@ -527,9 +527,11 @@ if test -d ${srcdir}/libitm; then
     fi
 fi
 
-# Disable libsanitizer for some systems.
+# Disable libsanitizer on all systems but x86 linux for now.
 case "${target}" in
-  cris-*-* | crisv32-*-* | mmix-*-*)
+  x86_64-*-linux-* | i?86-*-linux-*)
+    ;;
+  *)
     noconfigdirs="$noconfigdirs target-libsanitizer"
     ;;
 esac
