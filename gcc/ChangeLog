@@ -1,3 +1,7 @@
+2012-11-13  Jakub Jelinek  <jakub@redhat.com>
+
+	* Makefile.in (asan.o): Depend on $(TM_P_H).
+
 2012-11-12  Jakub Jelinek  <jakub@redhat.com>
 
 	* asan.c (instrument_builtin_call) <case BUILT_IN_BCOPY>: Fix up
