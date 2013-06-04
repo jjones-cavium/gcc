@@ -1,3 +1,14 @@
+2013-06-04  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	2012-11-12  Wei Mi <wmi@google.com>
+
+	* configure.ac: Add libsanitizer to target_libraries.
+	* Makefile.def: Ditto.
+	* configure: Regenerate.
+	* Makefile.in: Regenerate.
+	* libsanitizer: New directory for asan runtime.  Contains an empty
+	tsan directory.
+
 2013-05-23  Manjunath Matti  <mmatti@caviumnetworks.com>
 	
 	* Makefile.def (libatomic): New target_module.
