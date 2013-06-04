@@ -527,6 +527,13 @@ if test -d ${srcdir}/libitm; then
     fi
 fi
 
+# Disable libsanitizer for some systems.
+case "${target}" in
+  cris-*-* | crisv32-*-* | mmix-*-*)
+    noconfigdirs="$noconfigdirs target-libsanitizer"
+    ;;
+esac
+
 # Disable libssp for some systems.
 case "${target}" in
   avr-*-*)
