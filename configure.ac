@@ -527,14 +527,21 @@ if test -d ${srcdir}/libitm; then
     fi
 fi
 
-# Disable libsanitizer on all systems but x86 linux for now.
-case "${target}" in
-  x86_64-*-linux-* | i?86-*-linux-*)
-    ;;
-  *)
-    noconfigdirs="$noconfigdirs target-libsanitizer"
-    ;;
-esac
+# Disable libsanitizer on unsupported systems.
+if test -d ${srcdir}/libsanitizer; then
+    if test x$enable_libsanitizer = x; then
+	AC_MSG_CHECKING([for libsanitizer support])
+	if (srcdir=${srcdir}/libsanitizer; \
+		. ${srcdir}/configure.tgt; \
+		test -n "$UNSUPPORTED")
+	then
+	    AC_MSG_RESULT([no])
+	    noconfigdirs="$noconfigdirs target-libsanitizer"
+	else
+	    AC_MSG_RESULT([yes])
+	fi
+    fi
+fi
 
 # Disable libssp for some systems.
 case "${target}" in
