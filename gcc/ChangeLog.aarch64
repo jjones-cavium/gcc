@@ -3,6 +3,14 @@
 	* config/aarch64/aarch64.md (*mov<mode>_aarch64): Revert the
 	patch "Generate movi instruction with shift if required"
 
+2013-06-04  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_simd_valid_immediate): Change
+	return type to bool for prototype.
+	(aarch64_legitimate_constant_p): Check for true instead of not -1.
+	(aarch64_simd_valid_immediate): Fix up each return to return a bool.
+	(aarch64_simd_immediate_valid_for_move): Update retval for bool.
+
 2013-06-03  Sofiane Naci  <sofiane.naci@arm.com>
 
 	* config/aarch64/aarch64.md (*movdi_aarch64): Define "simd" attribute.
