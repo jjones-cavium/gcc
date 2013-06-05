@@ -1,5 +1,16 @@
 2013-06-05  Manjunath Matti <mmatti@caviumnetworks.com>
 
+	Backported from upstream
+
+	2012-11-17  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* common.opt (static-libasan): New option.
+	* gcc.c (LIBASAN_SPEC): New macro.
+	(LINK_COMMAND_SPEC): Replace -lasan with LIBASAN_SPEC.
+	* doc/invoke.texi: Document -static-libasan.
+
+2013-06-05  Manjunath Matti <mmatti@caviumnetworks.com>
+
 	2012-11-17  Jakub Jelinek  <jakub@redhat.com>
 
 	gcc/testsuite/

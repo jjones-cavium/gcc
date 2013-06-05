@@ -2452,6 +2452,9 @@ static-libgo
 Driver
 ; Documented for Go, but always accepted by driver.
 
+static-libasan
+Driver
+
 symbolic
 Driver
 
