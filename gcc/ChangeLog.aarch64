@@ -3,6 +3,10 @@
 	* config/aarch64/aarch64.md (*mov<mode>_aarch64): Revert the
 	patch "Generate movi instruction with shift if required"
 
+2013-06-03  Sofiane Naci  <sofiane.naci@arm.com>
+
+	* config/aarch64/aarch64.md (*movdi_aarch64): Define "simd" attribute.
+
 2013-05-31  Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_load_symref_appropriately):
