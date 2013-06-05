@@ -1,5 +1,18 @@
 2013-06-05  Manjunath Matti <mmatti@caviumnetworks.com>
 
+	Backported
+	
+	2012-11-15  Jakub Jelinek  <jakub@redhat.com>
+
+	* asan.c (report_error_func): Set DECL_IGNORED_P, don't touch
+	DECL_ASSEMBLER_NAME.
+	(asan_init_func): Likewise.
+	(asan_finish_file): Use void * instead of __asan_global * as
+	type of __asan_{,un}register_globals.  Set DECL_IGNORED_P on
+	the decls.
+
+2013-06-05  Manjunath Matti <mmatti@caviumnetworks.com>
+
 	Backported libsanitizer testcases.
 
 	2012-11-14  Jakub Jelinek  <jakub@redhat.com>
