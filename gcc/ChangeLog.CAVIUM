@@ -1,5 +1,14 @@
 2013-06-05  Manjunath Matti <mmatti@caviumnetworks.com>
 
+	2012-11-17  Jakub Jelinek  <jakub@redhat.com>
+
+	gcc/testsuite/
+	* lib/asan-dg.exp (asan_symbolize): Prune BFD: prefixed error messages
+	from addr2line_output.  Increment idx if asking for more than one address
+	in one object.
+
+2013-06-05  Manjunath Matti <mmatti@caviumnetworks.com>
+
 	Backported
 	
 	2012-11-15  Jakub Jelinek  <jakub@redhat.com>
@@ -17,7 +26,7 @@
 
 	2012-11-14  Jakub Jelinek  <jakub@redhat.com>
 
-	gcc/testsuite
+	gcc/testsuite/
 	* lib/asan-dg.exp: New file.
 	* gcc.dg/asan/asan.exp: New file.
 	* g++.dg/dg.exp: Prune also asan tests.
