@@ -135,6 +135,14 @@ struct tune_params
   const int memmov_cost;
 };
 
+struct simd_immediate_info
+{
+  rtx value;
+  int shift;
+  int element_width;
+  bool mvn;
+};
+
 HOST_WIDE_INT aarch64_initial_elimination_offset (unsigned, unsigned);
 bool aarch64_bitmask_imm (HOST_WIDE_INT val, enum machine_mode);
 bool aarch64_constant_address_p (rtx);
@@ -148,6 +156,7 @@ bool aarch64_legitimate_pic_operand_p (rtx);
 bool aarch64_move_imm (HOST_WIDE_INT, enum machine_mode);
 bool aarch64_mov_operand_p (rtx, enum aarch64_symbol_context,
 			    enum machine_mode);
+char *aarch64_output_scalar_simd_mov_immediate (rtx, enum machine_mode);
 char *aarch64_output_simd_mov_immediate (rtx, enum machine_mode, unsigned);
 bool aarch64_pad_arg_upward (enum machine_mode, const_tree);
 bool aarch64_pad_reg_upward (enum machine_mode, const_tree, bool);
