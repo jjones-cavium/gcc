@@ -1,3 +1,8 @@
+2013-06-05  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.md (*mov<mode>_aarch64): Revert the
+	patch "Generate movi instruction with shift if required"
+
 2013-05-31  Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_load_symref_appropriately):
