@@ -3178,6 +3178,25 @@
 )
 
 ;; Bitfield Insert (insv)
+(define_expand "insv"
+  [(set (zero_extract (match_operand 0 "register_operand")
+		      (match_operand 1 "const_int_operand")
+		      (match_operand 2 "const_int_operand"))
+	(match_operand 3 "general_operand"))]
+   ""
+{
+  rtx temp = 0;
+  if (GET_MODE (operands[0]) == SImode)
+    temp = gen_insvsi (operands[0], operands[1], operands[2], operands[3]);
+  else if (GET_MODE (operands[0]) == DImode)
+    temp = gen_insvdi (operands[0], operands[1], operands[2], operands[3]);
+  if (!temp)
+    FAIL;
+
+  emit_insn (temp);
+  DONE;
+})
+
 (define_expand "insv<mode>"
   [(set (zero_extract:GPI (match_operand:GPI 0 "register_operand")
 			  (match_operand 1 "const_int_operand")
