@@ -1,3 +1,8 @@
+2013-06-06  Marcus Shawcroft  <marcus.shawcroft@arm.com>
+
+	gcc.dg/vect/no-section-anchors-vect-68.c:
+	Add dg-skip-if aarch64_tiny.
+
 2013-06-04  Ian Bolton  <ian.bolton@arm.com>
 
 	* gcc.target/aarch64/movi_1.c: New test.
