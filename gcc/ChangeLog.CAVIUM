@@ -1,5 +1,10 @@
 2013-06-10  Andrew Pinski  <apinski@cavium.com>
 
+	* config/mips/mips.c (mips_classify_symbol): Consider local
+	symbols as global when -mxgot is used.
+
+2013-06-10  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/lib/asan-dg.exp (asan_init): Save off ALWAYS_CXXFLAGS.
 	(asan_finish): Restore ALWAYS_CXXFLAGS if needed.
 
