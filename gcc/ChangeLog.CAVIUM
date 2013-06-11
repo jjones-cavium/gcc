@@ -1,5 +1,9 @@
 2013-06-11  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/lib/asan-dg.exp (asan_finish): Fix TCL code and if/else's.
+
+2013-06-11  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/lib/target-supports.exp (check_effective_target_arm_fp16_ok_nocache):
 	Check both -mfloat-abi=softfp and -mfloat-abi=hard instead of just -mfloat-abi=softfp.
 	Add including of assert.h also.

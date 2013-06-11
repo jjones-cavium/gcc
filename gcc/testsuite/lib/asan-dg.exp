@@ -106,10 +106,12 @@ proc asan_finish { args } {
 
     if [info exists asan_saved_ALWAYS_CXXFLAGS ] {
 	set ALWAYS_CXXFLAGS ALWAYS_CXXFLAGS
-    } else if [info exists asan_saved_TEST_ALWAYS_FLAGS] {
-	set TEST_ALWAYS_FLAGS $asan_saved_TEST_ALWAYS_FLAGS
     } else {
-	unset TEST_ALWAYS_FLAGS
+	if [info exists asan_saved_TEST_ALWAYS_FLAGS] {
+	    set TEST_ALWAYS_FLAGS $asan_saved_TEST_ALWAYS_FLAGS
+	} else {
+	    unset TEST_ALWAYS_FLAGS
+	}
     }
 }
 
