@@ -2211,12 +2211,14 @@ proc check_effective_target_arm_fp16_ok_nocache { } {
     }
     # Add -mfpu for a VFP fp16 variant since there is no preprocessor
     # macro to check for this support.
-    set flags "-mfpu=vfpv4 -mfloat-abi=softfp"
-    if { [check_no_compiler_messages_nocache arm_fp16_ok assembly {
-	int dummy;
-    } "$flags"] } {
-	set et_arm_fp16_flags "$flags"
-	return 1
+    foreach flags {"-mfpu=vfpv4 -mfloat-abi=softfp" "-mfpu=vfpv4 -mfloat-abi=hard"} {
+      if { [check_no_compiler_messages_nocache arm_fp16_ok assembly {
+	    #include <assert.h>
+	    int dummy;
+      } "$flags"] } {
+	  set et_arm_fp16_flags "$flags"
+	  return 1
+      }
     }
 
     return 0
