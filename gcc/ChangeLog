@@ -499,6 +499,12 @@
 	* doc/invoke.texi: Document it.
 	* optabs.c (init_sync_libfuncs): Honor it.
 
+2012-04-16  Ulrich Weigand  <ulrich.weigand@linaro.org>
+
+	PR target/51819
+	* config/arm/arm.c (arm_print_operand): Fix invalid alignment
+	hints for 'A' operand types.
+
 2012-04-11  Eric Botcazou  <ebotcazou@adacore.com>
 
 	PR target/52624
