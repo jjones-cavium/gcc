@@ -205,6 +205,23 @@ along with GCC; see the file COPYING3.  If not see
    A destructor function that calls the runtime asan library function
    _asan_unregister_globals is also installed.  */
 
+
+/* Compatibility function for GCC 4.7 as make_ssa_name does not
+   support a type for an anonymous SSA_NAME.  */
+static tree
+asan_make_ssa_name (tree decl, gimple stmt)
+{
+  if (TYPE_P (decl) && is_gimple_reg_type (decl))
+    {
+      decl = create_tmp_var (decl, NULL);
+      add_referenced_var (decl);
+    }
+
+  return make_ssa_name (decl, stmt);
+}
+
+#define make_ssa_name asan_make_ssa_name
+
 alias_set_type asan_shadow_set = -1;
 
 /* Pointer types to 1 resp. 2 byte integers in shadow memory.  A separate

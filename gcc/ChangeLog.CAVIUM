@@ -1,3 +1,8 @@
+2013-06-13  Andrew Pinski  <apinski@cavium.com>
+
+	* asan.c (asan_make_ssa_name): New function for 4.7 compatibility.
+	(make_ssa_name): Define to asan_make_ssa_name.
+
 2013-06-11  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/lib/asan-dg.exp (asan_finish): Fix TCL code and if/else's.
