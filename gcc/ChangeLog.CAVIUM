@@ -1,4 +1,11 @@
 2013-06-14  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	* tsan.c (pass_tsan): Remove optinfo flag for 4.7 compatibility.
+	(pass_tsan_O0): Ditto.
+	* gimple.h (gimple_store_p): New predicate.
+	(gimple_assign_load_p): Likewise.
+
+2013-06-14  Manjunath Matti <mmatti@caviumnetworks.com>
 	
 	Backported from mainline
 	2012-11-22  Dmitry Vyukov  <dvyukov@google.com>

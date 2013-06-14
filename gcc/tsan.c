@@ -360,7 +360,6 @@ struct gimple_opt_pass pass_tsan =
  {
   GIMPLE_PASS,
   "tsan",				/* name  */
-  OPTGROUP_NONE,			/* optinfo_flags */
   tsan_gate,				/* gate  */
   tsan_pass,				/* execute  */
   NULL,					/* sub  */
@@ -388,7 +387,6 @@ struct gimple_opt_pass pass_tsan_O0 =
  {
   GIMPLE_PASS,
   "tsan0",				/* name  */
-  OPTGROUP_NONE,			/* optinfo_flags */
   tsan_gate_O0,				/* gate  */
   tsan_pass,				/* execute  */
   NULL,					/* sub  */
