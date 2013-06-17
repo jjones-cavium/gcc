@@ -1605,7 +1605,9 @@ asan_instrument (void)
 static bool
 gate_asan (void)
 {
-  return flag_asan != 0;
+  return flag_asan != 0
+	  && !lookup_attribute ("no_address_safety_analysis",
+				DECL_ATTRIBUTES (current_function_decl));
 }
 
 struct gimple_opt_pass pass_asan =
@@ -1631,7 +1633,7 @@ struct gimple_opt_pass pass_asan =
 static bool
 gate_asan_O0 (void)
 {
-  return flag_asan != 0 && !optimize;
+  return !optimize && gate_asan ();
 }
 
 struct gimple_opt_pass pass_asan_O0 =

@@ -1,3 +1,23 @@
+2013-06-17  Manjunath Matti <mmatti@caviumnetworks.com>
+	
+	2012-11-23  Jakub Jelinek  <jakub@redhat.com>
+	
+	PR sanitizer/55435
+	gcc/c-family/
+	* c-common.c (handle_no_address_safety_analysis_attribute): New 
+	function.
+	(c_common_attribute_table): Add no_address_safety_analysis.
+	
+	gcc/
+	* asan.c (gate_asan): Don't instrument functions with 
+	no_address_safety_analysis attribute.
+	(gate_asan_O0): Use !optimize && gate_asan ().
+	* doc/extend.texi (no_address_safety_analysis): Document new 
+	function attribute.
+	
+	gcc/testsuite/
+	* c-c++-common/asan/attrib-1.c: New test.
+
 2013-06-14  Manjunath Matti <mmatti@caviumnetworks.com>
 
 	* tsan.c (pass_tsan): Remove optinfo flag for 4.7 compatibility.
