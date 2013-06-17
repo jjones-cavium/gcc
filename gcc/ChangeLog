@@ -1,3 +1,8 @@
+2012-11-23  Tobias Burnus  <burnus@net-b.de>
+
+	* doc/invoke.texi (-fsanitize=address): Remove obsolete
+	remark.
+
 2012-11-23  Jakub Jelinek  <jakub@redhat.com>
 
 	* tsan.c: Fix up comment formatting.
