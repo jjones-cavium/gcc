@@ -1,4 +1,13 @@
 2013-06-17  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-11-23  Jakub Jelinek  <jakub@redhat.com>
+
+	* lib/asan-dg.exp (asan_symbolize): Remove all "BFD: " prefixed lines 
+	from the output.
+
+2013-06-17  Manjunath Matti <mmatti@caviumnetworks.com>
 	
 	2012-11-23  Jakub Jelinek  <jakub@redhat.com>
 	
