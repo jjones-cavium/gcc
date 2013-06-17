@@ -1,3 +1,7 @@
+2012-11-24  Jack Howarth <howarth@bromo.med.uc.edu>
+
+	* config/darwin.h (LINK_COMMAND_SPEC_A): Deal with -fsanitize=address.
+
 2012-11-23  Tobias Burnus  <burnus@net-b.de>
 
 	* doc/invoke.texi (-fsanitize=address): Remove obsolete
