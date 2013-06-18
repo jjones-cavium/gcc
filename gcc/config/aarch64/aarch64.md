@@ -3695,15 +3695,27 @@
 ;; don't have modes for ADRP and ADD instructions.  This is to allow high
 ;; and lo_sum's to be used with the labels defining the jump tables in
 ;; rodata section.
+(define_expand "add_losym"
+  [(match_operand 0 "register_operand" "=r")
+   (match_operand 1 "register_operand" "r")
+   (match_operand 2 "aarch64_valid_symref" "S")]
+""
+{
+  if (TARGET_64BIT)
+    emit_insn (gen_add_losym_di (operands[0], operands[1], operands[2]));
+  else
+    emit_insn (gen_add_losym_si (operands[0], operands[1], operands[2]));
+  DONE;
+})
 
-(define_insn "add_losym"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-	(lo_sum:DI (match_operand:DI 1 "register_operand" "r")
+(define_insn "add_losym_<mode>"
+  [(set (match_operand:P 0 "register_operand" "=r")
+	(lo_sum:P (match_operand:P 1 "register_operand" "r")
 		   (match_operand 2 "aarch64_valid_symref" "S")))]
   ""
   "add\\t%0, %1, :lo12:%a2"
   [(set_attr "v8type" "alu")
-   (set_attr "mode" "DI")]
+   (set_attr "mode" "<MODE>")]
 
 )
 

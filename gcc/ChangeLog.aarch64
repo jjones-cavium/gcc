@@ -1,3 +1,9 @@
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (add_losym): Change to an expand.
+	(add_losym_<mode>): New pattern.
+	* config/aarch64/iterators.md (P): New iterator.
+
 2013-06-17  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64-elf.h (DRIVER_SELF_SPECS): Fix typo.
