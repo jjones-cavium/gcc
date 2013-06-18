@@ -337,6 +337,14 @@
 	(read_rtx): Parse and read mappings for int iterators.
 	(read_rtx_code): Record int iterator usage.
 
+2012-06-13  Alexandre Oliva  <aoliva@redhat.com>
+
+	* common.opt (ftree-coalesce-inlined-vars): New.
+	(ftree-coalesce-vars): New.
+	* doc/invoke.texi: Document them.
+	* tree-ssa-copyrename.c (copy_rename_partition_coalesce):
+	Implement them.
+
 2012-06-13  Richard Sandiford  <rdsandiford@googlemail.com>
 
 	* read-rtl.c (mapping): Remove index field.  Add current_value field.
