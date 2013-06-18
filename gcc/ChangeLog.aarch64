@@ -1,3 +1,13 @@
+2013-06-17  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Change the linker script based
+	on the milp32/mlp64 options.
+	* config/aarch64/aarch64-elf.h (ASM_SPEC): Pass -milp32 and -mlp64 on to the assembler.
+	(ENDIAN_SPEC): Define.
+	(DRIVER_SELF_SPECS): Define.
+	* config/aarch64/aarch64.opt (milp32): New option.
+	(mlp64): New option.
+
 2013-06-12  Sofiane Naci  <sofiane.naci@arm.com>
 
 	* config/aarch64/aarch64-simd.md (aarch64_combine<mode>): convert to split.

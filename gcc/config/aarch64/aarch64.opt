@@ -98,3 +98,11 @@ Target RejectNegative Joined Var(aarch64_cpu_string)
 mtune=
 Target RejectNegative Joined Var(aarch64_tune_string)
 -mtune=CPU	Optimize for CPU
+
+milp32
+Target RejectNegative Negative(mlp64) InverseMask(64BIT)
+-milp32		Use the ILP32 ABI
+
+mlp64
+Target RejectNegative Negative(milp32) Mask(64BIT)
+-milp32		Use the LP64 ABI
