@@ -352,9 +352,13 @@
 ;; -------------------------------------------------------------------
 ;; Jumps and other miscellaneous insns
 ;; -------------------------------------------------------------------
+(define_expand "indirect_jump"
+  [(set (pc) (match_operand 0 "register_operand" "r"))]
+  ""
+  "gcc_assert (GET_MODE (operands[0]) == Pmode);")
 
-(define_insn "indirect_jump"
-  [(set (pc) (match_operand:DI 0 "register_operand" "r"))]
+(define_insn "indirect_jump_<mode>"
+  [(set (pc) (match_operand:P 0 "register_operand" "r"))]
   ""
   "br\\t%0"
   [(set_attr "v8type" "branch")]

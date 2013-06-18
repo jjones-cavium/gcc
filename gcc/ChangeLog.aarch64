@@ -1,5 +1,10 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.md (indirect_jump): Change to an expand.
+	(indirect_jump_<mode>): New pattern.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.md (casesi): Use Pmode instead of DImode.
 	Use gen_casesi_dispatch_di/gen_casesi_dispatch_si.
 	(casesi_dispatch): Rename to ...
