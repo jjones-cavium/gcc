@@ -1,5 +1,20 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.md (*call_reg): Rename to ...
+	(*call_reg_<mode>): This. Use P iterator in some cases.
+	(*call_symbol): Rename to ...
+	(*call_symbol_<mode>): This.  Use P iterator in some cases.
+	(*call_value_reg): Rename to ...
+	(*call_value_reg_<mode>): This.  Use P iterator in some cases.
+	(*call_value_symbol): Rename to ...
+	(*call_value_symbol_<mode>): This.  Use P iterator in some cases.
+	(*sibcall_insn): Rename to ...
+	(*sibcall_insn_<mode>): This.  Use P iterator in some cases.
+	(*sibcall_value_insn): Rename to ...
+	(*sibcall_value_insn_<mode>): This.  Use P iterator in some cases.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.md (add_losym): Change to an expand.
 	(add_losym_<mode>): New pattern.
 	* config/aarch64/iterators.md (P): New iterator.

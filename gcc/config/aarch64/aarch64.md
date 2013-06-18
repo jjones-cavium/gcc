@@ -612,8 +612,8 @@
   }"
 )
 
-(define_insn "*call_reg"
-  [(call (mem:DI (match_operand:DI 0 "register_operand" "r"))
+(define_insn "*call_reg_<mode>"
+  [(call (mem:P (match_operand:P 0 "register_operand" "r"))
 	 (match_operand 1 "" ""))
    (use (match_operand 2 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -622,8 +622,8 @@
   [(set_attr "v8type" "call")]
 )
 
-(define_insn "*call_symbol"
-  [(call (mem:DI (match_operand:DI 0 "" ""))
+(define_insn "*call_symbol_<mode>"
+  [(call (mem:P (match_operand:P 0 "" ""))
 	 (match_operand 1 "" ""))
    (use (match_operand 2 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -659,9 +659,9 @@
   }"
 )
 
-(define_insn "*call_value_reg"
+(define_insn "*call_value_reg<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:DI (match_operand:DI 1 "register_operand" "r"))
+	(call (mem:P (match_operand:P 1 "register_operand" "r"))
 		      (match_operand 2 "" "")))
    (use (match_operand 3 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -670,9 +670,9 @@
   [(set_attr "v8type" "call")]
 )
 
-(define_insn "*call_value_symbol"
+(define_insn "*call_value_symbol_<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:DI (match_operand:DI 1 "" ""))
+	(call (mem:P (match_operand:P 1 "" ""))
 	      (match_operand 2 "" "")))
    (use (match_operand 3 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -707,8 +707,8 @@
   }
 )
 
-(define_insn "*sibcall_insn"
-  [(call (mem:DI (match_operand:DI 0 "" "X"))
+(define_insn "*sibcall_insn_<mode>"
+  [(call (mem:P (match_operand:P 0 "" "X"))
 	 (match_operand 1 "" ""))
    (return)
    (use (match_operand 2 "" ""))]
@@ -717,9 +717,9 @@
   [(set_attr "v8type" "branch")]
 )
 
-(define_insn "*sibcall_value_insn"
+(define_insn "*sibcall_value_insn_<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:DI (match_operand 1 "" "X"))
+	(call (mem:P (match_operand 1 "" "X"))
 	      (match_operand 2 "" "")))
    (return)
    (use (match_operand 3 "" ""))]
