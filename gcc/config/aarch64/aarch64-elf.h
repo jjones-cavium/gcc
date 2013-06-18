@@ -132,7 +132,7 @@
 #undef DRIVER_SELF_SPECS
 #define DRIVER_SELF_SPECS \
   " %{!mbig-endian:%{!mlittle-endian:" ENDIAN_SPEC "}}" \
-  " %{!milp32:%{!mlp64:-mpl64}}"
+  " %{!milp32:%{!mlp64:-mlp64}}"
 
 #undef TYPE_OPERAND_FMT
 #define TYPE_OPERAND_FMT	"%%%s"

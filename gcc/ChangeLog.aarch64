@@ -1,5 +1,9 @@
 2013-06-17  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64-elf.h (DRIVER_SELF_SPECS): Fix typo.
+
+2013-06-17  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.c (aarch64_save_or_restore_callee_save_registers):
 	Use DImode instead of Pmode.
 	(initialize_aarch64_code_model): Error out when ilp32 and large code model is used.
