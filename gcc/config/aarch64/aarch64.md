@@ -826,8 +826,8 @@
 )
 
 (define_insn "*movsi_aarch64"
-  [(set (match_operand:SI 0 "nonimmediate_operand" "=r,r,r,*w,m,  m,*w, r,*w")
-	(match_operand:SI 1 "aarch64_mov_operand"  " r,M,m, m,rZ,*w,rZ,*w,*w"))]
+  [(set (match_operand:SI 0 "nonimmediate_operand" "=r,r,r,*w,m,  m,*w, r,*w,r")
+	(match_operand:SI 1 "aarch64_mov_operand"  " r,M,m, m,rZ,*w,rZ,*w,*w,Ush"))]
   "(register_operand (operands[0], SImode)
     || aarch64_reg_or_zero (operands[1], SImode))"
   "@
@@ -839,10 +839,11 @@
    str\\t%s1, %0
    fmov\\t%s0, %w1
    fmov\\t%w0, %s1
-   fmov\\t%s0, %s1"
-  [(set_attr "v8type" "move,alu,load1,load1,store1,store1,fmov,fmov,fmov")
+   fmov\\t%s0, %s1
+   adrp\\t%0, %A1"
+  [(set_attr "v8type" "move,alu,load1,load1,store1,store1,fmov,fmov,fmov,adr")
    (set_attr "mode" "SI")
-   (set_attr "fp" "*,*,*,yes,*,yes,yes,yes,yes")]
+   (set_attr "fp" "*,*,*,yes,*,yes,yes,yes,yes,*")]
 )
 
 (define_insn "*movdi_aarch64"
@@ -3713,7 +3714,7 @@
 	(lo_sum:P (match_operand:P 1 "register_operand" "r")
 		   (match_operand 2 "aarch64_valid_symref" "S")))]
   ""
-  "add\\t%0, %1, :lo12:%a2"
+  "add\\t%<w>0, %<w>1, :lo12:%a2"
   [(set_attr "v8type" "alu")
    (set_attr "mode" "<MODE>")]
 
