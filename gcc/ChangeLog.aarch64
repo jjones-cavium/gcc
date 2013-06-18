@@ -1,7 +1,14 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.md (casesi): Use Pmode instead of DImode.
+	Use gen_casesi_dispatch_di/gen_casesi_dispatch_si.
+	(casesi_dispatch): Rename to ...
+	(casesi_dispatch_<mode>): This. Use P iterator in some cases.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.md (*movsi_aarch64): Add Ush for ILP32 mode.
-	(add_losym_<mode>): Add <w> to the operands.
+	(add_losym_<mode>): Add <w> to the operands of the instruction.
 
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 

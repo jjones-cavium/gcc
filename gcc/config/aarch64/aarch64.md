@@ -444,17 +444,21 @@
 						 const0_rtx),
 				    operands[0], operands[2], operands[4]));
 
-    operands[2] = force_reg (DImode, gen_rtx_LABEL_REF (VOIDmode, operands[3]));
-    emit_jump_insn (gen_casesi_dispatch (operands[2], operands[0],
-					 operands[3]));
+    operands[2] = force_reg (Pmode, gen_rtx_LABEL_REF (VOIDmode, operands[3]));
+    if (TARGET_64BIT)
+      emit_jump_insn (gen_casesi_dispatch_di (operands[2], operands[0],
+					      operands[3]));
+    else
+      emit_jump_insn (gen_casesi_dispatch_si (operands[2], operands[0],
+					      operands[3]));
     DONE;
   }
 )
 
-(define_insn "casesi_dispatch"
+(define_insn "casesi_dispatch_<mode>"
   [(parallel
     [(set (pc)
-	  (mem:DI (unspec [(match_operand:DI 0 "register_operand" "r")
+	  (mem:P (unspec [(match_operand:P 0 "register_operand" "r")
 			   (match_operand:SI 1 "register_operand" "r")]
 			UNSPEC_CASESI)))
      (clobber (reg:CC CC_REGNUM))
