@@ -95,7 +95,7 @@
 
 #define INT_TYPE_SIZE		32
 
-#define LONG_TYPE_SIZE		64	/* XXX This should be an option */
+#define LONG_TYPE_SIZE		(TARGET_64BIT ? 64 : 32)
 
 #define LONG_LONG_TYPE_SIZE	64
 
@@ -104,6 +104,8 @@
 #define DOUBLE_TYPE_SIZE	64
 
 #define LONG_DOUBLE_TYPE_SIZE	128
+
+#define POINTER_SIZE (TARGET_64BIT ? 64 : 32)
 
 /* The architecture reserves all bits of the address for hardware use,
    so the vbit must go into the delta field of pointers to member
@@ -709,7 +711,7 @@ do {									     \
 
 #define NO_FUNCTION_CSE	1
 
-#define Pmode		DImode
+#define Pmode		(TARGET_64BIT?DImode:SImode)
 #define FUNCTION_MODE	Pmode
 
 #define SELECT_CC_MODE(OP, X, Y)	aarch64_select_cc_mode (OP, X, Y)

@@ -1,5 +1,14 @@
 2013-06-17  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_save_or_restore_callee_save_registers):
+	Use DImode instead of Pmode.
+	(initialize_aarch64_code_model): Error out when ilp32 and large code model is used.
+	* config/aarch64/aarch64.h (LONG_TYPE_SIZE): Define based on -milp32.
+	(Pmode): Likewise.
+	(POINTER_SIZE): New define.
+
+2013-06-17  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Change the linker script based
 	on the milp32/mlp64 options.
 	* config/aarch64/aarch64-elf.h (ASM_SPEC): Pass -milp32 and -mlp64 on to the assembler.

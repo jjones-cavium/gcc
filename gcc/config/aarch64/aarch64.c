@@ -1829,7 +1829,7 @@ aarch64_save_or_restore_callee_save_registers (HOST_WIDE_INT offset,
       if (aarch64_register_saved_on_entry (regno))
 	{
 	  rtx mem;
-	  mem = gen_mem_ref (Pmode,
+	  mem = gen_mem_ref (DImode,
 			     plus_constant (base_rtx,
 					    start_offset));
 
@@ -1845,7 +1845,7 @@ aarch64_save_or_restore_callee_save_registers (HOST_WIDE_INT offset,
 	    {
 	      rtx mem2;
 	      /* Next highest register to be saved.  */
-	      mem2 = gen_mem_ref (Pmode,
+	      mem2 = gen_mem_ref (DImode,
 				  plus_constant
 				  (base_rtx,
 				   start_offset + increment));
@@ -4980,6 +4980,13 @@ aarch64_init_expanders (void)
 static void
 initialize_aarch64_code_model (void)
 {
+
+  if (!TARGET_64BIT && aarch64_cmodel_var == AARCH64_CMODEL_LARGE)
+    {
+      error ("code model %qs does not work with ILP32 code.\n", "large");
+      aarch64_cmodel_var = AARCH64_CMODEL_SMALL;
+    }
+
    if (flag_pic)
      {
        switch (aarch64_cmodel_var)
