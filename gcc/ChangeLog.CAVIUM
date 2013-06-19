@@ -4,6 +4,15 @@
 
 	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
 
+	* asan.c (instrument_assignment): Instrument lhs only
+	for gimple_store_p and rhs1 only for gimple_assign_load_p.
+
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
+
 	* lib/asan-dg.exp (asan_get_gtest_test_list,
 	asan_get_gtest_expect_death_list, asan-gtest): New procedures.
 	(proc ${tool}_load): Remember [asan_get_gtest_test_list "$output"]
