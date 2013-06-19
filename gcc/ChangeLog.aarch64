@@ -1,5 +1,11 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.md (add_losym_<mode>): Use PTR
+	iterator instead of P iterator.
+	* config/aarch64/iterators.md (P): Remove as PTR is the same.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.c (aarch64_expand_prologue):
 	Use gen_storewb_pairdi_si for !TARGET_64BIT.
 	(aarch64_expand_epilogue): Use gen_loadwb_pairdi_si

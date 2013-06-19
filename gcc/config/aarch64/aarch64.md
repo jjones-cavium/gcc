@@ -3720,8 +3720,8 @@
 })
 
 (define_insn "add_losym_<mode>"
-  [(set (match_operand:P 0 "register_operand" "=r")
-	(lo_sum:P (match_operand:P 1 "register_operand" "r")
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+	(lo_sum:PTR (match_operand:PTR 1 "register_operand" "r")
 		   (match_operand 2 "aarch64_valid_symref" "S")))]
   ""
   "add\\t%<w>0, %<w>1, :lo12:%a2"

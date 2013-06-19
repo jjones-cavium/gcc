@@ -26,10 +26,6 @@
 ;; Iterator for General Purpose Integer registers (32- and 64-bit modes)
 (define_mode_iterator GPI [SI DI])
 
-;; This mode iterator allows :P to be used for patterns that operate on
-;; pointer-sized quantities.  Exactly one of the two alternatives will match.
-(define_mode_iterator P [(SI "Pmode == SImode") (DI "Pmode == DImode")])
-
 ;; Iterator for QI and HI modes
 (define_mode_iterator SHORT [QI HI])
 
