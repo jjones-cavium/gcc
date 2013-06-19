@@ -69,6 +69,12 @@
 	* doc/extend.texi (no_address_safety_analysis): Document new
 	function attribute.
 
+2012-11-14  Jan Hubicka  <jh@suse.cz>
+
+	* tree.c (set_call_expr_flags): New function.
+	(local_define_builtin): Use it.
+	* tree.h (set_call_expr_flags): Declare.
+
 2012-11-22  Dmitry Vyukov  <dvyukov@google.com>
 	    Wei Mi  <wmi@google.com>
 

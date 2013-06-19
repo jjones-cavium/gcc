@@ -2,6 +2,16 @@
 
 	Backported from mainline.
 
+	2012-11-14  Jan Hubicka  <jh@suse.cz>
+
+	* tree.c (set_call_expr_flags): New function.
+	(local_define_builtin): Use it.
+	* tree.h (set_call_expr_flags): Declare.
+
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
 	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
 
 	* sanitizer.def: Add Address Sanitizer builtins.
