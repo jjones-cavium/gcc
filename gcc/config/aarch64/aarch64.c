@@ -2050,12 +2050,21 @@ aarch64_expand_prologue (void)
 	    }
 	  else
 	    {
-	      insn = emit_insn (gen_storewb_pairdi_di
-				(stack_pointer_rtx, stack_pointer_rtx,
-				 hard_frame_pointer_rtx,
-				 gen_rtx_REG (DImode, LR_REGNUM),
-				 GEN_INT (-offset),
-				 GEN_INT (GET_MODE_SIZE (DImode) - offset)));
+	      if (TARGET_64BIT)
+	        insn = emit_insn (gen_storewb_pairdi_di
+				  (stack_pointer_rtx, stack_pointer_rtx,
+				   hard_frame_pointer_rtx,
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (-offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) - offset)));
+	      else
+	        insn = emit_insn (gen_storewb_pairdi_si
+				  (stack_pointer_rtx, stack_pointer_rtx,
+				   gen_lowpart (DImode, hard_frame_pointer_rtx),
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (-offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) - offset)));
+		
 	      RTX_FRAME_RELATED_P (XVECEXP (PATTERN (insn), 0, 2)) = 1;
 	    }
 
@@ -2191,13 +2200,22 @@ aarch64_expand_epilogue (bool for_sibcall)
 	    }
 	  else
 	    {
-	      insn = emit_insn (gen_loadwb_pairdi_di
-				(stack_pointer_rtx,
-				 stack_pointer_rtx,
-				 hard_frame_pointer_rtx,
-				 gen_rtx_REG (DImode, LR_REGNUM),
-				 GEN_INT (offset),
-				 GEN_INT (GET_MODE_SIZE (DImode) + offset)));
+	      if (TARGET_64BIT)
+	        insn = emit_insn (gen_loadwb_pairdi_di
+				  (stack_pointer_rtx,
+				   stack_pointer_rtx,
+				   hard_frame_pointer_rtx,
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) + offset)));
+	      else
+	        insn = emit_insn (gen_loadwb_pairdi_si
+				  (stack_pointer_rtx,
+				   stack_pointer_rtx,
+				   gen_lowpart (DImode, hard_frame_pointer_rtx),
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) + offset)));
 	      RTX_FRAME_RELATED_P (XVECEXP (PATTERN (insn), 0, 2)) = 1;
 	      add_reg_note (insn, REG_CFA_ADJUST_CFA,
 			    (gen_rtx_SET (Pmode, stack_pointer_rtx,

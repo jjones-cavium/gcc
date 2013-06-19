@@ -1,5 +1,23 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_expand_prologue):
+	Use gen_storewb_pairdi_si for !TARGET_64BIT.
+	(aarch64_expand_epilogue): Use gen_loadwb_pairdi_si
+	for !TARGET_64BIT.
+	* config/aarch64/aarch64.md (indirect_jump_<mode>): Use PTR iterator
+	instead of the P iterator.
+	(casesi_dispatch_<mode>): Likewise.
+	(*call_reg_<mode>): Likewise.
+	(*call_symbol_<mode>): Likewise.
+	(*call_value_reg<mode>): Likewise.
+	(*call_value_symbol_<mode>): Likewise.
+	(*sibcall_insn_<mode>): Likewise.
+	(*sibcall_value_insn_<mode>): Likewise.
+	(stack_tie): Change to expand.
+	(stack_tie_<mode>): New pattern.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* gcc/config/aarch64/aarch64.md (*movsi_aarch64): Add stack register
 	moves to the pattern for ILP32 mode.
 

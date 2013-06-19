@@ -358,7 +358,7 @@
   "gcc_assert (GET_MODE (operands[0]) == Pmode);")
 
 (define_insn "indirect_jump_<mode>"
-  [(set (pc) (match_operand:P 0 "register_operand" "r"))]
+  [(set (pc) (match_operand:PTR 0 "register_operand" "r"))]
   ""
   "br\\t%0"
   [(set_attr "v8type" "branch")]
@@ -462,7 +462,7 @@
 (define_insn "casesi_dispatch_<mode>"
   [(parallel
     [(set (pc)
-	  (mem:P (unspec [(match_operand:P 0 "register_operand" "r")
+	  (mem:PTR (unspec [(match_operand:PTR 0 "register_operand" "r")
 			   (match_operand:SI 1 "register_operand" "r")]
 			UNSPEC_CASESI)))
      (clobber (reg:CC CC_REGNUM))
@@ -621,7 +621,7 @@
 )
 
 (define_insn "*call_reg_<mode>"
-  [(call (mem:P (match_operand:P 0 "register_operand" "r"))
+  [(call (mem:PTR (match_operand:PTR 0 "register_operand" "r"))
 	 (match_operand 1 "" ""))
    (use (match_operand 2 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -631,7 +631,7 @@
 )
 
 (define_insn "*call_symbol_<mode>"
-  [(call (mem:P (match_operand:P 0 "" ""))
+  [(call (mem:PTR (match_operand:PTR 0 "" ""))
 	 (match_operand 1 "" ""))
    (use (match_operand 2 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -669,7 +669,7 @@
 
 (define_insn "*call_value_reg<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:P (match_operand:P 1 "register_operand" "r"))
+	(call (mem:PTR (match_operand:PTR 1 "register_operand" "r"))
 		      (match_operand 2 "" "")))
    (use (match_operand 3 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -680,7 +680,7 @@
 
 (define_insn "*call_value_symbol_<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:P (match_operand:P 1 "" ""))
+	(call (mem:PTR (match_operand:PTR 1 "" ""))
 	      (match_operand 2 "" "")))
    (use (match_operand 3 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -716,7 +716,7 @@
 )
 
 (define_insn "*sibcall_insn_<mode>"
-  [(call (mem:P (match_operand:P 0 "" "X"))
+  [(call (mem:PTR (match_operand:PTR 0 "" "X"))
 	 (match_operand 1 "" ""))
    (return)
    (use (match_operand 2 "" ""))]
@@ -727,7 +727,7 @@
 
 (define_insn "*sibcall_value_insn_<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:P (match_operand 1 "" "X"))
+	(call (mem:PTR (match_operand 1 "" "X"))
 	      (match_operand 2 "" "")))
    (return)
    (use (match_operand 3 "" ""))]
@@ -3809,10 +3809,20 @@
   [(set_attr "v8type" "call")
    (set_attr "length" "16")])
 
-(define_insn "stack_tie"
+(define_expand "stack_tie"
   [(set (mem:BLK (scratch))
-	(unspec:BLK [(match_operand:DI 0 "register_operand" "rk")
-		     (match_operand:DI 1 "register_operand" "rk")]
+	(unspec:BLK [(match_operand 0 "register_operand" "rk")
+		     (match_operand 1 "register_operand" "rk")]
+		    UNSPEC_PRLG_STK))]
+  ""
+{
+  gcc_assert (GET_MODE (operands[0]) == Pmode);
+})
+
+(define_insn "stack_tie_<mode>"
+  [(set (mem:BLK (scratch))
+	(unspec:BLK [(match_operand:PTR 0 "register_operand" "rk")
+		     (match_operand:PTR 1 "register_operand" "rk")]
 		    UNSPEC_PRLG_STK))]
   ""
   ""
