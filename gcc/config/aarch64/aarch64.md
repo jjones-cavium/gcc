@@ -518,8 +518,16 @@
   [(set_attr "v8type" "branch")]
 )
 
-(define_insn "eh_return"
-  [(unspec_volatile [(match_operand:DI 0 "register_operand" "r")]
+(define_expand "eh_return"
+  [(unspec_volatile [(match_operand 0 "register_operand" "r")]
+    UNSPECV_EH_RETURN)]
+  ""
+{
+  gcc_assert (GET_MODE (operands[0]) == Pmode);
+})
+
+(define_insn "eh_return<mode>"
+  [(unspec_volatile [(match_operand:PTR 0 "register_operand" "r")]
     UNSPECV_EH_RETURN)]
   ""
   "#"
@@ -527,7 +535,7 @@
 )
 
 (define_split
-  [(unspec_volatile [(match_operand:DI 0 "register_operand" "")]
+  [(unspec_volatile [(match_operand:PTR 0 "register_operand" "")]
     UNSPECV_EH_RETURN)]
   "reload_completed"
   [(set (match_dup 1) (match_dup 0))]

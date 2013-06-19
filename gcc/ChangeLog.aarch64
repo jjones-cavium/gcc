@@ -1,5 +1,15 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_expand_epilogue):
+	Use Pmode for IP0_REGNUM in one place.
+	(aarch64_final_eh_return_addr): Use Pmode for LR_REGNUM
+	and the addition of the memory.
+	* config/aarch64/aarch64.md (eh_frame): Change to an expand.
+	(eh_return<mode>): New insn.
+	(split for UNSPECV_EH_RETURN): Use PTR iterator.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.md (add_losym_<mode>): Use PTR
 	iterator instead of P iterator.
 	* config/aarch64/iterators.md (P): Remove as PTR is the same.

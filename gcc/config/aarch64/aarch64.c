@@ -2265,7 +2265,7 @@ aarch64_expand_epilogue (bool for_sibcall)
 	 as a temporary register to hold the current SP value.  The
 	 CFA is described using IP0 then SP is modified.  */
 
-      rtx ip0 = gen_rtx_REG (DImode, IP0_REGNUM);
+      rtx ip0 = gen_rtx_REG (Pmode, IP0_REGNUM);
 
       insn = emit_move_insn (ip0, stack_pointer_rtx);
       add_reg_note (insn, REG_CFA_DEF_CFA, ip0);
@@ -2339,7 +2339,7 @@ aarch64_final_eh_return_addr (void)
     - cfun->machine->frame.saved_regs_size;
 
   if (cfun->machine->frame.reg_offset[LR_REGNUM] < 0)
-    return gen_rtx_REG (DImode, LR_REGNUM);
+    return gen_rtx_REG (Pmode, LR_REGNUM);
 
   /* DSE and CSELIB do not detect an alias between sp+k1 and fp+k2.  This can
      result in a store to save LR introduced by builtin_eh_return () being
@@ -2355,17 +2355,17 @@ aarch64_final_eh_return_addr (void)
   if (frame_pointer_needed)
     {
       if (fp_offset)
-        return gen_frame_mem (DImode,
+        return gen_frame_mem (Pmode,
 			      plus_constant (hard_frame_pointer_rtx, UNITS_PER_WORD));
       else
-        return gen_frame_mem (DImode,
+        return gen_frame_mem (Pmode,
 			      plus_constant (stack_pointer_rtx, UNITS_PER_WORD));
     }
 
   /* If FP is not needed, we calculate the location of LR, which would be
      at the top of the saved registers block.  */
 
-  return gen_frame_mem (DImode,
+  return gen_frame_mem (Pmode,
 			plus_constant (stack_pointer_rtx,
 				       fp_offset
 				       + cfun->machine->frame.saved_regs_size
