@@ -1,5 +1,10 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* gcc/config/aarch64/aarch64.md (*movsi_aarch64): Add stack register
+	moves to the pattern for ILP32 mode.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.md (indirect_jump): Change to an expand.
 	(indirect_jump_<mode>): New pattern.
 
