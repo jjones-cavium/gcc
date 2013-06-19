@@ -19,6 +19,7 @@
    <http://www.gnu.org/licenses/>.  */
 
 #define _FP_W_TYPE_SIZE		64
+
 #ifdef __LP64__
 #define _FP_W_TYPE		unsigned long
 #define _FP_WS_TYPE		signed long
