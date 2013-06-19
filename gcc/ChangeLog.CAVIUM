@@ -1,3 +1,15 @@
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-11-30  Jakub Jelinek  <jakub@redhat.com>
+
+	* tsan.c (is_load_of_const_p): Removed.
+	(instrument_expr): Use result of get_inner_reference
+	instead of get_base_address, avoid some unnecessary tests,
+	use !pt_solution_includes and !may_be_aliased tests to
+	check whether base might escape current function.
+
 2013-06-17  Manjunath Matti <mmatti@caviumnetworks.com>
 
 	Backported from mainline.
