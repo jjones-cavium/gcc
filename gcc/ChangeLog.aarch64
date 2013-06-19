@@ -1,5 +1,11 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_expand_prologue):
+	Use DImode version of hard_frame_pointer_rtx.
+	(aarch64_expand_epilogue): Likewise.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.c (aarch64_expand_epilogue):
 	Use Pmode for IP0_REGNUM in one place.
 	(aarch64_final_eh_return_addr): Use Pmode for LR_REGNUM

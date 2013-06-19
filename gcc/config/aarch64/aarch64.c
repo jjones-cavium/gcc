@@ -2043,7 +2043,7 @@ aarch64_expand_prologue (void)
 						     fp_offset
 						     + UNITS_PER_WORD));
 	      insn = emit_insn (gen_store_pairdi (mem_fp,
-						  hard_frame_pointer_rtx,
+						  gen_lowpart (DImode, hard_frame_pointer_rtx),
 						  mem_lr,
 						  gen_rtx_REG (DImode,
 							       LR_REGNUM)));
@@ -2192,7 +2192,7 @@ aarch64_expand_epilogue (bool for_sibcall)
 				      plus_constant (stack_pointer_rtx,
 						     fp_offset
 						     + UNITS_PER_WORD));
-	      insn = emit_insn (gen_load_pairdi (hard_frame_pointer_rtx,
+	      insn = emit_insn (gen_load_pairdi (gen_lowpart (DImode, hard_frame_pointer_rtx),
 						 mem_fp,
 						 gen_rtx_REG (DImode,
 							      LR_REGNUM),
