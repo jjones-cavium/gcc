@@ -1,5 +1,10 @@
 2013-06-18  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_output_mi_thunk): Support
+	32bit vcall_offsets for !TARGET_64BIT.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.c (aarch64_expand_prologue):
 	Use DImode version of hard_frame_pointer_rtx.
 	(aarch64_expand_epilogue): Likewise.

@@ -2492,7 +2492,7 @@ aarch64_output_mi_thunk (FILE *file, tree thunk ATTRIBUTE_UNUSED,
     aarch64_add_constant (this_regno, IP1_REGNUM, delta);
   else
     {
-      gcc_assert ((vcall_offset & 0x7) == 0);
+      gcc_assert ((vcall_offset & (TARGET_64BIT ? 0x7 : 0x3) ) == 0);
 
       this_rtx = gen_rtx_REG (Pmode, this_regno);
       temp0 = gen_rtx_REG (Pmode, IP0_REGNUM);
