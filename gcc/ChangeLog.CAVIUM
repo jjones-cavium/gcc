@@ -9,6 +9,29 @@
 
 2013-06-20  Manjunath Matti <mmatti@caviumnetworks.com>
 
+	Backported from mainline.
+
+	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55439
+	* Makefile.in (tsan.o): Depend on tree-ssa-propagate.h.
+	* sanitizer.def: Add __tsan_atomic* builtins.
+	* asan.c (initialize_sanitizer_builtins): Adjust to also
+	initialize __tsan_atomic* builtins.
+	* tsan.c: Include tree-ssa-propagate.h.
+	(enum tsan_atomic_action): New enum.
+	(tsan_atomic_table): New table.
+	(instrument_builtin_call): New function.
+	(instrument_gimple): Take pointer to gimple_stmt_iterator
+	instead of gimple_stmt_iterator.  Call instrument_builtin_call
+	on builtin call stmts.
+	(instrument_memory_accesses): Adjust instrument_gimple caller.
+	* builtin-types.def (BT_FN_BOOL_VPTR_PTR_I1_INT_INT,
+	BT_FN_BOOL_VPTR_PTR_I2_INT_INT, BT_FN_BOOL_VPTR_PTR_I4_INT_INT,
+	BT_FN_BOOL_VPTR_PTR_I8_INT_INT, BT_FN_BOOL_VPTR_PTR_I16_INT_INT): New.
+
+2013-06-20  Manjunath Matti <mmatti@caviumnetworks.com>
+
 	* gimple.c (get_base_address): Do not return NULL_TREE apart 
 	from for WITH_SIZE_EXPR.
 
