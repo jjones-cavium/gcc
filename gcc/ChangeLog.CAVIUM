@@ -1,3 +1,8 @@
+2013-06-20  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	* gimple.c (get_base_address): Do not return NULL_TREE apart 
+	from for WITH_SIZE_EXPR.
+
 2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
 
 	Backported from mainline.
