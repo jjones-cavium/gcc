@@ -1,5 +1,10 @@
 2013-06-20  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_trampoline_init):
+	Support Pmode being SImode.
+
+2013-06-20  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.c (aarch64_elf_asm_constructor): Use
 	.word for !TARGET64_BIT.
 	(aarch64_elf_asm_destructor): Likewise.

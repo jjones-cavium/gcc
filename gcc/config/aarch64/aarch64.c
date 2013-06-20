@@ -4092,11 +4092,18 @@ aarch64_trampoline_init (rtx m_tramp, tree fndecl, rtx chain_value)
   /* Don't need to copy the trailing D-words, we fill those in below.  */
   emit_block_move (m_tramp, assemble_trampoline_template (),
 		   GEN_INT (TRAMPOLINE_SIZE - 16), BLOCK_OP_NORMAL);
-  mem = adjust_address (m_tramp, DImode, 16);
+  mem = adjust_address (m_tramp, Pmode, 16);
+
+  if (!TARGET_64BIT && BYTES_BIG_ENDIAN)
+    mem = adjust_address (mem, Pmode, 4);
+
   fnaddr = XEXP (DECL_RTL (fndecl), 0);
   emit_move_insn (mem, fnaddr);
 
-  mem = adjust_address (m_tramp, DImode, 24);
+  mem = adjust_address (m_tramp, Pmode, 24);
+
+  if (!TARGET_64BIT && BYTES_BIG_ENDIAN)
+    mem = adjust_address (mem, Pmode, 4);
   emit_move_insn (mem, chain_value);
 
   /* XXX We should really define a "clear_cache" pattern and use
