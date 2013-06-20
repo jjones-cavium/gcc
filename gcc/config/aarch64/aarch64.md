@@ -3738,16 +3738,16 @@
 
 )
 
-(define_insn "ldr_got_small"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-	(unspec:DI [(mem:DI (lo_sum:DI
-			      (match_operand:DI 1 "register_operand" "r")
-			      (match_operand:DI 2 "aarch64_valid_symref" "S")))]
+(define_insn "ldr_got_small_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+	(unspec:PTR [(mem:PTR (lo_sum:PTR
+			      (match_operand:PTR 1 "register_operand" "r")
+			      (match_operand:PTR 2 "aarch64_valid_symref" "S")))]
 		   UNSPEC_GOTSMALLPIC))]
   ""
-  "ldr\\t%0, [%1, #:got_lo12:%a2]"
+  "ldr\\t%<w>0, [%1, #:got_lo12:%a2]"
   [(set_attr "v8type" "load1")
-   (set_attr "mode" "DI")]
+   (set_attr "mode" "<MODE>")]
 )
 
 (define_insn "aarch64_load_tp_hard"
