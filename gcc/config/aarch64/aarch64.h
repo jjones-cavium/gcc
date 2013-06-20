@@ -826,5 +826,4 @@ extern enum aarch64_code_model aarch64_cmodel;
 
 #define MULTILIB_DEFAULTS { "mlp64" }
 
-
 #endif /* GCC_AARCH64_H */
