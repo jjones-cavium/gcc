@@ -4159,7 +4159,7 @@ aarch64_elf_asm_constructor (rtx symbol, int priority)
       s = get_section (buf, SECTION_WRITE, NULL);
       switch_to_section (s);
       assemble_align (POINTER_SIZE);
-      fputs ("\t.dword\t", asm_out_file);
+      fputs (TARGET_64BIT ? "\t.dword\t" : "\t.word\t", asm_out_file);
       output_addr_const (asm_out_file, symbol);
       fputc ('\n', asm_out_file);
     }
@@ -4178,7 +4178,7 @@ aarch64_elf_asm_destructor (rtx symbol, int priority)
       s = get_section (buf, SECTION_WRITE, NULL);
       switch_to_section (s);
       assemble_align (POINTER_SIZE);
-      fputs ("\t.dword\t", asm_out_file);
+      fputs (TARGET_64BIT ? "\t.dword\t" : "\t.word\t", asm_out_file);
       output_addr_const (asm_out_file, symbol);
       fputc ('\n', asm_out_file);
     }
