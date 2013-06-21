@@ -1,3 +1,12 @@
+2013-06-21  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* gcc.target/arm/ftest-armv4t-thumb.c: Skip for soft-float Thumb.
+	* gcc.target/arm/ftest-armv5t-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv5te-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6k-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6z-thumb.c: Likewise.
+
 2013-06-20  Manjunath Matti <mmatti@caviumnetworks.com>
 
 	* gimple.c (get_base_address): Do not return NULL_TREE apart 
