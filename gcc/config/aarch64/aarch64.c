@@ -2954,7 +2954,7 @@ aarch64_classify_address (struct aarch64_address_info *info,
   enum rtx_code code = GET_CODE (x);
   rtx op0, op1;
   bool allow_reg_index_p =
-    outer_code != PARALLEL && GET_MODE_SIZE(mode) != 16;
+    outer_code != PARALLEL && GET_MODE_SIZE(mode) != 16 && TARGET_64BIT;
 
   /* Don't support anything other than POST_INC or REG addressing for
      AdvSIMD.  */

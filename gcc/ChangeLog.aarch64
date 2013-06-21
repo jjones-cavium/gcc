@@ -1,5 +1,12 @@
 2013-06-20  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_classify_address): Don't
+	allow reg index mode for ILP32 (note we can allow it if we know for a
+	fact it is really an index here and not the pointer and we sign extend it
+	but that is too much work for now).
+
+2013-06-20  Andrew Pinski  <apinski@cavium.com>
+
 	* testsuite/gcc.target/aarch64/aapcs64/test_18.c: Use long long
 	for ILP32.
 
