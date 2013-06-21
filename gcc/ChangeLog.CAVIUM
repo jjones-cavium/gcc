@@ -1,3 +1,9 @@
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	* gcc/tsanc.c (instrument_builtin_call) Call 
+	gimple_build_assign_with_ops_stat instead of 
+	gimple_build_assign_with_ops based on the number of parameters.
+
 2013-06-21  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* gcc.target/arm/ftest-armv4t-thumb.c: Skip for soft-float Thumb.

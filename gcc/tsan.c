@@ -561,7 +561,7 @@ instrument_builtin_call (gimple_stmt_iterator *gsi)
 		t = make_ssa_name (TREE_TYPE (TREE_TYPE (decl)), stmt);
 		cond = build2 (NE_EXPR, boolean_type_node, t,
 			       build_int_cst (TREE_TYPE (t), 0));
-		g = gimple_build_assign_with_ops (COND_EXPR, lhs, cond,
+		g = gimple_build_assign_with_ops_stat (COND_EXPR, lhs, cond,
 						  args[1],
 						  gimple_assign_lhs (g));
 		gimple_call_set_lhs (stmt, t);
