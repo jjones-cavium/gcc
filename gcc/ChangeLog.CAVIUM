@@ -4,6 +4,15 @@
 
 	2012-12-10  Jakub Jelinek  <jakub@redhat.com>
 
+	* g++.dg/asan/asan_test.cc: Sync from upstream.
+	* g++.dg/asan/asan_test_utils.h: Likewise.
+
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-10  Jakub Jelinek  <jakub@redhat.com>
+
 	* asan.c (asan_init_shadow_ptr_types): Move earlier in the file.
 	Call initialize_sanitizer_builtins at the end.
 	(asan_pp_string): Use TREE_TYPE (shadow_ptr_types[0])
