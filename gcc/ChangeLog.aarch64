@@ -1,5 +1,10 @@
 2013-06-21  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64-linux.h (LINUX_TARGET_LINK_SPEC):
+	Change the linker script based on the milp32 option.
+
+2013-06-21  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Change to update
 	for the new naming.
 
