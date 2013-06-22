@@ -27,7 +27,7 @@
 
 #ifndef LINK_SPEC
 #define LINK_SPEC "%{mbig-endian:-EB} %{mlittle-endian:-EL} -X \
-%{milp32:-maarch64elf%{mbig-endian:b}ilp32} \
+%{milp32:-maarch64elf%{mbig-endian:b}32} \
 %{mlp64:-maarch64elf%{mbig-endian:b}}"
 #endif
 

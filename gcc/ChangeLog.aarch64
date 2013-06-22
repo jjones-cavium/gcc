@@ -1,3 +1,8 @@
+2013-06-21  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Change to update
+	for the new naming.
+
 2013-06-20  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.c (aarch64_classify_address): Don't
