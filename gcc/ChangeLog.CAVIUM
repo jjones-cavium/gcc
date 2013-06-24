@@ -1,6 +1,14 @@
 2013-06-24  Manjunath Matti <mmatti@caviumnetworks.com>
 
 	Backported from mainline.
+	
+	2012-12-11  Jakub Jelinek  <jakub@redhat.com>
+
+	* g++.dg/asan/asan_test.C: Link -lasan before -lpthread.
+
+2013-06-24  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
 
 	2012-12-11  Jakub Jelinek  <jakub@redhat.com>
 
