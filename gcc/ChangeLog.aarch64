@@ -1,3 +1,11 @@
+2013-06-25  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Update for the
+	renaming of the bigendian ilp32 linker target.
+	* config/aarch64/aarch64-linux.h (GLIBC_DYNAMIC_LINKER): Support
+	milp32 correctly.
+	(LINK_SPEC): Update for the bigendian ilp32 linker target.
+
 2013-06-24  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.h (TARGET_CPU_CPP_BUILTINS):

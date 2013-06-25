@@ -27,8 +27,7 @@
 
 #ifndef LINK_SPEC
 #define LINK_SPEC "%{mbig-endian:-EB} %{mlittle-endian:-EL} -X \
-%{milp32:-maarch64elf%{mbig-endian:b}32} \
-%{mlp64:-maarch64elf%{mbig-endian:b}}"
+-maarch64elf%{milp32:32}%{mbig-endian:b}"
 #endif
 
 #endif /* GCC_AARCH64_ELF_RAW_H */
