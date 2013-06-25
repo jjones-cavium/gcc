@@ -1,3 +1,8 @@
+2013-06-24  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.h (TARGET_CPU_CPP_BUILTINS):
+	Define __ILP32__ for ilp32 targets.
+
 2013-06-21  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64-linux.h (LINUX_TARGET_LINK_SPEC):
