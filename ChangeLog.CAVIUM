@@ -1,4 +1,17 @@
 2013-06-25  Manjunath Matti  <mmatti@caviumnetworks.com>
+	
+	2012-12-20  Matthias Klose  <doko@ubuntu.com>
+
+	* Makefile.def (install-target-libgfortran): Depend on
+	install-target-libquadmath, install-target-libgcc.
+	(install-target-libsanitizer): Depend on install-target-libgcc.
+	(install-target-libjava): Depend on install-target-libgcc.
+	(install-target-libitm): Depend on install-target-libgcc.
+	(install-target-libobjc): Depend on install-target-libgcc.
+	(install-target-libstdc++-v3): Depend on install-target-libgcc.
+	* Makefile.in: Regenerate.
+
+2013-06-25  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	2012-12-11  H.J. Lu  <hongjiu.lu@intel.com>
 
