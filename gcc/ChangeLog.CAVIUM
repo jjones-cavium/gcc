@@ -1,3 +1,11 @@
+2013-06-25  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/asan/asan.exp: Run the tests without
+	testing the results of asan_init.
+	* testsuite/gcc.dg/asan/asan.exp: Likewise.
+	* testsuite/lib/asan-dg.exp (check_effective_target_faddress_sanitizer):
+	Change to a linking program.
+
 2013-06-25  Manjunath Matti  <mmatti@caviumnetworks.com>
 	
 	Backported from mainline.

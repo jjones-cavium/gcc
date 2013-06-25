@@ -18,8 +18,8 @@
 # code, 0 otherwise.
 
 proc check_effective_target_faddress_sanitizer {} {
-    return [check_no_compiler_messages faddress_sanitizer object {
-	void foo (void) { }
+    return [check_no_compiler_messages faddress_sanitizer executable {
+	int main (void) { return 0; }
     } "-fsanitize=address"]
 }
 
