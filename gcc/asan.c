@@ -1,5 +1,5 @@
 /* AddressSanitizer, a fast memory error detector.
-   Copyright (C) 2012 Free Software Foundation, Inc.
+   Copyright (C) 2012, 2013 Free Software Foundation, Inc.
    Contributed by Kostya Serebryany <kcc@google.com>
 
 This file is part of GCC.
@@ -480,7 +480,6 @@ asan_protect_global (tree decl)
       || DECL_THREAD_LOCAL_P (decl)
       /* Externs will be protected elsewhere.  */
       || DECL_EXTERNAL (decl)
-      || !TREE_ASM_WRITTEN (decl)
       || !DECL_RTL_SET_P (decl)
       /* Comdat vars pose an ABI problem, we can't know if
 	 the var that is selected by the linker will have
@@ -1717,7 +1716,8 @@ asan_finish_file (void)
   tree fn = builtin_decl_implicit (BUILT_IN_ASAN_INIT);
   append_to_statement_list (build_call_expr (fn, 0), &asan_ctor_statements);
   for (vnode = varpool_nodes; vnode; vnode = vnode->next)
-    if (asan_protect_global (vnode->decl))
+    if (TREE_ASM_WRITTEN (vnode->decl)
+	&& asan_protect_global (vnode->decl))
       ++gcount;
   htab_t const_desc_htab = constant_pool_htab ();
   htab_traverse (const_desc_htab, count_string_csts, &gcount);
@@ -1739,7 +1739,8 @@ asan_finish_file (void)
       DECL_IGNORED_P (var) = 1;
       v = VEC_alloc (constructor_elt, gc, gcount);
       for (vnode = varpool_nodes; vnode; vnode = vnode->next)
-	if (asan_protect_global (vnode->decl))
+	if (TREE_ASM_WRITTEN (vnode->decl)
+	    && asan_protect_global (vnode->decl))
 	  asan_add_global (vnode->decl, TREE_TYPE (type), v);
       struct asan_add_string_csts_data aascd;
       aascd.type = TREE_TYPE (type);
