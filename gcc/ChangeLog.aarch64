@@ -1,3 +1,9 @@
+2013-06-26  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.target/aarch64/atomic-op-long.c: Update for
+	ILP32 ABI support.
+	* testsuite/gcc.target/aarch64/fcvt_double_int.c: Likewise.
+
 2013-06-25  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Update for the
