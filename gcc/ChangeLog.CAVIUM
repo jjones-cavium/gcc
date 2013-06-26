@@ -1,3 +1,11 @@
+2013-06-26  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/asan/asan.exp: Call dg-init and asan_init
+	before calling check_effective_target_faddress_sanitizer.
+	Run gcc-dg-runtest only ifcheck_effective_target_faddress_sanitizer
+	returns true. 
+	* testsuite/gcc.dg/asan/asan.exp: Likewise.
+
 2013-06-25  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/g++.dg/asan/asan.exp: Run the tests without
