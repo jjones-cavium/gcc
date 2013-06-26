@@ -1,4 +1,5 @@
 /* { dg-do compile } */
+/* { dg-skip-if "not compatiable with hard-float abi" { { arm*-*-* } && arm_hf_eabi } { "-mthumb" } { "" } } */
 /* { dg-options "-O -march=armv6" } */
 /* { dg-prune-output "switch .* conflicts with" } */
 
