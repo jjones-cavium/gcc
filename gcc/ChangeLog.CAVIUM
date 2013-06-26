@@ -1,3 +1,461 @@
+2013-06-26  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/asan/asan.exp: Call dg-init and asan_init
+	before calling check_effective_target_faddress_sanitizer.
+	Run gcc-dg-runtest only ifcheck_effective_target_faddress_sanitizer
+	returns true. 
+	* testsuite/gcc.dg/asan/asan.exp: Likewise.
+
+2013-06-26  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+gcc/testsuite
+	* gcc.target/arm/builtin-bswap-1.c: Skip for soft-float Thumb.
+	* gcc.target/arm/builtin-bswap16-1.c: Likewise.
+	* gcc.target/arm/pr40887.c: Likewise.
+	* gcc.target/arm/scd42-1.c: Likewise.
+	* gcc.target/arm/scd42-3.c: Likewise.
+	* gcc.target/arm/unsigned-extend-1.c: Likewise.
+	* gcc.target/arm/xor-and.c: Likewise.
+
+2013-06-25  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/g++.dg/asan/asan.exp: Run the tests without
+	testing the results of asan_init.
+	* testsuite/gcc.dg/asan/asan.exp: Likewise.
+	* testsuite/lib/asan-dg.exp (check_effective_target_faddress_sanitizer):
+	Change to a linking program.
+
+2013-06-25  Manjunath Matti  <mmatti@caviumnetworks.com>
+	
+	Backported from mainline.
+	
+	2013-01-06  Jakub Jelinek  <jakub@redhat.com>
+
+	* varasm.c (output_constant_def_contents): For asan_protect_global
+	protected strings, adjust DECL_ALIGN if needed, before testing for
+	anchored symbols.
+	(place_block_symbol): Adjust size for asan protected STRING_CSTs if
+	TREE_CONSTANT_POOL_ADDRESS_P.  Increase alignment for asan protected
+	normal decls.
+	(output_object_block): For asan protected decls, emit asan padding
+	after their contents.
+	* asan.c (asan_protect_global): Don't check TREE_ASM_WRITTEN here.
+	(asan_finish_file): Test it here instead.
+
+2013-06-25  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-12  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55508
+	* builtin-attrs.def (ATTR_TMPURE_NOTHROW_LEAF_LIST,
+	ATTR_TMPURE_NORETURN_NOTHROW_LEAF_LIST): New.
+	* asan.c (ATTR_TMPURE_NOTHROW_LEAF_LIST,
+	ATTR_TMPURE_NORETURN_NOTHROW_LEAF_LIST): Define.
+	* sanitizer.def: Make __asan_report_* and __asan_handle_no_return
+	builtins tm pure.
+
+2013-06-25  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Backported from mailine.
+
+	2012-12-12  Jakub Jelinek  <jakub@redhat.com>
+
+	* lib/gcc-dg.exp (${tool}_load): Handle non-existing
+	set_target_env_var the same as if it is empty list.
+	(dg-set-target-env-var): Fix up error message.
+	(set-target-env-var): Record both preexisting env var values
+	as well as info that env wasn't set.
+	(restore-target-env-var): Iterate on reversed list, if second
+	sublist element is 1, setenv the env var to the third sublist
+	element, otherwise unsetenv it.
+	(gcc-dg-runtest): Don't initialize set_target_env_var.
+	(dg-test): Unset set_target_env_var if it was set.
+
+	* g++.dg/asan/deep-tail-call-1.C: Whitespace fixes.  Don't rely
+	on argc being one.
+	* g++.dg/asan/interception-malloc-test-1.C: Only run on linux.
+	Whitespace fixes.  Avoid unnecessary * sizeof(char).
+	* g++.dg/asan/deep-thread-stack-1.C: Add -lasan -lpthread to
+	dg-options.  Whitespace fixes.
+	* g++.dg/asan/deep-stack-uaf-1.C: Skip for -flto.  Whitespace fixes.
+	* g++.dg/asan/interception-test-1.C: Whitespace fixes.
+	* g++.dg/asan/interception-failure-test-1.C: Whitespace fixes.
+	Avoid unnecessary * sizeof(char).  Remove // CHECK: comment.
+	* g++.dg/asan/default-options-1.C: Whitespace fixes.
+	* g++.dg/asan/symbolize-callback-1.C: Whitespace fixes.  Make
+	first __asan_symbolize argument unnamed.  Avoid unnecessary
+	* sizeof(char).
+	* g++.dg/asan/large-func-test-1.C: Whitespace fixes.  Don't rely
+	on argc being one.  Allow both _Znwj and _Znwm as operator new.
+	Ignore everything in the backtrace above operator new.  Fix up
+	dg-output regexps.
+	* c-c++-common/asan/null-deref-1.c: Add -fno-omit-frame-pointer
+	and for x86 -mno-omit-leaf-frame-pointer.  Fix up dg-output regexps.
+	* c-c++-common/asan/clone-test-1.c: Whitespace fixes.  Return non-zero
+	on failures.  Avoid pointless PASS dg-output check. Remove bogus
+	dg-shouldfail.
+	* c-c++-common/asan/sanity-check-pure-c-1.c: Fix up dg-output regexps.
+	Avoid unnecessary * sizeof(char).
+	* c-c++-common/asan/heap-overflow-1.c: Fix up dg-output regexps.
+	Don't rely on argc being one.
+	* c-c++-common/asan/sleep-before-dying-1.c: Whitespace fixes.
+	Avoid unnecessary * sizeof(char).
+	* c-c++-common/asan/rlimit-mmap-test-1.c: Whitespace fixes.
+	* c-c++-common/asan/stack-overflow-1.c: Fix up dg-output regexps.
+	* c-c++-common/asan/global-overflow-1.c: Add -fno-builtin-memset.
+	Fix up dg-output regexps.
+	* c-c++-common/asan/strncpy-overflow-1.c: Fix up dg-output regexps.
+	* c-c++-common/asan/memcmp-1.c:	Don't rely on argc being one.
+	* c-c++-common/asan/use-after-free-1.c: Fix up dg-output regexps.
+	* c-c++-common/asan/swapcontext-test-1.c: Don't rely on argc being
+	one.
+	* c-c++-common/asan/force-inline-opt0-1.c: Remove dg-skip-if.
+	* c-c++-common/asan/strip-path-prefix-1.c: Whitespace fixes.
+	Avoid unnecessary * sizeof(char).
+
+	2012-12-12  Wei Mi  <wmi@google.com>
+
+	* lib/target-supports.exp (check_effective_target_dlopen,
+	check_effective_target_clone, check_effective_target_setrlimit,
+	check_effective_target_swapcontext): New procedures.
+	* lib/gcc-dg.exp (${tool}_load): Handle dg-set-target-env-var.
+	(dg-set-target-env-var, set-target-env-var,
+	restore-target-env-var): New procedures.
+	(gcc-dg-runtest): Set set_target_env_var.
+	* g++.dg/asan/symbolize-callback-1.C: New test.
+	* g++.dg/asan/shared-lib-test-1-so.cc: New file.
+	* g++.dg/asan/deep-tail-call-1.C: New test.
+	* g++.dg/asan/default-options-1.C: New test.
+	* g++.dg/asan/interception-test-1.C: New test.
+	* g++.dg/asan/dlclose-test-1-so.cc: New file.
+	* g++.dg/asan/deep-thread-stack-1.C: New test.
+	* g++.dg/asan/interception-malloc-test-1.C: New test.
+	* g++.dg/asan/deep-stack-uaf-1.C: New test.
+	* g++.dg/asan/large-func-test-1.C: New test.
+	* g++.dg/asan/interception-failure-test-1.C: New test.
+	* c-c++-common/asan/strip-path-prefix-1.c: New test.
+	* c-c++-common/asan/force-inline-opt0-1.c: New test.
+	* c-c++-common/asan/swapcontext-test-1.c: New test.
+	* c-c++-common/asan/null-deref-1.c: New test.
+	* c-c++-common/asan/global-overflow-1.c: New test.
+	* c-c++-common/asan/strncpy-overflow-1.c: New test.
+	* c-c++-common/asan/rlimit-mmap-test-1.c: New test.
+	* c-c++-common/asan/stack-overflow-1.c: New test.
+	* c-c++-common/asan/use-after-free-1.c: New test.
+	* c-c++-common/asan/sanity-check-pure-c-1.c: New test.
+	* c-c++-common/asan/clone-test-1.c: New test.
+	* c-c++-common/asan/heap-overflow-1.c: New test.
+	* c-c++-common/asan/sleep-before-dying-1.c: New test.
+
+2013-06-24  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+	
+	2012-12-11  Jakub Jelinek  <jakub@redhat.com>
+
+	* g++.dg/asan/asan_test.C: Link -lasan before -lpthread.
+
+2013-06-24  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-11  Jakub Jelinek  <jakub@redhat.com>
+
+	* varasm.c (get_variable_section): Don't return lcomm_section
+	for asan_protect_global decls.
+	* asan.c (asan_protect_global): Only avoid public common variables.
+	Don't call get_variable_section here.
+
+2013-06-24  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-11  Jakub Jelinek  <jakub@redhat.com>
+
+	* sanitizer.def (BUILT_IN_ASAN_HANDLE_NO_RETURN): New builtin.
+	* asan.c (instrument_builtin_call): Change is_gimple_builtin_call
+	gcc_assert to gcc_checking_assert.
+	(maybe_instrument_call): Imit __builtin___asan_handle_no_return ()
+	before noreturn calls other than __builtin_trap () and
+	__builtin_unreachable ().
+
+2013-06-24  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-06-04  Richard Guenther  <rguenther@suse.de>
+	Eric Botcazou  <ebotcazou@adacore.com>
+
+	Backport from mainline
+	2012-04-03  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* expr.c (get_bit_range): Add OFFSET parameter and adjust BITPOS.
+	Change type of BITOFFSET to signed.  Make sure the lower bound of
+	the computed range is non-negative by adjusting OFFSET and BITPOS.
+	(expand_assignment): Adjust call to get_bit_range.
+
+	2012-03-27  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* expr.c (get_bit_range): Return the null range if the enclosing record
+	is part of a larger bit field.
+
+	2012-03-20  Richard Guenther  <rguenther@suse.de>
+
+	* stor-layout.c (finish_bitfield_representative): Fallback
+	to conservative maximum size if the padding up to the next
+	field cannot be computed as a constant.
+	(finish_bitfield_layout): If we cannot compute the distance
+	between the start of the bitfield representative and the
+	bitfield member start a new representative.
+	* expr.c (get_bit_range): The distance between the start of
+	the bitfield representative and the bitfield member is zero
+	if the field offsets are not constants.
+
+	2012-03-16  Richard Guenther  <rguenther@suse.de>
+
+	* stor-layout.c (finish_bitfield_representative): Fall back
+	to the conservative maximum size if we cannot compute the
+	size of the tail padding.
+
+	2012-03-14  Richard Guenther  <rguenther@suse.de>
+
+	* tree.h (DECL_BIT_FIELD_REPRESENTATIVE): New define.
+	* stor-layout.c (start_bitfield_representative): New function.
+	(finish_bitfield_representative): Likewise.
+	(finish_bitfield_layout): Likewise.
+	(finish_record_layout): Call finish_bitfield_layout.
+	* tree.c (free_lang_data_in_decl): Only free DECL_QUALIFIER
+	for QUAL_UNION_TYPE fields.
+	* tree-streamer-in.c (lto_input_ts_field_decl_tree_pointers):
+	Stream DECL_BIT_FIELD_REPRESENTATIVE.
+	* tree-streamer-out.c (write_ts_field_decl_tree_pointers): Likewise.
+
+	PR middle-end/52080
+	PR middle-end/52097
+	PR middle-end/48124
+	* expr.c (get_bit_range): Unconditionally extract bitrange
+	from DECL_BIT_FIELD_REPRESENTATIVE.
+	(expand_assignment): Adjust call to get_bit_range.
+
+	gcc/testsuite/
+	PR middle-end/52080
+	PR middle-end/52097
+	PR middle-end/48124
+	* gcc.dg/torture/pr48124-1.c: New testcase.
+	* gcc.dg/torture/pr48124-2.c: Likewise.
+	* gcc.dg/torture/pr48124-3.c: Likewise.
+	* gcc.dg/torture/pr48124-4.c: Likewise.
+	* gnat.dg/pack16.adb: Likewise.
+	* gnat.dg/pack16_pkg.ads: Likewise.
+	* gnat.dg/pack17.adb: Likewise.
+	* gnat.dg/specs/pack7.ads: Likewise.
+	* gnat.dg/specs/pack8.ads: Likewise.
+	* gnat.dg/specs/pack8_pkg.ads: Likewise.
+
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-10  Jakub Jelinek  <jakub@redhat.com>
+
+	* g++.dg/asan/asan_test.cc: Sync from upstream.
+	* g++.dg/asan/asan_test_utils.h: Likewise.
+
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-10  Jakub Jelinek  <jakub@redhat.com>
+
+	* asan.c (asan_init_shadow_ptr_types): Move earlier in the file.
+	Call initialize_sanitizer_builtins at the end.
+	(asan_pp_string): Use TREE_TYPE (shadow_ptr_types[0])
+	as character type instead of char_type_node.
+	(asan_emit_stack_protection): Call asan_init_shadow_ptr_types
+	if shadow_ptr_types isn't initialized.
+	(asan_protect_global): Return true for STRING_CSTs except those
+	created by asan_pp_string.
+	(count_string_csts, add_string_csts): New functions.
+	(struct asan_add_string_csts_data): New type.
+	(asan_finish_file): Clear flag_asan at the beginning, restore at the
+	end.  Traverse constant_pool_htab () to look for protected
+	STRING_CSTs.  Don't call initialize_sanitizer_builtins,
+	instead call asan_init_shadow_ptr_types if shadow_ptr_types isn't
+	initialized yet.
+	(asan_instrument): Don't call initialize_sanitizer_builtins.
+	* varasm.c (output_constant_def_contents): If STRING_CST should be
+	asan protected, align it sufficiently and emit padding after it.
+	(categorize_decl_for_section): If flag_asan, don't put STRING_CSTs
+	that should be asan protected into mergeable sections.  For
+	-fmerge-all-constants, ignore it for -fmudflap or if decl is
+	asan protected.
+
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-10  Jakub Jelinek  <jakub@redhat.com>
+
+	* asan.c (instrument_derefs): Handle bitfield COMPONENT_REFs
+	accesses as reads/writes to their DECL_BIT_FIELD_REPRESENTATIVE.
+
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-06  Peter Bergner  <bergner@vnet.ibm.com>
+
+	* config/rs6000/sysv4.h (TARGET_ASAN_SHADOW_OFFSET): Define.
+	* config/rs6000/rs6000.c (rs6000_asan_shadow_offset): New function.
+	* config/rs6000/rs6000.h (FRAME_GROWS_DOWNWARD): Disable if using ASAN.
+
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-06  Jack Howarth <howarth@bromo.med.uc.edu>
+
+	PR 55599/sanitizer
+	* config/darwin.h (LINK_COMMAND_SPEC_A): Remove static libasan support.
+
+2013-06-21  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	* gcc/tsanc.c (instrument_builtin_call) Call 
+	gimple_build_assign_with_ops_stat instead of 
+	gimple_build_assign_with_ops based on the number of parameters.
+
+2013-06-21  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* gcc.target/arm/ftest-armv4t-thumb.c: Skip for soft-float Thumb.
+	* gcc.target/arm/ftest-armv5t-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv5te-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6k-thumb.c: Likewise.
+	* gcc.target/arm/ftest-armv6z-thumb.c: Likewise.
+
+2013-06-20  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-04  Jakub Jelinek  <jakub@redhat.com>
+
+	PR testsuite/55587
+	* lib/asan-dg.exp (asan_init): Return 1 if libasan has been found,
+	0 if not.
+	* g++.dg/asan/asan.exp: Don't run gcc-dg-runtest if [asan_init]
+	returned 0.
+	* gcc.dg/asan/asan.exp: Likewise.
+
+2013-06-20  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55439
+	* Makefile.in (tsan.o): Depend on tree-ssa-propagate.h.
+	* sanitizer.def: Add __tsan_atomic* builtins.
+	* asan.c (initialize_sanitizer_builtins): Adjust to also
+	initialize __tsan_atomic* builtins.
+	* tsan.c: Include tree-ssa-propagate.h.
+	(enum tsan_atomic_action): New enum.
+	(tsan_atomic_table): New table.
+	(instrument_builtin_call): New function.
+	(instrument_gimple): Take pointer to gimple_stmt_iterator
+	instead of gimple_stmt_iterator.  Call instrument_builtin_call
+	on builtin call stmts.
+	(instrument_memory_accesses): Adjust instrument_gimple caller.
+	* builtin-types.def (BT_FN_BOOL_VPTR_PTR_I1_INT_INT,
+	BT_FN_BOOL_VPTR_PTR_I2_INT_INT, BT_FN_BOOL_VPTR_PTR_I4_INT_INT,
+	BT_FN_BOOL_VPTR_PTR_I8_INT_INT, BT_FN_BOOL_VPTR_PTR_I16_INT_INT): New.
+
+2013-06-20  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	* gimple.c (get_base_address): Do not return NULL_TREE apart 
+	from for WITH_SIZE_EXPR.
+
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-11-14  Jan Hubicka  <jh@suse.cz>
+
+	* tree.c (set_call_expr_flags): New function.
+	(local_define_builtin): Use it.
+	* tree.h (set_call_expr_flags): Declare.
+
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
+
+	* sanitizer.def: Add Address Sanitizer builtins.
+	Rename BUILT_IN_TSAN_READ_* to BUILT_IN_TSAN_READ* and
+	BUILT_IN_TSAN_WRITE_* to BUILT_IN_TSAN_WRITE*.
+	* Makefile.in (asan.o): Depend on langhooks.h.
+	(tsan.o): Depend on asan.h.
+	* asan.h (initialize_sanitizer_builtins): New prototype.
+	* asan.c: Include langhooks.h.
+	(report_error_func): Use builtin_decl_implicit of corresponding
+	BUILT_IN_ASAN_REPORT_{LOAD,STORE}*.
+	(asan_init_func): Removed.
+	(initialize_sanitizer_builtins): New function.
+	(asan_finish_file): Call it.  Use builtin_decl_implicit
+	on BUILT_IN_ASAN_{INIT,{,UN}REGISTER_GLOBALS}.
+	(asan_instrument): Call initialize_sanitizer_builtins.
+	* builtins.def (DEF_SANITIZER_BUILTIN): Change condition to
+	(flag_asan || flag_tsan).
+	* tsan.c: Include asan.h and tsan.h.
+	(get_memory_access_decl): Rename BUILT_IN_TSAN_{READ,WRITE}_*
+	to BUILT_IN_TSAN_{READ,WRITE}*.
+	(tsan_pass): Call initialize_sanitizer_builtins.
+	(tsan_gate, tsan_gate_O0): Don't check if
+	builtin_decl_implicit_p (BUILT_IN_TSAN_INIT) is true.
+	(tsan_finish_file): Call initialize_sanitizer_builtins.
+	* builtin-types.def (BT_FN_VOID_PTR_PTRMODE): New fn type.
+
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
+
+	* asan.c (instrument_assignment): Instrument lhs only
+	for gimple_store_p and rhs1 only for gimple_assign_load_p.
+
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-12-03  Jakub Jelinek  <jakub@redhat.com>
+
+	* lib/asan-dg.exp (asan_get_gtest_test_list,
+	asan_get_gtest_expect_death_list, asan-gtest): New procedures.
+	(proc ${tool}_load): Remember [asan_get_gtest_test_list "$output"]
+	and [asan_get_gtest_expect_death_list "$output"] in global vars.
+	(asan_symbolize): Sanitize [] characters from key.
+	* g++.dg/asan/asan_test_config.h: New file.
+	* g++.dg/asan/asan_globals_test.cc: New file.
+	* g++.dg/asan/asan_test_utils.h: New file.
+	* g++.dg/asan/dejagnu-gtest.h: New file.
+	* g++.dg/asan/asan_test.cc: New file.
+	* g++.dg/asan/asan_test.C: New test.
+
+2013-06-19  Manjunath Matti <mmatti@caviumnetworks.com>
+
+	Backported from mainline.
+
+	2012-11-30  Jakub Jelinek  <jakub@redhat.com>
+
+	* tsan.c (is_load_of_const_p): Removed.
+	(instrument_expr): Use result of get_inner_reference
+	instead of get_base_address, avoid some unnecessary tests,
+	use !pt_solution_includes and !may_be_aliased tests to
+	check whether base might escape current function.
+
 2013-06-17  Manjunath Matti <mmatti@caviumnetworks.com>
 
 	Backported from mainline.
