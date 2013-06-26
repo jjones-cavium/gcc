@@ -6,6 +6,17 @@
 	returns true. 
 	* testsuite/gcc.dg/asan/asan.exp: Likewise.
 
+2013-06-26  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+gcc/testsuite
+	* gcc.target/arm/builtin-bswap-1.c: Skip for soft-float Thumb.
+	* gcc.target/arm/builtin-bswap16-1.c: Likewise.
+	* gcc.target/arm/pr40887.c: Likewise.
+	* gcc.target/arm/scd42-1.c: Likewise.
+	* gcc.target/arm/scd42-3.c: Likewise.
+	* gcc.target/arm/unsigned-extend-1.c: Likewise.
+	* gcc.target/arm/xor-and.c: Likewise.
+
 2013-06-25  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/g++.dg/asan/asan.exp: Run the tests without

@@ -1,4 +1,5 @@
 /* { dg-do compile } */
+/* { dg-skip-if "not compatiable with hard-float abi" { { arm*-*-* } && arm_hf_eabi } { "-mthumb" } { "" } } */
 /* { dg-options "-O2 -march=armv6" } */
 
 unsigned char foo (unsigned char c)
