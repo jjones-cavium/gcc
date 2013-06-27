@@ -3,6 +3,14 @@
 	* gimple.h (gsi_stmt): Allow for NULL
 	i.ptr for compatibility with 4.8.
 
+2013-06-27  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	2013-01-08  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55844
+	* c-c++-common/asan/null-deref-1.c: Add -fno-shrink-wrap to
+	dg-options.
+
 2013-06-26  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/g++.dg/asan/asan.exp: Call dg-init and asan_init
