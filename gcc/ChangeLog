@@ -1,3 +1,9 @@
+2013-01-08  Jakub Jelinek  <jakub@redhat.com>
+
+	PR fortran/55341
+	* asan.c (asan_clear_shadow): New function.
+	(asan_emit_stack_protection): Use it.
+
 2013-01-06  Jakub Jelinek  <jakub@redhat.com>
 
 	* varasm.c (output_constant_def_contents): For asan_protect_global

@@ -6,6 +6,13 @@
 2013-06-27  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	2013-01-08  Jakub Jelinek  <jakub@redhat.com>
+	PR fortran/55341
+	* asan.c (asan_clear_shadow): New function.
+	(asan_emit_stack_protection): Use it.
+
+2013-06-27  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	2013-01-08  Jakub Jelinek  <jakub@redhat.com>
 
 	PR sanitizer/55844
 	* c-c++-common/asan/null-deref-1.c: Add -fno-shrink-wrap to
