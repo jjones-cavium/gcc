@@ -5,6 +5,19 @@
 
 2013-06-28  Manjunath Matti  <mmatti@caviumnetworks.com>
 
+	2013-02-04  Alexander Potapenko <glider@google.com>
+	Jack Howarth  <howarth@bromo.med.uc.edu>
+	Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55617
+	* config/darwin.c (sort_ctor_records): Stabilized qsort
+	on constructor priority by using original position.
+	(finalize_ctors): New routine to sort constructors by
+	priority before use in assemble_integer.
+	(machopic_asm_out_constructor): Use finalize_ctors if needed.
+
+2013-06-28  Manjunath Matti  <mmatti@caviumnetworks.com>
+
 	2013-01-30  Jakub Jelinek  <jakub@redhat.com>
 
 	PR sanitizer/55374
