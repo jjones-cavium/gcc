@@ -1,3 +1,8 @@
+2013-06-29  Andrew Pinski  <apinski@cavium.com>
+
+	* gimple.h (gsi_stmt): Allow for NULL
+	i.ptr for compatibility with 4.8.
+
 2013-06-26  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/g++.dg/asan/asan.exp: Call dg-init and asan_init
