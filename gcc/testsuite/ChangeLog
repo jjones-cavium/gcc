@@ -1,3 +1,10 @@
+2013-02-11  Alexander Potapenko <glider@google.com>
+	    Jack Howarth  <howarth@bromo.med.uc.edu>
+	    Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55617
+	* g++.dg/asan/pr55617.C: Run on all targets.
+
 2013-02-09  Uros Bizjak  <ubizjak@gmail.com>
 
 	* g++.dg/asan/asan_test.C: Compile with -D__NO_INLINE__
@@ -7,10 +14,7 @@
 	* g++.dg/asan/interception-malloc-test-1.C: Ditto.
 
 2013-02-04  Alexander Potapenko <glider@google.com>
-	    Jack Howarth  <howarth@bromo.med.uc.edu>
-	    Jakub Jelinek  <jakub@redhat.com>
 
-	PR sanitizer/55617
 	* g++.dg/asan/pr55617.C: New test.
 
 2013-01-30  Jakub Jelinek  <jakub@redhat.com>

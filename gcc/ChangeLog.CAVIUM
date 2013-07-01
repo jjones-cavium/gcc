@@ -1,5 +1,24 @@
 2013-07-01  Manjunath Matti  <mmatti@caviumnetworks.com>
 
+	Backported from mailine.
+	2013-02-11  Alexander Potapenko <glider@google.com>
+		    Jack Howarth  <howarth@bromo.med.uc.edu>
+		    Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55617
+	
+	gcc/
+	* config/darwin.c (cdtor_record): Rename ctor_record.
+	(sort_cdtor_records): Rename sort_ctor_records.
+	(finalize_dtors): New routine to sort destructors by
+	priority before use in assemble_integer.
+	(machopic_asm_out_destructor): Use finalize_dtors if needed.
+
+	gcc/testsuite/
+	* g++.dg/asan/pr55617.C: Run on all targets.
+
+2013-07-01  Manjunath Matti  <mmatti@caviumnetworks.com>
+
 	2013-02-09  Uros Bizjak  <ubizjak@gmail.com>
 
 	* g++.dg/asan/asan_test.C: Compile with -D__NO_INLINE__

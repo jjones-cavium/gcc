@@ -1,3 +1,14 @@
+2013-02-11  Alexander Potapenko <glider@google.com>
+	    Jack Howarth  <howarth@bromo.med.uc.edu>
+	    Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/55617
+	* config/darwin.c (cdtor_record): Rename ctor_record.
+	(sort_cdtor_records): Rename sort_ctor_records.
+	(finalize_dtors): New routine to sort destructors by
+	priority before use in assemble_integer.
+	(machopic_asm_out_destructor): Use finalize_dtors if needed.
+
 2013-02-05  Jakub Jelinek  <jakub@redhat.com>
 
 	PR sanitizer/55374
@@ -15,10 +26,6 @@
 	* config/gnu-user.h (LIBASAN_EARLY_SPEC): Add missing guard.
 
 2013-02-04  Alexander Potapenko  <glider@google.com>
-	    Jack Howarth  <howarth@bromo.med.uc.edu>
-	    Jakub Jelinek  <jakub@redhat.com>
-
-	PR sanitizer/55617
 	* config/darwin.c (sort_ctor_records): Stabilized qsort
 	on constructor priority by using original position.
 	(finalize_ctors): New routine to sort constructors by
