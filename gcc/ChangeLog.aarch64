@@ -1,3 +1,8 @@
+2013-06-27  Yufeng Zhang  <yufeng.zhang@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_add_offset): Change to pass
+	'mode' to aarch64_plus_immediate and gen_rtx_PLUS.
+
 2013-06-14  Vidya Praveen <vidyapraveen@arm.com>
 
 	* config/aarch64/aarch64-simd.md (aarch64_<su>mlal_lo<mode>):

@@ -797,7 +797,7 @@ aarch64_force_temporary (rtx x, rtx value)
 static rtx
 aarch64_add_offset (rtx temp, rtx reg, HOST_WIDE_INT offset)
 {
-  if (!aarch64_plus_immediate (GEN_INT (offset), DImode))
+  if (!aarch64_plus_immediate (GEN_INT (offset), mode))
     {
       rtx high;
       /* Load the full offset into a register.  This
@@ -805,7 +805,7 @@ aarch64_add_offset (rtx temp, rtx reg, HOST_WIDE_INT offset)
       high = GEN_INT (offset);
       offset = 0;
       high = aarch64_force_temporary (temp, high);
-      reg = aarch64_force_temporary (temp, gen_rtx_PLUS (Pmode, high, reg));
+      reg = aarch64_force_temporary (temp, gen_rtx_PLUS (mode, high, reg));
     }
   return plus_constant (reg, offset);
 }
