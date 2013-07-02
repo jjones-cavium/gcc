@@ -1,3 +1,8 @@
+2013-06-05  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.c (aarch64_add_offset): Add another
+	parameter mode to aarch64_add_offset.
+
 2013-06-28  Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_cannot_force_const_mem): Adjust

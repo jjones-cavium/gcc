@@ -795,7 +795,7 @@ aarch64_force_temporary (enum machine_mode mode, rtx x, rtx value)
 
 
 static rtx
-aarch64_add_offset (rtx temp, rtx reg, HOST_WIDE_INT offset)
+aarch64_add_offset (enum machine_mode mode, rtx temp, rtx reg, HOST_WIDE_INT offset)
 {
   if (!aarch64_plus_immediate (GEN_INT (offset), mode))
     {
@@ -847,7 +847,7 @@ aarch64_expand_mov_immediate (rtx dest, rtx imm)
  	    {
  	      gcc_assert(can_create_pseudo_p ());
  	      base = aarch64_force_temporary (mode, dest, base);
- 	      base = aarch64_add_offset (NULL, base, INTVAL (offset));
+ 	      base = aarch64_add_offset (mode, NULL, base, INTVAL (offset));
  	      aarch64_emit_move (dest, base);
  	      return;
  	    }
@@ -864,7 +864,7 @@ aarch64_expand_mov_immediate (rtx dest, rtx imm)
 	    {
 	      gcc_assert(can_create_pseudo_p ());
 	      base = aarch64_force_temporary (mode, dest, base);
-	      base = aarch64_add_offset (NULL, base, INTVAL (offset));
+	      base = aarch64_add_offset (mode, NULL, base, INTVAL (offset));
 	      aarch64_emit_move (dest, base);
 	      return;
 	    }
