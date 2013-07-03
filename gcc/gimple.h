@@ -4996,6 +4996,8 @@ gsi_prev (gimple_stmt_iterator *i)
 static inline gimple
 gsi_stmt (gimple_stmt_iterator i)
 {
+  if (i.ptr == NULL)
+    return NULL;
   return i.ptr->stmt;
 }
 
