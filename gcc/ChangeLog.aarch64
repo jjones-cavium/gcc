@@ -1,4 +1,8 @@
-2013-06-05  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+2013-07-02  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.md (*extr_insv_reg<mode>): New pattern.
+
+2013-07-02  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.c (aarch64_add_offset): Add another
 	parameter mode to aarch64_add_offset.
