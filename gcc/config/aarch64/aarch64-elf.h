@@ -117,8 +117,8 @@
 %{mlittle-endian:-EL} \
 %{mcpu=*:-mcpu=%*} \
 %{march=*:-march=%*} \
-%{milp32} \
-%{mlp64}"
+%{mabi=ilp32:-milp32} \
+%{mabi=lp64:-mlp64}"
 #endif
 
 #ifdef TARGET_BIG_ENDIAN_DEFAULT
@@ -132,7 +132,7 @@
 #undef DRIVER_SELF_SPECS
 #define DRIVER_SELF_SPECS \
   " %{!mbig-endian:%{!mlittle-endian:" ENDIAN_SPEC "}}" \
-  " %{!milp32:%{!mlp64:-mlp64}}"
+  " %{!mabi=*:-mabi=lp64}"
 
 #undef TYPE_OPERAND_FMT
 #define TYPE_OPERAND_FMT	"%%%s"

@@ -80,6 +80,10 @@
 #define TARGET_SIMD !TARGET_GENERAL_REGS_ONLY
 #define TARGET_FLOAT !TARGET_GENERAL_REGS_ONLY
 
+
+/* Compatibility option until merge in upstream patches. */
+#define TARGET_64BIT		(aarch64_abi == AARCH64_ABI_LP64)
+
 #define UNITS_PER_WORD		8
 
 #define UNITS_PER_VREG		16
@@ -525,6 +529,12 @@ typedef struct GTY (()) machine_function
 } machine_function;
 #endif
 
+/* Which ABI to use.  */
+enum aarch64_abi_type
+{
+  AARCH64_ABI_LP64 = 0,
+  AARCH64_ABI_ILP32 = 1
+};
 
 /* Which ABI to use.  */
 enum arm_abi_type
@@ -537,7 +547,6 @@ enum arm_pcs
   ARM_PCS_AAPCS64,		/* Base standard AAPCS for 64 bit.  */
   ARM_PCS_UNKNOWN
 };
-
 
 extern enum arm_abi_type arm_abi;
 extern enum arm_pcs arm_pcs_variant;
@@ -827,6 +836,6 @@ extern enum aarch64_code_model aarch64_cmodel;
   ((MODE) == V4SImode || (MODE) == V8HImode || (MODE) == V16QImode \
    || (MODE) == V4SFmode || (MODE) == V2DImode || mode == V2DFmode)
 
-#define MULTILIB_DEFAULTS { "mlp64" }
+#define MULTILIB_DEFAULTS { "mabi=lp64" }
 
 #endif /* GCC_AARCH64_H */

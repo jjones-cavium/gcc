@@ -1,3 +1,18 @@
+2013-07-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Use
+	-mabi=ilp32 instead of -milp32.
+	* config/aarch64/aarch64-elf.h (ASM_SPEC): Support -mabi=* instead of
+	-milp32/-mlp64.
+	(DRIVER_SELF_SPECS): Likewise.
+	* config/aarch64/aarch64-linux.h (LINK_SPEC): Likewise.
+	* config/aarch64/aarch64.h (TARGET_64BIT): New define.
+	(aarch64_abi_type): New enum type.
+	(MULTILIB_DEFAULTS): Use -mabi=lp64 instead of -mlp64.
+	* config/aarch64/aarch64.opt (mabi=): New option.
+	(milp32): Make an alias for -mabi=ilp32.
+	(mlp64): Make an alias for -mabi=lp64.
+
 2013-06-26  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.target/aarch64/atomic-op-long.c: Update for

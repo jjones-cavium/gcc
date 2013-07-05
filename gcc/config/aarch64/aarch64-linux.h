@@ -31,7 +31,7 @@
    -dynamic-linker " GNU_USER_DYNAMIC_LINKER "	\
    -X						\
    %{mbig-endian:-EB} %{mlittle-endian:-EL}	\
-   -maarch64linux%{milp32:32}%{mbig-endian:b}"
+   -maarch64linux%{mabi=ilp32:32}%{mbig-endian:b}"
 
 #define LINK_SPEC LINUX_TARGET_LINK_SPEC
 
