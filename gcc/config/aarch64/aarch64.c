@@ -560,7 +560,10 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
 	rtx x0 = gen_rtx_REG (Pmode, R0_REGNUM);
 	rtx tp;
 
-	emit_insn (gen_tlsdesc_small (imm));
+	if (TARGET_64BIT)
+	  emit_insn (gen_tlsdesc_small_di (imm));
+	else
+	  emit_insn (gen_tlsdesc_small_si (imm));
 	tp = aarch64_load_tp (NULL);
 	emit_insn (gen_rtx_SET (Pmode, dest, gen_rtx_PLUS (Pmode, tp, x0)));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);

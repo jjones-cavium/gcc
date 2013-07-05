@@ -3817,14 +3817,14 @@
    (set_attr "length" "8")]
 )
 
-(define_insn "tlsdesc_small"
-  [(set (reg:DI R0_REGNUM)
-        (unspec:DI [(match_operand:DI 0 "aarch64_valid_symref" "S")]
+(define_insn "tlsdesc_small_<mode>"
+  [(set (reg:PTR R0_REGNUM)
+        (unspec:PTR [(match_operand:PTR 0 "aarch64_valid_symref" "S")]
 		   UNSPEC_TLSDESC))
    (clobber (reg:DI LR_REGNUM))
    (clobber (match_scratch:DI 1 "=r"))]
   "TARGET_TLS_DESC"
-  "adrp\\tx0, %A0\;ldr\\t%1, [x0, #%L0]\;add\\tx0, x0, %L0\;.tlsdesccall\\t%0\;blr\\t%1"
+  "adrp\\tx0, %A0\;ldr\\t%<w>1, [x0, #%L0]\;add\\t<w>0, <w>0, %L0\;.tlsdesccall\\t%0\;blr\\t%1"
   [(set_attr "v8type" "call")
    (set_attr "length" "16")])
 
