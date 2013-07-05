@@ -1,5 +1,10 @@
 2013-07-05  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64-linux.h (GLIBC_DYNAMIC_LINKER):
+	Use -mabi=ilp32 instead of -milp32.
+
+2013-07-05  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Use
 	-mabi=ilp32 instead of -milp32.
 	* config/aarch64/aarch64-elf.h (ASM_SPEC): Support -mabi=* instead of

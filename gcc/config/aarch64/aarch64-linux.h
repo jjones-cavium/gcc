@@ -21,7 +21,7 @@
 #ifndef GCC_AARCH64_LINUX_H
 #define GCC_AARCH64_LINUX_H
 
-#define GLIBC_DYNAMIC_LINKER "/lib/ld-linux%{milp32:32}-aarch64.so.1"
+#define GLIBC_DYNAMIC_LINKER "/lib/ld-linux%{mabi=ilp32:32}-aarch64.so.1"
 
 #define LINUX_TARGET_LINK_SPEC  "%{h*}		\
    %{static:-Bstatic}				\
