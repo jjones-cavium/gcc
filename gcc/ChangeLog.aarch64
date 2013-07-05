@@ -1,5 +1,16 @@
 2013-07-05  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_load_symref_appropriately):
+	Handle !TARGET_64BIT.
+	* config/aarch64/aarch64.md (aarch64_load_tp_hard): Change to exand.
+	(aarch64_load_tp_hard_<mode>): New pattern.
+	(tlsie_small): Rename to ...
+	(tlsie_small_<mode>): This and use PTR iterator.
+	(tlsle_small): Rename to ...
+	(tlsle_small_<mode>): This and use PTR iterator.
+
+2013-07-05  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-linux.h (GLIBC_DYNAMIC_LINKER):
 	Use -mabi=ilp32 instead of -milp32.
 

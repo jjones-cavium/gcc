@@ -3750,15 +3750,26 @@
    (set_attr "mode" "<MODE>")]
 )
 
-(define_insn "aarch64_load_tp_hard"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-	(unspec:DI [(const_int 0)] UNSPEC_TLS))]
+(define_expand "aarch64_load_tp_hard"
+  [(set (match_operand 0 "register_operand" "=r")
+	(unspec [(const_int 0)] UNSPEC_TLS))]
+  ""
+{
+  if (TARGET_64BIT)
+    emit_insn (gen_aarch64_load_tp_hard_di (operands[0]));
+  else
+    emit_insn (gen_aarch64_load_tp_hard_si (operands[0]));
+   DONE;
+})
+
+(define_insn "aarch64_load_tp_hard_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+	(unspec:PTR [(const_int 0)] UNSPEC_TLS))]
   ""
   "mrs\\t%0, tpidr_el0"
   [(set_attr "v8type" "mrs")
-   (set_attr "mode" "DI")]
+   (set_attr "mode" "<MODE>")]
 )
-
 ;; The TLS ABI specifically requires that the compiler does not schedule
 ;; instructions in the TLS stubs, in order to enable linker relaxation.
 ;; Therefore we treat the stubs as an atomic sequence.
@@ -3783,26 +3794,26 @@
   [(set_attr "v8type" "call")
    (set_attr "length" "16")])
 
-(define_insn "tlsie_small"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-        (unspec:DI [(match_operand:DI 1 "aarch64_tls_ie_symref" "S")]
+(define_insn "tlsie_small_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+        (unspec:PTR [(match_operand:PTR 1 "aarch64_tls_ie_symref" "S")]
 		   UNSPEC_GOTSMALLTLS))]
   ""
-  "adrp\\t%0, %A1\;ldr\\t%0, [%0, #%L1]"
+  "adrp\\t%0, %A1\;ldr\\t%<w>0, [%0, #%L1]"
   [(set_attr "v8type" "load1")
-   (set_attr "mode" "DI")
+   (set_attr "mode" "<MODE>")
    (set_attr "length" "8")]
 )
 
-(define_insn "tlsle_small"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-        (unspec:DI [(match_operand:DI 1 "register_operand" "r")
-                   (match_operand:DI 2 "aarch64_tls_le_symref" "S")]
+(define_insn "tlsle_small_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+        (unspec:PTR [(match_operand:PTR 1 "register_operand" "r")
+                   (match_operand:PTR 2 "aarch64_tls_le_symref" "S")]
 		   UNSPEC_GOTSMALLTLS))]
   ""
-  "add\\t%0, %1, #%G2\;add\\t%0, %0, #%L2"
+  "add\\t%<w>0, %<w>1, #%G2\;add\\t%<w>0, %<w>0, #%L2"
   [(set_attr "v8type" "alu")
-   (set_attr "mode" "DI")
+   (set_attr "mode" "<MODE>")
    (set_attr "length" "8")]
 )
 

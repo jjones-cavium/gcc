@@ -571,7 +571,10 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
       {
 	rtx tmp_reg = gen_reg_rtx (Pmode);
 	rtx tp = aarch64_load_tp (NULL);
-	emit_insn (gen_tlsie_small (tmp_reg, imm));
+	if (TARGET_64BIT)
+	  emit_insn (gen_tlsie_small_di (tmp_reg, imm));
+	else
+	  emit_insn (gen_tlsie_small_si (tmp_reg, imm));
 	emit_insn (gen_rtx_SET (Pmode, dest, gen_rtx_PLUS (Pmode, tp, tmp_reg)));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
 	return;
@@ -580,7 +583,10 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
     case SYMBOL_SMALL_TPREL:
       {
 	rtx tp = aarch64_load_tp (NULL);
-	emit_insn (gen_tlsle_small (dest, tp, imm));
+	if (TARGET_64BIT)
+	  emit_insn (gen_tlsle_small_di (dest, tp, imm));
+	else
+	  emit_insn (gen_tlsle_small_si (dest, tp, imm));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
 	return;
       }
