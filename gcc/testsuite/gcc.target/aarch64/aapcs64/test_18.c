@@ -6,13 +6,18 @@
 
 #define TESTFILE "test_18.c"
 
+#ifdef __LP64__
+#define int64_t long
+#else
+#define int64_t long long
+#endif
 
 struct y
 {
-  long p;
-  long q;
-  long r;
-  long s;
+  int64_t p;
+  int64_t q;
+  int64_t r;
+  int64_t s;
 } v = { 1, 2, 3, 4 };
 
 struct z

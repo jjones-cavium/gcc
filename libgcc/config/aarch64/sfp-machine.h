@@ -19,9 +19,16 @@
    <http://www.gnu.org/licenses/>.  */
 
 #define _FP_W_TYPE_SIZE		64
+
+#ifdef __LP64__
 #define _FP_W_TYPE		unsigned long
 #define _FP_WS_TYPE		signed long
 #define _FP_I_TYPE		int
+#else
+#define _FP_W_TYPE		unsigned long long
+#define _FP_WS_TYPE		signed long long
+#define _FP_I_TYPE		int
+#endif
 
 typedef int TItype __attribute__ ((mode (TI)));
 typedef unsigned int UTItype __attribute__ ((mode (TI)));

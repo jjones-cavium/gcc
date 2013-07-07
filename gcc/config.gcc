@@ -772,7 +772,7 @@ case ${target} in
 aarch64*-*-elf)
 	tm_file="${tm_file} dbxelf.h elfos.h newlib-stdint.h"
 	tm_file="${tm_file} aarch64/aarch64-elf.h aarch64/aarch64-elf-raw.h"
-	tmake_file="${tmake_file} aarch64/t-aarch64"
+	tmake_file="${tmake_file} aarch64/t-aarch64 aarch64/t-aarch64-elf"
 	use_gcc_stdint=wrap
 	case $target in
 	aarch64_be-*)

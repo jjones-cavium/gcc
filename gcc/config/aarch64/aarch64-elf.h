@@ -116,8 +116,23 @@
 %{mbig-endian:-EB} \
 %{mlittle-endian:-EL} \
 %{mcpu=*:-mcpu=%*} \
-%{march=*:-march=%*}"
+%{march=*:-march=%*} \
+%{mabi=ilp32:-milp32} \
+%{mabi=lp64:-mlp64}"
 #endif
+
+#ifdef TARGET_BIG_ENDIAN_DEFAULT
+#define ENDIAN_SPEC "-mbig-endian"
+#else
+#define ENDIAN_SPEC "-mlittle-endian"
+#endif
+
+/* Force the default endianness and ABI flags onto the command line
+   in order to make the other specs easier to write.  */
+#undef DRIVER_SELF_SPECS
+#define DRIVER_SELF_SPECS \
+  " %{!mbig-endian:%{!mlittle-endian:" ENDIAN_SPEC "}}" \
+  " %{!mabi=*:-mabi=lp64}"
 
 #undef TYPE_OPERAND_FMT
 #define TYPE_OPERAND_FMT	"%%%s"

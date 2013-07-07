@@ -26,6 +26,222 @@
 
 	* config/aarch64/aarch64.md (*extr_insv_reg<mode>): New pattern.
 
+2013-07-06  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/t-aarch64-linux: Build ilp32 multilib also.
+
+2013-07-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_load_symref_appropriately):
+	Handle !TARGET_64BIT better.
+	* config/aarch64/aarch64.md (tlsdesc_small): Rename to ...
+	(tlsdesc_small_<mode>): This and use PTR iterator instead of DImode.
+
+2013-07-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_load_symref_appropriately):
+	Handle !TARGET_64BIT.
+	* config/aarch64/aarch64.md (aarch64_load_tp_hard): Change to exand.
+	(aarch64_load_tp_hard_<mode>): New pattern.
+	(tlsie_small): Rename to ...
+	(tlsie_small_<mode>): This and use PTR iterator.
+	(tlsle_small): Rename to ...
+	(tlsle_small_<mode>): This and use PTR iterator.
+
+2013-07-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-linux.h (GLIBC_DYNAMIC_LINKER):
+	Use -mabi=ilp32 instead of -milp32.
+
+2013-07-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Use
+	-mabi=ilp32 instead of -milp32.
+	* config/aarch64/aarch64-elf.h (ASM_SPEC): Support -mabi=* instead of
+	-milp32/-mlp64.
+	(DRIVER_SELF_SPECS): Likewise.
+	* config/aarch64/aarch64-linux.h (LINK_SPEC): Likewise.
+	* config/aarch64/aarch64.h (TARGET_64BIT): New define.
+	(aarch64_abi_type): New enum type.
+	(MULTILIB_DEFAULTS): Use -mabi=lp64 instead of -mlp64.
+	* config/aarch64/aarch64.opt (mabi=): New option.
+	(milp32): Make an alias for -mabi=ilp32.
+	(mlp64): Make an alias for -mabi=lp64.
+
+2013-06-26  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.target/aarch64/atomic-op-long.c: Update for
+	ILP32 ABI support.
+	* testsuite/gcc.target/aarch64/fcvt_double_int.c: Likewise.
+
+2013-06-25  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Update for the
+	renaming of the bigendian ilp32 linker target.
+	* config/aarch64/aarch64-linux.h (GLIBC_DYNAMIC_LINKER): Support
+	milp32 correctly.
+	(LINK_SPEC): Update for the bigendian ilp32 linker target.
+
+2013-06-24  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.h (TARGET_CPU_CPP_BUILTINS):
+	Define __ILP32__ for ilp32 targets.
+
+2013-06-21  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-linux.h (LINUX_TARGET_LINK_SPEC):
+	Use linux target rather than elf target.
+
+2013-06-21  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-linux.h (LINUX_TARGET_LINK_SPEC):
+	Change the linker script based on the milp32 option.
+
+2013-06-21  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Change to update
+	for the new naming.
+
+2013-06-20  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_classify_address): Don't
+	allow reg index mode for ILP32 (note we can allow it if we know for a
+	fact it is really an index here and not the pointer and we sign extend it
+	but that is too much work for now).
+
+2013-06-20  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.target/aarch64/aapcs64/test_18.c: Use long long
+	for ILP32.
+
+2013-06-20  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_trampoline_init):
+	Support Pmode being SImode.
+
+2013-06-20  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_elf_asm_constructor): Use
+	.word for !TARGET64_BIT.
+	(aarch64_elf_asm_destructor): Likewise.
+
+2013-06-19  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.h (MULTILIB_DEFAULTS): Define.
+	* config.gcc (aarch64*-*-elf): Use aarch64/t-aarch64-elf.
+	* config/aarch64/t-aarch64-elf: New file.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_output_mi_thunk): Support
+	32bit vcall_offsets for !TARGET_64BIT.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_expand_prologue):
+	Use DImode version of hard_frame_pointer_rtx.
+	(aarch64_expand_epilogue): Likewise.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_expand_epilogue):
+	Use Pmode for IP0_REGNUM in one place.
+	(aarch64_final_eh_return_addr): Use Pmode for LR_REGNUM
+	and the addition of the memory.
+	* config/aarch64/aarch64.md (eh_frame): Change to an expand.
+	(eh_return<mode>): New insn.
+	(split for UNSPECV_EH_RETURN): Use PTR iterator.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (add_losym_<mode>): Use PTR
+	iterator instead of P iterator.
+	* config/aarch64/iterators.md (P): Remove as PTR is the same.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_expand_prologue):
+	Use gen_storewb_pairdi_si for !TARGET_64BIT.
+	(aarch64_expand_epilogue): Use gen_loadwb_pairdi_si
+	for !TARGET_64BIT.
+	* config/aarch64/aarch64.md (indirect_jump_<mode>): Use PTR iterator
+	instead of the P iterator.
+	(casesi_dispatch_<mode>): Likewise.
+	(*call_reg_<mode>): Likewise.
+	(*call_symbol_<mode>): Likewise.
+	(*call_value_reg<mode>): Likewise.
+	(*call_value_symbol_<mode>): Likewise.
+	(*sibcall_insn_<mode>): Likewise.
+	(*sibcall_value_insn_<mode>): Likewise.
+	(stack_tie): Change to expand.
+	(stack_tie_<mode>): New pattern.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* gcc/config/aarch64/aarch64.md (*movsi_aarch64): Add stack register
+	moves to the pattern for ILP32 mode.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (indirect_jump): Change to an expand.
+	(indirect_jump_<mode>): New pattern.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (casesi): Use Pmode instead of DImode.
+	Use gen_casesi_dispatch_di/gen_casesi_dispatch_si.
+	(casesi_dispatch): Rename to ...
+	(casesi_dispatch_<mode>): This. Use P iterator in some cases.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (*movsi_aarch64): Add Ush for ILP32 mode.
+	(add_losym_<mode>): Add <w> to the operands of the instruction.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (*call_reg): Rename to ...
+	(*call_reg_<mode>): This. Use P iterator in some cases.
+	(*call_symbol): Rename to ...
+	(*call_symbol_<mode>): This.  Use P iterator in some cases.
+	(*call_value_reg): Rename to ...
+	(*call_value_reg_<mode>): This.  Use P iterator in some cases.
+	(*call_value_symbol): Rename to ...
+	(*call_value_symbol_<mode>): This.  Use P iterator in some cases.
+	(*sibcall_insn): Rename to ...
+	(*sibcall_insn_<mode>): This.  Use P iterator in some cases.
+	(*sibcall_value_insn): Rename to ...
+	(*sibcall_value_insn_<mode>): This.  Use P iterator in some cases.
+
+2013-06-18  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (add_losym): Change to an expand.
+	(add_losym_<mode>): New pattern.
+	* config/aarch64/iterators.md (P): New iterator.
+
+2013-06-17  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf.h (DRIVER_SELF_SPECS): Fix typo.
+
+2013-06-17  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_save_or_restore_callee_save_registers):
+	Use DImode instead of Pmode.
+	(initialize_aarch64_code_model): Error out when ilp32 and large code model is used.
+	* config/aarch64/aarch64.h (LONG_TYPE_SIZE): Define based on -milp32.
+	(Pmode): Likewise.
+	(POINTER_SIZE): New define.
+
+2013-06-17  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Change the linker script based
+	on the milp32/mlp64 options.
+	* config/aarch64/aarch64-elf.h (ASM_SPEC): Pass -milp32 and -mlp64 on to the assembler.
+	(ENDIAN_SPEC): Define.
+	(DRIVER_SELF_SPECS): Define.
+	* config/aarch64/aarch64.opt (milp32): New option.
+	(mlp64): New option.
+
 2013-07-02  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.c (aarch64_add_offset): Add another

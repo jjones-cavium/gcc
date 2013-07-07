@@ -533,7 +533,10 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
 	if (can_create_pseudo_p ())
 	  tmp_reg =  gen_reg_rtx (Pmode);
 	emit_move_insn (tmp_reg, gen_rtx_HIGH (Pmode, imm));
-	emit_insn (gen_ldr_got_small (dest, tmp_reg, imm));
+	if (TARGET_64BIT)
+	  emit_insn (gen_ldr_got_small_di (dest, tmp_reg, imm));
+	else
+	  emit_insn (gen_ldr_got_small_si (dest, tmp_reg, imm));
 	return;
       }
 
@@ -557,7 +560,10 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
 	rtx x0 = gen_rtx_REG (Pmode, R0_REGNUM);
 	rtx tp;
 
-	emit_insn (gen_tlsdesc_small (imm));
+	if (TARGET_64BIT)
+	  emit_insn (gen_tlsdesc_small_di (imm));
+	else
+	  emit_insn (gen_tlsdesc_small_si (imm));
 	tp = aarch64_load_tp (NULL);
 	emit_insn (gen_rtx_SET (Pmode, dest, gen_rtx_PLUS (Pmode, tp, x0)));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
@@ -568,7 +574,10 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
       {
 	rtx tmp_reg = gen_reg_rtx (Pmode);
 	rtx tp = aarch64_load_tp (NULL);
-	emit_insn (gen_tlsie_small (tmp_reg, imm));
+	if (TARGET_64BIT)
+	  emit_insn (gen_tlsie_small_di (tmp_reg, imm));
+	else
+	  emit_insn (gen_tlsie_small_si (tmp_reg, imm));
 	emit_insn (gen_rtx_SET (Pmode, dest, gen_rtx_PLUS (Pmode, tp, tmp_reg)));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
 	return;
@@ -577,7 +586,10 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
     case SYMBOL_SMALL_TPREL:
       {
 	rtx tp = aarch64_load_tp (NULL);
-	emit_insn (gen_tlsle_small (dest, tp, imm));
+	if (TARGET_64BIT)
+	  emit_insn (gen_tlsle_small_di (dest, tp, imm));
+	else
+	  emit_insn (gen_tlsle_small_si (dest, tp, imm));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
 	return;
       }
@@ -1830,7 +1842,7 @@ aarch64_save_or_restore_callee_save_registers (HOST_WIDE_INT offset,
       if (aarch64_register_saved_on_entry (regno))
 	{
 	  rtx mem;
-	  mem = gen_mem_ref (Pmode,
+	  mem = gen_mem_ref (DImode,
 			     plus_constant (base_rtx,
 					    start_offset));
 
@@ -1846,7 +1858,7 @@ aarch64_save_or_restore_callee_save_registers (HOST_WIDE_INT offset,
 	    {
 	      rtx mem2;
 	      /* Next highest register to be saved.  */
-	      mem2 = gen_mem_ref (Pmode,
+	      mem2 = gen_mem_ref (DImode,
 				  plus_constant
 				  (base_rtx,
 				   start_offset + increment));
@@ -2044,19 +2056,28 @@ aarch64_expand_prologue (void)
 						     fp_offset
 						     + UNITS_PER_WORD));
 	      insn = emit_insn (gen_store_pairdi (mem_fp,
-						  hard_frame_pointer_rtx,
+						  gen_lowpart (DImode, hard_frame_pointer_rtx),
 						  mem_lr,
 						  gen_rtx_REG (DImode,
 							       LR_REGNUM)));
 	    }
 	  else
 	    {
-	      insn = emit_insn (gen_storewb_pairdi_di
-				(stack_pointer_rtx, stack_pointer_rtx,
-				 hard_frame_pointer_rtx,
-				 gen_rtx_REG (DImode, LR_REGNUM),
-				 GEN_INT (-offset),
-				 GEN_INT (GET_MODE_SIZE (DImode) - offset)));
+	      if (TARGET_64BIT)
+	        insn = emit_insn (gen_storewb_pairdi_di
+				  (stack_pointer_rtx, stack_pointer_rtx,
+				   hard_frame_pointer_rtx,
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (-offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) - offset)));
+	      else
+	        insn = emit_insn (gen_storewb_pairdi_si
+				  (stack_pointer_rtx, stack_pointer_rtx,
+				   gen_lowpart (DImode, hard_frame_pointer_rtx),
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (-offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) - offset)));
+		
 	      RTX_FRAME_RELATED_P (XVECEXP (PATTERN (insn), 0, 2)) = 1;
 	    }
 
@@ -2184,7 +2205,7 @@ aarch64_expand_epilogue (bool for_sibcall)
 				      plus_constant (stack_pointer_rtx,
 						     fp_offset
 						     + UNITS_PER_WORD));
-	      insn = emit_insn (gen_load_pairdi (hard_frame_pointer_rtx,
+	      insn = emit_insn (gen_load_pairdi (gen_lowpart (DImode, hard_frame_pointer_rtx),
 						 mem_fp,
 						 gen_rtx_REG (DImode,
 							      LR_REGNUM),
@@ -2192,13 +2213,22 @@ aarch64_expand_epilogue (bool for_sibcall)
 	    }
 	  else
 	    {
-	      insn = emit_insn (gen_loadwb_pairdi_di
-				(stack_pointer_rtx,
-				 stack_pointer_rtx,
-				 hard_frame_pointer_rtx,
-				 gen_rtx_REG (DImode, LR_REGNUM),
-				 GEN_INT (offset),
-				 GEN_INT (GET_MODE_SIZE (DImode) + offset)));
+	      if (TARGET_64BIT)
+	        insn = emit_insn (gen_loadwb_pairdi_di
+				  (stack_pointer_rtx,
+				   stack_pointer_rtx,
+				   hard_frame_pointer_rtx,
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) + offset)));
+	      else
+	        insn = emit_insn (gen_loadwb_pairdi_si
+				  (stack_pointer_rtx,
+				   stack_pointer_rtx,
+				   gen_lowpart (DImode, hard_frame_pointer_rtx),
+				   gen_rtx_REG (DImode, LR_REGNUM),
+				   GEN_INT (offset),
+				   GEN_INT (GET_MODE_SIZE (DImode) + offset)));
 	      RTX_FRAME_RELATED_P (XVECEXP (PATTERN (insn), 0, 2)) = 1;
 	      add_reg_note (insn, REG_CFA_ADJUST_CFA,
 			    (gen_rtx_SET (Pmode, stack_pointer_rtx,
@@ -2248,7 +2278,7 @@ aarch64_expand_epilogue (bool for_sibcall)
 	 as a temporary register to hold the current SP value.  The
 	 CFA is described using IP0 then SP is modified.  */
 
-      rtx ip0 = gen_rtx_REG (DImode, IP0_REGNUM);
+      rtx ip0 = gen_rtx_REG (Pmode, IP0_REGNUM);
 
       insn = emit_move_insn (ip0, stack_pointer_rtx);
       add_reg_note (insn, REG_CFA_DEF_CFA, ip0);
@@ -2322,7 +2352,7 @@ aarch64_final_eh_return_addr (void)
     - cfun->machine->frame.saved_regs_size;
 
   if (cfun->machine->frame.reg_offset[LR_REGNUM] < 0)
-    return gen_rtx_REG (DImode, LR_REGNUM);
+    return gen_rtx_REG (Pmode, LR_REGNUM);
 
   /* DSE and CSELIB do not detect an alias between sp+k1 and fp+k2.  This can
      result in a store to save LR introduced by builtin_eh_return () being
@@ -2338,17 +2368,17 @@ aarch64_final_eh_return_addr (void)
   if (frame_pointer_needed)
     {
       if (fp_offset)
-        return gen_frame_mem (DImode,
+        return gen_frame_mem (Pmode,
 			      plus_constant (hard_frame_pointer_rtx, UNITS_PER_WORD));
       else
-        return gen_frame_mem (DImode,
+        return gen_frame_mem (Pmode,
 			      plus_constant (stack_pointer_rtx, UNITS_PER_WORD));
     }
 
   /* If FP is not needed, we calculate the location of LR, which would be
      at the top of the saved registers block.  */
 
-  return gen_frame_mem (DImode,
+  return gen_frame_mem (Pmode,
 			plus_constant (stack_pointer_rtx,
 				       fp_offset
 				       + cfun->machine->frame.saved_regs_size
@@ -2475,7 +2505,7 @@ aarch64_output_mi_thunk (FILE *file, tree thunk ATTRIBUTE_UNUSED,
     aarch64_add_constant (this_regno, IP1_REGNUM, delta);
   else
     {
-      gcc_assert ((vcall_offset & 0x7) == 0);
+      gcc_assert ((vcall_offset & (TARGET_64BIT ? 0x7 : 0x3) ) == 0);
 
       this_rtx = gen_rtx_REG (Pmode, this_regno);
       temp0 = gen_rtx_REG (Pmode, IP0_REGNUM);
@@ -2936,7 +2966,7 @@ aarch64_classify_address (struct aarch64_address_info *info,
   enum rtx_code code = GET_CODE (x);
   rtx op0, op1;
   bool allow_reg_index_p =
-    outer_code != PARALLEL && GET_MODE_SIZE(mode) != 16;
+    outer_code != PARALLEL && GET_MODE_SIZE(mode) != 16 && TARGET_64BIT;
 
   /* Don't support anything other than POST_INC or REG addressing for
      AdvSIMD.  */
@@ -4080,11 +4110,18 @@ aarch64_trampoline_init (rtx m_tramp, tree fndecl, rtx chain_value)
   /* Don't need to copy the trailing D-words, we fill those in below.  */
   emit_block_move (m_tramp, assemble_trampoline_template (),
 		   GEN_INT (TRAMPOLINE_SIZE - 16), BLOCK_OP_NORMAL);
-  mem = adjust_address (m_tramp, DImode, 16);
+  mem = adjust_address (m_tramp, Pmode, 16);
+
+  if (!TARGET_64BIT && BYTES_BIG_ENDIAN)
+    mem = adjust_address (mem, Pmode, 4);
+
   fnaddr = XEXP (DECL_RTL (fndecl), 0);
   emit_move_insn (mem, fnaddr);
 
-  mem = adjust_address (m_tramp, DImode, 24);
+  mem = adjust_address (m_tramp, Pmode, 24);
+
+  if (!TARGET_64BIT && BYTES_BIG_ENDIAN)
+    mem = adjust_address (mem, Pmode, 4);
   emit_move_insn (mem, chain_value);
 
   /* XXX We should really define a "clear_cache" pattern and use
@@ -4147,7 +4184,7 @@ aarch64_elf_asm_constructor (rtx symbol, int priority)
       s = get_section (buf, SECTION_WRITE, NULL);
       switch_to_section (s);
       assemble_align (POINTER_SIZE);
-      fputs ("\t.dword\t", asm_out_file);
+      fputs (TARGET_64BIT ? "\t.dword\t" : "\t.word\t", asm_out_file);
       output_addr_const (asm_out_file, symbol);
       fputc ('\n', asm_out_file);
     }
@@ -4166,7 +4203,7 @@ aarch64_elf_asm_destructor (rtx symbol, int priority)
       s = get_section (buf, SECTION_WRITE, NULL);
       switch_to_section (s);
       assemble_align (POINTER_SIZE);
-      fputs ("\t.dword\t", asm_out_file);
+      fputs (TARGET_64BIT ? "\t.dword\t" : "\t.word\t", asm_out_file);
       output_addr_const (asm_out_file, symbol);
       fputc ('\n', asm_out_file);
     }
@@ -4986,6 +5023,13 @@ aarch64_init_expanders (void)
 static void
 initialize_aarch64_code_model (void)
 {
+
+  if (!TARGET_64BIT && aarch64_cmodel_var == AARCH64_CMODEL_LARGE)
+    {
+      error ("code model %qs does not work with ILP32 code.\n", "large");
+      aarch64_cmodel_var = AARCH64_CMODEL_SMALL;
+    }
+
    if (flag_pic)
      {
        switch (aarch64_cmodel_var)

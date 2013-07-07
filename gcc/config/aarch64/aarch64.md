@@ -352,9 +352,13 @@
 ;; -------------------------------------------------------------------
 ;; Jumps and other miscellaneous insns
 ;; -------------------------------------------------------------------
+(define_expand "indirect_jump"
+  [(set (pc) (match_operand 0 "register_operand" "r"))]
+  ""
+  "gcc_assert (GET_MODE (operands[0]) == Pmode);")
 
-(define_insn "indirect_jump"
-  [(set (pc) (match_operand:DI 0 "register_operand" "r"))]
+(define_insn "indirect_jump_<mode>"
+  [(set (pc) (match_operand:PTR 0 "register_operand" "r"))]
   ""
   "br\\t%0"
   [(set_attr "v8type" "branch")]
@@ -444,17 +448,21 @@
 						 const0_rtx),
 				    operands[0], operands[2], operands[4]));
 
-    operands[2] = force_reg (DImode, gen_rtx_LABEL_REF (VOIDmode, operands[3]));
-    emit_jump_insn (gen_casesi_dispatch (operands[2], operands[0],
-					 operands[3]));
+    operands[2] = force_reg (Pmode, gen_rtx_LABEL_REF (VOIDmode, operands[3]));
+    if (TARGET_64BIT)
+      emit_jump_insn (gen_casesi_dispatch_di (operands[2], operands[0],
+					      operands[3]));
+    else
+      emit_jump_insn (gen_casesi_dispatch_si (operands[2], operands[0],
+					      operands[3]));
     DONE;
   }
 )
 
-(define_insn "casesi_dispatch"
+(define_insn "casesi_dispatch_<mode>"
   [(parallel
     [(set (pc)
-	  (mem:DI (unspec [(match_operand:DI 0 "register_operand" "r")
+	  (mem:PTR (unspec [(match_operand:PTR 0 "register_operand" "r")
 			   (match_operand:SI 1 "register_operand" "r")]
 			UNSPEC_CASESI)))
      (clobber (reg:CC CC_REGNUM))
@@ -510,8 +518,16 @@
   [(set_attr "v8type" "branch")]
 )
 
-(define_insn "eh_return"
-  [(unspec_volatile [(match_operand:DI 0 "register_operand" "r")]
+(define_expand "eh_return"
+  [(unspec_volatile [(match_operand 0 "register_operand" "r")]
+    UNSPECV_EH_RETURN)]
+  ""
+{
+  gcc_assert (GET_MODE (operands[0]) == Pmode);
+})
+
+(define_insn "eh_return<mode>"
+  [(unspec_volatile [(match_operand:PTR 0 "register_operand" "r")]
     UNSPECV_EH_RETURN)]
   ""
   "#"
@@ -519,7 +535,7 @@
 )
 
 (define_split
-  [(unspec_volatile [(match_operand:DI 0 "register_operand" "")]
+  [(unspec_volatile [(match_operand:PTR 0 "register_operand" "")]
     UNSPECV_EH_RETURN)]
   "reload_completed"
   [(set (match_dup 1) (match_dup 0))]
@@ -612,8 +628,8 @@
   }"
 )
 
-(define_insn "*call_reg"
-  [(call (mem:DI (match_operand:DI 0 "register_operand" "r"))
+(define_insn "*call_reg_<mode>"
+  [(call (mem:PTR (match_operand:PTR 0 "register_operand" "r"))
 	 (match_operand 1 "" ""))
    (use (match_operand 2 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -622,8 +638,8 @@
   [(set_attr "v8type" "call")]
 )
 
-(define_insn "*call_symbol"
-  [(call (mem:DI (match_operand:DI 0 "" ""))
+(define_insn "*call_symbol_<mode>"
+  [(call (mem:PTR (match_operand:PTR 0 "" ""))
 	 (match_operand 1 "" ""))
    (use (match_operand 2 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -659,9 +675,9 @@
   }"
 )
 
-(define_insn "*call_value_reg"
+(define_insn "*call_value_reg<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:DI (match_operand:DI 1 "register_operand" "r"))
+	(call (mem:PTR (match_operand:PTR 1 "register_operand" "r"))
 		      (match_operand 2 "" "")))
    (use (match_operand 3 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -670,9 +686,9 @@
   [(set_attr "v8type" "call")]
 )
 
-(define_insn "*call_value_symbol"
+(define_insn "*call_value_symbol_<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:DI (match_operand:DI 1 "" ""))
+	(call (mem:PTR (match_operand:PTR 1 "" ""))
 	      (match_operand 2 "" "")))
    (use (match_operand 3 "" ""))
    (clobber (reg:DI LR_REGNUM))]
@@ -707,8 +723,8 @@
   }
 )
 
-(define_insn "*sibcall_insn"
-  [(call (mem:DI (match_operand:DI 0 "" "X"))
+(define_insn "*sibcall_insn_<mode>"
+  [(call (mem:PTR (match_operand:PTR 0 "" "X"))
 	 (match_operand 1 "" ""))
    (return)
    (use (match_operand 2 "" ""))]
@@ -717,9 +733,9 @@
   [(set_attr "v8type" "branch")]
 )
 
-(define_insn "*sibcall_value_insn"
+(define_insn "*sibcall_value_insn_<mode>"
   [(set (match_operand 0 "" "")
-	(call (mem:DI (match_operand 1 "" "X"))
+	(call (mem:PTR (match_operand 1 "" "X"))
 	      (match_operand 2 "" "")))
    (return)
    (use (match_operand 3 "" ""))]
@@ -826,8 +842,8 @@
 )
 
 (define_insn "*movsi_aarch64"
-  [(set (match_operand:SI 0 "nonimmediate_operand" "=r,r,r,*w,m,  m,*w, r,*w")
-	(match_operand:SI 1 "aarch64_mov_operand"  " r,M,m, m,rZ,*w,rZ,*w,*w"))]
+  [(set (match_operand:SI 0 "nonimmediate_operand" "=r,r,r,*w,m,  m,*w, r,*w,r,k,r")
+	(match_operand:SI 1 "aarch64_mov_operand"  " r,M,m, m,rZ,*w,rZ,*w,*w,Ush,r,k"))]
   "(register_operand (operands[0], SImode)
     || aarch64_reg_or_zero (operands[1], SImode))"
   "@
@@ -839,10 +855,13 @@
    str\\t%s1, %0
    fmov\\t%s0, %w1
    fmov\\t%w0, %s1
-   fmov\\t%s0, %s1"
-  [(set_attr "v8type" "move,alu,load1,load1,store1,store1,fmov,fmov,fmov")
+   fmov\\t%s0, %s1
+   adrp\\t%0, %A1
+   mov\\t%0, %x1
+   mov\\t%x0, %1"
+  [(set_attr "v8type" "move,alu,load1,load1,store1,store1,fmov,fmov,fmov,adr,move,move")
    (set_attr "mode" "SI")
-   (set_attr "fp" "*,*,*,yes,*,yes,yes,yes,yes")]
+   (set_attr "fp" "*,*,*,yes,*,yes,yes,yes,yes,*,*,*")]
 )
 
 (define_insn "*movdi_aarch64"
@@ -3742,39 +3761,62 @@
 ;; don't have modes for ADRP and ADD instructions.  This is to allow high
 ;; and lo_sum's to be used with the labels defining the jump tables in
 ;; rodata section.
+(define_expand "add_losym"
+  [(match_operand 0 "register_operand" "=r")
+   (match_operand 1 "register_operand" "r")
+   (match_operand 2 "aarch64_valid_symref" "S")]
+""
+{
+  if (TARGET_64BIT)
+    emit_insn (gen_add_losym_di (operands[0], operands[1], operands[2]));
+  else
+    emit_insn (gen_add_losym_si (operands[0], operands[1], operands[2]));
+  DONE;
+})
 
-(define_insn "add_losym"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-	(lo_sum:DI (match_operand:DI 1 "register_operand" "r")
+(define_insn "add_losym_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+	(lo_sum:PTR (match_operand:PTR 1 "register_operand" "r")
 		   (match_operand 2 "aarch64_valid_symref" "S")))]
   ""
-  "add\\t%0, %1, :lo12:%a2"
+  "add\\t%<w>0, %<w>1, :lo12:%a2"
   [(set_attr "v8type" "alu")
-   (set_attr "mode" "DI")]
+   (set_attr "mode" "<MODE>")]
 
 )
 
-(define_insn "ldr_got_small"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-	(unspec:DI [(mem:DI (lo_sum:DI
-			      (match_operand:DI 1 "register_operand" "r")
-			      (match_operand:DI 2 "aarch64_valid_symref" "S")))]
+(define_insn "ldr_got_small_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+	(unspec:PTR [(mem:PTR (lo_sum:PTR
+			      (match_operand:PTR 1 "register_operand" "r")
+			      (match_operand:PTR 2 "aarch64_valid_symref" "S")))]
 		   UNSPEC_GOTSMALLPIC))]
   ""
-  "ldr\\t%0, [%1, #:got_lo12:%a2]"
+  "ldr\\t%<w>0, [%1, #:got_lo12:%a2]"
   [(set_attr "v8type" "load1")
-   (set_attr "mode" "DI")]
+   (set_attr "mode" "<MODE>")]
 )
 
-(define_insn "aarch64_load_tp_hard"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-	(unspec:DI [(const_int 0)] UNSPEC_TLS))]
+(define_expand "aarch64_load_tp_hard"
+  [(set (match_operand 0 "register_operand" "=r")
+	(unspec [(const_int 0)] UNSPEC_TLS))]
+  ""
+{
+  if (TARGET_64BIT)
+    emit_insn (gen_aarch64_load_tp_hard_di (operands[0]));
+  else
+    emit_insn (gen_aarch64_load_tp_hard_si (operands[0]));
+   DONE;
+})
+
+(define_insn "aarch64_load_tp_hard_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+	(unspec:PTR [(const_int 0)] UNSPEC_TLS))]
   ""
   "mrs\\t%0, tpidr_el0"
   [(set_attr "v8type" "mrs")
-   (set_attr "mode" "DI")]
+   (set_attr "mode" "<MODE>")]
 )
-
 ;; The TLS ABI specifically requires that the compiler does not schedule
 ;; instructions in the TLS stubs, in order to enable linker relaxation.
 ;; Therefore we treat the stubs as an atomic sequence.
@@ -3799,44 +3841,54 @@
   [(set_attr "v8type" "call")
    (set_attr "length" "16")])
 
-(define_insn "tlsie_small"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-        (unspec:DI [(match_operand:DI 1 "aarch64_tls_ie_symref" "S")]
+(define_insn "tlsie_small_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+        (unspec:PTR [(match_operand:PTR 1 "aarch64_tls_ie_symref" "S")]
 		   UNSPEC_GOTSMALLTLS))]
   ""
-  "adrp\\t%0, %A1\;ldr\\t%0, [%0, #%L1]"
+  "adrp\\t%0, %A1\;ldr\\t%<w>0, [%0, #%L1]"
   [(set_attr "v8type" "load1")
-   (set_attr "mode" "DI")
+   (set_attr "mode" "<MODE>")
    (set_attr "length" "8")]
 )
 
-(define_insn "tlsle_small"
-  [(set (match_operand:DI 0 "register_operand" "=r")
-        (unspec:DI [(match_operand:DI 1 "register_operand" "r")
-                   (match_operand:DI 2 "aarch64_tls_le_symref" "S")]
+(define_insn "tlsle_small_<mode>"
+  [(set (match_operand:PTR 0 "register_operand" "=r")
+        (unspec:PTR [(match_operand:PTR 1 "register_operand" "r")
+                   (match_operand:PTR 2 "aarch64_tls_le_symref" "S")]
 		   UNSPEC_GOTSMALLTLS))]
   ""
-  "add\\t%0, %1, #%G2\;add\\t%0, %0, #%L2"
+  "add\\t%<w>0, %<w>1, #%G2\;add\\t%<w>0, %<w>0, #%L2"
   [(set_attr "v8type" "alu")
-   (set_attr "mode" "DI")
+   (set_attr "mode" "<MODE>")
    (set_attr "length" "8")]
 )
 
-(define_insn "tlsdesc_small"
-  [(set (reg:DI R0_REGNUM)
-        (unspec:DI [(match_operand:DI 0 "aarch64_valid_symref" "S")]
+(define_insn "tlsdesc_small_<mode>"
+  [(set (reg:PTR R0_REGNUM)
+        (unspec:PTR [(match_operand:PTR 0 "aarch64_valid_symref" "S")]
 		   UNSPEC_TLSDESC))
    (clobber (reg:DI LR_REGNUM))
    (clobber (match_scratch:DI 1 "=r"))]
   "TARGET_TLS_DESC"
-  "adrp\\tx0, %A0\;ldr\\t%1, [x0, #%L0]\;add\\tx0, x0, %L0\;.tlsdesccall\\t%0\;blr\\t%1"
+  "adrp\\tx0, %A0\;ldr\\t%<w>1, [x0, #%L0]\;add\\t<w>0, <w>0, %L0\;.tlsdesccall\\t%0\;blr\\t%1"
   [(set_attr "v8type" "call")
    (set_attr "length" "16")])
 
-(define_insn "stack_tie"
+(define_expand "stack_tie"
   [(set (mem:BLK (scratch))
-	(unspec:BLK [(match_operand:DI 0 "register_operand" "rk")
-		     (match_operand:DI 1 "register_operand" "rk")]
+	(unspec:BLK [(match_operand 0 "register_operand" "rk")
+		     (match_operand 1 "register_operand" "rk")]
+		    UNSPEC_PRLG_STK))]
+  ""
+{
+  gcc_assert (GET_MODE (operands[0]) == Pmode);
+})
+
+(define_insn "stack_tie_<mode>"
+  [(set (mem:BLK (scratch))
+	(unspec:BLK [(match_operand:PTR 0 "register_operand" "rk")
+		     (match_operand:PTR 1 "register_operand" "rk")]
 		    UNSPEC_PRLG_STK))]
   ""
   ""

@@ -21,7 +21,7 @@
 #ifndef GCC_AARCH64_LINUX_H
 #define GCC_AARCH64_LINUX_H
 
-#define GLIBC_DYNAMIC_LINKER "/lib/ld-linux-aarch64.so.1"
+#define GLIBC_DYNAMIC_LINKER "/lib/ld-linux%{mabi=ilp32:32}-aarch64.so.1"
 
 #define LINUX_TARGET_LINK_SPEC  "%{h*}		\
    %{static:-Bstatic}				\
@@ -30,7 +30,8 @@
    %{rdynamic:-export-dynamic}			\
    -dynamic-linker " GNU_USER_DYNAMIC_LINKER "	\
    -X						\
-   %{mbig-endian:-EB} %{mlittle-endian:-EL}"
+   %{mbig-endian:-EB} %{mlittle-endian:-EL}	\
+   -maarch64linux%{mabi=ilp32:32}%{mbig-endian:b}"
 
 #define LINK_SPEC LINUX_TARGET_LINK_SPEC
 
