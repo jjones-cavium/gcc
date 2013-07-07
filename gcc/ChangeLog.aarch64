@@ -1,3 +1,7 @@
+2013-07-06  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/t-aarch64-linux: Build ilp32 multilib also.
+
 2013-07-05  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.c (aarch64_load_symref_appropriately):
