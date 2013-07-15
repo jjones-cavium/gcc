@@ -171,6 +171,7 @@ struct simd_immediate_info
   int shift;
   int element_width;
   bool mvn;
+  bool msl;
 };
 
 HOST_WIDE_INT aarch64_initial_elimination_offset (unsigned, unsigned);
@@ -210,9 +211,6 @@ int aarch64_asm_preferred_eh_data_format (int, int);
 int aarch64_hard_regno_mode_ok (unsigned, enum machine_mode);
 int aarch64_hard_regno_nregs (unsigned, enum machine_mode);
 int aarch64_simd_attr_length_move (rtx);
-int aarch64_simd_immediate_valid_for_move (rtx, enum machine_mode, rtx *,
-					   int *, unsigned char *, int *,
-					   int *);
 int aarch64_uxt_size (int, HOST_WIDE_INT);
 rtx aarch64_final_eh_return_addr (void);
 rtx aarch64_legitimize_reload_address (rtx *, enum machine_mode, int, int, int);

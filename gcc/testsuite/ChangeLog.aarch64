@@ -1,3 +1,7 @@
+2013-07-12  Tejas Belagod  <tejas.belagod@arm.com>
+
+	* gcc.target/aarch64/vect-movi.c: New.
+
 2013-07-02  Ian Bolton  <ian.bolton@arm.com>
 
 	* gcc.target/config/aarch64/insv_1.c: Update to show it doesn't work
