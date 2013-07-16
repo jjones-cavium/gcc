@@ -80,6 +80,7 @@
     UNSPEC_FRINTZ
     UNSPEC_GOTSMALLPIC
     UNSPEC_GOTSMALLTLS
+    UNSPEC_GOTTINYPIC
     UNSPEC_LD2
     UNSPEC_LD3
     UNSPEC_LD4
@@ -3795,6 +3796,16 @@
   "ldr\\t%<w>0, [%1, #:got_lo12:%a2]"
   [(set_attr "v8type" "load1")
    (set_attr "mode" "<MODE>")]
+)
+
+(define_insn "ldr_got_tiny"
+  [(set (match_operand:DI 0 "register_operand" "=r")
+	(unspec:DI [(match_operand:DI 1 "aarch64_valid_symref" "S")]
+		   UNSPEC_GOTTINYPIC))]
+  ""
+  "ldr\\t%0, %L1"
+  [(set_attr "v8type" "load1")
+   (set_attr "mode" "DI")]
 )
 
 (define_expand "aarch64_load_tp_hard"
