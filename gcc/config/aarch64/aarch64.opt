@@ -119,4 +119,4 @@ Target RejectNegative Alias(mabi=, ilp32)
 
 mlp64
 Target RejectNegative Alias(mabi=, lp64)
--milp32		Use the LP64 ABI
+-mlp64		Use the LP64 ABI
