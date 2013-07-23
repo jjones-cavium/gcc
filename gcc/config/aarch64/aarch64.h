@@ -32,9 +32,6 @@
       else						\
 	builtin_define ("__AARCH64EL__");		\
 							\
-     if (!TARGET_64BIT)					\
-	builtin_define ("__ILP32__");			\
-							\
       switch (aarch64_cmodel)				\
 	{						\
 	  case AARCH64_CMODEL_TINY:			\
@@ -52,6 +49,11 @@
 	    break;					\
 	}						\
 							\
+      if (TARGET_ILP32)					\
+	{						\
+	  cpp_define (parse_in, "_ILP32");		\
+	  cpp_define (parse_in, "__ILP32__");		\
+	}						\
     } while (0)
 
 
