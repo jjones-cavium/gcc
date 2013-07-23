@@ -111,6 +111,29 @@
 
 #define GLOBAL_ASM_OP "\t.global\t"
 
+#ifdef TARGET_BIG_ENDIAN_DEFAULT
+#define ENDIAN_SPEC "-mbig-endian"
+#else
+#define ENDIAN_SPEC "-mlittle-endian"
+#endif
+
+#if TARGET_DATA_MODEL == 1
+#define ABI_SPEC  "-mabi=lp64"
+#define MULTILIB_DEFAULTS { "mabi=lp64" }
+#elif TARGET_DATA_MODEL == 2
+#define ABI_SPEC  "-mabi=ilp32"
+#define MULTILIB_DEFAULTS { "mabi=ilp32" }
+#else
+#error "Unknown or undefined TARGET_DATA_MODEL!"
+#endif
+
+/* Force the default endianness and ABI flags onto the command line
+   in order to make the other specs easier to write.  */
+#undef DRIVER_SELF_SPECS
+#define DRIVER_SELF_SPECS \
+  " %{!mbig-endian:%{!mlittle-endian:" ENDIAN_SPEC "}}" \
+  " %{!mabi=*:" ABI_SPEC "}"
+
 #ifndef ASM_SPEC
 #define ASM_SPEC "\
 %{mbig-endian:-EB} \
@@ -119,19 +142,6 @@
 %{march=*:-march=%*} \
 %{mabi=*:-mabi=%*}"
 #endif
-
-#ifdef TARGET_BIG_ENDIAN_DEFAULT
-#define ENDIAN_SPEC "-mbig-endian"
-#else
-#define ENDIAN_SPEC "-mlittle-endian"
-#endif
-
-/* Force the default endianness and ABI flags onto the command line
-   in order to make the other specs easier to write.  */
-#undef DRIVER_SELF_SPECS
-#define DRIVER_SELF_SPECS \
-  " %{!mbig-endian:%{!mlittle-endian:" ENDIAN_SPEC "}}" \
-  " %{!mabi=*:-mabi=lp64}"
 
 #undef TYPE_OPERAND_FMT
 #define TYPE_OPERAND_FMT	"%%%s"

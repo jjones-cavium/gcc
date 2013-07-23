@@ -102,7 +102,10 @@
 
 #define INT_TYPE_SIZE		32
 
-#define LONG_TYPE_SIZE		(TARGET_64BIT ? 64 : 32)
+
+#define LONG_TYPE_SIZE		(TARGET_ILP32 ? 32 : 64)
+
+#define POINTER_SIZE		(TARGET_ILP32 ? 32 : 64)
 
 #define LONG_LONG_TYPE_SIZE	64
 
@@ -111,8 +114,6 @@
 #define DOUBLE_TYPE_SIZE	64
 
 #define LONG_DOUBLE_TYPE_SIZE	128
-
-#define POINTER_SIZE (TARGET_64BIT ? 64 : 32)
 
 /* The architecture reserves all bits of the address for hardware use,
    so the vbit must go into the delta field of pointers to member
@@ -536,6 +537,12 @@ enum aarch64_abi_type
   AARCH64_ABI_ILP32 = 1
 };
 
+#ifndef AARCH64_ABI_DEFAULT
+#define AARCH64_ABI_DEFAULT AARCH64_ABI_LP64
+#endif
+
+#define TARGET_ILP32	(aarch64_abi & AARCH64_ABI_ILP32)
+
 enum arm_pcs
 {
   ARM_PCS_AAPCS64,		/* Base standard AAPCS for 64 bit.  */
@@ -713,7 +720,18 @@ do {									     \
 
 #define NO_FUNCTION_CSE	1
 
-#define Pmode		(TARGET_64BIT?DImode:SImode)
+/* Specify the machine mode that the hardware addresses have.
+   After generation of rtl, the compiler makes no further distinction
+   between pointers and any other objects of this machine mode.  */
+#define Pmode		DImode
+
+/* A C expression whose value is zero if pointers that need to be extended
+   from being `POINTER_SIZE' bits wide to `Pmode' are sign-extended and
+   greater then zero if they are zero-extended and less then zero if the
+   ptr_extend instruction should be used.  */
+#define POINTERS_EXTEND_UNSIGNED 1
+
+/* Mode of a function address in a call instruction (for indexing purposes).  */
 #define FUNCTION_MODE	Pmode
 
 #define SELECT_CC_MODE(OP, X, Y)	aarch64_select_cc_mode (OP, X, Y)

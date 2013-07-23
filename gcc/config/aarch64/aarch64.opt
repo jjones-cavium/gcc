@@ -100,7 +100,7 @@ Target RejectNegative Joined Var(aarch64_tune_string)
 -mtune=CPU	Optimize for CPU
 
 mabi=
-Target RejectNegative Joined Enum(aarch64_abi) Var(aarch64_abi) Init(AARCH64_ABI_LP64)
+Target RejectNegative Joined Enum(aarch64_abi) Var(aarch64_abi) Init(AARCH64_ABI_DEFAULT)
 -mabi=ABI	Generate code that conforms to the specified ABI
 
 Enum
