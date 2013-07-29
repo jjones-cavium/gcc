@@ -146,9 +146,9 @@
 /* Using long long breaks -ansi and -std=c90, so these will need to be
    made conditional for an LLP64 ABI.  */
 
-#define SIZE_TYPE	"long unsigned int"
+#define SIZE_TYPE	(TARGET_64BIT ? "long unsigned int" : "unsigned int")
 
-#define PTRDIFF_TYPE	"long int"
+#define PTRDIFF_TYPE	(TARGET_64BIT ? "long int" : "int")
 
 #define PCC_BITFIELD_TYPE_MATTERS	1
 

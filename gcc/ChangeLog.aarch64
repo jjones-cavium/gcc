@@ -1,3 +1,9 @@
+2013-07-23  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #7526
+	* config/aarch64/aarch64.h (SIZE_TYPE): Set to unsigned int for ILP32.
+	(PTRDIFF_TYPE): Set to int for ILP32.
+
 2013-07-17  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.opt (mlp64): Fix typo in the help section.
