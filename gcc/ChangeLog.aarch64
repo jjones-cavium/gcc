@@ -4,6 +4,10 @@
 	* config/aarch64/aarch64.h (SIZE_TYPE): Set to unsigned int for ILP32.
 	(PTRDIFF_TYPE): Set to int for ILP32.
 
+2013-07-19  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/arm_neon.h (vabs_s64): New function
+
 2013-07-17  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.opt (mlp64): Fix typo in the help section.
