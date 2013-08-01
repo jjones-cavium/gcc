@@ -17895,6 +17895,13 @@ mips_expand_vec_minmax (rtx target, rtx op0, rtx op1,
   x = gen_rtx_IOR (vmode, t0, t1);
   emit_insn (gen_rtx_SET (VOIDmode, target, x));
 }
+
+static unsigned HOST_WIDE_INT
+mips_asan_shadow_offset (void)
+{
+  return (unsigned HOST_WIDE_INT) 1 << (POINTER_SIZE == 64 ? 41 : 29);
+}
+
 
 /* Initialize the GCC target structure.  */
 #undef TARGET_ASM_ALIGNED_HI_OP
@@ -18127,6 +18134,9 @@ mips_expand_vec_minmax (rtx target, rtx op0, rtx op1,
 
 #undef TARGET_VECTORIZE_VEC_PERM_CONST_OK
 #define TARGET_VECTORIZE_VEC_PERM_CONST_OK mips_vectorize_vec_perm_const_ok
+
+#undef TARGET_ASAN_SHADOW_OFFSET
+#define TARGET_ASAN_SHADOW_OFFSET mips_asan_shadow_offset
 
 struct gcc_target targetm = TARGET_INITIALIZER;
 

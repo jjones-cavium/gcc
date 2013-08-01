@@ -31,7 +31,7 @@ extern SANITIZER_INTERFACE_ATTRIBUTE uptr __asan_mapping_offset;
 #  if SANITIZER_WORDSIZE == 32
 #   define SHADOW_OFFSET (1 << 29)
 #  else
-#   if defined(__powerpc64__)
+#   if defined(__powerpc64__) || defined (__mips__)
 #    define SHADOW_OFFSET (1ULL << 41)
 #   else
 #    define SHADOW_OFFSET (1ULL << 44)

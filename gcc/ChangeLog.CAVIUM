@@ -1,3 +1,9 @@
+2013-08-01  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Initial libsanitizer support for MIPS.
+	* config/mips/mips.c (mips_asan_shadow_offset): New function.
+	(TARGET_ASAN_SHADOW_OFFSET): Define.
+
 2013-07-09  Andrew Pinski  <apinski@cavium.com>
 
 	Revert:

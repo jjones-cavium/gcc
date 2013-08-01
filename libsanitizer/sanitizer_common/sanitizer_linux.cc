@@ -34,10 +34,18 @@
 #include <sys/prctl.h>
 #include <linux/futex.h>
 
+
+#ifdef __mips__
+#include <asm/sgidefs.h>
+#if (_MIPS_SIM == _MIPS_SIM_ABI64) || _MIPS_SIM == _MIPS_SIM_NABI32
+#define SANITIZER_MIPS_N32_OR_N64
+#endif
+#endif
+
 // Are we using 32-bit or 64-bit syscalls?
 // x32 (which defines __x86_64__) has SANITIZER_WORDSIZE == 32
 // but it still needs to use 64-bit syscalls.
-#if defined(__x86_64__) || SANITIZER_WORDSIZE == 64
+#if defined SANITIZER_MIPS_N32_OR_N64 || defined(__x86_64__) || defined(__mips__) || SANITIZER_WORDSIZE == 64
 # define SANITIZER_LINUX_USES_64BIT_SYSCALLS 1
 #else
 # define SANITIZER_LINUX_USES_64BIT_SYSCALLS 0
