@@ -1,3 +1,20 @@
+2013-08-02  Andrew Pinski  <apinski@cavium.com>
+
+	* config.gcc (arm*-*-linux*): Match montavista and use arm/t-montavista-linux-eabi
+	for that.
+	* config/arm/t-montavista-linux-eabi: New file.
+	Revert:
+	* config/arm/linux-eabi.h (TARGET_DEFAULT_FLOAT_ABI): Define
+	to ARM_FLOAT_ABI_HARD.
+	(GLIBC_DYNAMIC_LINKER_DEFAULT): Change to the hard float one.
+	(MULTILIB_DEFAULT_ENDIAN): New define.
+	(MULTILIB_DEFAULTS): New define.
+	* config/arm/t-linux-eabi (MULTILIB_OPTIONS): Redefine to include
+	hard and soft float ABIs.
+	(MULTILIB_DIRNAMES): Likewise.
+	(MULTILIB_OSDIRNAMES): Likewise.
+	(MULTILIB_MATCHES): Match -msoft-float as -mfloat-abi=soft.
+
 2013-08-01  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Initial libsanitizer support for MIPS.

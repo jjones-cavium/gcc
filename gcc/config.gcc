@@ -878,6 +878,8 @@ arm*-*-linux*)			# ARM GNU/Linux with ELF
 	    *-androideabi)
 		tmake_file="$tmake_file arm/t-linux-androideabi"
 		;;
+	    *-montavista-*)
+		tmake_file="$tmake_file arm/t-montavista-linux-eabi"
 	    esac
   	    # The BPABI long long divmod functions return a 128-bit value in
 	    # registers r0-r3.  Correctly modeling that requires the use of

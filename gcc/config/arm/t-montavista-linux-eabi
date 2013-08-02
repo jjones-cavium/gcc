@@ -18,8 +18,11 @@
 
 # We do not build a Thumb multilib for Linux because the definition of
 # CLEAR_INSN_CACHE in linux-gas.h does not work in Thumb mode.
-MULTILIB_OPTIONS	=
-MULTILIB_DIRNAMES	=
+MULTILIB_OPTIONS	= mfloat-abi=hard/mfloat-abi=soft
+MULTILIB_DIRNAMES	= hard soft
+MULTILIB_OSDIRNAMES	= ../lib ../libsf
+MULTILIB_MATCHES	= mfloat-abi?soft=msoft-float
+MULTILIB_MATCHES	+= mfloat-abi?soft=mfloat-abi?softfp
 
 #MULTILIB_OPTIONS     += mcpu=fa606te/mcpu=fa626te/mcpu=fmp626/mcpu=fa726te
 #MULTILIB_DIRNAMES    += fa606te fa626te fmp626 fa726te
