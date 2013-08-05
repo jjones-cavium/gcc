@@ -117,8 +117,7 @@
 %{mlittle-endian:-EL} \
 %{mcpu=*:-mcpu=%*} \
 %{march=*:-march=%*} \
-%{mabi=ilp32:-milp32} \
-%{mabi=lp64:-mlp64}"
+%{mabi=*:-mabi=%*}"
 #endif
 
 #ifdef TARGET_BIG_ENDIAN_DEFAULT
