@@ -1,3 +1,8 @@
+2013-08-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-elf-raw.h (LINK_SPEC): Use the same white spaces as
+	the upstream patch.
+
 2013-08-05  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.c (aarch64_attribute_table): New
