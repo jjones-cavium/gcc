@@ -1,3 +1,12 @@
+2013-08-05  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.c (aarch64_attribute_table): New
+	attribute table defined.
+	(aarch64_handle_long_call_attribute): New Declare and define
+	long_call attribute.
+	(aarch64_decl_is_long_call_p): Return true if function is
+	declared with long_call attribute.
+
 2013-08-04  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64-elf.h (ASM_SPEC): Pass -mabi=* through

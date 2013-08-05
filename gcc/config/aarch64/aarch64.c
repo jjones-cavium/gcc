@@ -110,6 +110,8 @@ static unsigned bit_count (unsigned HOST_WIDE_INT);
 static bool aarch64_const_vec_all_same_int_p (rtx,
 					      HOST_WIDE_INT, HOST_WIDE_INT);
 
+static tree aarch64_handle_long_call_attribute (tree *, tree, tree, int,
+						bool *);
 static bool aarch64_vectorize_vec_perm_const_ok (enum machine_mode vmode,
 						 const unsigned char *sel);
 
@@ -124,6 +126,16 @@ unsigned long aarch64_isa_flags = 0;
 
 /* Mask to specify which instruction scheduling options should be used.  */
 unsigned long aarch64_tune_flags = 0;
+
+/* The value of TARGET_ATTRIBUTE_TABLE.  */
+static const struct attribute_spec aarch64_attribute_table[] = {
+  /* { name, min_len, max_len, decl_req, type_req, fn_type_req, handler,
+       om_diagnostic } */
+  { "long_call",   0, 0, true,  false, false,
+    aarch64_handle_long_call_attribute, false },
+
+  { NULL,          0, 0, false, false, false, NULL, false }
+};
 
 /* Tuning parameters.  */
 
@@ -393,8 +405,14 @@ aarch64_hard_regno_mode_ok (unsigned regno, enum machine_mode mode)
 /* Return true if calls to DECL should be treated as
    long-calls (ie called via a register).  */
 static bool
-aarch64_decl_is_long_call_p (const_tree decl ATTRIBUTE_UNUSED)
+aarch64_decl_is_long_call_p (const_tree decl)
 {
+
+  if (decl == NULL)
+    return false;
+
+  if (lookup_attribute ("long_call", DECL_ATTRIBUTES (decl)))
+    return true;
   return false;
 }
 
@@ -5112,6 +5130,25 @@ aarch64_init_expanders (void)
   init_machine_status = aarch64_init_machine_status;
 }
 
+/* Handle a "long_call" attribute; arguments as in
+   struct attribute_spec.handler.  */
+
+static tree
+aarch64_handle_long_call_attribute (tree *node, tree name,
+				    tree args ATTRIBUTE_UNUSED,
+				    int flags ATTRIBUTE_UNUSED,
+				    bool *no_add_attrs)
+{
+  if (TREE_CODE (*node) != FUNCTION_DECL)
+    {
+      warning (OPT_Wattributes, "%qE attribute only applies to functions",
+	       name);
+      *no_add_attrs = true;
+    }
+
+  return NULL_TREE;
+}
+
 /* A checking mechanism for the implementation of the various code models.  */
 static void
 initialize_aarch64_code_model (void)
@@ -8139,6 +8176,9 @@ aarch64_vectorize_vec_perm_const_ok (enum machine_mode vmode,
 
 #undef TARGET_LEGITIMATE_CONSTANT_P
 #define TARGET_LEGITIMATE_CONSTANT_P aarch64_legitimate_constant_p
+
+#undef TARGET_ATTRIBUTE_TABLE
+#define TARGET_ATTRIBUTE_TABLE aarch64_attribute_table
 
 #undef TARGET_LIBGCC_CMP_RETURN_MODE
 #define TARGET_LIBGCC_CMP_RETURN_MODE aarch64_libgcc_cmp_return_mode
