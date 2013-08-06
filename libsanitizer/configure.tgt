@@ -29,6 +29,8 @@ case "${target}" in
 	;;
   sparc*-*-linux*)
 	;;
+  arm*-*-linux*)
+	;;
   mips*-*-linux*)
 	;;
   x86_64-*-darwin* | i?86-*-darwin*)

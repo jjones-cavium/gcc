@@ -1,3 +1,11 @@
+2013-08-06  Manjunath Matti  <mmatti@caviumnetworks.com>
+	
+	Initial libsanitizer support for ARM.
+	* config/arm/arm.c (arm_asan_shadow_offset): New function.
+	(TARGET_ASAN_SHADOW_OFFSET): Define.
+	* config/arm/linux-eabi.h (ASAN_CC1_SPEC): Define and enable
+	-funwind-tables for -fsanitize=address.
+
 2013-08-02  Andrew Pinski  <apinski@cavium.com>
 
 	* config.gcc (arm*-*-linux*): Match montavista and use arm/t-montavista-linux-eabi
