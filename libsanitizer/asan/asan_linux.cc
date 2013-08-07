@@ -107,7 +107,7 @@ void AsanPlatformThreadInit() {
 void GetStackTrace(StackTrace *stack, uptr max_s, uptr pc, uptr bp, bool fast) {
 #if defined(__arm__) || \
     defined(__powerpc__) || defined(__powerpc64__) || \
-    defined(__sparc__)
+    defined(__sparc__) || defined(__mips__)
   fast = false;
 #endif
   if (!fast)
