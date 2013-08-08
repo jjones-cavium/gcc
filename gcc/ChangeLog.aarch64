@@ -1,3 +1,7 @@
+2013-08-08  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/t-aarch64-elf: Add mcmodel=large multilib.
+
 2013-08-05  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.c (aarch64_attribute_table): New
