@@ -1,3 +1,4 @@
-MULTILIB_OPTIONS = mabi=lp64/mabi=ilp32
-MULTILIB_DIRNAMES = lp64 ilp32
+MULTILIB_OPTIONS = mabi=lp64/mabi=ilp32 mcmodel=large
+MULTILIB_DIRNAMES = lp64 ilp32 large
+MULTILIB_EXCEPTIONS = mabi=ilp32/mcmodel=large
 
