@@ -628,28 +628,41 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
 
     case SYMBOL_SMALL_TLSDESC:
       {
-	rtx x0 = gen_rtx_REG (Pmode, R0_REGNUM);
+	enum machine_mode mode = GET_MODE (dest);
+	rtx x0 = gen_rtx_REG (mode, R0_REGNUM);
 	rtx tp;
 
-	if (TARGET_64BIT)
-	  emit_insn (gen_tlsdesc_small_di (imm));
-	else
+	gcc_assert (mode == Pmode || mode == ptr_mode);
+
+	if (TARGET_ILP32)
 	  emit_insn (gen_tlsdesc_small_si (imm));
+	else
+	  emit_insn (gen_tlsdesc_small_di (imm));
+
 	tp = aarch64_load_tp (NULL);
-	emit_insn (gen_rtx_SET (Pmode, dest, gen_rtx_PLUS (Pmode, tp, x0)));
+
+	if (mode != Pmode)
+	  tp = gen_lowpart (mode, tp);
+
+	emit_insn (gen_rtx_SET (mode, dest, gen_rtx_PLUS (mode, tp, x0)));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
 	return;
       }
 
     case SYMBOL_SMALL_GOTTPREL:
       {
-	rtx tmp_reg = gen_reg_rtx (Pmode);
+	enum machine_mode mode = GET_MODE (dest);
+	rtx tmp_reg = gen_reg_rtx (mode);
 	rtx tp = aarch64_load_tp (NULL);
-	if (TARGET_64BIT)
-	  emit_insn (gen_tlsie_small_di (tmp_reg, imm));
-	else
-	  emit_insn (gen_tlsie_small_si (tmp_reg, imm));
-	emit_insn (gen_rtx_SET (Pmode, dest, gen_rtx_PLUS (Pmode, tp, tmp_reg)));
+
+	gcc_assert (mode == Pmode || mode == ptr_mode);
+
+	emit_insn (gen_tlsie_small (tmp_reg, imm));
+
+	if (mode != Pmode)
+	  tp = gen_lowpart (mode, tp);
+
+	emit_insn (gen_rtx_SET (mode, dest, gen_rtx_PLUS (mode, tp, tmp_reg)));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
 	return;
       }
@@ -657,10 +670,7 @@ aarch64_load_symref_appropriately (rtx dest, rtx imm,
     case SYMBOL_SMALL_TPREL:
       {
 	rtx tp = aarch64_load_tp (NULL);
-	if (TARGET_64BIT)
-	  emit_insn (gen_tlsle_small_di (dest, tp, imm));
-	else
-	  emit_insn (gen_tlsle_small_si (dest, tp, imm));
+	emit_insn (gen_tlsle_small (dest, tp, imm));
 	set_unique_reg_note (get_last_insn (), REG_EQUIV, imm);
 	return;
       }
@@ -2140,21 +2150,12 @@ aarch64_expand_prologue (void)
 	    }
 	  else
 	    {
-	      if (TARGET_64BIT)
-	        insn = emit_insn (gen_storewb_pairdi_di
-				  (stack_pointer_rtx, stack_pointer_rtx,
-				   hard_frame_pointer_rtx,
-				   gen_rtx_REG (DImode, LR_REGNUM),
-				   GEN_INT (-offset),
-				   GEN_INT (GET_MODE_SIZE (DImode) - offset)));
-	      else
-	        insn = emit_insn (gen_storewb_pairdi_si
-				  (stack_pointer_rtx, stack_pointer_rtx,
-				   gen_lowpart (DImode, hard_frame_pointer_rtx),
-				   gen_rtx_REG (DImode, LR_REGNUM),
-				   GEN_INT (-offset),
-				   GEN_INT (GET_MODE_SIZE (DImode) - offset)));
-		
+	      insn = emit_insn (gen_storewb_pairdi_di
+				(stack_pointer_rtx, stack_pointer_rtx,
+				 hard_frame_pointer_rtx,
+				 gen_rtx_REG (DImode, LR_REGNUM),
+				 GEN_INT (-offset),
+				 GEN_INT (GET_MODE_SIZE (DImode) - offset)));
 	      RTX_FRAME_RELATED_P (XVECEXP (PATTERN (insn), 0, 2)) = 1;
 	    }
 
@@ -2290,22 +2291,13 @@ aarch64_expand_epilogue (bool for_sibcall)
 	    }
 	  else
 	    {
-	      if (TARGET_64BIT)
-	        insn = emit_insn (gen_loadwb_pairdi_di
-				  (stack_pointer_rtx,
-				   stack_pointer_rtx,
-				   hard_frame_pointer_rtx,
-				   gen_rtx_REG (DImode, LR_REGNUM),
-				   GEN_INT (offset),
-				   GEN_INT (GET_MODE_SIZE (DImode) + offset)));
-	      else
-	        insn = emit_insn (gen_loadwb_pairdi_si
-				  (stack_pointer_rtx,
-				   stack_pointer_rtx,
-				   gen_lowpart (DImode, hard_frame_pointer_rtx),
-				   gen_rtx_REG (DImode, LR_REGNUM),
-				   GEN_INT (offset),
-				   GEN_INT (GET_MODE_SIZE (DImode) + offset)));
+	      insn = emit_insn (gen_loadwb_pairdi_di
+				(stack_pointer_rtx,
+				 stack_pointer_rtx,
+				 hard_frame_pointer_rtx,
+				 gen_rtx_REG (DImode, LR_REGNUM),
+				 GEN_INT (offset),
+				 GEN_INT (GET_MODE_SIZE (DImode) + offset)));
 	      RTX_FRAME_RELATED_P (XVECEXP (PATTERN (insn), 0, 2)) = 1;
 	      add_reg_note (insn, REG_CFA_ADJUST_CFA,
 			    (gen_rtx_SET (Pmode, stack_pointer_rtx,
@@ -2351,7 +2343,7 @@ aarch64_expand_epilogue (bool for_sibcall)
 	 However the dwarf emitter only understands a constant
 	 register offset.
 
-	 The solution choosen here is to use the otherwise unused IP0
+	 The solution chosen here is to use the otherwise unused IP0
 	 as a temporary register to hold the current SP value.  The
 	 CFA is described using IP0 then SP is modified.  */
 
@@ -3061,7 +3053,7 @@ aarch64_classify_address (struct aarch64_address_info *info,
   enum rtx_code code = GET_CODE (x);
   rtx op0, op1;
   bool allow_reg_index_p =
-    outer_code != PARALLEL && GET_MODE_SIZE(mode) != 16 && TARGET_64BIT;
+    outer_code != PARALLEL && GET_MODE_SIZE(mode) != 16;
 
   /* Don't support anything other than POST_INC or REG addressing for
      AdvSIMD.  */
@@ -4221,7 +4213,6 @@ aarch64_trampoline_init (rtx m_tramp, tree fndecl, rtx chain_value)
   emit_block_move (m_tramp, assemble_trampoline_template (),
 		   GEN_INT (tramp_code_sz), BLOCK_OP_NORMAL);
   mem = adjust_address (m_tramp, ptr_mode, tramp_code_sz);
-
   fnaddr = XEXP (DECL_RTL (fndecl), 0);
   if (GET_MODE (fnaddr) != ptr_mode)
     fnaddr = convert_memory_address (ptr_mode, fnaddr);

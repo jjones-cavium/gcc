@@ -84,7 +84,7 @@
 
 
 /* Compatibility option until merge in upstream patches. */
-#define TARGET_64BIT		(aarch64_abi == AARCH64_ABI_LP64)
+#define TARGET_64BIT		(!TARGET_ILP32)
 
 #define UNITS_PER_WORD		8
 
@@ -149,9 +149,9 @@
 /* Using long long breaks -ansi and -std=c90, so these will need to be
    made conditional for an LLP64 ABI.  */
 
-#define SIZE_TYPE	(TARGET_64BIT ? "long unsigned int" : "unsigned int")
+#define SIZE_TYPE	(TARGET_ILP32 ? "unsigned int" : "long unsigned int")
 
-#define PTRDIFF_TYPE	(TARGET_64BIT ? "long int" : "int")
+#define PTRDIFF_TYPE	(TARGET_ILP32 ? "int" : "long int")
 
 #define PCC_BITFIELD_TYPE_MATTERS	1
 

@@ -1,3 +1,37 @@
+2013-08-08  Andrew Pinski  <apinski@cavium.com>
+
+	Fix TLS after merging in ILP32 from trunk.
+	* config/aarch64/aarch64.c (aarch64_load_symref_appropriately):
+	Handle ILP32 for SYMBOL_SMALL_TLSDESC and SYMBOL_SMALL_GOTTPREL,
+	and SYMBOL_SMALL_TPREL.
+	(aarch64_expand_prologue): Revert patch for gen_storewb_pair.
+	(aarch64_expand_epilogue): Revert patch for gen_loadwb_pair.
+	(aarch64_classify_address): Don't reject reg+index for TARGET_64BIT.
+	(aarch64_trampoline_init): Remove empty line.
+	* config/aarch64/aarch64.h (TARGET_64BIT): Define based on TARGET_ILP32.
+	(SIZE_TYPE): Likewise.
+	(PTRDIFF_TYPE): Likewise.
+	* config/aarch64/aarch64.md (indirect_jump): Revert to the trunk version.
+	(casesi): Likewise.
+	(casesi_dispatch): Likewise.
+	(eh_return): Likewise.
+	(*call_reg): Likewise.
+	(*call_symbol): Likewise.
+	(*call_value_reg): Likewise.
+	(*call_value_symbol): Likewise.
+	(*sibcall_insn): Likewise.
+	(*sibcall_value_insn): Likewise.
+	(*movsi_aarch64): Likewise.
+	(add_losym): Likewise.
+	(ldr_got_small_sidi): Likewise.
+	(aarch64_load_tp_hard): Likewise.
+	(tlsie_small): New expand
+	(tlsie_small_<mode>): Remove PTR from the symbol operand.
+	(tlsle_small): New expand.
+	(tlsle_small_<mode>): Remove PTR from the symbol operand.
+	(tlsdesc_small_<mode>): Likewise.
+	(stack_tie): Revert to the trunk version.
+
 2013-07-23  Yufeng Zhang  <yufeng.zhang@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_hard_regno_mode_ok): Also return
