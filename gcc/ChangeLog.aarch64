@@ -1,3 +1,12 @@
+2013-08-11  Andrew Pinski  <apinski@cavium.com>
+
+	Fix some vector testcases ICE with ILP32
+	* config/aarch64/aarch64-builtins.c (builtin_simd_arg):
+	Add SIMD_ARG_COPY_TO_REG_PTR.
+	(aarch64_simd_expand_args): Handle SIMD_ARG_COPY_TO_REG_PTR.
+	(aarch64_simd_expand_builtin): Use SIMD_ARG_COPY_TO_REG_PTR for
+	pointer arguments.
+
 2013-08-08  Andrew Pinski  <apinski@cavium.com>
 
 	Fix TLS after merging in ILP32 from trunk.

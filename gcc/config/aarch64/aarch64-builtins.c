@@ -958,6 +958,7 @@ aarch64_builtin_decl (unsigned code, bool initialize_p ATTRIBUTE_UNUSED)
 
 typedef enum
 {
+  SIMD_ARG_COPY_TO_REG_PTR,
   SIMD_ARG_COPY_TO_REG,
   SIMD_ARG_CONSTANT,
   SIMD_ARG_STOP
@@ -999,8 +1000,18 @@ aarch64_simd_expand_args (rtx target, int icode, int have_retval,
 
 	  switch (thisarg)
 	    {
+	    case SIMD_ARG_COPY_TO_REG_PTR:
+	      if (GET_MODE (op[argc]) == ptr_mode
+		  && GET_MODE (op[argc]) != Pmode)
+		{
+		  rtx t;
+		  rtx temp = gen_reg_rtx (DImode);
+		  t = copy_to_mode_reg (SImode, op[argc]);
+		  emit_insn (gen_zero_extendsidi2 (temp, t));
+		  op[argc] = temp;
+		}
 	    case SIMD_ARG_COPY_TO_REG:
-	      /*gcc_assert (GET_MODE (op[argc]) == mode[argc]); */
+	      /* gcc_assert (GET_MODE (op[argc]) == mode[argc]); */
 	      if (!(*insn_data[icode].operand[argc + have_retval].predicate)
 		  (op[argc], mode[argc]))
 		op[argc] = copy_to_mode_reg (mode[argc], op[argc]);
@@ -1132,12 +1143,12 @@ aarch64_simd_expand_builtin (int fcode, tree exp, rtx target)
     case AARCH64_SIMD_LOAD1:
     case AARCH64_SIMD_LOADSTRUCT:
       return aarch64_simd_expand_args (target, icode, 1, exp,
-				       SIMD_ARG_COPY_TO_REG, SIMD_ARG_STOP);
+				       SIMD_ARG_COPY_TO_REG_PTR, SIMD_ARG_STOP);
 
     case AARCH64_SIMD_STORE1:
     case AARCH64_SIMD_STORESTRUCT:
       return aarch64_simd_expand_args (target, icode, 0, exp,
-				       SIMD_ARG_COPY_TO_REG,
+				       SIMD_ARG_COPY_TO_REG_PTR,
 				       SIMD_ARG_COPY_TO_REG, SIMD_ARG_STOP);
 
     case AARCH64_SIMD_REINTERP:
