@@ -1,3 +1,8 @@
+2013-08-14  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	* tsan.c (tsan_make_ssa_name): New function for 4.7 compatibility.
+	(make_ssa_name): Define to tsan_make_ssa_name.
+
 2013-08-06  Manjunath Matti  <mmatti@caviumnetworks.com>
 	
 	Initial libsanitizer support for ARM.

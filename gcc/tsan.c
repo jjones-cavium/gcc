@@ -41,6 +41,22 @@ along with GCC; see the file COPYING3.  If not see
 #include "tsan.h"
 #include "asan.h"
 
+/* Compatibility function for GCC 4.7 as make_ssa_name does not
+ *    support a type for an anonymous SSA_NAME.  */
+static tree
+tsan_make_ssa_name (tree decl, gimple stmt)
+{
+  if (TYPE_P (decl) && is_gimple_reg_type (decl))
+    {
+      decl = create_tmp_var (decl, NULL);
+      add_referenced_var (decl);
+    }
+
+  return make_ssa_name (decl, stmt);
+}
+
+#define make_ssa_name tsan_make_ssa_name
+
 /* Number of instrumented memory accesses in the current function.  */
 
 /* Builds the following decl
