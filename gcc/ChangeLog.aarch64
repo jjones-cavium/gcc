@@ -1,3 +1,12 @@
+2013-08-11  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #7079
+	* config/aarch64/aarch64.md (*movsi_aarch64): Use Ust instead of S constrain.
+	(*movdi_aarch64): Likewise.
+	(ldr_got_small_sidi): Add type attribute.
+	* config/aarch64/constraints.md (Ust): New constraint like S but only
+	if the symbol is SYMBOL_TINY_ABSOLUTE.
+
 2013-08-14  Yufeng Zhang  <yufeng.zhang@arm.com>
 
 	* function.c (assign_parm_find_data_types): Set passed_mode and

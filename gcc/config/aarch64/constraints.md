@@ -114,6 +114,12 @@
   (and (match_code "const_int")
        (match_test "(unsigned) exact_log2 (ival) <= 4")))
 
+(define_constraint "Ust"
+  "A constraint that matches an absolute symbolic address; only for tiny model."
+  (and (match_code "const,symbol_ref,label_ref")
+       (match_test "aarch64_symbolic_address_p (op)
+		    && aarch64_classify_symbolic_expression (op, SYMBOL_CONTEXT_ADR) == SYMBOL_TINY_ABSOLUTE")))
+
 (define_memory_constraint "Q"
  "A memory address which uses a single base register with no offset."
  (and (match_code "mem")
