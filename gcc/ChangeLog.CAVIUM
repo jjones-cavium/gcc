@@ -1,3 +1,15 @@
+2013-08-21  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	gcc/testsuite
+	* lib/tsan-dg.exp: New file.
+	* gcc.dg/tsan/tsan.exp: New file.
+	* c-c++-common/tsan/free_race.c: New testcase.
+	* c-c++-common/tsan/free_race2.c: New testcase.
+	* c-c++-common/tsan/race_on_barrier.c: New testcase.
+	* c-c++-common/tsan/race_on_barrier2.c: New testcase.
+	* c-c++-common/tsan/simple_race.c: New testcase.
+	* c-c++-common/tsan/simple_stack.c: New testcase.
+
 2013-08-16  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #7620
