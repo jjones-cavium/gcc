@@ -1,3 +1,12 @@
+2013-08-27  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	gcc/testsuite
+	* c-c++-common/tsan/race_on_mutex.c: New testcase.
+	* c-c++-common/tsan/race_on_mutex2.c: New testcase.
+	* c-c++-common/tsan/thread_leak3.c: New testcase.
+	* c-c++-common/tsan/thread_leak4.c: New testcase.
+	* c-c++-common/tsan/thread_leak5.c: New testcase.
+
 2013-08-21  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	gcc/testsuite
