@@ -1,5 +1,5 @@
 
-/* { dg-do run { target { *-*-linux* } } } */
+/* { dg-do run { target { x86_64*-*-linux* } } } */
 /* { dg-shouldfail "tsan" } */
 
 #include <pthread.h>

@@ -1,6 +1,17 @@
 2013-08-27  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	gcc/testsuite
+	* c-c++-common/tsan/free_race.c: Should only be tested on 
+	x86_64 as thread sanitizer is only supported on this arch.
+	* c-c++-common/tsan/free_race2.c: Ditto.
+	* c-c++-common/tsan/race_on_barrier.c: Ditto.
+	* c-c++-common/tsan/race_on_barrier2.c: Ditto.
+	* c-c++-common/tsan/simple_race.c: Ditto.
+	* c-c++-common/tsan/simple_stack.c: Ditto.
+
+2013-08-27  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	gcc/testsuite
 	* c-c++-common/tsan/race_on_mutex.c: New testcase.
 	* c-c++-common/tsan/race_on_mutex2.c: New testcase.
 	* c-c++-common/tsan/thread_leak3.c: New testcase.
