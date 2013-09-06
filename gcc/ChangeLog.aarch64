@@ -1,3 +1,19 @@
+2013-09-05  James Greenhalgh  <james.greenhalgh@arm.com>
+	    Sofiane Naci <sofiane.naci@arm.com>
+
+	* config/aarch64/aarch64.md
+	(*movti_aarch64): Rename r_2_f and f_2_r.
+	(*movsf_aarch64): Likewise.
+	(*movdf_aarch64): Likewise.
+	(*movtf_aarch64): Likewise.
+	(aarch64_movdi_<mode>low): Likewise.
+	(aarch64_movdi_<mode>high): Likewise.
+	(aarch64_mov<mode>high_di): Likewise.
+	(aarch64_mov<mode>low_di): Likewise.
+	(aarch64_movtilow_tilow): Likewise.
+	* config/arm/types.md (type): Add Neon types.
+	* doc/md.texi: Change references to neon_type to refer to type.
+
 2013-09-05  Yufeng Zhang  <yufeng.zhang@arm.com>
 
 	* config/aarch64/aarch64-option-extensions.def: Add
