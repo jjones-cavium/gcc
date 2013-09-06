@@ -1,4 +1,25 @@
 2013-09-05  James Greenhalgh  <james.greenhalgh@arm.com>
+	    Sofiane Naci  <sofiane.naci@arm.com>
+
+	* config/arm/types.md (define_attr "type"):
+	Expand "arlo_imm"
+	into "adr", "alu_imm", "alus_imm", "logic_imm", "logics_imm".
+	Expand "arlo_reg"
+	into "adc_reg", "adc_imm", "adcs_reg", "adcs_imm", "alu_ext",
+	"alu_reg", "alus_ext", "alus_reg", "bfm", "csel", "logic_reg",
+	"logics_reg", "rev".
+	Expand "arlo_shift"
+	into "alu_shift_imm", "alus_shift_imm", "logic_shift_imm",
+	"logics_shift_imm".
+	Expand "arlo_shift_reg"
+	into "alu_shift_reg", "alus_shift_reg", "logic_shift_reg",
+	"logics_shift_reg".
+	Expand "clz" into "clz, "rbit".
+	Rename "shift" to "shift_imm".
+	* config/aarch64/aarch64.md: Update for attribute change
+	all occurrences of arlo_* and shift* types.
+
+2013-09-05  James Greenhalgh  <james.greenhalgh@arm.com>
 	    Sofiane Naci <sofiane.naci@arm.com>
 
 	* config/aarch64/aarch64.md
