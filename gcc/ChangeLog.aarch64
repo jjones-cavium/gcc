@@ -1,5 +1,16 @@
 2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
+	* config/aarch64/aarch64-simd.md
+	(move_lo_quad_<mode>): Replace type mov_reg with fmovs.
+	* config/aarch64/aarch64.md
+	(*movsi_aarch64): Replace type mov_reg with fmovs.
+	(*movdi_aarch64): Likewise
+	(*movsf_aarch64): Likewise
+	(*movdf_aarch64): Likewise
+	* config/aarch64/types.md (type): Rename fcpys to fmov.
+
+2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
+
 	* config/aarch64/aarch64.md
 	(*madd<mode>): Fix type attribute.
 	(*maddsi_uxtw): Likewise.
