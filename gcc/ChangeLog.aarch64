@@ -1,5 +1,11 @@
 2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
+	* config/aarch64/arm_neon.h
+	(vqtbl<1,2,3,4><q>_s8): Fix control vector parameter type.
+	(vqtbx<1,2,3,4><q>_s8): Likewise.
+
+2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
+
 	* config/aarch64/aarch64-simd.md
 	(aarch64_sqdml<SBINQOPS:as>l_n<mode>_internal): Use
 	<vwx> iterator to ensure correct register choice.
