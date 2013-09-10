@@ -7322,7 +7322,7 @@ vld1q_dup_u64 (const uint64_t * a)
        int16x4_t result;                                                \
        __asm__ ("mla %0.4h, %2.4h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7350,7 +7350,7 @@ vld1q_dup_u64 (const uint64_t * a)
        uint16x4_t result;                                               \
        __asm__ ("mla %0.4h, %2.4h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7378,7 +7378,7 @@ vld1q_dup_u64 (const uint64_t * a)
        int16x4_t result;                                                \
        __asm__ ("mla %0.4h, %2.4h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7406,7 +7406,7 @@ vld1q_dup_u64 (const uint64_t * a)
        uint16x4_t result;                                               \
        __asm__ ("mla %0.4h, %2.4h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7443,7 +7443,7 @@ vmla_n_s16 (int16x4_t a, int16x4_t b, int16_t c)
   int16x4_t result;
   __asm__ ("mla %0.4h,%2.4h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -7465,7 +7465,7 @@ vmla_n_u16 (uint16x4_t a, uint16x4_t b, uint16_t c)
   uint16x4_t result;
   __asm__ ("mla %0.4h,%2.4h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -7556,7 +7556,7 @@ vmla_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        int32x4_t result;                                                \
        __asm__ ("smlal2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7584,7 +7584,7 @@ vmla_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlal2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7612,7 +7612,7 @@ vmla_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        int32x4_t result;                                                \
        __asm__ ("smlal2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7640,7 +7640,7 @@ vmla_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlal2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7665,7 +7665,7 @@ vmlal_high_n_s16 (int32x4_t a, int16x8_t b, int16_t c)
   int32x4_t result;
   __asm__ ("smlal2 %0.4s,%2.8h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -7687,7 +7687,7 @@ vmlal_high_n_u16 (uint32x4_t a, uint16x8_t b, uint16_t c)
   uint32x4_t result;
   __asm__ ("umlal2 %0.4s,%2.8h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -7778,7 +7778,7 @@ vmlal_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        int32x4_t result;                                                \
        __asm__ ("smlal %0.4s,%2.4h,%3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7806,7 +7806,7 @@ vmlal_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlal %0.4s,%2.4h,%3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7834,7 +7834,7 @@ vmlal_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        int32x4_t result;                                                \
        __asm__ ("smlal %0.4s, %2.4h, %3.h[%4]"                          \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7862,7 +7862,7 @@ vmlal_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlal %0.4s, %2.4h, %3.h[%4]"                          \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -7887,7 +7887,7 @@ vmlal_n_s16 (int32x4_t a, int16x4_t b, int16_t c)
   int32x4_t result;
   __asm__ ("smlal %0.4s,%2.4h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -7909,7 +7909,7 @@ vmlal_n_u16 (uint32x4_t a, uint16x4_t b, uint16_t c)
   uint32x4_t result;
   __asm__ ("umlal %0.4s,%2.4h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8015,7 +8015,7 @@ vmlal_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        int16x8_t result;                                                \
        __asm__ ("mla %0.8h, %2.8h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8043,7 +8043,7 @@ vmlal_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        uint16x8_t result;                                               \
        __asm__ ("mla %0.8h, %2.8h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8071,7 +8071,7 @@ vmlal_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        int16x8_t result;                                                \
        __asm__ ("mla %0.8h, %2.8h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8099,7 +8099,7 @@ vmlal_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        uint16x8_t result;                                               \
        __asm__ ("mla %0.8h, %2.8h, %3.h[%4]"                            \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8148,7 +8148,7 @@ vmlaq_n_s16 (int16x8_t a, int16x8_t b, int16_t c)
   int16x8_t result;
   __asm__ ("mla %0.8h,%2.8h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8170,7 +8170,7 @@ vmlaq_n_u16 (uint16x8_t a, uint16x8_t b, uint16_t c)
   uint16x8_t result;
   __asm__ ("mla %0.8h,%2.8h,%3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8276,7 +8276,7 @@ vmlaq_u32 (uint32x4_t a, uint32x4_t b, uint32x4_t c)
        int16x4_t result;                                                \
        __asm__ ("mls %0.4h,%2.4h,%3.h[%4]"                              \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8304,7 +8304,7 @@ vmlaq_u32 (uint32x4_t a, uint32x4_t b, uint32x4_t c)
        uint16x4_t result;                                               \
        __asm__ ("mls %0.4h,%2.4h,%3.h[%4]"                              \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8341,7 +8341,7 @@ vmls_n_s16 (int16x4_t a, int16x4_t b, int16_t c)
   int16x4_t result;
   __asm__ ("mls %0.4h, %2.4h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8363,7 +8363,7 @@ vmls_n_u16 (uint16x4_t a, uint16x4_t b, uint16_t c)
   uint16x4_t result;
   __asm__ ("mls %0.4h, %2.4h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8454,7 +8454,7 @@ vmls_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        int32x4_t result;                                                \
        __asm__ ("smlsl2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8482,7 +8482,7 @@ vmls_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlsl2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8510,7 +8510,7 @@ vmls_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        int32x4_t result;                                                \
        __asm__ ("smlsl2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8538,7 +8538,7 @@ vmls_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlsl2 %0.4s, %2.8h, %3.h[%4]"                         \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8563,7 +8563,7 @@ vmlsl_high_n_s16 (int32x4_t a, int16x8_t b, int16_t c)
   int32x4_t result;
   __asm__ ("smlsl2 %0.4s, %2.8h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8585,7 +8585,7 @@ vmlsl_high_n_u16 (uint32x4_t a, uint16x8_t b, uint16_t c)
   uint32x4_t result;
   __asm__ ("umlsl2 %0.4s, %2.8h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8676,7 +8676,7 @@ vmlsl_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        int32x4_t result;                                                \
        __asm__ ("smlsl %0.4s, %2.4h, %3.h[%4]"                          \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8704,7 +8704,7 @@ vmlsl_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlsl %0.4s, %2.4h, %3.h[%4]"                          \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8732,7 +8732,7 @@ vmlsl_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        int32x4_t result;                                                \
        __asm__ ("smlsl %0.4s, %2.4h, %3.h[%4]"                          \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8760,7 +8760,7 @@ vmlsl_high_u32 (uint64x2_t a, uint32x4_t b, uint32x4_t c)
        uint32x4_t result;                                               \
        __asm__ ("umlsl %0.4s, %2.4h, %3.h[%4]"                          \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8785,7 +8785,7 @@ vmlsl_n_s16 (int32x4_t a, int16x4_t b, int16_t c)
   int32x4_t result;
   __asm__ ("smlsl %0.4s, %2.4h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8807,7 +8807,7 @@ vmlsl_n_u16 (uint32x4_t a, uint16x4_t b, uint16_t c)
   uint32x4_t result;
   __asm__ ("umlsl %0.4s, %2.4h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -8913,7 +8913,7 @@ vmlsl_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        int16x8_t result;                                                \
        __asm__ ("mls %0.8h,%2.8h,%3.h[%4]"                              \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8941,7 +8941,7 @@ vmlsl_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        uint16x8_t result;                                               \
        __asm__ ("mls %0.8h,%2.8h,%3.h[%4]"                              \
                 : "=w"(result)                                          \
-                : "0"(a_), "w"(b_), "w"(c_), "i"(d)                     \
+                : "0"(a_), "w"(b_), "x"(c_), "i"(d)                     \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -8998,7 +8998,7 @@ vmlsl_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        int32x4_t __result;						\
        __asm__ ("mls %0.4s, %2.4s, %3.s[%4]"				\
                 : "=w"(__result)					\
-                : "0"(__a_), "w"(__b_), "w"(__c_), "i"(__d)		\
+                : "0"(__a_), "w"(__b_), "x"(__c_), "i"(__d)		\
                 : /* No clobbers */);					\
        __result;							\
      })
@@ -9026,7 +9026,7 @@ vmlsl_u32 (uint64x2_t a, uint32x2_t b, uint32x2_t c)
        uint32x4_t __result;						\
        __asm__ ("mls %0.4s, %2.4s, %3.s[%4]"				\
                 : "=w"(__result)					\
-                : "0"(__a_), "w"(__b_), "w"(__c_), "i"(__d)		\
+                : "0"(__a_), "w"(__b_), "x"(__c_), "i"(__d)		\
                 : /* No clobbers */);					\
        __result;							\
      })
@@ -9050,7 +9050,7 @@ vmlsq_n_f64 (float64x2_t a, float64x2_t b, float64_t c)
   float64x2_t t1;
   __asm__ ("fmul %1.2d, %3.2d, %4.d[0]; fsub %0.2d, %0.2d, %1.2d"
            : "=w"(result), "=w"(t1)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -9061,7 +9061,7 @@ vmlsq_n_s16 (int16x8_t a, int16x8_t b, int16_t c)
   int16x8_t result;
   __asm__ ("mls %0.8h, %2.8h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -9083,7 +9083,7 @@ vmlsq_n_u16 (uint16x8_t a, uint16x8_t b, uint16_t c)
   uint16x8_t result;
   __asm__ ("mls %0.8h, %2.8h, %3.h[0]"
            : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
+           : "0"(a), "w"(b), "x"(c)
            : /* No clobbers */);
   return result;
 }
@@ -9824,7 +9824,7 @@ vmul_n_s16 (int16x4_t a, int16_t b)
   int16x4_t result;
   __asm__ ("mul %0.4h,%1.4h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -9846,7 +9846,7 @@ vmul_n_u16 (uint16x4_t a, uint16_t b)
   uint16x4_t result;
   __asm__ ("mul %0.4h,%1.4h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -9883,7 +9883,7 @@ vmul_n_u32 (uint32x2_t a, uint32_t b)
        int32x4_t result;                                                \
        __asm__ ("smull2 %0.4s, %1.8h, %2.h[%3]"                         \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -9909,7 +9909,7 @@ vmul_n_u32 (uint32x2_t a, uint32_t b)
        uint32x4_t result;                                               \
        __asm__ ("umull2 %0.4s, %1.8h, %2.h[%3]"                         \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -9935,7 +9935,7 @@ vmul_n_u32 (uint32x2_t a, uint32_t b)
        int32x4_t result;                                                \
        __asm__ ("smull2 %0.4s, %1.8h, %2.h[%3]"                         \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -9961,7 +9961,7 @@ vmul_n_u32 (uint32x2_t a, uint32_t b)
        uint32x4_t result;                                               \
        __asm__ ("umull2 %0.4s, %1.8h, %2.h[%3]"                         \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -9985,7 +9985,7 @@ vmull_high_n_s16 (int16x8_t a, int16_t b)
   int32x4_t result;
   __asm__ ("smull2 %0.4s,%1.8h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -10007,7 +10007,7 @@ vmull_high_n_u16 (uint16x8_t a, uint16_t b)
   uint32x4_t result;
   __asm__ ("umull2 %0.4s,%1.8h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -10108,7 +10108,7 @@ vmull_high_u32 (uint32x4_t a, uint32x4_t b)
        int32x4_t result;                                                \
        __asm__ ("smull %0.4s,%1.4h,%2.h[%3]"                            \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10134,7 +10134,7 @@ vmull_high_u32 (uint32x4_t a, uint32x4_t b)
        uint32x4_t result;                                               \
        __asm__ ("umull %0.4s,%1.4h,%2.h[%3]"                            \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10160,7 +10160,7 @@ vmull_high_u32 (uint32x4_t a, uint32x4_t b)
        int32x4_t result;                                                \
        __asm__ ("smull %0.4s, %1.4h, %2.h[%3]"                          \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10186,7 +10186,7 @@ vmull_high_u32 (uint32x4_t a, uint32x4_t b)
        uint32x4_t result;                                               \
        __asm__ ("umull %0.4s, %1.4h, %2.h[%3]"                          \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10210,7 +10210,7 @@ vmull_n_s16 (int16x4_t a, int16_t b)
   int32x4_t result;
   __asm__ ("smull %0.4s,%1.4h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -10232,7 +10232,7 @@ vmull_n_u16 (uint16x4_t a, uint16_t b)
   uint32x4_t result;
   __asm__ ("umull %0.4s,%1.4h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -10359,7 +10359,7 @@ vmull_u32 (uint32x2_t a, uint32x2_t b)
        int16x8_t result;                                                \
        __asm__ ("mul %0.8h,%1.8h,%2.h[%3]"                              \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10385,7 +10385,7 @@ vmull_u32 (uint32x2_t a, uint32x2_t b)
        uint16x8_t result;                                               \
        __asm__ ("mul %0.8h,%1.8h,%2.h[%3]"                              \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10437,7 +10437,7 @@ vmull_u32 (uint32x2_t a, uint32x2_t b)
        int16x8_t result;                                                \
        __asm__ ("mul %0.8h, %1.8h, %2.h[%3]"                            \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10463,7 +10463,7 @@ vmull_u32 (uint32x2_t a, uint32x2_t b)
        uint16x8_t result;                                               \
        __asm__ ("mul %0.8h, %1.8h, %2.h[%3]"                            \
                 : "=w"(result)                                          \
-                : "w"(a_), "w"(b_), "i"(c)                              \
+                : "w"(a_), "x"(b_), "i"(c)                              \
                 : /* No clobbers */);                                   \
        result;                                                          \
      })
@@ -10509,7 +10509,7 @@ vmulq_n_s16 (int16x8_t a, int16_t b)
   int16x8_t result;
   __asm__ ("mul %0.8h,%1.8h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -10531,7 +10531,7 @@ vmulq_n_u16 (uint16x8_t a, uint16_t b)
   uint16x8_t result;
   __asm__ ("mul %0.8h,%1.8h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -11997,7 +11997,7 @@ vqrdmulh_n_s16 (int16x4_t a, int16_t b)
   int16x4_t result;
   __asm__ ("sqrdmulh %0.4h,%1.4h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
@@ -12019,7 +12019,7 @@ vqrdmulhq_n_s16 (int16x8_t a, int16_t b)
   int16x8_t result;
   __asm__ ("sqrdmulh %0.8h,%1.8h,%2.h[0]"
            : "=w"(result)
-           : "w"(a), "w"(b)
+           : "w"(a), "x"(b)
            : /* No clobbers */);
   return result;
 }
