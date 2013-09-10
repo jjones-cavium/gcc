@@ -1,3 +1,7 @@
+2013-09-06  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64-cores.def: Enable CRC for Thunder.
+
 2013-09-05  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/aarch64.md
