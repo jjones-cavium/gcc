@@ -1,5 +1,11 @@
 2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
+	* config/aarch64/aarch64.md
+	(*movti_aarch64): Use "multiple" for type where v8type is "move2".
+	(*movtf_aarch64): Likewise.
+
+2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
+
 	* config/arm/types.md: Add "no_insn", "multiple" and "untyped"
 	types.
 
