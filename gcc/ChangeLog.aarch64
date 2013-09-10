@@ -1,12 +1,18 @@
 2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
+	* config/aarch64/types.md (type): Add "mrs" type.
+	* config/aarch64/aarch64.md
+	(aarch64_load_tp_hard): Make type "mrs".
+
+2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
+
 	* config/aarch64/aarch64.md
 	(*movti_aarch64): Use "multiple" for type where v8type is "move2".
 	(*movtf_aarch64): Likewise.
 
 2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
-	* config/arm/types.md: Add "no_insn", "multiple" and "untyped"
+	* config/aarch64/types.md: Add "no_insn", "multiple" and "untyped"
 	types.
 
 2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
@@ -32,7 +38,7 @@
 
 2013-09-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
-	* config/arm/types.md: Split fdiv<sd> as fsqrt<sd>, fdiv<sd>.
+	* config/aarch64/types.md: Split fdiv<sd> as fsqrt<sd>, fdiv<sd>.
 	* config/aarch64/aarch64.md:
 	(sqrt<mode>2): Update for attribute changes.
 
@@ -99,7 +105,7 @@
 2013-09-05  James Greenhalgh  <james.greenhalgh@arm.com>
 	    Sofiane Naci  <sofiane.naci@arm.com>
 
-	* config/arm/types.md (define_attr "type"):
+	* config/aarch64/types.md (define_attr "type"):
 	Expand "arlo_imm"
 	into "adr", "alu_imm", "alus_imm", "logic_imm", "logics_imm".
 	Expand "arlo_reg"
@@ -130,7 +136,7 @@
 	(aarch64_mov<mode>high_di): Likewise.
 	(aarch64_mov<mode>low_di): Likewise.
 	(aarch64_movtilow_tilow): Likewise.
-	* config/arm/types.md (type): Add Neon types.
+	* config/aarch64/types.md (type): Add Neon types.
 	* doc/md.texi: Change references to neon_type to refer to type.
 
 2013-09-05  Yufeng Zhang  <yufeng.zhang@arm.com>
