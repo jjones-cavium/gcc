@@ -1,3 +1,9 @@
+2013-10-03  Ian Bolton  <ian.bolton@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_secondary_reload): Remove legacy
+	code.
+	* config/aarch64/aarch64.md (reload_sp_immediate): Likewise.
+
 2013-10-03  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/t-aarch64-elf: Enable multilib for mbig-endian.
