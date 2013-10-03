@@ -1,3 +1,9 @@
+2013-07-26  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+	    Richard Earnshaw  <richard.earnshaw@arm.com>
+
+	* combine.c (simplify_comparison): Re-canonicalize operands
+	where appropriate.	
+
 2013-03-01  Richard Biener  <rguenther@suse.de>
 
 	Backport from mainline

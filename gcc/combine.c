@@ -12322,6 +12322,13 @@ simplify_comparison (enum rtx_code code, rtx *pop0, rtx *pop1)
 	    }
 	}
 
+  /* We may have changed the comparison operands.  Re-canonicalize.  */
+  if (swap_commutative_operands_p (op0, op1))
+    {
+      tem = op0, op0 = op1, op1 = tem;
+      code = swap_condition (code);
+    }
+
 #ifdef CANONICALIZE_COMPARISON
   /* If this machine only supports a subset of valid comparisons, see if we
      can convert an unsupported one into a supported one.  */
