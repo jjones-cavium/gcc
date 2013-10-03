@@ -1,3 +1,8 @@
+2013-09-16  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* gcc.target/aarch64/mul_intrinsic_1.c: New.
+	* gcc.target/aarch64/fmul_intrinsic_1.c: Likewise.
+
 2013-09-09  Ian Bolton  <ian.bolton@arm.com>
 
 	* gcc.target/aarch64/movdi_1.c: New test.
