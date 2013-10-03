@@ -1,3 +1,7 @@
+2013-10-03  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/t-aarch64-elf: Enable multilib for mbig-endian.
+
 2013-09-30  Venkataramanan Kumar  <venkataramanan.kumar@linaro.org>
 
 	* config/aarch64/aarch64.h (MCOUNT_NAME): Define.
