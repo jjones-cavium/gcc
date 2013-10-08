@@ -1,5 +1,13 @@
 2013-10-08  Manjunath Matti  <mmatti@caviumnetworks.com>
 
+	* testsuite/gcc.dg/ubsan/ubsan.exp: Run the tests without 
+	testing the results of ubsan_init.
+	* testsuite/g++.dg/ubsan/ubsan.exp: Likewise.
+	* testsuite/lib/ubsan-dg.exp: (check_effective_target_fundefined_sanitizer):
+	Change to a linking program.
+
+2013-10-08  Manjunath Matti  <mmatti@caviumnetworks.com>
+
 	Backported:
 
 	2013-08-30  Marek Polacek  <polacek@redhat.com>
