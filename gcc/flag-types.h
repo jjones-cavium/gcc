@@ -216,4 +216,17 @@ enum vect_verbosity_levels {
   MAX_VERBOSITY_LEVEL
 };
 
+/* Different instrumentation modes.  */
+enum sanitize_code {
+  /* AddressSanitizer.  */
+  SANITIZE_ADDRESS = 1 << 0,
+  /* ThreadSanitizer.  */
+  SANITIZE_THREAD = 1 << 1,
+  /* UndefinedBehaviorSanitizer.  */
+  SANITIZE_SHIFT = 1 << 2,
+  SANITIZE_DIVIDE = 1 << 3,
+  SANITIZE_UNREACHABLE = 1 << 4,
+  SANITIZE_UNDEFINED = SANITIZE_SHIFT | SANITIZE_DIVIDE | SANITIZE_UNREACHABLE
+};
+
 #endif /* ! GCC_FLAG_TYPES_H */

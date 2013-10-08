@@ -50,6 +50,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "value-prof.h"
 #include "diagnostic-core.h"
 #include "builtins.h"
+#include "ubsan.h"
 
 
 #ifndef PAD_VARARGS_DOWN
@@ -10209,6 +10210,11 @@ fold_builtin_0 (location_t loc, tree fndecl, bool ignore ATTRIBUTE_UNUSED)
 
     case BUILT_IN_CLASSIFY_TYPE:
       return fold_builtin_classify_type (NULL_TREE);
+
+    case BUILT_IN_UNREACHABLE:
+      if (flag_sanitize & SANITIZE_UNREACHABLE)
+	return ubsan_instrument_unreachable (loc);
+      break;
 
     default:
       break;

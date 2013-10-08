@@ -725,7 +725,7 @@ tsan_pass (void)
 static bool
 tsan_gate (void)
 {
-  return flag_tsan != 0;
+  return (flag_sanitize & SANITIZE_THREAD) != 0;
 }
 
 /* Inserts __tsan_init () into the list of CTORs.  */
@@ -767,7 +767,7 @@ struct gimple_opt_pass pass_tsan =
 static bool
 tsan_gate_O0 (void)
 {
-  return flag_tsan != 0 && !optimize;
+  return (flag_sanitize & SANITIZE_THREAD) != 0 && !optimize;
 }
 
 struct gimple_opt_pass pass_tsan_O0 =

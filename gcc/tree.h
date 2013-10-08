@@ -3791,6 +3791,7 @@ enum tree_index
   TI_VA_LIST_FPR_COUNTER_FIELD,
   TI_BOOLEAN_TYPE,
   TI_FILEPTR_TYPE,
+  TI_POINTER_SIZED_TYPE,
 
   TI_DFLOAT32_TYPE,
   TI_DFLOAT64_TYPE,
@@ -3947,6 +3948,7 @@ extern GTY(()) tree global_trees[TI_MAX];
 #define va_list_fpr_counter_field	global_trees[TI_VA_LIST_FPR_COUNTER_FIELD]
 /* The C type `FILE *'.  */
 #define fileptr_type_node		global_trees[TI_FILEPTR_TYPE]
+#define pointer_sized_int_node		global_trees[TI_POINTER_SIZED_TYPE]
 
 #define boolean_type_node		global_trees[TI_BOOLEAN_TYPE]
 #define boolean_false_node		global_trees[TI_BOOLEAN_FALSE]
@@ -4342,6 +4344,7 @@ extern tree build_vector_from_val (tree, tree);
 extern tree build_constructor (tree, VEC(constructor_elt,gc) *);
 extern tree build_constructor_single (tree, tree, tree);
 extern tree build_constructor_from_list (tree, tree);
+extern tree build_constructor_va (tree, int, ...);
 extern tree build_real_from_int_cst (tree, const_tree);
 extern tree build_complex (tree, tree, tree);
 extern tree build_one_cst (tree);
@@ -4883,6 +4886,11 @@ extern int integer_onep (const_tree);
    all of whose significant bits are 1.  */
 
 extern int integer_all_onesp (const_tree);
+
+/* integer_minus_onep (tree x) is nonzero if X is an integer constant of
+   value -1.  */
+
+extern int integer_minus_onep (const_tree);
 
 /* integer_pow2p (tree x) is nonzero is X is an integer constant with
    exactly one bit 1.  */

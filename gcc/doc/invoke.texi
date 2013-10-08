@@ -448,7 +448,7 @@ Objective-C and Objective-C++ Dialects}.
 @gccoptlist{@var{object-file-name}  -l@var{library} @gol
 -nostartfiles  -nodefaultlibs  -nostdlib -pie -rdynamic @gol
 -s  -static -static-libgcc -static-libstdc++ @gol
--static-libasan -static-libtsan @gol
+-static-libasan -static-libtsan -static-libubsan @gol
 -shared -shared-libgcc  -symbolic @gol
 -T @var{script}  -Wl,@var{option}  -Xlinker @var{option} @gol
 -u @var{symbol}}
@@ -4880,6 +4880,26 @@ argument in the command line does not matter, it takes effect after all
 other options are processed, and it does so only once, no matter how
 many times it is given.  This is mainly intended to be used with
 @option{-fcompare-debug}.
+
+@item -fsanitize=address
+Enable AddressSanitizer, a fast memory error detector.
+Memory access instructions will be instrumented to detect
+out-of-bounds and use-after-free bugs.
+See @uref{http://code.google.com/p/address-sanitizer/} for more details.
+
+@item -fsanitize=thread
+Enable ThreadSanitizer, a fast data race detector.
+Memory access instructions will be instrumented to detect
+data race bugs.
+See @uref{http://code.google.com/p/data-race-test/wiki/ThreadSanitizer} for more details.
+
+@item -fsanitize=undefined
+Enable UndefinedBehaviorSanitizer, a fast undefined behavior detector
+Various computations will be instrumented to detect undefined behavior
+at runtime, e.g.@: division by zero or various overflows.
+While @option{-ftrapv} causes traps for signed overflows to be emitted,
+@option{-fsanitize=undefined} gives a diagnostic message.
+This currently works only for the C family of languages.
 
 @item -fdump-final-insns@r{[}=@var{file}@r{]}
 @opindex fdump-final-insns
@@ -9589,6 +9609,15 @@ the GCC driver automatically links against @option{libtsan}.  If
 option is not used, then this links against the shared version of
 @file{libtsan}.  The @option{-static-libtsan} option directs the GCC
 driver to link @file{libtsan} statically, without necessarily linking
+other libraries statically.
+
+@item -static-libubsan
+When the @option{-fsanitize=undefined} option is used to link a program,
+the GCC driver automatically links against @option{libubsan}.  If
+@file{libubsan} is available as a shared library, and the @option{-static}
+option is not used, then this links against the shared version of
+@file{libubsan}.  The @option{-static-libubsan} option directs the GCC
+driver to link @file{libubsan} statically, without necessarily linking
 other libraries statically.
 
 @item -static-libstdc++

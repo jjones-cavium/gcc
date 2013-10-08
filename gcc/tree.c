@@ -1451,6 +1451,27 @@ build_constructor_from_list (tree type, tree vals)
   return build_constructor (type, v);
 }
 
+/* Return a new CONSTRUCTOR node whose type is TYPE.  NELTS is the number
+   of elements, provided as index/value pairs.  */
+
+tree
+build_constructor_va (tree type, int nelts, ...)
+{
+  VEC(constructor_elt, gc) *v = NULL;
+  va_list p;
+
+  va_start (p, nelts);
+  v = VEC_alloc (constructor_elt, gc, nelts);
+  while (nelts--)
+    {
+      tree index = va_arg (p, tree);
+      tree value = va_arg (p, tree);
+      CONSTRUCTOR_APPEND_ELT (v, index, value);
+    }
+  va_end (p);
+  return build_constructor (type, v);
+}
+
 /* Return a new FIXED_CST node whose type is TYPE and value is F.  */
 
 tree
@@ -1786,6 +1807,19 @@ integer_all_onesp (const_tree expr)
     }
   else
     return TREE_INT_CST_LOW (expr) == ((unsigned HOST_WIDE_INT) 1 << prec) - 1;
+}
+/* Return 1 if EXPR is the integer constant minus one.  */
+
+int
+integer_minus_onep (const_tree expr)
+{
+  STRIP_NOPS (expr);
+
+  if (TREE_CODE (expr) == COMPLEX_CST)
+    return (integer_all_onesp (TREE_REALPART (expr))
+            && integer_zerop (TREE_IMAGPART (expr)));
+  else
+    return integer_all_onesp (expr);
 }
 
 /* Return 1 if EXPR is an integer constant that is a power of 2 (i.e., has only
@@ -9312,6 +9346,8 @@ build_common_tree_nodes (bool signed_char, bool short_double)
   const_ptr_type_node
     = build_pointer_type (build_type_variant (void_type_node, 1, 0));
   fileptr_type_node = ptr_type_node;
+
+  pointer_sized_int_node = build_nonstandard_integer_type (POINTER_SIZE, 1);
 
   float_type_node = make_node (REAL_TYPE);
   TYPE_PRECISION (float_type_node) = FLOAT_TYPE_SIZE;

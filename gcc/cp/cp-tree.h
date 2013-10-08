@@ -5361,6 +5361,7 @@ extern tree build_non_dependent_expr		(tree);
 extern void make_args_non_dependent		(VEC(tree,gc) *);
 extern bool reregister_specialization		(tree, tree, tree);
 extern tree fold_non_dependent_expr		(tree);
+extern tree fold_non_dependent_expr_sfinae	(tree, tsubst_flags_t);
 extern bool alias_type_or_template_p            (tree);
 extern bool alias_template_specialization_p     (tree);
 extern bool explicit_class_specialization_p     (tree);

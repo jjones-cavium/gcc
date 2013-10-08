@@ -208,7 +208,6 @@ static tree current_template_args (void);
 static tree fixup_template_type_parm_type (tree, int);
 static tree fixup_template_parm_index (tree, tree, int);
 static tree tsubst_template_parm (tree, tree, tsubst_flags_t);
-
 /* Make the current scope suitable for access checking when we are
    processing T.  T can be FUNCTION_DECL for instantiated function
    template, or VAR_DECL for static member variable (need by
@@ -5269,7 +5268,8 @@ redeclare_class_template (tree type, tree parms)
 /* Simplify EXPR if it is a non-dependent expression.  Returns the
    (possibly simplified) expression.  */
 
-static tree
+/*static tree*/
+tree
 fold_non_dependent_expr_sfinae (tree expr, tsubst_flags_t complain)
 {
   if (expr == NULL_TREE)
