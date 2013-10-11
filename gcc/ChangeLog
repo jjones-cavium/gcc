@@ -1,3 +1,8 @@
+2013-10-11  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* machmode.h: Port the definition of GET_MODE_UNIT_BITSIZE from
+	mainline.
+
 2013-08-30  Marek Polacek  <polacek@redhat.com>
 
 	* Makefile.in (ubsan.o): Add.

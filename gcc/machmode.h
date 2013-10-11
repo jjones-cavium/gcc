@@ -211,6 +211,9 @@ extern const unsigned char mode_inner[NUM_MACHINE_MODES];
    ? GET_MODE_SIZE (MODE)			\
    : GET_MODE_SIZE (GET_MODE_INNER (MODE)))
 
+#define GET_MODE_UNIT_BITSIZE(MODE) \
+  ((unsigned short) (GET_MODE_UNIT_SIZE (MODE) * BITS_PER_UNIT))
+
 /* Get the number of units in the object.  */
 
 extern const unsigned char mode_nunits[NUM_MACHINE_MODES];
