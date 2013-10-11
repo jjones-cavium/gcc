@@ -83,7 +83,7 @@ proc asan_init { args } {
 	set asan_saved_TEST_ALWAYS_FLAGS $TEST_ALWAYS_FLAGS
     }
     if [info exists ALWAYS_CXXFLAGS] {
-	set asan_saved_ALWAYS_CXXFLAGS ALWAYS_CXXFLAGS
+	set asan_saved_ALWAYS_CXXFLAGS $ALWAYS_CXXFLAGS
 	set ALWAYS_CXXFLAGS [concat "{ldflags=$link_flags}" $ALWAYS_CXXFLAGS]
 	set ALWAYS_CXXFLAGS [concat "{additional_flags=-fsanitize=address -g}" $ALWAYS_CXXFLAGS]
     } else {
@@ -109,7 +109,7 @@ proc asan_finish { args } {
     global asan_saved_ALWAYS_CXXFLAGS
 
     if [info exists asan_saved_ALWAYS_CXXFLAGS ] {
-	set ALWAYS_CXXFLAGS ALWAYS_CXXFLAGS
+	set ALWAYS_CXXFLAGS $asan_saved_ALWAYS_CXXFLAGS
     } else {
 	if [info exists asan_saved_TEST_ALWAYS_FLAGS] {
 	    set TEST_ALWAYS_FLAGS $asan_saved_TEST_ALWAYS_FLAGS

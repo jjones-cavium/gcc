@@ -1,3 +1,9 @@
+2013-10-11  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/lib/asan-dg.exp (asan_init): Fix assigning to
+	asan_saved_ALWAYS_CXXFLAGS.
+	(asan_finish): Fix restore of ALWAYS_CXXFLAGS.
+
 2013-10-08  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	* testsuite/gcc.dg/ubsan/ubsan.exp: Run the tests without 
