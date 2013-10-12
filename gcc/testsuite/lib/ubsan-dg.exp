@@ -110,9 +110,11 @@ proc ubsan_finish { args } {
 
     if [info exists asan_saved_ALWAYS_CXXFLAGS ] {
 	set ALWAYS_CXXFLAGS $asan_saved_ALWAYS_CXXFLAGS
-    } else if [info exists ubsan_saved_TEST_ALWAYS_FLAGS] {
-	set TEST_ALWAYS_FLAGS $ubsan_saved_TEST_ALWAYS_FLAGS
     } else {
-	unset TEST_ALWAYS_FLAGS
+	if [info exists ubsan_saved_TEST_ALWAYS_FLAGS] {
+	    set TEST_ALWAYS_FLAGS $ubsan_saved_TEST_ALWAYS_FLAGS
+	} else {
+	    unset TEST_ALWAYS_FLAGS
+	}
     }
 }
