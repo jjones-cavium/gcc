@@ -1,3 +1,33 @@
+2013-10-15  Manjunath Matti  <mmatti@caviumnetworks.com>
+	
+	Backported:
+
+	2013-02-28  Konstantin Serebryany  <konstantin.s.serebryany@gmail.com>
+		Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/56454
+	gcc/
+	* asan.c (gate_asan): Lookup no_sanitize_address instead of
+	no_address_safety_analysis attribute.
+	* doc/extend.texi (no_address_safety_attribute): Rename to
+	no_sanitize_address attribute, mention no_address_safety_analysis
+	attribute as deprecated alias.
+
+	c-family/
+	* c-common.c (handle_no_sanitize_address_attribute): New function.
+	(c_common_attribute_table): Add no_sanitize_address attribute.
+	(handle_no_address_safety_analysis_attribute): Add
+	no_sanitize_address attribute, not no_address_safety_analysis
+	attribute.
+
+	gcc/testsuite/
+	* g++.dg/asan/default-options-1.C (__asan_default_options): Use
+	no_sanitize_address attribute rather than no_address_safety_analysis.
+	* g++.dg/asan/sanitizer_test_utils.h
+	(ATTRIBUTE_NO_ADDRESS_SAFETY_ANALYSIS): Likewise.
+	* c-c++-common/asan/attrib-1.c: Test no_sanitize_address attribute
+	in addition to no_address_safety_analysis.
+
 2013-10-11  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/lib/ubsan-dg.exp (usan_init): Save off ALWAYS_CXXFLAGS.
