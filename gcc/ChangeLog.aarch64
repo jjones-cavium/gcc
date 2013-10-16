@@ -1,3 +1,8 @@
+2013-10-12  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/aarch64/arm_neon.h
+	(vtbx<1,3>_<psu>8): Fix register constriants.
+
 2013-10-09  Alex Velenko  <Alex.Velenko@arm.com>
 
 	* config/aarch64/arm_neon.h (vclz_s8, vclz_s16, vclz_s32)
