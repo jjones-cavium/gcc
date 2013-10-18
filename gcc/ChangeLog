@@ -1255,6 +1255,17 @@
 	* config/arm/arm-protos.h (arm_autoinc_modes_ok_p): Declare.
 	* config/arm/arm.c (arm_autoinc_modes_ok_p): Define.
 
+2012-10-09  Marc Glisse  <marc.glisse@inria.fr>
+
+	PR c++/54427
+	* fold-const.c (fold_binary_loc): Use build_zero_cst instead of
+	build_int_cst for a potential vector.
+	* c-typeck.c: Include c-common.h.
+	(enum stv_conv): Moved to c-common.h.
+	(scalar_to_vector): Moved to c-common.c.
+	(build_binary_op): Adapt to scalar_to_vector's new prototype.
+	* Makefile.in: c-typeck.c depends on c-common.h.
+
 2012-10-08  Terry Guo  <terry.guo@arm.com>
 
 	Backported from mainline

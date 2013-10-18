@@ -1117,4 +1117,15 @@ struct GTY(()) tree_userdef_literal {
 
 extern tree build_userdef_literal (tree suffix_id, tree value, tree num_string);
 
+/* Possibe cases of scalar_to_vector conversion.  */
+enum stv_conv {
+  stv_error,        /* Error occured.  */
+  stv_nothing,      /* Nothing happened.  */
+  stv_firstarg,     /* First argument must be expanded.  */
+  stv_secondarg     /* Second argument must be expanded.  */
+};
+
+extern enum stv_conv scalar_to_vector (location_t loc, enum tree_code code,
+				       tree op0, tree op1, bool);
+
 #endif /* ! GCC_C_COMMON_H */
