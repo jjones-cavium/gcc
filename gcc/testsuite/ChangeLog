@@ -278,6 +278,11 @@
 	* g++.dg/asan/asan.exp: New file.
 	* c-c++-common/asan/memcmp-1.c: New test.
 
+2012-11-06  Jan Hubicka  <jh@suse.cz>
+
+	* gcc.dg/tree-ssa/loop-1.c: Make to look like a good unroling candidate still.
+	* gcc.dg/tree-ssa/loop-23.c: Likewise.
+
 2013-04-03  Richard Biener  <rguenther@suse.de>
 
 	PR tree-optimization/56501
