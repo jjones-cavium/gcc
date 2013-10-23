@@ -199,6 +199,11 @@
 
 	* g++.dg/asan/asan_test.C: Link -lasan before -lpthread.
 
+2012-12-11  Jakub Jelinek  <jakub@redhat.com>
+
+	PR c++/55619
+	* g++.dg/ext/asm12.C: New test.
+
 2012-12-10  Jakub Jelinek  <jakub@redhat.com>
 
 	* g++.dg/asan/asan_test.cc: Sync from upstream.

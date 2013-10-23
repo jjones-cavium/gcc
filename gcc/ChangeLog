@@ -226,6 +226,12 @@
 	before noreturn calls other than __builtin_trap () and
 	__builtin_unreachable ().
 
+2012-12-11  Jakub Jelinek  <jakub@redhat.com>
+
+	PR c++/55619
+	* semantics.c (finish_asm_stmt): Don't call decay_conversion
+	on input operands that can be only in memory.
+
 2012-12-10  Jakub Jelinek  <jakub@redhat.com>
 
 	* asan.c (asan_init_shadow_ptr_types): Move earlier in the file.

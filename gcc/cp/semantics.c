@@ -1382,7 +1382,15 @@ finish_asm_stmt (int volatile_p, tree string, tree output_operands,
       for (i = 0, t = input_operands; t; ++i, t = TREE_CHAIN (t))
 	{
 	  constraint = TREE_STRING_POINTER (TREE_VALUE (TREE_PURPOSE (t)));
-	  operand = decay_conversion (TREE_VALUE (t));
+	  bool constraint_parsed
+	    = parse_input_constraint (&constraint, i, ninputs, noutputs, 0,   
+				      oconstraints, &allows_mem, &allows_reg);
+	  /* If the operand is going to end up in memory, don't call
+	     decay_conversion.  */
+	  if (constraint_parsed && !allows_reg && allows_mem)
+	    operand = mark_lvalue_use (TREE_VALUE (t));
+	  else
+	    operand = decay_conversion (TREE_VALUE (t));
 
 	  /* If the type of the operand hasn't been determined (e.g.,
 	     because it involves an overloaded function), then issue
@@ -1395,8 +1403,7 @@ finish_asm_stmt (int volatile_p, tree string, tree output_operands,
 	      operand = error_mark_node;
 	    }
 
-	  if (parse_input_constraint (&constraint, i, ninputs, noutputs, 0,
-				      oconstraints, &allows_mem, &allows_reg))
+	  if (constraint_parsed)
 	    {
 	      /* If the operand is going to end up in memory,
 		 mark it addressable.  */
