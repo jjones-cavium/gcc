@@ -1,3 +1,9 @@
+2013-10-24  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #8531
+	* tree-ssa-sccvn.c (fully_constant_vn_reference_p): Don't
+	simplify __builtin_constant_p.
+
 2013-10-22  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	gcc/testsuite/
