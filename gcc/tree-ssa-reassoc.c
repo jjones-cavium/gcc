@@ -376,14 +376,10 @@ get_rank (tree e)
       int i, n;
       tree op;
 
-      if (TREE_CODE (SSA_NAME_VAR (e)) == PARM_DECL
-	  && SSA_NAME_IS_DEFAULT_DEF (e))
+      if (SSA_NAME_IS_DEFAULT_DEF (e))
 	return find_operand_rank (e);
 
       stmt = SSA_NAME_DEF_STMT (e);
-      if (gimple_bb (stmt) == NULL)
-	return 0;
-
       if (gimple_code (stmt) == GIMPLE_PHI)
 	return phi_rank (stmt);
 
@@ -477,7 +473,7 @@ sort_by_operand_rank (const void *pa, const void *pb)
   /* It's nicer for optimize_expression if constants that are likely
      to fold when added/multiplied//whatever are put next to each
      other.  Since all constants have rank 0, order them by type.  */
-  if (oeb->rank == 0 &&  oea->rank == 0)
+  if (oeb->rank == 0 && oea->rank == 0)
     {
       if (constant_type (oeb->op) != constant_type (oea->op))
 	return constant_type (oeb->op) - constant_type (oea->op);
@@ -2992,7 +2988,6 @@ init_reassoc (void)
 {
   int i;
   long rank = 2;
-  tree param;
   int *bbs = XNEWVEC (int, last_basic_block + 1);
 
   /* Find the loops, so that we can prevent moving calculations in
@@ -3011,24 +3006,15 @@ init_reassoc (void)
   bb_rank = XCNEWVEC (long, last_basic_block + 1);
   operand_rank = pointer_map_create ();
 
-  /* Give each argument a distinct rank.   */
-  for (param = DECL_ARGUMENTS (current_function_decl);
-       param;
-       param = DECL_CHAIN (param))
+  /* Give each default definition a distinct rank.  This includes
+     parameters and the static chain.  Walk backwards over all
+     SSA names so that we get proper rank ordering according
+     to tree_swap_operands_p.  */
+  for (i = num_ssa_names - 1; i > 0; --i)
     {
-      if (gimple_default_def (cfun, param) != NULL)
-	{
-	  tree def = gimple_default_def (cfun, param);
-	  insert_operand_rank (def, ++rank);
-	}
-    }
-
-  /* Give the chain decl a distinct rank. */
-  if (cfun->static_chain_decl != NULL)
-    {
-      tree def = gimple_default_def (cfun, cfun->static_chain_decl);
-      if (def != NULL)
-	insert_operand_rank (def, ++rank);
+      tree name = ssa_name (i);
+      if (name && SSA_NAME_IS_DEFAULT_DEF (name))
+	insert_operand_rank (name, ++rank);
     }
 
   /* Set up rank for each BB  */

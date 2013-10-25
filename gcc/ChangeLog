@@ -366,6 +366,13 @@
 	* doc/extend.texi (no_address_safety_analysis): Document new
 	function attribute.
 
+2012-06-27  Richard Guenther  <rguenther@suse.de>
+
+	PR tree-optimization/53774
+	* tree-ssa-reassoc.c (get_rank): All default defs have
+	precomputed rank.
+	(init_reassoc): Precompute rank for all SSA default defs.
+
 2012-06-04  Richard Guenther  <rguenther@suse.de>
 	Eric Botcazou  <ebotcazou@adacore.com>
 
