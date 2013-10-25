@@ -1,3 +1,8 @@
+2013-10-24  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* gcc.target/aarch64/c-output-mod-2.c: Fix for -fPIC.
+	* gcc.target/aarch64/c-output-mod-3.c: Likewise.
+
 2013-10-17  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
 
 	* gcc.target/aarch64/c-output-template.c: New testcase.
