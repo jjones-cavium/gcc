@@ -1,3 +1,8 @@
+2013-10-10  Jakub Jelinek  <jakub@redhat.com>
+
+	PR middle-end/58670
+	* gcc.dg/torture/pr58670.c: New test.
+
 2013-08-30  Marek Polacek  <polacek@redhat.com>
 
 	* g++.dg/ubsan/div-by-zero-1.C: New test.
