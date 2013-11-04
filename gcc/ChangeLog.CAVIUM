@@ -1,5 +1,9 @@
 2013-11-04  Andrew Pinski  <apinski@cavium.com>
 
+	* stmt.c: Include tree-flow.h to fix bootstrap.
+
+2013-11-04  Andrew Pinski  <apinski@cavium.com>
+
 	* config/mips/mips.c (mips_block_move_straight): Fix O32 for misaligned
 	cases.
 

@@ -54,6 +54,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "pretty-print.h"
 #include "bitmap.h"
 #include "params.h"
+#include "tree-flow.h"
 
 
 /* Functions and data structures for expanding case statements.  */
