@@ -1,3 +1,8 @@
+2013-11-04  Andrew Pinski  <apinski@cavium.com>
+
+	* configure.ac: Fix up accidental addition use of emul_name.
+	* configure: Likewise.
+
 2013-10-31  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Backported :
