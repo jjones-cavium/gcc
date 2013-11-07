@@ -46,7 +46,7 @@ int main ()
   return 0;
 }
 
-/* { dg-final { scan-rtl-dump-times "SMS succeeded" 1 "sms" { target spu-*-* mips*-*-* } } } */
+/* { dg-final { scan-rtl-dump-times "SMS succeeded" 1 "sms" { target spu-*-* } } } */
 
 /* { dg-final { cleanup-rtl-dump "sms" } } */
 
