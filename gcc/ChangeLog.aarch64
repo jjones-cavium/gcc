@@ -1,3 +1,8 @@
+2013-11-07  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_legitimize_reload_address):
+	Explain why plus_constant is not used.
+
 2013-11-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/arm_neon.h
