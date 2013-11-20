@@ -1,3 +1,7 @@
+2013-11-19  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/aarch64/aarch64.md: Remove v8type from all insns.
+
 2013-11-15  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/aarch64-simd.md: Remove simd_type from all
