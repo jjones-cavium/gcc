@@ -1,3 +1,10 @@
+2013-11-14  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* gcc.target/aarch64/cpu-diagnostics-2.c: Change "-mcpu="
+	to "cortex-a53".
+	* gcc.target/aarch64/cpu-diagnostics-3.c: Change "-mcpu="
+	to "cortex-a53".
+
 2013-11-19  Cesar Philippidis  <cesar@codesourcery.com>
 
 	* gcc.c-torture/execute/20101011-1.c (__aarch64__):

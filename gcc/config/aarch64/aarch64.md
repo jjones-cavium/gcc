@@ -163,13 +163,9 @@
 
 (define_attr "generic_sched" "yes,no"
   (const (if_then_else
-          (eq_attr "tune" "large,small,cortexa53")
+          (eq_attr "tune" "cortexa53")
           (const_string "no")
           (const_string "yes"))))
-
-;; Scheduling
-(include "large.md")
-(include "small.md")
 
 ;; -------------------------------------------------------------------
 ;; Jumps and other miscellaneous insns

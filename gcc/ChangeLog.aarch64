@@ -1,3 +1,13 @@
+2013-11-14  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/aarch64/aarch64-cores.def (example-1): Remove.
+	(example-2): Likewise.
+	* config/aarch64/aarch64-tune.md: Regenerate.
+	* config/aarch64/aarch64.md: Do not include "large.md" or "small.md".
+	(generic_sched): Remove "large", "small".
+	* config/aarch64/large.md: Delete.
+	* config/aarch64/small.md: Delete.
+
 2013-11-19  Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_save_or_restore_fprs): Fix over
