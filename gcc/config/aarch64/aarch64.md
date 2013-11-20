@@ -163,10 +163,11 @@
 
 (define_attr "generic_sched" "yes,no"
   (const (if_then_else
-          (eq_attr "tune" "cortexa53")
+          (eq_attr "tune" "cortexa53,cortexa15")
           (const_string "no")
           (const_string "yes"))))
 
+(include "cortex-a15.md")
 ;; -------------------------------------------------------------------
 ;; Jumps and other miscellaneous insns
 ;; -------------------------------------------------------------------

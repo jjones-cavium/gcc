@@ -56,19 +56,89 @@
 (define_cpu_unit "ca15_sx1_alu, ca15_sx1_shf, ca15_sx1_sat" "cortex_a15")
 (define_cpu_unit "ca15_sx2_alu, ca15_sx2_shf, ca15_sx2_sat" "cortex_a15")
 
+(define_attr "neon_type"
+   "neon_int_1,\
+   neon_int_2,\
+   neon_int_3,\
+   neon_int_4,\
+   neon_int_5,\
+   neon_vqneg_vqabs,\
+   neon_vmov,\
+   neon_vaba,\
+   neon_vsma,\
+   neon_vaba_qqq,\
+   neon_mul_ddd_8_16_qdd_16_8_long_32_16_long,\
+   neon_mul_qqq_8_16_32_ddd_32,\
+   neon_mul_qdd_64_32_long_qqd_16_ddd_32_scalar_64_32_long_scalar,\
+   neon_mla_ddd_8_16_qdd_16_8_long_32_16_long,\
+   neon_mla_qqq_8_16,\
+   neon_mla_ddd_32_qqd_16_ddd_32_scalar_qdd_64_32_long_scalar_qdd_64_32_long,\
+   neon_mla_qqq_32_qqd_32_scalar,\
+   neon_mul_ddd_16_scalar_32_16_long_scalar,\
+   neon_mul_qqd_32_scalar,\
+   neon_mla_ddd_16_scalar_qdd_32_16_long_scalar,\
+   neon_shift_1,\
+   neon_shift_2,\
+   neon_shift_3,\
+   neon_vshl_ddd,\
+   neon_vqshl_vrshl_vqrshl_qqq,\
+   neon_vsra_vrsra,\
+   neon_fp_vadd_ddd_vabs_dd,\
+   neon_fp_vadd_qqq_vabs_qq,\
+   neon_fp_vsum,\
+   neon_fp_vmul_ddd,\
+   neon_fp_vmul_qqd,\
+   neon_fp_vmla_ddd,\
+   neon_fp_vmla_qqq,\
+   neon_fp_vmla_ddd_scalar,\
+   neon_fp_vmla_qqq_scalar,\
+   neon_fp_vrecps_vrsqrts_ddd,\
+   neon_fp_vrecps_vrsqrts_qqq,\
+   neon_bp_simple,\
+   neon_bp_2cycle,\
+   neon_bp_3cycle,\
+   neon_ldr,\
+   neon_str,\
+   neon_vld1_1_2_regs,\
+   neon_vld1_3_4_regs,\
+   neon_vld2_2_regs_vld1_vld2_all_lanes,\
+   neon_vld2_4_regs,\
+   neon_vld3_vld4,\
+   neon_vst1_1_2_regs_vst2_2_regs,\
+   neon_vst1_3_4_regs,\
+   neon_vst2_4_regs_vst3_vst4,\
+   neon_vst3_vst4,\
+   neon_vld1_vld2_lane,\
+   neon_vld3_vld4_lane,\
+   neon_vst1_vst2_lane,\
+   neon_vst3_vst4_lane,\
+   neon_vld3_vld4_all_lanes,\
+   neon_mcr,\
+   neon_mcr_2_mcrr,\
+   neon_mrc,\
+   neon_mrrc,\
+   neon_ldm_2,\
+   neon_stm_2,\
+   none"
+ (const_string "none"))
+
+(define_attr "insn"
+        "mov,mvn,smulxy,smlaxy,smlalxy,smulwy,smlawx,mul,muls,mla,mlas,umull,umulls,umlal,umlals,smull,smulls,smlal,smlals,smlawy,smuad,smuadx,smlad,smladx,smusd,smusdx,smlsd,smlsdx,smmul,smmulr,smmla,umaal,smlald,smlsld,clz,mrs,msr,xtab,sdiv,udiv,sat,other"
+        (const_string "other"))
+
 ;; Simple Execution Unit:
 ;;
 ;; Simple ALU without shift
 (define_insn_reservation "cortex_a15_alu" 2
   (and (eq_attr "tune" "cortexa15")
-       (and (eq_attr "type" "alu")
+       (and (eq_attr "type" "alu_imm")
             (eq_attr "neon_type" "none")))
   "ca15_issue1,(ca15_sx1,ca15_sx1_alu)|(ca15_sx2,ca15_sx2_alu)")
 
 ;; ALU ops with immediate shift
 (define_insn_reservation "cortex_a15_alu_shift" 3
   (and (eq_attr "tune" "cortexa15")
-       (and (eq_attr "type" "alu_shift")
+       (and (eq_attr "type" "alu_shift_imm")
             (eq_attr "neon_type" "none")))
   "ca15_issue1,(ca15_sx1,ca15_sx1+ca15_sx1_shf,ca15_sx1_alu)\
 	       |(ca15_sx2,ca15_sx2+ca15_sx2_shf,ca15_sx2_alu)")
@@ -87,7 +157,7 @@
 ;; 32-bit multiplies
 (define_insn_reservation "cortex_a15_mult32" 3
   (and (eq_attr "tune" "cortexa15")
-       (and (eq_attr "type" "mult")
+       (and (eq_attr "type" "mul")
 	    (and (eq_attr "neon_type" "none")
 		 (eq_attr "mul64" "no"))))
   "ca15_issue1,ca15_mx")
@@ -95,7 +165,7 @@
 ;; 64-bit multiplies
 (define_insn_reservation "cortex_a15_mult64" 4
   (and (eq_attr "tune" "cortexa15")
-       (and (eq_attr "type" "mult")
+       (and (eq_attr "type" "mul")
 	    (and (eq_attr "neon_type" "none")
 		 (eq_attr "mul64" "yes"))))
   "ca15_issue1,ca15_mx*2")
@@ -159,7 +229,7 @@
   "ca15_issue2,ca15_ls1+ca15_ls2,ca15_str,ca15_str")
 
 ;; We include Neon.md here to ensure that the branch can block the Neon units.
-(include "../arm/cortex-a15-neon.md")
+(include "cortex-a15-neon.md")
 
 ;; We lie with calls.  They take up all issue slots, and form a block in the
 ;; pipeline.  The result however is available the next cycle.
