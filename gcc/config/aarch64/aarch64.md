@@ -318,7 +318,6 @@
           (const_string "yes"))))
 
 ;; Scheduling
-(include "aarch64-generic.md")
 (include "large.md")
 (include "small.md")
 
