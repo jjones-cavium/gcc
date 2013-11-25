@@ -865,4 +865,7 @@ extern enum aarch64_code_model aarch64_cmodel;
 
 #define MULTILIB_DEFAULTS { "mabi=lp64" }
 
+#define ENDIAN_LANE_N(mode, n)  \
+  (BYTES_BIG_ENDIAN ? GET_MODE_NUNITS (mode) - 1 - n : n)
+
 #endif /* GCC_AARCH64_H */
