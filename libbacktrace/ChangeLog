@@ -1,3 +1,11 @@
+2013-11-30  Ian Lance Taylor  <iant@google.com>
+
+	Backport from mainline:
+	2013-10-17  Ian Lance Taylor  <iant@google.com>
+
+	* elf.c (elf_add): Don't get the wrong offsets if a debug section
+	is missing.
+
 2013-03-25  Ian Lance Taylor  <iant@google.com>
 
 	* alloc.c: #include <sys/types.h>.
