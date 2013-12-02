@@ -131,6 +131,12 @@
 
 	* config/aarch64/aarch64.c (all_architectures): Remove "generic".
 
+2013-11-13  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* config/aarch64/aarch64.h (FRAME_GROWS_DOWNWARD): Define to 1.
+	* config/aarch64/aarch64.c (aarch64_initial_elimination_offset):
+	Update offset calculations.
+
 2013-11-13  Tejas Belagod  <tejas.belagod@arm.com>
 
 	* config/aarch64/aarch64-simd.md (vec_extract): New.
