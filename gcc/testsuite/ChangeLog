@@ -1,3 +1,7 @@
+2013-11-26  Yufeng  <yufeng.zhang@arm.com>
+
+	* gcc.target/arm/20131120.c: New test.
+
 2013-11-26  Terry Guo  <terry.guo@arm.com>
 
         * gcc.target/arm/thumb1-pic-high.c: New case.
