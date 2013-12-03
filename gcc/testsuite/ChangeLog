@@ -1,3 +1,8 @@
+2013-11-26  Terry Guo  <terry.guo@arm.com>
+
+        * gcc.target/arm/thumb1-pic-high.c: New case.
+        * gcc.target/arm/thumb1-pic-single-base.c: New case.
+
 2013-10-10  Jakub Jelinek  <jakub@redhat.com>
 
 	PR middle-end/58670
