@@ -1,3 +1,9 @@
+2013-12-04  Jakub Jelinek  <jakub@redhat.com>
+
+	PR rtl-optimization/58726
+	* combine.c (force_to_mode): Fix comment typo.  Don't destructively
+	modify x for ROTATE, ROTATERT and IF_THEN_ELSE.
+
 2012-09-26  Ian Lance Taylor  <iant@google.com>
 
 	* diagnostic.c (bt_callback): Cast pc when calling fprintf.
