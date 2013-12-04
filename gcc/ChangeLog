@@ -150,11 +150,6 @@
 	no_sanitize_address attribute, mention no_address_safety_analysis
 	attribute as deprecated alias.
 
-2013-04-05  Greta Yorsh  <Greta.Yorsh@arm.com>
-
-        * config/arm/arm.md (negdi_extendsidi): New pattern.
-        (negdi_zero_extendsidi): Likewise.
-
 2013-02-11  Alexander Potapenko <glider@google.com>
 	    Jack Howarth  <howarth@bromo.med.uc.edu>
 	    Jakub Jelinek  <jakub@redhat.com>
