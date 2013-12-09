@@ -4883,16 +4883,7 @@ vaddlvq_u32 (uint32x4_t a)
   return result;
 }
 
-__extension__ static __inline float32x2_t __attribute__ ((__always_inline__))
-vbsl_f32 (uint32x2_t a, float32x2_t b, float32x2_t c)
-{
-  float32x2_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
+/* vbsl  */
 
 __extension__ static __inline poly8x8_t __attribute__ ((__always_inline__))
 vbsl_p8 (uint8x8_t a, poly8x8_t b, poly8x8_t c)
@@ -4910,116 +4901,6 @@ vbsl_p16 (uint16x4_t a, poly16x4_t b, poly16x4_t c)
 {
   poly16x4_t result;
   __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline int8x8_t __attribute__ ((__always_inline__))
-vbsl_s8 (uint8x8_t a, int8x8_t b, int8x8_t c)
-{
-  int8x8_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
-vbsl_s16 (uint16x4_t a, int16x4_t b, int16x4_t c)
-{
-  int16x4_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
-vbsl_s32 (uint32x2_t a, int32x2_t b, int32x2_t c)
-{
-  int32x2_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline int64x1_t __attribute__ ((__always_inline__))
-vbsl_s64 (uint64x1_t a, int64x1_t b, int64x1_t c)
-{
-  int64x1_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline uint8x8_t __attribute__ ((__always_inline__))
-vbsl_u8 (uint8x8_t a, uint8x8_t b, uint8x8_t c)
-{
-  uint8x8_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline uint16x4_t __attribute__ ((__always_inline__))
-vbsl_u16 (uint16x4_t a, uint16x4_t b, uint16x4_t c)
-{
-  uint16x4_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline uint32x2_t __attribute__ ((__always_inline__))
-vbsl_u32 (uint32x2_t a, uint32x2_t b, uint32x2_t c)
-{
-  uint32x2_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline uint64x1_t __attribute__ ((__always_inline__))
-vbsl_u64 (uint64x1_t a, uint64x1_t b, uint64x1_t c)
-{
-  uint64x1_t result;
-  __asm__ ("bsl %0.8b, %2.8b, %3.8b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline float32x4_t __attribute__ ((__always_inline__))
-vbslq_f32 (uint32x4_t a, float32x4_t b, float32x4_t c)
-{
-  float32x4_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
-}
-
-__extension__ static __inline float64x2_t __attribute__ ((__always_inline__))
-vbslq_f64 (uint64x2_t a, float64x2_t b, float64x2_t c)
-{
-  float64x2_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
            : "=w"(result)
            : "0"(a), "w"(b), "w"(c)
            : /* No clobbers */);
@@ -5048,92 +4929,118 @@ vbslq_p16 (uint16x8_t a, poly16x8_t b, poly16x8_t c)
   return result;
 }
 
-__extension__ static __inline int8x16_t __attribute__ ((__always_inline__))
-vbslq_s8 (uint8x16_t a, int8x16_t b, int8x16_t c)
+__extension__ static __inline float32x2_t __attribute__ ((__always_inline__))
+vbsl_f32 (uint32x2_t __a, float32x2_t __b, float32x2_t __c)
 {
-  int8x16_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv2sf_suss (__a, __b, __c);
+}
+
+__extension__ static __inline int8x8_t __attribute__ ((__always_inline__))
+vbsl_s8 (uint8x8_t __a, int8x8_t __b, int8x8_t __c)
+{
+  return __builtin_aarch64_simd_bslv8qi_suss (__a, __b, __c);
+}
+
+__extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
+vbsl_s16 (uint16x4_t __a, int16x4_t __b, int16x4_t __c)
+{
+  return __builtin_aarch64_simd_bslv4hi_suss (__a, __b, __c);
+}
+
+__extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
+vbsl_s32 (uint32x2_t __a, int32x2_t __b, int32x2_t __c)
+{
+  return __builtin_aarch64_simd_bslv2si_suss (__a, __b, __c);
+}
+
+__extension__ static __inline int64x1_t __attribute__ ((__always_inline__))
+vbsl_s64 (uint64x1_t __a, int64x1_t __b, int64x1_t __c)
+{
+  return __builtin_aarch64_simd_bsldi_suss (__a, __b, __c);
+}
+
+__extension__ static __inline uint8x8_t __attribute__ ((__always_inline__))
+vbsl_u8 (uint8x8_t __a, uint8x8_t __b, uint8x8_t __c)
+{
+  return __builtin_aarch64_simd_bslv8qi_uuuu (__a, __b, __c);
+}
+
+__extension__ static __inline uint16x4_t __attribute__ ((__always_inline__))
+vbsl_u16 (uint16x4_t __a, uint16x4_t __b, uint16x4_t __c)
+{
+  return __builtin_aarch64_simd_bslv4hi_uuuu (__a, __b, __c);
+}
+
+__extension__ static __inline uint32x2_t __attribute__ ((__always_inline__))
+vbsl_u32 (uint32x2_t __a, uint32x2_t __b, uint32x2_t __c)
+{
+  return __builtin_aarch64_simd_bslv2si_uuuu (__a, __b, __c);
+}
+
+__extension__ static __inline uint64x1_t __attribute__ ((__always_inline__))
+vbsl_u64 (uint64x1_t __a, uint64x1_t __b, uint64x1_t __c)
+{
+  return __builtin_aarch64_simd_bsldi_uuuu (__a, __b, __c);
+}
+
+__extension__ static __inline float32x4_t __attribute__ ((__always_inline__))
+vbslq_f32 (uint32x4_t __a, float32x4_t __b, float32x4_t __c)
+{
+  return __builtin_aarch64_simd_bslv4sf_suss (__a, __b, __c);
+}
+
+__extension__ static __inline float64x2_t __attribute__ ((__always_inline__))
+vbslq_f64 (uint64x2_t __a, float64x2_t __b, float64x2_t __c)
+{
+  return __builtin_aarch64_simd_bslv2df_suss (__a, __b, __c);
+}
+
+__extension__ static __inline int8x16_t __attribute__ ((__always_inline__))
+vbslq_s8 (uint8x16_t __a, int8x16_t __b, int8x16_t __c)
+{
+  return __builtin_aarch64_simd_bslv16qi_suss (__a, __b, __c);
 }
 
 __extension__ static __inline int16x8_t __attribute__ ((__always_inline__))
-vbslq_s16 (uint16x8_t a, int16x8_t b, int16x8_t c)
+vbslq_s16 (uint16x8_t __a, int16x8_t __b, int16x8_t __c)
 {
-  int16x8_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv8hi_suss (__a, __b, __c);
 }
 
 __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
-vbslq_s32 (uint32x4_t a, int32x4_t b, int32x4_t c)
+vbslq_s32 (uint32x4_t __a, int32x4_t __b, int32x4_t __c)
 {
-  int32x4_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv4si_suss (__a, __b, __c);
 }
 
 __extension__ static __inline int64x2_t __attribute__ ((__always_inline__))
-vbslq_s64 (uint64x2_t a, int64x2_t b, int64x2_t c)
+vbslq_s64 (uint64x2_t __a, int64x2_t __b, int64x2_t __c)
 {
-  int64x2_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv2di_suss (__a, __b, __c);
 }
 
 __extension__ static __inline uint8x16_t __attribute__ ((__always_inline__))
-vbslq_u8 (uint8x16_t a, uint8x16_t b, uint8x16_t c)
+vbslq_u8 (uint8x16_t __a, uint8x16_t __b, uint8x16_t __c)
 {
-  uint8x16_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv16qi_uuuu (__a, __b, __c);
 }
 
 __extension__ static __inline uint16x8_t __attribute__ ((__always_inline__))
-vbslq_u16 (uint16x8_t a, uint16x8_t b, uint16x8_t c)
+vbslq_u16 (uint16x8_t __a, uint16x8_t __b, uint16x8_t __c)
 {
-  uint16x8_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv8hi_uuuu (__a, __b, __c);
 }
 
 __extension__ static __inline uint32x4_t __attribute__ ((__always_inline__))
-vbslq_u32 (uint32x4_t a, uint32x4_t b, uint32x4_t c)
+vbslq_u32 (uint32x4_t __a, uint32x4_t __b, uint32x4_t __c)
 {
-  uint32x4_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv4si_uuuu (__a, __b, __c);
 }
 
 __extension__ static __inline uint64x2_t __attribute__ ((__always_inline__))
-vbslq_u64 (uint64x2_t a, uint64x2_t b, uint64x2_t c)
+vbslq_u64 (uint64x2_t __a, uint64x2_t __b, uint64x2_t __c)
 {
-  uint64x2_t result;
-  __asm__ ("bsl %0.16b, %2.16b, %3.16b"
-           : "=w"(result)
-           : "0"(a), "w"(b), "w"(c)
-           : /* No clobbers */);
-  return result;
+  return __builtin_aarch64_simd_bslv2di_uuuu (__a, __b, __c);
 }
 
 __extension__ static __inline uint32x2_t __attribute__ ((__always_inline__))
