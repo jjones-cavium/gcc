@@ -1,3 +1,8 @@
+2013-11-26  Matthew Leach  <matthew.leach@arm.com>
+
+	* config/aarch64/linux-unwind.h (aarch64_fallback_frame_state):	Check
+	for correct opcodes on BE.
+
 2013-11-26  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/arm_neon.h (vtbx1_<psu>8): Emulate behaviour
