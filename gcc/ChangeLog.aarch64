@@ -1,3 +1,10 @@
+2013-12-03  Vladimir Makarov  <vmakarov@redhat.com>
+
+	* config/aarch64/aarch64.c (aarch64_frame_pointer_required): Check
+	LR_REGNUM.
+	(aarch64_can_eliminate): Don't check elimination source when
+	frame_pointer_required is false.
+
 2013-11-26  Matthew Leach  <matthew.leach@arm.com>
 
 	* config/aarch64/linux-unwind.h (aarch64_fallback_frame_state):	Check
