@@ -1,3 +1,9 @@
+2013-12-06  Andrew Pinski  <apinski@cavium.com>
+
+	PR target/59092
+	* config/aarch64/aarch64.md (trap): New pattern.
+	* config/aarch64/types.md (trap): New type attribute.
+
 2013-12-03  Vladimir Makarov  <vmakarov@redhat.com>
 
 	* config/aarch64/aarch64.c (aarch64_frame_pointer_required): Check
