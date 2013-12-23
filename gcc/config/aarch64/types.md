@@ -386,6 +386,7 @@
 ; neon_mul_b_long
 ; neon_mul_h_long
 ; neon_mul_s_long
+; neon_mul_d_long
 ; neon_mul_h_scalar
 ; neon_mul_h_scalar_q
 ; neon_mul_s_scalar
@@ -579,6 +580,15 @@
 ; neon_fp_div_s_q
 ; neon_fp_div_d
 ; neon_fp_div_d_q
+;
+; The classification below is for Crypto instructions.
+;
+; crypto_aes
+; crypto_sha1_xor
+; crypto_sha1_fast
+; crypto_sha1_slow
+; crypto_sha256_fast
+; crypto_sha256_slow
 
 (define_attr "type"
  "adc_imm,\
@@ -940,6 +950,7 @@
   neon_mul_b_long,\
   neon_mul_h_long,\
   neon_mul_s_long,\
+  neon_mul_d_long,\
   neon_mul_h_scalar,\
   neon_mul_h_scalar_q,\
   neon_mul_s_scalar,\
@@ -1154,7 +1165,14 @@
   neon_fp_div_s,\
   neon_fp_div_s_q,\
   neon_fp_div_d,\
-  neon_fp_div_d_q"
+  neon_fp_div_d_q,\
+\
+  crypto_aes,\
+  crypto_sha1_xor,\
+  crypto_sha1_fast,\
+  crypto_sha1_slow,\
+  crypto_sha256_fast,\
+  crypto_sha256_slow"
    (const_string "untyped"))
 
 ; Is this an (integer side) multiply with a 32-bit (or smaller) result?
