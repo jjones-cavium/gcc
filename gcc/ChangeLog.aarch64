@@ -1,3 +1,7 @@
+2013-10-03  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/arm_neon.h: Rearrange builtins as per mainline.
+
 2013-12-19  Tejas Belagod  <tejas.belagod@arm.com>
 
 	* config/aarch64/aarch64-simd-builtins.def: Update builtins table.
