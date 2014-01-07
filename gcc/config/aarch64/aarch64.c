@@ -4669,6 +4669,8 @@ aarch64_rtx_costs (rtx x, int code, int outer ATTRIBUTE_UNUSED,
 
 		  if (speed)
 		    *cost += extra_cost->int_multiply_add;
+
+		  return true;
 		}
 
 	      *cost += (rtx_cost (new_op0, PLUS, 0, speed)
