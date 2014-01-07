@@ -50,3 +50,5 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 #endif
 	j	RA
 
+        .section        .note.GNU-stack,"",@progbits
+

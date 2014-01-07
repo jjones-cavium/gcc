@@ -39,3 +39,9 @@ Boston, MA 02110-1301, USA.  */
 #undef GNU_USER_DYNAMIC_LINKER64
 #define GNU_USER_DYNAMIC_LINKER64 "%{ march=octeon3: /lib64-fp/ld.so.1 ; \
 				    : /lib64/ld.so.1 }"
+
+/* include executable stack flag at end of asm file */
+#undef TARGET_ASM_FILE_END
+#define TARGET_ASM_FILE_END file_end_indicate_exec_stack
+
+

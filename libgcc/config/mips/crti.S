@@ -47,3 +47,5 @@ _fini:
 	addu	$sp,$sp,-32
 	sw	$31,20($sp)
 #endif
+        .section        .note.GNU-stack,"",@progbits
+
