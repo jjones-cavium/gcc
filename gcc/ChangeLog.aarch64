@@ -1,3 +1,8 @@
+2014-01-07  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/aarch64/aarch64-elf.h (ASM_SPEC): Remove identity spec for
+	-mcpu.
+
 2014-01-06  Richard Earnshaw  <rearnsha@arm.com>
 
 	* aarch64.c (aarch64_rtx_costs): Fix cost calculation for MADD.
