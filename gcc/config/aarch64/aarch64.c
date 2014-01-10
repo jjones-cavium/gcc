@@ -4486,6 +4486,7 @@ aarch64_strip_shift_or_extend (rtx x)
   /* Zero and sign extraction of a widened value.  */
   if ((GET_CODE (op) == ZERO_EXTRACT || GET_CODE (op) == SIGN_EXTRACT)
       && XEXP (op, 2) == const0_rtx
+      && GET_CODE (XEXP (op, 0)) == MULT
       && aarch64_is_extend_from_extract (GET_MODE (op), XEXP (XEXP (op, 0), 1),
 					 XEXP (op, 1)))
     return XEXP (XEXP (op, 0), 0);

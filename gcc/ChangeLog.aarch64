@@ -1,3 +1,10 @@
+2014-01-10  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #9131
+	* config/aarch64/aarch64.c (aarch64_strip_shift_or_extend):
+	Fix check for sign_extract since it might not have a mult inside
+	of it.
+
 2014-01-07  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/aarch64-elf.h (ASM_SPEC): Remove identity spec for
