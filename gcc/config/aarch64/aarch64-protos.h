@@ -116,7 +116,8 @@ struct cpu_rtx_cost_table
   const int memory_load;
   const int memory_store;
   const int register_shift;
-  const int int_divide;
+  const int int_dividesi;
+  const int int_dividedi;
   const int float_divide;
   const int double_divide;
   const int int_multiply;
@@ -175,6 +176,7 @@ struct tune_params
   const struct cpu_regmove_cost *const regmove_cost;
   const struct cpu_vector_cost *const vec_costs;
   const int memmov_cost;
+  const int issue_rate;
 };
 
 struct simd_immediate_info

@@ -157,7 +157,8 @@ static const struct cpu_rtx_cost_table generic_rtx_cost_table =
   NAMED_PARAM (memory_load, COSTS_N_INSNS (1)),
   NAMED_PARAM (memory_store, COSTS_N_INSNS (0)),
   NAMED_PARAM (register_shift, COSTS_N_INSNS (1)),
-  NAMED_PARAM (int_divide, COSTS_N_INSNS (6)),
+  NAMED_PARAM (int_dividesi, COSTS_N_INSNS (6)),
+  NAMED_PARAM (int_dividedi, COSTS_N_INSNS (6)),
   NAMED_PARAM (float_divide, COSTS_N_INSNS (2)),
   NAMED_PARAM (double_divide, COSTS_N_INSNS (6)),
   NAMED_PARAM (int_multiply, COSTS_N_INSNS (1)),
@@ -166,6 +167,27 @@ static const struct cpu_rtx_cost_table generic_rtx_cost_table =
   NAMED_PARAM (int_multiply_extend_add, COSTS_N_INSNS (1)),
   NAMED_PARAM (float_multiply, COSTS_N_INSNS (0)),
   NAMED_PARAM (double_multiply, COSTS_N_INSNS (1))
+};
+
+
+#if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
+__extension__
+#endif
+static const struct cpu_rtx_cost_table thunder_rtx_cost_table =
+{
+  NAMED_PARAM (memory_load, COSTS_N_INSNS (3)),
+  NAMED_PARAM (memory_store, COSTS_N_INSNS (1)),
+  NAMED_PARAM (register_shift, COSTS_N_INSNS (1)),
+  NAMED_PARAM (int_dividesi, COSTS_N_INSNS (22)),
+  NAMED_PARAM (int_dividedi, COSTS_N_INSNS (38)),
+  NAMED_PARAM (float_divide, COSTS_N_INSNS (3)),
+  NAMED_PARAM (double_divide, COSTS_N_INSNS (5)+2),
+  NAMED_PARAM (int_multiply, COSTS_N_INSNS (4)),
+  NAMED_PARAM (int_multiply_extend, COSTS_N_INSNS (4)),
+  NAMED_PARAM (int_multiply_add, COSTS_N_INSNS (4)),
+  NAMED_PARAM (int_multiply_extend_add, COSTS_N_INSNS (4)),
+  NAMED_PARAM (float_multiply, COSTS_N_INSNS (1)+2),
+  NAMED_PARAM (double_multiply, COSTS_N_INSNS (1)+2)
 };
 
 #if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
@@ -192,6 +214,17 @@ static const struct cpu_regmove_cost generic_regmove_cost =
      Therefore we need to raise the cost above 2 in order to have
      reload handle the situation.  */
   NAMED_PARAM (FP2FP, 4)
+};
+
+#if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
+__extension__
+#endif
+static const struct cpu_regmove_cost thunder_regmove_cost =
+{
+  NAMED_PARAM (GP2GP, 1),
+  NAMED_PARAM (GP2FP, 2),
+  NAMED_PARAM (FP2GP, 2),
+  NAMED_PARAM (FP2FP, 2)
 };
 
 /* Generic costs for vector insn classes.  */
@@ -224,7 +257,23 @@ static const struct tune_params generic_tunings =
   &generic_addrcost_table,
   &generic_regmove_cost,
   &generic_vector_cost,
-  NAMED_PARAM (memmov_cost, 4)
+  NAMED_PARAM (memmov_cost, 4),
+  NAMED_PARAM (issue_rate, 1)
+};
+
+
+#if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
+__extension__
+#endif
+
+static const struct tune_params thunder_tunings =
+{
+  &thunder_rtx_cost_table,
+  &generic_addrcost_table,
+  &thunder_regmove_cost,
+  &generic_vector_cost,
+  NAMED_PARAM (memmov_cost, 3),
+  NAMED_PARAM (issue_rate, 2)
 };
 
 /* A processor implementing AArch64.  */
@@ -4802,9 +4851,12 @@ aarch64_rtx_costs (rtx x, int code, int outer ATTRIBUTE_UNUSED,
       *cost = COSTS_N_INSNS (2);
       if (speed)
 	{
+	  if (GET_MODE (x) == DImode)
+	    *cost += (extra_cost->int_multiply_add
+		      + extra_cost->int_dividedi);
 	  if (GET_MODE_CLASS (GET_MODE (x)) == MODE_INT)
 	    *cost += (extra_cost->int_multiply_add
-		      + extra_cost->int_divide);
+		      + extra_cost->int_dividesi);
 	  else if (GET_MODE (x) == DFmode)
 	    *cost += (extra_cost->double_multiply
 		      + extra_cost->double_divide);
@@ -4819,8 +4871,10 @@ aarch64_rtx_costs (rtx x, int code, int outer ATTRIBUTE_UNUSED,
       *cost = COSTS_N_INSNS (1);
       if (speed)
 	{
+	  if (GET_MODE (x) == DImode)
+	    *cost += extra_cost->int_dividedi;
 	  if (GET_MODE_CLASS (GET_MODE (x)) == MODE_INT)
-	    *cost += extra_cost->int_divide;
+	    *cost += extra_cost->int_dividesi;
 	  else if (GET_MODE (x) == DFmode)
 	    *cost += extra_cost->double_divide;
 	  else if (GET_MODE (x) == SFmode)
@@ -6353,6 +6407,13 @@ static unsigned int
 aarch64_autovectorize_vector_sizes (void)
 {
   return (16 | 8);
+}
+
+/* Return the number of instructions that can be issued per cycle.  */
+static int
+aarch64_sched_issue_rate (void)
+{
+  return aarch64_tune_params->issue_rate;
 }
 
 /* A table to help perform AArch64-specific name mangling for AdvSIMD
@@ -8461,6 +8522,9 @@ aarch64_vectorize_vec_perm_const_ok (enum machine_mode vmode,
    to determine the size of the access.  We assume accesses are aligned.  */
 #undef TARGET_MAX_ANCHOR_OFFSET
 #define TARGET_MAX_ANCHOR_OFFSET 4095
+
+#undef TARGET_SCHED_ISSUE_RATE
+#define TARGET_SCHED_ISSUE_RATE aarch64_sched_issue_rate
 
 struct gcc_target targetm = TARGET_INITIALIZER;
 

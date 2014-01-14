@@ -1,3 +1,26 @@
+2014-01-13  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-cores.def (thunder): Use thunder tuning.
+	* config/aarch64/aarch64-protos.h (cpu_rtx_cost_table): Split int_divide 
+	into int_dividesi and int_dividedi.
+	(tune_params): Add issue_rate.
+	* config/aarch64/aarch64.c (generic_rtx_cost_table): Split int_divide 
+	into int_dividesi and int_dividedi.
+	(thunder_rtx_cost_table): New variable.
+	(thunder_regmove_cost): New variable.
+	(generic_tunings): Add issue rate of 1.
+	(thunder_tunings): New variable.
+	(aarch64_rtx_costs): Adjust divide/mod to use int_dividesi and int_dividedi.
+	(aarch64_sched_issue_rate): New function.
+	(TARGET_SCHED_ISSUE_RATE): Define.
+	* config/aarch64/aarch64.md: Include thunder.md
+	(mode): New attr.
+	(generic_sched): Default thunder to no.
+	(<su>muldi3_highpart): Add mode attr.
+	(<su_optab>div<mode>3): Likewise.
+	(*<su_optab>divsi3_uxtw): Likewise.
+	* config/aarch64/thunder.md: New file.
+
 2014-01-10  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #9131
