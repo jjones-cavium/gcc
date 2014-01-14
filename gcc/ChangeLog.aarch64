@@ -1,5 +1,10 @@
 2014-01-13  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_register_move_cost): Correct the
+	cost for moving between the stack registers and non GPR registers.
+
+2014-01-13  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-cores.def (thunder): Use thunder tuning.
 	* config/aarch64/aarch64-protos.h (cpu_rtx_cost_table): Split int_divide 
 	into int_dividesi and int_dividedi.
