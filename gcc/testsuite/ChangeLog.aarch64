@@ -1,3 +1,9 @@
+2014-01-10  Richard Earnshaw  <rearnsha@arm.com>
+
+	PR target/59744
+	* gcc.target/aarch64/cmn-neg.c: Use equality comparisons.
+	* gcc.target/aarch64/cmn-neg2.c: New test.
+
 2013-12-19  Tejas Belagod  <tejas.belagod@arm.com>
 
 	* gcc.target/aarch64/sha256_1.c: New.
