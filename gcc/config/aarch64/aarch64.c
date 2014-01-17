@@ -224,7 +224,9 @@ static const struct cpu_regmove_cost thunder_regmove_cost =
   NAMED_PARAM (GP2GP, 1),
   NAMED_PARAM (GP2FP, 2),
   NAMED_PARAM (FP2GP, 2),
-  NAMED_PARAM (FP2FP, 2)
+  /* FIXME: this has to be the same as memmov as there is a reload bug, 
+     see bug #9154.  */
+  NAMED_PARAM (FP2FP, 3)
 };
 
 /* Generic costs for vector insn classes.  */
