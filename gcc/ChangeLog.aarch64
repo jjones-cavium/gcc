@@ -1,3 +1,8 @@
+2014-01-24  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-linux.h (GLIBC_DYNAMIC_LINKER): Rename the ILP32
+	ld.so so that it uses _ilp32.
+
 2014-01-20  Alex Velenko  <Alex.Velenko@arm.com>
 
 	* config/aarch64/aarch64-simd.md (vec_perm<mode>): Add BE check.
