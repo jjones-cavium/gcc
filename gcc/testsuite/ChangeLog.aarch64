@@ -1,5 +1,9 @@
 2014-01-23  Alex Velenko  <Alex.Velenko@arm.com>
 
+	* gcc.target/aarch64/sshr64_1.c: New testcase.
+
+2014-01-23  Alex Velenko  <Alex.Velenko@arm.com>
+
 	* gcc.target/aarch64/vld1-vst1_1.c: New test_case.
 
 2014-01-20  Alex Velenko  <Alex.Velenko@arm.com>
