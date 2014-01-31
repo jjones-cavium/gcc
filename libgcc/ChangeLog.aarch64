@@ -1,3 +1,8 @@
+2014-01-29  Marcus Shawcroft  <marcus.shawcroft@arm.com>
+
+	* config/aarch64/sfp-machine.h (_FP_I_TYPE): Define
+	as long long.
+
 2013-03-18  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/sfp-machine.h: Support ILP32 ABI.
