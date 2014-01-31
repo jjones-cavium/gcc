@@ -7,6 +7,12 @@
 	(thunder_64neon_storepair): Likewise.
 	(thunder_128neon_storepair): Likewise.
 
+2014-01-29  Marcus Shawcroft  <marcus.shawcroft@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_expand_mov_immediate)
+	(aarch64_legitimate_address_p, aarch64_class_max_nregs): Adjust
+	whitespace.
+
 2014-01-24  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* common/config/aarch64/aarch64-common.c
