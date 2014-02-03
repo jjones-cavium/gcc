@@ -1,3 +1,14 @@
+2014-02-02  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/thunder.md (thunder_add): Rename to ...
+	(thunder_alu): This and split out flag setting to ...
+	(thunder_alus): This.
+	(thunder_brj): Split out calls and trap.
+	(thunder_call): New reserve.
+	(thunder_trap): New reserve.
+	(compare/branch bypass): New bypass as the instructions
+	combined between issueing.
+
 2014-01-30  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/thunder.md (thunder_f_cvt): Add f_cvti2f.

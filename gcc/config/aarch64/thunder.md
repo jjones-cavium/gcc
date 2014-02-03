@@ -32,9 +32,16 @@
 (define_cpu_unit "thunder_mult" "thunder_mult")
 (define_cpu_unit "thunder_divide" "thunder_divide")
 
-(define_insn_reservation "thunder_add" 1
+;; (final_presence_set "thunder_pipe1" "thunder_pipe0")
+
+(define_insn_reservation "thunder_alu" 1
   (and (eq_attr "tune" "thunder")
-       (eq_attr "type" "adc_imm,adc_reg,adr,alu_imm,alu_reg,alus_imm,alus_reg,extend,logic_imm,logic_reg,logics_imm,logics_reg,mov_imm,mov_reg"))
+       (eq_attr "type" "adc_imm,adc_reg,adr,alu_imm,alu_reg,extend,logic_imm,logic_reg,mov_imm,mov_reg"))
+  "thunder_pipe0 | thunder_pipe1")
+
+(define_insn_reservation "thunder_alus" 1
+  (and (eq_attr "tune" "thunder")
+       (eq_attr "type" "alus_imm,alus_reg,logics_imm,logics_reg"))
   "thunder_pipe0 | thunder_pipe1")
 
 (define_insn_reservation "thunder_shift" 1
@@ -109,9 +116,18 @@
 
 (define_insn_reservation "thunder_brj" 1
   (and (eq_attr "tune" "thunder")
-       (eq_attr "type" "branch,trap,call"))
+       (eq_attr "type" "branch"))
   "thunder_pipe1")
 
+(define_insn_reservation "thunder_call" 1
+  (and (eq_attr "tune" "thunder")
+       (eq_attr "type" "call"))
+  "thunder_pipe1")
+
+(define_insn_reservation "thunder_trap" 1
+  (and (eq_attr "tune" "thunder")
+       (eq_attr "type" "trap"))
+  "thunder_pipe1")
 ;; FPU
 
 (define_insn_reservation "thunder_fadd" 4
@@ -210,5 +226,13 @@
   (and (eq_attr "tune" "thunder")
        (eq_attr "type" "untyped,multiple"))
   "thunder_pipe0 + thunder_pipe1")
+
+
+;; In Thunder, the alus that take one cycle are combined with the branches
+;; and don't take up an extra issue slot.
+;; FIXME: Not taking up an extra issue slot is not modeled in 4.7
+;; Also this is called macro fusion
+(define_bypass 0 "thunder_alus" "thunder_brj")
+
 
 
