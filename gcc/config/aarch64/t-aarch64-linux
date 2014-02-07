@@ -23,4 +23,4 @@ LIB1ASMFUNCS = _aarch64_sync_cache_range
 MULTILIB_OPTIONS = mabi=lp64/mabi=ilp32
 MULTILIB_DIRNAMES = lp64 ilp32
 MULTILIB_OSDIRNAMES = mabi.lp64=../lib64
-MULTILIB_OSDIRNAMES += mabi.ilp32=../lib32
+MULTILIB_OSDIRNAMES += mabi.ilp32=../libilp32
