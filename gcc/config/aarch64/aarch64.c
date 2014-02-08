@@ -8320,6 +8320,18 @@ aarch64_vectorize_vec_perm_const_ok (enum machine_mode vmode,
   return ret;
 }
 
+/* Return a list of modes that can be used for insv and extv.  */
+static enum machine_mode *
+aarch64_mode_for_extraction_insv (void)
+{
+  static enum machine_mode modes64[] = {SImode, DImode, BLKmode};
+  return modes64;
+}
+
+
+#undef TARGET_MODE_FOR_EXTRACTION_INSV
+#define TARGET_MODE_FOR_EXTRACTION_INSV aarch64_mode_for_extraction_insv
+
 #undef TARGET_ADDRESS_COST
 #define TARGET_ADDRESS_COST aarch64_address_cost
 
