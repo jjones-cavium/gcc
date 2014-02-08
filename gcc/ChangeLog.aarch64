@@ -1,5 +1,10 @@
 2014-02-07  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.md (*tb<optab><mode>1): Use GPI
+	instead of always saying the zero_extract is in DImode.
+
+2014-02-07  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.c (aarch64_mode_for_extraction_insv): New function.
 	(TARGET_MODE_FOR_EXTRACTION_INSV): Define.
 
