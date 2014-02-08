@@ -1,5 +1,10 @@
 2014-02-07  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.dg/octeon/cvmx/bt-2.c: Fix warnings.
+	* testsuite/gcc.dg/octeon/test-backtrace.h: Fix warnings.
+
+2014-02-07  Andrew Pinski  <apinski@cavium.com>
+
 	* simplify-rtx.c (simplify_subreg): Simplify
 	(subreg (zero_extract (a) (b) (c)) into
 	(zero_extract (truncate (a) (b) (c)))
