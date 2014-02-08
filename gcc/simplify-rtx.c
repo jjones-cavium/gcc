@@ -5671,6 +5671,26 @@ simplify_subreg (enum machine_mode outermode, rtx op,
 	}
     }
 
+  /* If we have subreg of a zero_extract, try to see if
+     the object can be simplified.  */
+  if (GET_CODE (op) == ZERO_EXTRACT
+      && GET_MODE_SIZE (outermode) < GET_MODE_SIZE (innermode)
+      && subreg_lowpart_offset (outermode, innermode) == byte
+      && SCALAR_INT_MODE_P (outermode)
+      && GET_CODE (XEXP (op, 1)) == CONST_INT
+      && GET_CODE (XEXP (op, 2)) == CONST_INT
+      && INTVAL (XEXP (op, 2)) < GET_MODE_BITSIZE (outermode)
+      && INTVAL (XEXP (op, 1)) + INTVAL (XEXP (op, 2)) < GET_MODE_BITSIZE (outermode))
+    {
+      rtx op0 = XEXP (op, 0);
+      op0 = simplify_unary_operation (TRUNCATE, outermode, op0, innermode);
+      if (op0 && GET_CODE (op0) != TRUNCATE && GET_CODE (op0) != SUBREG)
+	{
+	  return simplify_gen_ternary (ZERO_EXTRACT, outermode, outermode,
+				       op0, XEXP (op, 1), XEXP (op, 2));
+	}
+    }
+
   /* SUBREG of a hard register => just change the register number
      and/or mode.  If the hard register is not valid in that mode,
      suppress this simplification.  If the hard register is the stack,

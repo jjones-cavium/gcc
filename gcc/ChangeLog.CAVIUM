@@ -1,3 +1,11 @@
+2014-02-07  Andrew Pinski  <apinski@cavium.com>
+
+	* simplify-rtx.c (simplify_subreg): Simplify
+	(subreg (zero_extract (a) (b) (c)) into
+	(zero_extract (truncate (a) (b) (c)))
+	if the subreg is the lowerpart subreg and (b) and (c)
+	are in the range of the outer type.
+
 2014-02-05  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.dg/octeon/cvmx/bt-1.c: Fix warnings.
