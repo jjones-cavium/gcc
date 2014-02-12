@@ -1,3 +1,12 @@
+2014-02-12  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #9436
+	* optabs.c (emit_conditional_move): Only
+	try using the same registers for the constant
+	if the mode of the original compare and the other mode
+	are equal.
+	* gcc.c-torture/execute/20140212-1.c: New test.
+
 2013-11-06  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #8614
