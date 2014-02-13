@@ -177,6 +177,7 @@ struct tune_params
   const struct cpu_vector_cost *const vec_costs;
   const int memmov_cost;
   const int issue_rate;
+  const int align;
 };
 
 struct simd_immediate_info
