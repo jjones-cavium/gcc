@@ -1,3 +1,11 @@
+2014-02-24  Andrew Pinski  <apinski@cavium.com>
+
+	Revert:
+	Bug #7526
+	* config/aarch64/aarch64.h (SIZE_TYPE): Set to unsigned int for ILP32.
+	(PTRDIFF_TYPE): Set to int for ILP32.
+
+
 2014-02-13  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64-protos.h (tune_params): Add align field.
