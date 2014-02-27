@@ -1,3 +1,4 @@
+
 2014-02-24  Andrew Pinski  <apinski@cavium.com>
 
 	Revert:
@@ -14,6 +15,11 @@
 	(thunder_tunings): Likewise.
 	(aarch64_override_options): Use the align field of aarch64_tune_params
 	to set the loop, jump and function alignment.
+
+2014-02-10  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_override_options): Fix typo from
+	coretex to cortex.
 
 2014-02-06  Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
