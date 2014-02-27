@@ -5,6 +5,13 @@
 	* config/aarch64/aarch64.h (SIZE_TYPE): Set to unsigned int for ILP32.
 	(PTRDIFF_TYPE): Set to int for ILP32.
 
+2014-02-19  Michael Hudson-Doyle  <michael.hudson@linaro.org>
+
+	 PR target/59799
+	* config/aarch64/aarch64.c (aarch64_pass_by_reference): The rules for
+	passing arrays in registers are the same as for structs, so remove the
+	special case for them.
+
 2014-02-14  Kyle McMartin  <kyle@redhat.com>
 
 	PR pch/60010
