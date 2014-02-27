@@ -1,4 +1,3 @@
-
 2014-02-24  Andrew Pinski  <apinski@cavium.com>
 
 	Revert:
@@ -6,6 +5,10 @@
 	* config/aarch64/aarch64.h (SIZE_TYPE): Set to unsigned int for ILP32.
 	(PTRDIFF_TYPE): Set to int for ILP32.
 
+2014-02-14  Kyle McMartin  <kyle@redhat.com>
+
+	PR pch/60010
+	* config/host-linux.c (TRY_EMPTY_VM_SPACE): Define for AArch64.
 
 2014-02-13  Andrew Pinski  <apinski@cavium.com>
 
