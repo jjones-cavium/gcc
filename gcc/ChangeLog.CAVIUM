@@ -1,3 +1,8 @@
+2014-03-26  Andrew Pinski  <apinski@cavium.com>
+
+	* config.host: Set use_long_long_for_widest_fast_int to yes
+	for mips64*-*-*, aarch64*-*-*, and x86_64-*-*.
+
 2014-02-12  Andrew Pinski  <apinski@cavium.com>
 
 	* optabs.c (emit_conditional_move): Fix bug with the
