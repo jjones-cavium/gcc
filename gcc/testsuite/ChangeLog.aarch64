@@ -1,3 +1,11 @@
+2014-03-24  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* gcc.target/aarch64/vect-abs.c (dg-options): Add -std=c99.
+	(LONG_LONG): Use LLONG.
+	(set_rvector_long): Explicitly return void.
+	(set_vector_long): Likewise.
+	(check_vector_long): Likewise.
+
 2014-03-03  Renlin Li  <Renlin.Li@arm.com>
 
 	* gcc.target/aarch64/aapcs64/validate_memory.h: Move f32in64 and
