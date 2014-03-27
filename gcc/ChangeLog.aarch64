@@ -1,3 +1,7 @@
+2014-03-20  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
+
+	* config/aarch64/aarch64.c (MEMORY_MOVE_COST): Delete.
+
 2014-03-16  Renlin Li  <Renlin.Li@arm.com>
 
 	* config/aarch64/aarch64.c: Correct the comments about the
