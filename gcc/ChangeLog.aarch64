@@ -1,3 +1,8 @@
+2014-03-16  Renlin Li  <Renlin.Li@arm.com>
+
+	* config/aarch64/aarch64.c: Correct the comments about the
+	aarch64 stack layout.
+
 2014-03-12  Yufeng Zhang  <yufeng.zhang@arm.com>
 
 	* config/aarch64/aarch64-builtins.c
