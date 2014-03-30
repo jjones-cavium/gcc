@@ -21,8 +21,7 @@
 ;;   Copyright (C) 2004, 2005, 2006 Cavium Networks.
 
 
-;; Thunder is a dual-issue processor that can issue all instructions on
-;; pipe0 and a subset on pipe1.
+;; Thunder is a dual-issue processor.
 
 
 (define_automaton "thunder_main, thunder_mult, thunder_divide")
