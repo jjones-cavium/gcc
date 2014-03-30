@@ -1,3 +1,8 @@
+2014-03-30  Andrew Pinski  <apinski@cavium.com>
+
+	* testsuite/gcc.dg/octeon/test-backtrace.h (n_functions): Change
+	type to unsigned to avoid some warnings.
+
 2014-03-26  Andrew Pinski  <apinski@cavium.com>
 
 	* config.host: Set use_long_long_for_widest_fast_int to yes
