@@ -1,3 +1,10 @@
+2014-03-27  Marcus Shawcroft  <marcus.shawcroft@arm.com>
+
+	PR target/60580
+	* gcc.target/aarch64/pr60580_1.c: New.
+	* gcc.target/aarch64/test_fp_attribute_1.c: New.
+	* gcc.target/aarch64/test_fp_attribute_2.c: New.
+
 2014-03-24  Alex Velenko  <Alex.Velenko@arm.com>
 
 	* gcc.target/aarch64/ushr64_1.c: New.
