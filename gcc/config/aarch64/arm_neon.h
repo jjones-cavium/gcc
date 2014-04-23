@@ -2314,6 +2314,12 @@ vqneg_s32 (int32x2_t __a)
   return (int32x2_t) __builtin_aarch64_sqnegv2si (__a);
 }
 
+__extension__ static __inline int64x1_t __attribute__ ((__always_inline__))
+vqneg_s64 (int64x1_t __a)
+{
+  return __builtin_aarch64_sqnegdi (__a);
+}
+
 __extension__ static __inline int8x16_t __attribute__ ((__always_inline__))
 vqnegq_s8 (int8x16_t __a)
 {
@@ -2348,6 +2354,12 @@ __extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
 vqabs_s32 (int32x2_t __a)
 {
   return (int32x2_t) __builtin_aarch64_sqabsv2si (__a);
+}
+
+__extension__ static __inline int64x1_t __attribute__ ((__always_inline__))
+vqabs_s64 (int64x1_t __a)
+{
+  return __builtin_aarch64_sqabsdi (__a);
 }
 
 __extension__ static __inline int8x16_t __attribute__ ((__always_inline__))
@@ -21033,6 +21045,12 @@ vqabss_s32 (int32x1_t __a)
   return (int32x1_t) __builtin_aarch64_sqabssi (__a);
 }
 
+__extension__ static __inline int64_t __attribute__ ((__always_inline__))
+vqabsd_s64 (int64_t __a)
+{
+  return __builtin_aarch64_sqabsdi (__a);
+}
+
 /* vqadd */
 
 __extension__ static __inline int8x1_t __attribute__ ((__always_inline__))
@@ -21649,6 +21667,12 @@ __extension__ static __inline int32x1_t __attribute__ ((__always_inline__))
 vqnegs_s32 (int32x1_t __a)
 {
   return (int32x1_t) __builtin_aarch64_sqnegsi (__a);
+}
+
+__extension__ static __inline int64_t __attribute__ ((__always_inline__))
+vqnegd_s64 (int64_t __a)
+{
+  return __builtin_aarch64_sqnegdi (__a);
 }
 
 /* vqrdmulh */
