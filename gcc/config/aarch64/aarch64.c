@@ -1773,8 +1773,6 @@ aarch64_layout_frame (void)
   if (reload_completed && cfun->machine->frame.laid_out)
     return;
 
-  cfun->machine->frame.fp_lr_offset = 0;
-
   /* First mark all the registers that really need to be saved...  */
   for (regno = R0_REGNUM; regno <= R30_REGNUM; regno++)
     cfun->machine->frame.reg_offset[regno] = -1;
@@ -1824,14 +1822,12 @@ aarch64_layout_frame (void)
     {
       cfun->machine->frame.reg_offset[R29_REGNUM] = offset;
       offset += UNITS_PER_WORD;
-      cfun->machine->frame.fp_lr_offset = UNITS_PER_WORD;
     }
 
   if (cfun->machine->frame.reg_offset[R30_REGNUM] != -1)
     {
       cfun->machine->frame.reg_offset[R30_REGNUM] = offset;
       offset += UNITS_PER_WORD;
-      cfun->machine->frame.fp_lr_offset += UNITS_PER_WORD;
     }
 
   cfun->machine->frame.padding0 =
@@ -4228,8 +4224,7 @@ aarch64_initial_elimination_offset (unsigned from, unsigned to)
 	{
 	  HOST_WIDE_INT elim = crtl->outgoing_args_size
 	    + cfun->machine->frame.saved_regs_size
-	    + get_frame_size ()
-	    - cfun->machine->frame.fp_lr_offset;
+	    + get_frame_size ();
 	  elim = AARCH64_ROUND_UP (elim, STACK_BOUNDARY / BITS_PER_UNIT);
 	  return elim;
 	}
