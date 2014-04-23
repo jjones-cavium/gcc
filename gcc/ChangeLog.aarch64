@@ -1,3 +1,8 @@
+2014-04-22  Marcus Shawcroft  <marcus.shawcroft@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_initial_elimination_offset):
+	Fix indentation.
+
 2014-04-22  Vidya Praveen  <vidyapraveen@arm.com>
 
 	* aarch64.md (float<GPI:mode><GPF:mode>2): Remove.
