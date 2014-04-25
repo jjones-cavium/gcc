@@ -1,15 +1,19 @@
 2014-04-23  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_rtx_costs): Handle BSWAP.
+
+2014-04-23  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
  
-       * config/aarch64/aarch64.md (rev16<mode>2): New pattern.
-       (rev16<mode>2_alt): Likewise.
-       * config/aarch64/aarch64.c (aarch64_rtx_costs): Handle rev16 case.
-       * config/aarch/aarch.c (aarch_rev16_shright_mask_imm_p): New.
-       (aarch_rev16_shleft_mask_imm_p): Likewise.
-       (aarch_rev16_p_1): Likewise.
-       (aarch_rev16_p): Likewise.
-       * config/aarch/aarch-protos.h (aarch_rev16_p): Declare extern.
-       (aarch_rev16_shright_mask_imm_p): Likewise.
-       (aarch_rev16_shleft_mask_imm_p): Likewise.
+	* config/aarch64/aarch64.md (rev16<mode>2): New pattern.
+	(rev16<mode>2_alt): Likewise.
+	* config/aarch64/aarch64.c (aarch64_rtx_costs): Handle rev16 case.
+	* config/aarch/aarch.c (aarch_rev16_shright_mask_imm_p): New.
+	(aarch_rev16_shleft_mask_imm_p): Likewise.
+	(aarch_rev16_p_1): Likewise.
+	(aarch_rev16_p): Likewise.
+	* config/aarch/aarch-protos.h (aarch_rev16_p): Declare extern.
+	(aarch_rev16_shright_mask_imm_p): Likewise.
+	(aarch_rev16_shleft_mask_imm_p): Likewise.
 
 2014-04-22  Richard Henderson  <rth@redhat.com>
 
@@ -99,7 +103,7 @@
 2014-04-16  Andrew  Pinski  <apinski@cavium.com>
 
 	* config/host-linux.c (TRY_EMPTY_VM_SPACE): Change aarch64 ilp32
-        definition.
+	definition.
 
 2014-04-14  Yufeng Zhang  <yufeng.zhang@arm.com>
 
@@ -1673,7 +1677,7 @@
 
 2013-07-17  Yufeng Zhang  <yufeng.zhang@arm.com>
 
-         * config/aarch64/aarch64.c (aarch64_pad_arg_upward): In big-endian,
+	 * config/aarch64/aarch64.c (aarch64_pad_arg_upward): In big-endian,
 	pad pointer-typed argument downward.
 
 2013-07-15  Marcus Shawcroft  <marcus.shawcroft@arm.com>
@@ -3011,36 +3015,36 @@
 	Backport from mainline
 	2012-12-20  Ian Bolton  <ian.bolton@arm.com>
 
-        * gcc/config/aarch64/aarch64.md
-        (*addsi3_aarch64_uxtw): New pattern.
-        (*addsi3_compare0_uxtw): New pattern.
-        (*add_<shift>_si_uxtw): New pattern.
-        (*add_<optab><SHORT:mode>_si_uxtw): New pattern.
-        (*add_<optab><SHORT:mode>_shft_si_uxtw): New pattern.
-        (*add_<optab><SHORT:mode>_mult_si_uxtw): New pattern.
-        (*add_<optab>si_multp2_uxtw): New pattern.
-        (*addsi3_carryin_uxtw): New pattern.
-        (*addsi3_carryin_alt1_uxtw): New pattern.
-        (*addsi3_carryin_alt2_uxtw): New pattern.
-        (*addsi3_carryin_alt3_uxtw): New pattern.
-        (*add_uxtsi_multp2_uxtw): New pattern.
-        (*subsi3_uxtw): New pattern.
-        (*subsi3_compare0_uxtw): New pattern.
-        (*sub_<shift>_si_uxtw): New pattern.
-        (*sub_mul_imm_si_uxtw): New pattern.
-        (*sub_<optab><SHORT:mode>_si_uxtw): New pattern.
-        (*sub_<optab><SHORT:mode>_shft_si_uxtw): New pattern.
-        (*sub_<optab>si_multp2_uxtw): New pattern.
-        (*sub_uxtsi_multp2_uxtw): New pattern.
-        (*negsi2_uxtw): New pattern.
-        (*negsi2_compare0_uxtw): New pattern.
-        (*neg_<shift>_si2_uxtw): New pattern.
-        (*neg_mul_imm_si2_uxtw): New pattern.
-        (*mulsi3_uxtw): New pattern.
-        (*maddsi_uxtw): New pattern.
-        (*msubsi_uxtw): New pattern.
-        (*mulsi_neg_uxtw): New pattern.
-        (*<su_optab>divsi3_uxtw): New pattern.
+	* gcc/config/aarch64/aarch64.md
+	(*addsi3_aarch64_uxtw): New pattern.
+	(*addsi3_compare0_uxtw): New pattern.
+	(*add_<shift>_si_uxtw): New pattern.
+	(*add_<optab><SHORT:mode>_si_uxtw): New pattern.
+	(*add_<optab><SHORT:mode>_shft_si_uxtw): New pattern.
+	(*add_<optab><SHORT:mode>_mult_si_uxtw): New pattern.
+	(*add_<optab>si_multp2_uxtw): New pattern.
+	(*addsi3_carryin_uxtw): New pattern.
+	(*addsi3_carryin_alt1_uxtw): New pattern.
+	(*addsi3_carryin_alt2_uxtw): New pattern.
+	(*addsi3_carryin_alt3_uxtw): New pattern.
+	(*add_uxtsi_multp2_uxtw): New pattern.
+	(*subsi3_uxtw): New pattern.
+	(*subsi3_compare0_uxtw): New pattern.
+	(*sub_<shift>_si_uxtw): New pattern.
+	(*sub_mul_imm_si_uxtw): New pattern.
+	(*sub_<optab><SHORT:mode>_si_uxtw): New pattern.
+	(*sub_<optab><SHORT:mode>_shft_si_uxtw): New pattern.
+	(*sub_<optab>si_multp2_uxtw): New pattern.
+	(*sub_uxtsi_multp2_uxtw): New pattern.
+	(*negsi2_uxtw): New pattern.
+	(*negsi2_compare0_uxtw): New pattern.
+	(*neg_<shift>_si2_uxtw): New pattern.
+	(*neg_mul_imm_si2_uxtw): New pattern.
+	(*mulsi3_uxtw): New pattern.
+	(*maddsi_uxtw): New pattern.
+	(*msubsi_uxtw): New pattern.
+	(*mulsi_neg_uxtw): New pattern.
+	(*<su_optab>divsi3_uxtw): New pattern.
 
 2012-12-17  James Greenhalgh  <james.greenhalgh@arm.com>
 
@@ -3155,7 +3159,7 @@
 2012-12-04  Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
 	Backport from mainline
-        2012-12-04  Marcus Shawcroft  <marcus.shawcroft@arm.com>
+	2012-12-04  Marcus Shawcroft  <marcus.shawcroft@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_build_builtin_va_list): Set
 	TYPE_STUB_DECL.
@@ -3431,7 +3435,7 @@
 
 2012-10-15  Chris Schlumberger-Socha <chris.schlumberger-socha@arm.com>
 
-        * config/aarch64/aarch64.h (TARGET_CPU_CPP_BUILTINS): Add predefine for
+	* config/aarch64/aarch64.h (TARGET_CPU_CPP_BUILTINS): Add predefine for
 	AArch64 code models.
 
 2012-10-05  Tejas Belagod  <tejas.belagod@arm.com>
