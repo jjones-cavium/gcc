@@ -8553,6 +8553,9 @@ aarch64_mode_for_extraction_insv (void)
 #undef TARGET_SCHED_ISSUE_RATE
 #define TARGET_SCHED_ISSUE_RATE aarch64_sched_issue_rate
 
+#undef TARGET_FLAGS_REGNUM
+#define TARGET_FLAGS_REGNUM CC_REGNUM
+
 struct gcc_target targetm = TARGET_INITIALIZER;
 
 #include "gt-aarch64.h"
