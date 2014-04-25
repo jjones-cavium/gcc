@@ -1,3 +1,11 @@
+2013-04-25  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64-protos.h (cpu_rtx_cost_table): Add new
+	rtx operation rev.
+	* config/aarch64/aarch64.c (generic_rtx_cost_table): Update the
+	cost for rev operation.
+	(thunder_rtx_cost_table): Update the cost for rev operation.
+
 2014-04-23  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_rtx_costs): Handle BSWAP.

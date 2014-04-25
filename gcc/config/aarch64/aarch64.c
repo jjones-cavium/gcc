@@ -166,7 +166,8 @@ static const struct cpu_rtx_cost_table generic_rtx_cost_table =
   NAMED_PARAM (int_multiply_add, COSTS_N_INSNS (1)),
   NAMED_PARAM (int_multiply_extend_add, COSTS_N_INSNS (1)),
   NAMED_PARAM (float_multiply, COSTS_N_INSNS (0)),
-  NAMED_PARAM (double_multiply, COSTS_N_INSNS (1))
+  NAMED_PARAM (double_multiply, COSTS_N_INSNS (1)),
+  NAMED_PARAM (rev, COSTS_N_INSNS (0))
 };
 
 
@@ -187,7 +188,8 @@ static const struct cpu_rtx_cost_table thunder_rtx_cost_table =
   NAMED_PARAM (int_multiply_add, COSTS_N_INSNS (4)),
   NAMED_PARAM (int_multiply_extend_add, COSTS_N_INSNS (4)),
   NAMED_PARAM (float_multiply, COSTS_N_INSNS (1)+2),
-  NAMED_PARAM (double_multiply, COSTS_N_INSNS (1)+2)
+  NAMED_PARAM (double_multiply, COSTS_N_INSNS (1)+2),
+  NAMED_PARAM (rev, COSTS_N_INSNS (1))
 };
 
 #if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
@@ -4724,7 +4726,7 @@ aarch64_rtx_costs (rtx x, int code, int outer ATTRIBUTE_UNUSED,
       *cost = COSTS_N_INSNS (1);
 
       if (speed)
-        *cost += extra_cost->alu.rev;
+        *cost += extra_cost->rev;
 
       return false;
 
@@ -4734,7 +4736,7 @@ aarch64_rtx_costs (rtx x, int code, int outer ATTRIBUTE_UNUSED,
           *cost = COSTS_N_INSNS (1);
 
           if (speed)
-            *cost += extra_cost->alu.rev;
+            *cost += extra_cost->rev;
 
           return true;
         }

@@ -126,6 +126,7 @@ struct cpu_rtx_cost_table
   const int int_multiply_extend_add;
   const int float_multiply;
   const int double_multiply;
+  const int rev;
 };
 
 /* Additional cost for addresses.  */
