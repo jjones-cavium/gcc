@@ -1,3 +1,16 @@
+2014-04-23  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+ 
+       * config/aarch64/aarch64.md (rev16<mode>2): New pattern.
+       (rev16<mode>2_alt): Likewise.
+       * config/aarch64/aarch64.c (aarch64_rtx_costs): Handle rev16 case.
+       * config/aarch/aarch.c (aarch_rev16_shright_mask_imm_p): New.
+       (aarch_rev16_shleft_mask_imm_p): Likewise.
+       (aarch_rev16_p_1): Likewise.
+       (aarch_rev16_p): Likewise.
+       * config/aarch/aarch-protos.h (aarch_rev16_p): Declare extern.
+       (aarch_rev16_shright_mask_imm_p): Likewise.
+       (aarch_rev16_shleft_mask_imm_p): Likewise.
+
 2014-04-22  Richard Henderson  <rth@redhat.com>
 
 	* config/aarch64/aarch64 (addti3, subti3): New expanders.

@@ -1,3 +1,7 @@
+2014-04-23  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+       * gcc.target/aarch64/rev16_1.c: New test.
+
 2014-04-22  Alex Velenko  <Alex.Velenko@arm.com>
 
 	* gcc.target/aarch64/vqneg_s64_1.c: New testcase.

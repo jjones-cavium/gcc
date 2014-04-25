@@ -254,6 +254,10 @@ void aarch64_init_expanders (void);
 void aarch64_print_operand (FILE *, rtx, char);
 void aarch64_print_operand_address (FILE *, rtx);
 
+extern bool aarch_rev16_p (rtx);
+extern bool aarch_rev16_shleft_mask_imm_p (rtx, enum machine_mode);
+extern bool aarch_rev16_shright_mask_imm_p (rtx, enum machine_mode);
+
 /* Initialize builtins for SIMD intrinsics.  */
 void init_aarch64_simd_builtins (void);
 
