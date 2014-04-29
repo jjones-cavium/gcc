@@ -1,3 +1,7 @@
+2014-04-28  Richard Henderson  <rth@redhat.com>
+
+	* gcc-interface/Makefile.in: Support aarch64-linux.
+
 2014-04-22  Richard Henderson  <rth@redhat.com>
 
 	* gcc-interface/Makefile.in: Support aarch64-linux.
