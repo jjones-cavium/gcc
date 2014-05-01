@@ -1,3 +1,10 @@
+2014-05-01  Praveen Jonnalagadda <pjonnalagadda@caviumnetworks.com>
+
+	config/mips/irix-crti.S: Add .note.GNU-stack section
+	config/mips/irix-crtn.S: likewise
+	config/mips/mips16.S: likewise
+	config/mips/vr4120-div.S: likewise
+
 2012-11-27  Manjunath Matti  <mmatti@caviumnetworks.com>
 	Backport from mainline.
 	2012-03-05  Richard Henderson  <rth@redhat.com>

@@ -36,3 +36,4 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 	ld	$28,8($sp)
 	jr	$31
 	daddiu	$sp,$sp,16
+        .section        .note.GNU-stack,"",@progbits

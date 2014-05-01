@@ -719,3 +719,4 @@ CALL_STUB_RET (__mips16_call_stub_dc_10, 10, DC)
 #endif /* !__mips_single_float */
 
 #endif
+	.section        .note.GNU-stack,"",@progbits

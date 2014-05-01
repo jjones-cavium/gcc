@@ -72,3 +72,4 @@ __vr4120_modsi3:
 	j	$31
 	subu	$2,$6,$2	# r = x1 - r  in delay slot
 	.end	__vr4120_modsi3
+	.section        .note.GNU-stack,"",@progbits

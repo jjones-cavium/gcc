@@ -69,3 +69,4 @@ __gcc_fini:
 .hidden __gcc_init
 .hidden __gcc_fini
 
+        .section        .note.GNU-stack,"",@progbits
