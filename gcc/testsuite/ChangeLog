@@ -1,3 +1,7 @@
+2013-12-05  Tejas Belagod  <tejas.belagod@arm.com>
+
+	* gcc.dg/vect/vect-nop-move.c: New test.
+
 2013-11-26  Yufeng  <yufeng.zhang@arm.com>
 
 	* gcc.target/arm/20131120.c: New test.
