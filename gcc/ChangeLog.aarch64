@@ -1,3 +1,8 @@
+2014-05-02  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_expand_vec_perm_1): Tidy bit-flip
+	expression.
+
 2014-04-29  Zhenqiang Chen  <zhenqiang.chen@linaro.org>
 
 	* config/aarch64/aarch64.md (mov<mode>cc): New for GPF.
