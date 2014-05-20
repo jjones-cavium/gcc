@@ -1,3 +1,10 @@
+2012-03-27  Richard Guenther  <rguenther@suse.de>
+
+	PR middle-end/52720
+	* fold-const.c (try_move_mult_to_index): Handle &x.array more
+	explicitely.
+	* testsuite/gcc.dg/torture/pr52720.c: New testcase.
+
 2014-02-12  Andrew Pinski  <apinski@cavium.com>
 
 	* optabs.c (emit_conditional_move): Fix bug with the
