@@ -1,3 +1,8 @@
+2014-06-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/rs6000/rs6000-cpus.def (e5500): New cpu, same as e500mc64.
+	* config/rs6000/rs6000-tables.opt: Regenerate.
+
 2014-06-05  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Bug #10596
