@@ -1,3 +1,41 @@
+2014-06-05  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #10596
+	Ported:
+
+	2013-11-29  Jakub Jelinek  <jakub@redhat.com>
+	            Yury Gribov  <y.gribov@samsung.com>
+
+	gcc/
+	PR sanitizer/59063
+	* config/gnu-user.h: Removed old code for setting up sanitizer
+	libs.
+	* gcc.c: Using libsanitizer spec instead of explicit libs.
+
+	gcc/testsuite/
+	* c-c++-common/asan/pr59063-1.c: New test.
+	* c-c++-common/asan/pr59063-2.c: Likewise.
+	* lib/asan-dg.exp: Add path to libsanitizer.spec to cflags.
+	* lib/ubsan-dg.exp: Likewise.
+	
+	libsanitizer/
+	* libsanitizer.spec.in: Add spec file to hold link flags for
+	various sanitizer libs.
+	* configure.ac: Check whether clock_* routines come from librt.
+	* asan/Makefile.am (libasan_la_LDFLAGS): Libs now come from
+	configure.ac.
+	* tsan/Makefile.am (libtsan_la_LDFLAGS): Likewise.
+	* ubsan/Makefile.am (libubsan_la_LDFLAGS): Likewise.
+	* lsan/Makefile.am (liblsan_la_LDFLAGS): Likewise.
+	* asan/Makefile.in: Regenerate.
+	* interception/Makefile.in: Regenerate.
+	* lsan/Makefile.in: Regenerate.
+	* sanitizer_common/Makefile.in: Regenerate.
+	* tsan/Makefile.in: Regenerate.
+	* ubsan/Makefile.in: Regenerate.
+	* Makefile.in: Regenerate.
+	* configure: Regenerate.
+
 2014-04-14  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #10070

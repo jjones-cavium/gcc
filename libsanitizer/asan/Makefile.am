@@ -44,7 +44,7 @@ libasan_la_LIBADD = $(top_builddir)/sanitizer_common/libsanitizer_common.la $(to
 endif
 libasan_la_LIBADD += $(LIBSTDCXX_RAW_CXX_LDFLAGS)
 
-libasan_la_LDFLAGS = -version-info `grep -v '^\#' $(srcdir)/libtool-version` -lpthread -ldl
+libasan_la_LDFLAGS = -version-info `grep -v '^\#' $(srcdir)/libtool-version` $(link_libasan)
 
 # Work around what appears to be a GNU make bug handling MAKEFLAGS
 # values defined in terms of make variables, as is the case for CC and
