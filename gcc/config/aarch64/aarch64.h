@@ -22,6 +22,10 @@
 #ifndef GCC_AARCH64_H
 #define GCC_AARCH64_H
 
+#ifdef CSL_LICENSE_FEATURE
+#error "AARCH64 targets are not licensed controlled; Thunder toolchain"
+#endif
+
 /* Target CPU builtins.  */
 #define TARGET_CPU_CPP_BUILTINS()			\
   do							\

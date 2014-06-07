@@ -24,6 +24,11 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
+#ifdef CSL_LICENSE_FEATURE
+#error "MIPS targets are not licensed controlled; Octeon toolchain"
+#endif
+
+
 
 #include "config/vxworks-dummy.h"
 
