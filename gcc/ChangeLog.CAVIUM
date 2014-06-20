@@ -1,3 +1,20 @@
+2014-06-20  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Ported for bug #10596:
+	2013-02-22  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/56393
+	* config/gnu-user.h (LIBASAN_EARLY_SPEC): Link in libasan_preinit.o
+	if not linking a shared library.
+	
+	gcc/
+	* asan/Makefile.am (nodist_toolexeclib_HEADERS): Set to
+	libasan_preinit.o.
+	(libasan_preinit.o): Depend on asan_preinit.o.
+	* asan/Makefile.in: Regenerated.
+	* asan/asan_preinit.cc: New file, synced from upstream.
+	* asan/asan_rtl.cc: Remove preinit stuff, synced from upstream.
+
 2014-06-05  Andrew Pinski  <apinski@cavium.com>
 
 	* config/rs6000/rs6000-cpus.def (e5500): New cpu, same as e500mc64.
