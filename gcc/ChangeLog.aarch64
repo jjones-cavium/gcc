@@ -1,3 +1,11 @@
+2014-06-04  Bin Cheng  <bin.cheng@arm.com>
+
+	* config/aarch64/aarch64.c (aarch64_classify_address)
+	(aarch64_legitimize_reload_address): Support full addressing modes
+	for vector modes.
+	* config/aarch64/aarch64.md (mov<mode>, movmisalign<mode>)
+	(*aarch64_simd_mov<mode>, *aarch64_simd_mov<mode>): Relax predicates.
+
 2014-05-02  Alan Lawrence  <alan.lawrence@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_expand_vec_perm_1): Tidy bit-flip
