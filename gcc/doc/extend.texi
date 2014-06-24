@@ -8571,6 +8571,7 @@ to those machines.  Generally these generate calls to specific machine
 instructions, but allow the compiler to schedule those calls.
 
 @menu
+* AArch64 intrinsics::
 * Alpha Built-in Functions::
 * ARM iWMMXt Built-in Functions::
 * ARM NEON Intrinsics::
@@ -8591,6 +8592,11 @@ instructions, but allow the compiler to schedule those calls.
 * TILE-Gx Built-in Functions::
 * TILEPro Built-in Functions::
 @end menu
+
+@node AArch64 intrinsics
+@subsection ACLE Intrinsics for AArch64
+
+@include aarch64-acle-intrinsics.texi
 
 @node Alpha Built-in Functions
 @subsection Alpha Built-in Functions

@@ -613,6 +613,7 @@
   clz,\
   no_insn,\
   csel,\
+  crc,\
   extend,\
   f_cvt,\
   f_cvtf2i,\
