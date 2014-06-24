@@ -1,3 +1,10 @@
+2014-06-10  Alan Lawrence  <alan.lawrence@arm.com>
+
+	PR target/59843
+	* config/aarch64/aarch64-modes.def: Add V1DFmode.
+	* config/aarch64/aarch64.c (aarch64_vector_mode_supported_p):
+	Support V1DFmode.
+
 2014-06-11  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
 
 	* config.gcc (aarch64*-*-*): Add arm_acle.h to extra headers.
