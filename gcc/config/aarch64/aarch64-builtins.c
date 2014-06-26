@@ -38,6 +38,7 @@ enum aarch64_simd_builtin_type_mode
   T_V4HI,
   T_V2SI,
   T_V2SF,
+  T_V1DF,
   T_DI,
   T_DF,
   T_V16QI,
@@ -61,6 +62,7 @@ enum aarch64_simd_builtin_type_mode
 #define v4hi_UP  T_V4HI
 #define v2si_UP  T_V2SI
 #define v2sf_UP  T_V2SF
+#define v1df_UP  T_V1DF
 #define di_UP    T_DI
 #define df_UP    T_DF
 #define v16qi_UP T_V16QI
@@ -285,6 +287,8 @@ aarch64_types_storestruct_lane_qualifiers[SIMD_MAX_BUILTIN_ARGS]
   VAR2 (T, N, MAP, v8qi, v16qi)
 #define BUILTIN_VD(T, N, MAP) \
   VAR4 (T, N, MAP, v8qi, v4hi, v2si, v2sf)
+#define BUILTIN_VD1(T, N, MAP) \
+  VAR5 (T, N, MAP, v8qi, v4hi, v2si, v2sf, v1df)
 #define BUILTIN_VDC(T, N, MAP) \
   VAR6 (T, N, MAP, v8qi, v4hi, v2si, v2sf, di, df)
 #define BUILTIN_VDIC(T, N, MAP) \
@@ -319,8 +323,6 @@ aarch64_types_storestruct_lane_qualifiers[SIMD_MAX_BUILTIN_ARGS]
   VAR3 (T, N, MAP, v8qi, v4hi, v2si)
 #define BUILTIN_VD_HSI(T, N, MAP) \
   VAR2 (T, N, MAP, v4hi, v2si)
-#define BUILTIN_VD_RE(T, N, MAP) \
-  VAR6 (T, N, MAP, v8qi, v4hi, v2si, v2sf, di, df)
 #define BUILTIN_VQ(T, N, MAP) \
   VAR6 (T, N, MAP, v16qi, v8hi, v4si, v2di, v4sf, v2df)
 #define BUILTIN_VQN(T, N, MAP) \
@@ -676,13 +678,13 @@ aarch64_init_simd_builtins (void)
       aarch64_simd_builtin_datum *d = &aarch64_simd_builtin_data[i];
       const char *const modenames[] =
 	{
-	  "v8qi", "v4hi", "v2si", "v2sf", "di", "df",
+	  "v8qi", "v4hi", "v2si", "v2sf", "v1df", "di", "df",
 	  "v16qi", "v8hi", "v4si", "v4sf", "v2di", "v2df",
 	  "ti", "ei", "oi", "xi", "si", "sf", "hi", "qi"
 	};
       const enum machine_mode modes[] =
 	{
-	  V8QImode, V4HImode, V2SImode, V2SFmode, DImode, DFmode,
+	  V8QImode, V4HImode, V2SImode, V2SFmode, V1DFmode, DImode, DFmode,
 	  V16QImode, V8HImode, V4SImode, V4SFmode, V2DImode,
 	  V2DFmode, TImode, EImode, OImode, XImode, SImode,
 	  SFmode, HImode, QImode
@@ -1342,6 +1344,7 @@ aarch64_gimple_fold_builtin (gimple_stmt_iterator *gsi)
 #undef BUILTIN_VALL
 #undef BUILTIN_VB
 #undef BUILTIN_VD
+#undef BUILTIN_VD1
 #undef BUILTIN_VDC
 #undef BUILTIN_VDIC
 #undef BUILTIN_VDN
@@ -1357,7 +1360,6 @@ aarch64_gimple_fold_builtin (gimple_stmt_iterator *gsi)
 #undef BUILTIN_VDW
 #undef BUILTIN_VD_BHSI
 #undef BUILTIN_VD_HSI
-#undef BUILTIN_VD_RE
 #undef BUILTIN_VQ
 #undef BUILTIN_VQN
 #undef BUILTIN_VQW
