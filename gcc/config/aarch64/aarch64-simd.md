@@ -4406,6 +4406,19 @@
   [(set_attr "type" "neon_permute<q>")]
 )
 
+;; This exists solely to check the arguments to the corresponding __builtin.
+;; Used where we want an error for out-of-range indices which would otherwise
+;; be silently wrapped (e.g. the mask to a __builtin_shuffle).
+(define_expand "aarch64_im_lane_boundsi"
+  [(match_operand:SI 0 "immediate_operand" "i")
+   (match_operand:SI 1 "immediate_operand" "i")]
+  "TARGET_SIMD"
+{
+  aarch64_simd_lane_bounds (operands[0], 0, INTVAL (operands[1]));
+  DONE;
+}
+)
+
 (define_insn "aarch64_st2<mode>_dreg"
   [(set (match_operand:TI 0 "aarch64_simd_struct_operand" "=Utv")
 	(unspec:TI [(match_operand:OI 1 "register_operand" "w")

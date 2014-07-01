@@ -384,3 +384,6 @@
   VAR1 (TERNOPU, crypto_sha256h2, 0, v4si)
   VAR1 (BINOPU, crypto_sha256su0, 0, v4si)
   VAR1 (TERNOPU, crypto_sha256su1, 0, v4si)
+
+  /* Meta-op to check lane bounds of immediate in aarch64_expand_builtin.  */
+  VAR1 (BINOPV, im_lane_bound, 0, si)

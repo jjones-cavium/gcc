@@ -236,6 +236,13 @@
 	* config/aarch64/aarch64.md (mov<mode>, movmisalign<mode>)
 	(*aarch64_simd_mov<mode>, *aarch64_simd_mov<mode>): Relax predicates.
 
+2014-05-29  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/aarch64-builtins.c (aarch64_types_binopv_qualifiers,
+	TYPES_BINOPV): New static data.
+	* config/aarch64/aarch64-simd-builtins.def (im_lane_bound): New builtin.
+	* config/aarch64/aarch64-simd.md (aarch64_im_lane_boundsi): New pattern.
+
 2014-05-02  Alan Lawrence  <alan.lawrence@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_expand_vec_perm_1): Tidy bit-flip
