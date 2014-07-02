@@ -8,6 +8,10 @@
 	saved_return_address to the stack frame where LR register was stored.
 	(saved_return_address): Declare weak.
 
+2014-06-24  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* gcc.target/aarch64/singleton_intrinsics_1.c: Save temps and cleanup.
+
 2014-06-19  Alan Lawrence  <alan.lawrence@arm.com>
 
 	* g++.dg/abi/mangle-neon-aarch64.C: Also test mangling of float64x1_t.
