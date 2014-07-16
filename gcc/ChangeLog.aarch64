@@ -1,3 +1,9 @@
+2014-07-16  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (splitter for *aarch64_ashr_sisd_or_int_<mode>3):
+	Use gen_rtx_REG directly instead of gen_lowpart to work around CANNOT_CHANGE_MODE_CLASS
+	definition in older GCCs.
+
 2014-07-04  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* config/aarch64/aarch64-simd.md (move_lo_quad_internal_<mode>): New.

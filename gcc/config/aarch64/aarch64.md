@@ -2998,7 +2998,8 @@
    (set (match_dup 0)
         (unspec:DI [(match_dup 1) (match_dup 3)] UNSPEC_SISD_SSHL))]
 {
-  operands[3] = gen_lowpart (QImode, operands[0]);
+  /* Force the register mode change instead of using gen_lowpart. */
+  operands[3] = gen_rtx_REG (QImode, REGNO (operands[0]));
 }
 )
 
@@ -3013,7 +3014,8 @@
    (set (match_dup 0)
         (unspec:SI [(match_dup 1) (match_dup 3)] UNSPEC_SSHL_2S))]
 {
-  operands[3] = gen_lowpart (QImode, operands[0]);
+  /* Force the register mode change instead of using gen_lowpart. */
+  operands[3] = gen_rtx_REG (QImode, REGNO (operands[0]));
 }
 )
 
