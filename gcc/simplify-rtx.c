@@ -5658,7 +5658,6 @@ simplify_subreg (enum machine_mode outermode, rtx op,
 	    op1 = NULL_RTX;
 	  if (op1 == XEXP (op, 1))
 	    op1 = NULL_RTX;
-	  gcc_assert (op1 == NULL_RTX || GET_MODE (op1) == outermode);
 	}
 
       if (op0 != NULL_RTX || op1 != NULL_RTX)
