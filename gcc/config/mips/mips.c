@@ -17904,7 +17904,7 @@ mips_expand_vec_minmax (rtx target, rtx op0, rtx op1,
 static unsigned HOST_WIDE_INT
 mips_asan_shadow_offset (void)
 {
-  return (unsigned HOST_WIDE_INT) 1 << (POINTER_SIZE == 64 ? 41 : 29);
+  return (unsigned HOST_WIDE_INT) 1 << (POINTER_SIZE == 64 ? 37 : 29);
 }
 
 

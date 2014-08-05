@@ -1,3 +1,8 @@
+2014-08-05  Andrew Pinski  <apinski@cavium.com>
+
+	* config/mips/mips.c (mips_asan_shadow_offset): Fix so the we use the 37bit (40-3)
+	of virtual address space.
+
 2014-07-26  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #11598
