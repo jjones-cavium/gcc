@@ -174,7 +174,7 @@ static const struct cpu_rtx_cost_table generic_rtx_cost_table =
 #if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
 __extension__
 #endif
-static const struct cpu_rtx_cost_table thunder_rtx_cost_table =
+static const struct cpu_rtx_cost_table thunderx_rtx_cost_table =
 {
   NAMED_PARAM (memory_load, COSTS_N_INSNS (3)),
   NAMED_PARAM (memory_store, COSTS_N_INSNS (1)),
@@ -221,7 +221,7 @@ static const struct cpu_regmove_cost generic_regmove_cost =
 #if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
 __extension__
 #endif
-static const struct cpu_regmove_cost thunder_regmove_cost =
+static const struct cpu_regmove_cost thunderx_regmove_cost =
 {
   NAMED_PARAM (GP2GP, 1),
   NAMED_PARAM (GP2FP, 2),
@@ -272,11 +272,11 @@ static const struct tune_params generic_tunings =
 __extension__
 #endif
 
-static const struct tune_params thunder_tunings =
+static const struct tune_params thunderx_tunings =
 {
-  &thunder_rtx_cost_table,
+  &thunderx_rtx_cost_table,
   &generic_addrcost_table,
-  &thunder_regmove_cost,
+  &thunderx_regmove_cost,
   &generic_vector_cost,
   NAMED_PARAM (memmov_cost, 3),
   NAMED_PARAM (issue_rate, 2),
