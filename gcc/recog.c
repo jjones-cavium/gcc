@@ -984,6 +984,11 @@ general_operand (rtx op, enum machine_mode mode)
 	  && MEM_P (sub))
 	return 0;
 
+      /* Reject mode dependent addresses of a MEM as
+	 cleanup_subreg_operands, does not the correct thing. */
+      if (MEM_P (sub) && mode_dependent_address_p (XEXP (sub, 0)))
+	return 0;
+
       /* FLOAT_MODE subregs can't be paradoxical.  Combine will occasionally
 	 create such rtl, and we must reject it.  */
       if (SCALAR_FLOAT_MODE_P (GET_MODE (op))
