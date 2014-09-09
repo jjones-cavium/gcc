@@ -3957,11 +3957,11 @@
 })
 
 (define_insn "stack_protect_test_<mode>"
-  [(set (match_operand:PTR 0 "register_operand")
+  [(set (match_operand:PTR 0 "register_operand" "=r")
 	(unspec:PTR [(match_operand:PTR 1 "memory_operand" "m")
 		     (match_operand:PTR 2 "memory_operand" "m")]
 	 UNSPEC_SP_TEST))
-   (clobber (match_scratch:PTR 3 "=&r"))]
+   (clobber (match_scratch:PTR 3 "&r"))]
   ""
   "ldr\t%x3, %x1\;ldr\t%x0, %x2\;eor\t%x0, %x3, %x0"
   [(set_attr "length" "12")

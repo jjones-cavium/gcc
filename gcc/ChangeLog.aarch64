@@ -1,3 +1,9 @@
+2014-09-07 Venkataramanan Kumar <venkataramanan.kumar@linaro.org>
+
+	PR target/63190
+	* config/aarch64/aarch64.md (stack_protect_test_<mode>) Add register
+	constraint for operand0 and remove write only modifier from operand3.
+
 2014-08-07  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/thunder.md: rename to ...
