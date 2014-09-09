@@ -424,6 +424,12 @@
 	cost for rev operation.
 	(thunder_rtx_cost_table): Update the cost for rev operation.
 
+2014-04-23 Venkataramanan Kumar  <venkataramanan.kumar@linaro.org>
+
+	* config/aarch64/aarch64.md (stack_protect_set, stack_protect_test)
+	(stack_protect_set_<mode>, stack_protect_test_<mode>): Add
+	machine descriptions for Stack Smashing Protector.
+
 2014-04-23  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_rtx_costs): Handle BSWAP.
