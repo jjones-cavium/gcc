@@ -355,6 +355,15 @@
 	* config/aarch64/aarch64-simd-builtins.def (im_lane_bound): New builtin.
 	* config/aarch64/aarch64-simd.md (aarch64_im_lane_boundsi): New pattern.
 
+2014-05-27  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (stack_protect_set_<mode>):
+	Use <w> for the register in assembly template.
+	(stack_protect_test): Use the mode of operands[0] for the
+	result.
+	(stack_protect_test_<mode>): Use <w> for the register
+	in assembly template.
+
 2014-05-02  Alan Lawrence  <alan.lawrence@arm.com>
 
 	* config/aarch64/aarch64.c (aarch64_expand_vec_perm_1): Tidy bit-flip
