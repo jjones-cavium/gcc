@@ -1,3 +1,8 @@
+2014-09-11  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.md (stack_protect_test_<mode>) Add
+	write only modifier for operand3.
+
 2014-09-07 Venkataramanan Kumar <venkataramanan.kumar@linaro.org>
 
 	PR target/63190
