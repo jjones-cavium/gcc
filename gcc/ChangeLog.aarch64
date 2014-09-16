@@ -27,6 +27,10 @@
 	* config/aarch64/aarch64-simd.md (bswap<mode>): Rename to ...
 	(bswap<mode>2): This so it matches for the optable.
 
+2014-07-24  Kyle McMartin  <kyle@redhat.com>
+
+	* config/aarch64/aarch64-linux.h (TARGET_ASM_FILE_END): Define.
+
 2014-07-16  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.md (splitter for *aarch64_ashr_sisd_or_int_<mode>3):
