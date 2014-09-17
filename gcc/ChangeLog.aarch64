@@ -1,3 +1,10 @@
+2014-09-12  Wilco Dijkstra  <wilco.dijkstra@arm.com>
+ 
+	* config/aarch64/aarch64.c (aarch64_register_move_cost): Fix Q register
+	move handling.
+	(generic_regmove_cost): Undo raised FP2FP move cost as Q register moves
+	are now handled correctly.
+
 2014-09-09  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
 
 	PR target/61749
