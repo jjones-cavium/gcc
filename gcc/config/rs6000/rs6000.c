@@ -17271,6 +17271,8 @@ rs6000_split_multireg_move (rtx dst, rtx src)
 
       for (i = 0; i < nregs; i++)
 	{
+	  rtx dst1;
+	  rtx src1;
 	  /* Calculate index to next subword.  */
 	  ++j;
 	  if (j == nregs)
@@ -17281,11 +17283,23 @@ rs6000_split_multireg_move (rtx dst, rtx src)
 	  if (j == 0 && used_update)
 	    continue;
 
-	  emit_insn (gen_rtx_SET (VOIDmode,
-				  simplify_gen_subreg (reg_mode, dst, mode,
-						       j * reg_mode_size),
-				  simplify_gen_subreg (reg_mode, src, mode,
-						       j * reg_mode_size)));
+	  /* If this is a memory, just force the adjust address as
+	     it will be done that way later on anyways and
+	     mode_dependent_address_p will return true for many addresses
+	     which does not matter as fixed it up above.  */
+	  if (GET_CODE (dst) == MEM)
+	    dst1 = adjust_address_nv (dst, reg_mode, j * reg_mode_size);
+	  else
+	    dst1 = simplify_gen_subreg (reg_mode, dst, mode,
+					j * reg_mode_size);
+
+	  if (GET_CODE (src) == MEM)
+	    src1 = adjust_address_nv (src, reg_mode, j * reg_mode_size);
+	  else
+	    src1 = simplify_gen_subreg (reg_mode, src, mode,
+					j * reg_mode_size);
+
+	  emit_insn (gen_rtx_SET (VOIDmode, dst1, src1));
 	}
       if (restore_basereg != NULL_RTX)
 	emit_insn (restore_basereg);

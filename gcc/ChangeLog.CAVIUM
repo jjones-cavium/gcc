@@ -1,3 +1,10 @@
+2014-09-26  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #12405
+	* config/rs6000/rs6000.c (rs6000_split_multireg_move):
+	Use adjust_address_nv directly instead of simplify_gen_subreg
+	for MEM's.
+
 2014-08-28  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #12009
