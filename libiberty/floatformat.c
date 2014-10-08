@@ -379,6 +379,24 @@ const struct floatformat floatformat_ibm_long_double =
   floatformat_ibm_long_double_is_valid,
   &floatformat_ieee_double_big
 };
+
+const struct floatformat floatformat_ibm_long_double_big =
+{
+  floatformat_big, 128, 0, 1, 11, 1023, 2047, 12, 52,
+  floatformat_intbit_no,
+  "floatformat_ibm_long_double_big",
+  floatformat_ibm_long_double_is_valid,
+  &floatformat_ieee_double_big
+};
+
+const struct floatformat floatformat_ibm_long_double_little =
+{
+  floatformat_little, 128, 0, 1, 11, 1023, 2047, 12, 52,
+  floatformat_intbit_no,
+  "floatformat_ibm_long_double_little",
+  floatformat_ibm_long_double_is_valid,
+  &floatformat_ieee_double_little
+};
 
 
 #ifndef min

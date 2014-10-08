@@ -1,3 +1,9 @@
+2014-10-08  Andrew Pinski  <apinski@cavium.com>
+
+	* floatformat.c (floatformat_ibm_long_double_big):
+	New variable.
+	(floatformat_ibm_long_double_little): Likewise.
+
 2013-04-24  Andrew Pinski  <apinski@cavium.com>
 
 	* Sync with the trunk version.
