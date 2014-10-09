@@ -212,7 +212,9 @@ static const struct cpu_regmove_cost generic_regmove_cost =
   NAMED_PARAM (GP2GP, 1),
   NAMED_PARAM (GP2FP, 2),
   NAMED_PARAM (FP2GP, 2),
-  NAMED_PARAM (FP2FP, 2)
+  /* FIXME: this has to be the same as memmov as there is a reload bug, 
+     see bug #9154/#12540.  */
+  NAMED_PARAM (FP2FP, 4)
 };
 
 #if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007

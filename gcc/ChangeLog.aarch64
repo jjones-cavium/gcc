@@ -1,3 +1,9 @@
+2014-10-09  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #12540
+	* config/aarch64/aarch64.c (generic_regmove_cost): Change FP2FP to
+	the same as memmov cost as there is a reload bug.
+
 2014-09-12  Wilco Dijkstra  <wilco.dijkstra@arm.com>
  
 	* config/aarch64/aarch64.c (aarch64_register_move_cost): Fix Q register
