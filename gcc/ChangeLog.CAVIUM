@@ -1,3 +1,9 @@
+2014-10-09  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #12501
+	* Makefile.in: PLUGIN_HEADERS is too long before sort,
+	so the echo can't handle it.
+
 2014-09-26  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #12405
