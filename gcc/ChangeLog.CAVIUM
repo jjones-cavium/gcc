@@ -1,3 +1,8 @@
+2014-10-22  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #12749
+	* testsuite/gcc.c-torture/execute/20141022-1.c: New testcase.
+
 2014-10-09  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Bug #12501
