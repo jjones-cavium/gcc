@@ -144,8 +144,8 @@
 #define ASM_SPEC "\
 %{mbig-endian:-EB} \
 %{mlittle-endian:-EL} \
-%{march=*:-march=%*} \
-%(asm_cpu_spec)" \
+%{mcpu=*:-mcpu=%*} \
+%{march=*:-march=%*}" \
 ASM_MABI_SPEC
 #endif
 
