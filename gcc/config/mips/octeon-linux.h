@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.  */
 #undef SUBTARGET_ASM_SPEC
 #define SUBTARGET_ASM_SPEC			 \
   "%{!mno-abicalls:%{mplt:-call_nonpic;:-KPIC}}" \
-  " %{mocteon-useun} %{mno-octeon-useun}"
+  " %{mocteon-useun} %{mno-octeon-useun} %{msoft-float} %{msingle-float}"
 
 /* A standard GNU/Linux mapping.  On most targets, it is included in
    CC1_SPEC itself by config/linux.h, but mips.h overrides CC1_SPEC
