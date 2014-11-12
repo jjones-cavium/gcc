@@ -1400,3 +1400,4 @@ aarch64_gimple_fold_builtin (gimple_stmt_iterator *gsi)
 #undef VAR10
 #undef VAR11
 
+#include "gt-aarch64-builtins.h"
