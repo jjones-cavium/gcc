@@ -53,7 +53,7 @@ bool PrintsToTtyCached() {
 }
 class Decorator: private __sanitizer::AnsiColorDecorator {
  public:
-  Decorator() : __sanitizer::AnsiColorDecorator(PrintsToTtyCached()) { }
+  Decorator() : __sanitizer::AnsiColorDecorator(false) { }
   const char *Warning()    { return Red(); }
   const char *EndWarning() { return Default(); }
   const char *Access()     { return Blue(); }

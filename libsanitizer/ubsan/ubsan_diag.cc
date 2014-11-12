@@ -234,7 +234,7 @@ static void renderMemorySnippet(const __sanitizer::AnsiColorDecorator &Decor,
 }
 
 Diag::~Diag() {
-  __sanitizer::AnsiColorDecorator Decor(PrintsToTty());
+  __sanitizer::AnsiColorDecorator Decor(false);
   SpinMutexLock l(&CommonSanitizerReportMutex);
   Printf(Decor.Bold());
 
