@@ -1,3 +1,34 @@
+2014-11-15  Marc Glisse  <marc.glisse@inria.fr>
+
+	* gcc.target/i386/intrinsics_opt-1.c: New testcase.
+	* gcc.target/i386/intrinsics_opt-2.c: Likewise.
+	* gcc.target/i386/intrinsics_opt-3.c: Likewise.
+	* gcc.target/i386/intrinsics_opt-4.c: Likewise.
+
+2014-11-15  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	* gcc.dg/tree-ssa/pr61144.c: Add dg-require-alias.
+
+2014-11-15  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	* gcc.dg/pubtypes-3.c: Include <string.h>.
+	* gcc.dg/pubtypes-4.c: Likewise.
+
+2014-11-15  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	* gcc.dg/darwin-cfstring-format-1.c: Adjust dg-error.
+
+2014-11-15  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* gnat.dg/opt44.ad[sb]: New test.
+
+2014-11-15  Tobias Burnus  <burnus@net-b.de>
+
+	* gfortran.dg/binding_label_tests_4.f03: Add dg-excess-errors.
+	* gfortran.dg/coarray_9.f90: Ditto.
+	* gfortran.dg/empty_label.f: Ditto.
+	* gfortran.dg/empty_label.f90: Ditto.
+
 2014-11-14  Michael Meissner  <meissner@linux.vnet.ibm.com>
 
 	* gcc.target/powerpc/ppc-fpconv-1.c: Adjust for -mupper-regs-df

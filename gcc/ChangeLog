@@ -30,6 +30,104 @@
 	* targhooks.c (default_select_ccmp_cmp_order): New function.
 	* targhooks.h (default_select_ccmp_cmp_order): New prototypes.
 
+2014-11-15  Vladimir Makarov  <vmakarov@redhat.com>
+
+	* lra.c (lra): Switch off rematerialization pass.
+
+2014-11-15  Marc Glisse  <marc.glisse@inria.fr>
+
+	* config/i386/xmmintrin.h (_mm_add_ps, _mm_sub_ps, _mm_mul_ps,
+	_mm_div_ps, _mm_store_ss, _mm_cvtss_f32): Use vector extensions
+	instead of builtins.
+	* config/i386/emmintrin.h (__v2du, __v4su, __v8hu, __v16qu): New
+	typedefs.
+	(_mm_sqrt_sd): Fix comment.
+	(_mm_add_epi8, _mm_add_epi16, _mm_add_epi32, _mm_add_epi64,
+	_mm_sub_epi8, _mm_sub_epi16, _mm_sub_epi32, _mm_sub_epi64,
+	_mm_mullo_epi16, _mm_cmpeq_epi8, _mm_cmpeq_epi16, _mm_cmpeq_epi32,
+	_mm_cmplt_epi8, _mm_cmplt_epi16, _mm_cmplt_epi32, _mm_cmpgt_epi8,
+	_mm_cmpgt_epi16, _mm_cmpgt_epi32, _mm_and_si128, _mm_or_si128,
+	_mm_xor_si128, _mm_store_sd, _mm_cvtsd_f64, _mm_storeh_pd,
+	_mm_cvtsi128_si64, _mm_cvtsi128_si64x, _mm_add_pd, _mm_sub_pd,
+	_mm_mul_pd, _mm_div_pd, _mm_storel_epi64, _mm_movepi64_pi64):
+	Use vector extensions instead of builtins.
+	* config/i386/smmintrin.h (_mm_cmpeq_epi64, _mm_cmpgt_epi64,
+	_mm_mullo_epi32): Likewise.
+	* config/i386/avxintrin.h (__v4du, __v8su, __v16hu, __v32qu):
+	New typedefs.
+	(_mm256_add_pd, _mm256_add_ps, _mm256_div_pd, _mm256_div_ps,
+	_mm256_mul_pd, _mm256_mul_ps, _mm256_sub_pd, _mm256_sub_ps):
+	Use vector extensions instead of builtins.
+	* config/i386/avx2intrin.h (_mm256_cmpeq_epi8, _mm256_cmpeq_epi16,
+	_mm256_cmpeq_epi32, _mm256_cmpeq_epi64, _mm256_cmpgt_epi8,
+	_mm256_cmpgt_epi16, _mm256_cmpgt_epi32, _mm256_cmpgt_epi64,
+	_mm256_and_si256, _mm256_or_si256, _mm256_xor_si256, _mm256_add_epi8,
+	_mm256_add_epi16, _mm256_add_epi32, _mm256_add_epi64,
+	_mm256_mullo_epi16, _mm256_mullo_epi32, _mm256_sub_epi8,
+	_mm256_sub_epi16, _mm256_sub_epi32, _mm256_sub_epi64): Likewise.
+	* config/i386/avx512fintrin.h (__v8du, __v16su, __v32hu, __v64qu):
+	New typedefs.
+	(_mm512_or_si512, _mm512_or_epi32, _mm512_or_epi64, _mm512_xor_si512,
+	_mm512_xor_epi32, _mm512_xor_epi64, _mm512_and_si512,
+	_mm512_and_epi32, _mm512_and_epi64, _mm512_mullo_epi32,
+	_mm512_add_epi64, _mm512_sub_epi64, _mm512_add_epi32,
+	_mm512_sub_epi32, _mm512_add_pd, _mm512_add_ps, _mm512_sub_pd,
+	_mm512_sub_ps, _mm512_mul_pd, _mm512_mul_ps, _mm512_div_pd,
+	_mm512_div_ps): Use vector extensions instead of builtins.
+	* config/i386/avx512bwintrin.h (_mm512_mullo_epi16, _mm512_add_epi8,
+	_mm512_sub_epi8, _mm512_sub_epi16, _mm512_add_epi16): Likewise.
+	* config/i386/avx512dqintrin.h (_mm512_mullo_epi64): Likewise.
+	* config/i386/avx512vldqintrin.h (_mm256_mullo_epi64, _mm_mullo_epi64):
+	Likewise.
+
+2014-11-15  Jan Hubicka <hubicka@ucw.cz>
+
+	* lto-streamer-out.c (hash_tree): Use cl_optimization_hash.
+	* lto-streamer.h (cl_optimization_stream_out, cl_optimization_stream_in): Declare.
+	* optc-save-gen.awk: Generate cl_optimization LTO streaming and hashing routines.
+	* opth-gen.awk: Add prototype of cl_optimization_hash.
+	* tree-streamer-in.c (unpack_ts_optimization): Remove.
+	(streamer_unpack_tree_bitfields): Use cl_optimization_stream_in.
+	* tree-streamer-out.c (pack_ts_optimization): Remove.
+	(streamer_pack_tree_bitfields): Use cl_optimization_stream_out.
+
+2014-11-15  Mircea Namolaru  <mircea.namolaru@inria.fr>
+
+	* common.opt (flag_loop_unroll_and_jam): New flag.
+	* params.def (PARAM_LOOP_UNROLL_JAM_SIZE): Parameter for unroll and
+	jam flag.
+	(PARAM_LOOP_UNROLL_JAM_DEPTH): Likewise.
+	* graphite-poly.h (struct poly_bb:map_sepclass): New field
+	* graphite-poly.c (new_poly_bb): Initialization for new field.
+	(apply_poly_transforms): Support for unroll and jam flag.
+	* graphite-isl-ast-to-gimple.c (generate_luj_sepclass): Compute the
+	separation class.
+	(generate_luj_sepclass_opt): Build the separation class option.
+	(generate_luj_options): Set unroll and jam options.
+        (set_options): Support for unroll and jam options.
+	(scop_to_isl_ast): Likewise
+	* graphite-optimize-isl.c (getPrevectorMap_full): New function for
+        computing the separating class map.
+	(optimize_isl): Support for the separating class map.
+	(apply_schedule_map_to_scop): Likewise.
+	(getScheduleMap): Likewise.
+	(getScheduleForBand): Likewise.
+	(getScheduleForBandList): Likewise.
+        * graphite.c (gate_graphite_transforms): Add unroll and jam flag.
+	* toplev.c (process_options) Likewise.
+
+2014-11-15  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* tree-cfg.c (replace_loop_annotate_in_block): New function extracted
+	from...
+	(replace_loop_annotate): ...here.  Call it on the header and on the
+	latch block, if any.  Restore proper behavior of final cleanup.
+
+2014-11-15  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* tree-ssa-loop-ivcanon.c (try_unroll_loop_completely): Add log message
+	for max-completely-peeled-insns limit.
+
 2014-11-14  Jan Hubicka  <hubicka@ucw.cz>
 
 	* ipa-prop.h (ipa_known_type_data): Remove.
