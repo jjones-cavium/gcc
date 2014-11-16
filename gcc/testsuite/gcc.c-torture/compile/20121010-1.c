@@ -1,3 +1,4 @@
+int _IO_getc(int*);
 read_long(int *fp)
 {
   unsigned char b0, b1, b2, b3;

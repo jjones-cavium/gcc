@@ -716,8 +716,9 @@ cx_check_missing_mem_inits (tree fun, tree body, bool complain)
 	    }
 	  if (!complain)
 	    return true;
-	  error ("uninitialized member %qD in %<constexpr%> constructor",
-		 field);
+	  error ("member %qD must be initialized by mem-initializer "
+		 "in %<constexpr%> constructor", field);
+	  inform (DECL_SOURCE_LOCATION (field), "declared here");
 	  bad = true;
 	}
       if (field == NULL_TREE)
@@ -994,9 +995,8 @@ cxx_eval_builtin_function_call (const constexpr_ctx *ctx, tree t,
     }
   if (*non_constant_p)
     return t;
-  new_call = build_call_array_loc (EXPR_LOCATION (t), TREE_TYPE (t),
-                                   CALL_EXPR_FN (t), nargs, args);
-  new_call = fold (new_call);
+  new_call = fold_builtin_call_array (EXPR_LOCATION (t), TREE_TYPE (t),
+				      CALL_EXPR_FN (t), nargs, args);
   VERIFY_CONSTANT (new_call);
   return new_call;
 }

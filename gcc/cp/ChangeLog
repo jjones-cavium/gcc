@@ -1,3 +1,13 @@
+2014-11-15  Jason Merrill  <jason@redhat.com>
+
+	* parser.c (cp_parser_omp_declare_reduction_exprs): A block is not
+	an expression.
+
+	* constexpr.c (cxx_eval_builtin_function_call): Use
+	fold_builtin_call_array.
+
+	* constexpr.c (cx_check_missing_mem_inits): Clarify error message.
+
 2014-11-14  Paolo Carlini  <paolo.carlini@oracle.com>
 
 	* semantics.c (end_maybe_infinite_loop): Use fold_non_dependent_expr.
