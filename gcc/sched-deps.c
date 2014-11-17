@@ -52,7 +52,6 @@ along with GCC; see the file COPYING3.  If not see
 #include "cselib.h"
 #include "ira.h"
 #include "target.h"
-#include "emit-rtl.h"
 
 #ifdef INSN_SCHEDULING
 
@@ -2743,6 +2742,8 @@ sched_analyze_2 (struct deps_desc *deps, rtx x, rtx_insn *insn)
       break;
 
     case PREFETCH:
+      if (PREFETCH_SCHEDULE_BARRIER_P (x))
+	reg_pending_barrier = TRUE_BARRIER;
       /* Prefetch insn contains addresses only.  So if the prefetch
 	 address has no registers, there will be no dependencies on
 	 the prefetch insn.  This is wrong with result code

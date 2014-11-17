@@ -302,8 +302,6 @@ extern rtx expand_binop (machine_mode, optab, rtx, rtx, rtx, int,
 extern rtx sign_expand_binop (machine_mode, optab, optab, rtx, rtx,
 			      rtx, int, enum optab_methods);
 
-extern enum rtx_code get_rtx_code (enum tree_code tcode, bool unsignedp);
-
 /* Generate code to perform an operation on one operand with two results.  */
 extern int expand_twoval_unop (optab, rtx, rtx, rtx, int);
 
@@ -572,5 +570,6 @@ extern rtx emit_cstore (rtx target, enum insn_code icode, enum rtx_code code,
 			enum machine_mode mode, enum machine_mode compare_mode,
 			int unsignedp, rtx x, rtx y, int normalizep,
 			enum machine_mode target_mode);
+extern enum rtx_code get_rtx_code (enum tree_code tcode, bool unsignedp);
 
 #endif /* GCC_OPTABS_H */

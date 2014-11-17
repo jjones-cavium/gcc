@@ -80,13 +80,6 @@ along with GCC; see the file COPYING3.  If not see
 #include "stringpool.h"
 #include "tree-ssanames.h"
 
-/* Default return 1 to keep current order.  */
-int
-default_select_ccmp_cmp_order (int, int)
-{
-  return 1;
-}
-
 bool
 default_legitimate_address_p (machine_mode mode ATTRIBUTE_UNUSED,
 			      rtx addr ATTRIBUTE_UNUSED,

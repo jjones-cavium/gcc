@@ -220,7 +220,6 @@ extern tree std_gimplify_va_arg_expr (tree, tree, gimple_seq *, gimple_seq *);
 extern bool can_use_doloop_if_innermost (const widest_int &,
 					 const widest_int &,
 					 unsigned int, bool);
-extern int default_select_ccmp_cmp_order (int, int);
 
 extern rtx default_load_bounds_for_arg (rtx, rtx, rtx);
 extern void default_store_bounds_for_arg (rtx, rtx, rtx, rtx);

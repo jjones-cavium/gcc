@@ -92,7 +92,7 @@
 (define_constraint "Usn"
  "A constant that can be used with a CCMN operation (once negated)."
  (and (match_code "const_int")
-      (match_test "aarch64_uimm5 (-ival)")))
+      (match_test "IN_RANGE (ival, -31, 0)")))
 
 (define_constraint "Usd"
   "@internal

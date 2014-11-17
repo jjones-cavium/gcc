@@ -578,19 +578,6 @@ cancel_changes (int num)
 #define CODE_FOR_extzv	CODE_FOR_nothing
 #endif
 
-static bool
-ccmp_insn_p (rtx object)
-{
-  rtx x = PATTERN (object);
-  if (targetm.gen_ccmp_first
-      && GET_CODE (x) == SET
-      && GET_CODE (XEXP (x, 1)) == COMPARE
-      && (GET_CODE (XEXP (XEXP (x, 1), 0)) == IOR
-	  || GET_CODE (XEXP (XEXP (x, 1), 0)) == AND))
-    return true;
-  return false;
-}
-
 /* A subroutine of validate_replace_rtx_1 that tries to simplify the resulting
    rtx.  */
 
@@ -602,8 +589,7 @@ simplify_while_replacing (rtx *loc, rtx to, rtx object,
   enum rtx_code code = GET_CODE (x);
   rtx new_rtx = NULL_RTX;
 
-  /* Do not swap compares in conditional compare instruction.  */
-  if (SWAPPABLE_OPERANDS_P (x) && !ccmp_insn_p (object)
+  if (SWAPPABLE_OPERANDS_P (x)
       && swap_commutative_operands_p (XEXP (x, 0), XEXP (x, 1)))
     {
       validate_unshare_change (object, loc,

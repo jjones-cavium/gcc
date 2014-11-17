@@ -83,6 +83,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "builtins.h"
 #include "tree-chkp.h"
 #include "rtl-chkp.h"
+#include "ccmp.h"
 
 #ifndef STACK_PUSH_CODE
 #ifdef STACK_GROWS_DOWNWARD
@@ -161,8 +162,6 @@ static rtx store_field (rtx, HOST_WIDE_INT, HOST_WIDE_INT,
 static unsigned HOST_WIDE_INT highest_pow2_factor_for_target (const_tree, const_tree);
 
 static int is_aligning_offset (const_tree, const_tree);
-static void expand_operands (tree, tree, rtx, rtx*, rtx*,
-			     enum expand_modifier);
 static rtx reduce_to_bit_field_precision (rtx, rtx, tree);
 static rtx do_store_flag (sepops, rtx, machine_mode);
 #ifdef PUSH_ROUNDING
@@ -7625,7 +7624,7 @@ convert_tree_comp_to_rtx (enum tree_code tcode, int unsignedp)
    The value may be stored in TARGET if TARGET is nonzero.  The
    MODIFIER argument is as documented by expand_expr.  */
 
-static void
+void
 expand_operands (tree exp0, tree exp1, rtx target, rtx *op0, rtx *op1,
 		 enum expand_modifier modifier)
 {
@@ -8487,6 +8486,7 @@ expand_cond_expr_using_cmove (tree treeop0 ATTRIBUTE_UNUSED,
 
   get_condition_from_operand (treeop0, &op00, &op01, &unsignedp,
 			      &comparison_mode, &comparison_code);
+
 
   if (GET_MODE (op1) != mode)
     op1 = gen_lowpart (mode, op1);
@@ -9782,338 +9782,6 @@ expand_expr_real_2 (sepops ops, rtx target, machine_mode tmode,
 }
 #undef REDUCE_BIT_FIELD
 
-/* The following functions expand conditional compare (CCMP) instructions.
-   Here is a short description about the over all algorithm:
-     * ccmp_candidate_p is used to identify the CCMP candidate
-
-     * expand_ccmp_expr is the main entry, which calls expand_ccmp_expr_1
-       to expand CCMP.
-
-     * expand_ccmp_expr_1 uses a recursive algorithm to expand CCMP.
-       It calls two target hooks gen_ccmp_first and gen_ccmp_next to generate
-       CCMP instructions.
-	 - gen_ccmp_first expands the first compare in CCMP.
-	 - gen_ccmp_next expands the following compares.
-
-       Another hook select_ccmp_cmp_order is called to determine which compare
-       is done first since not all combination of compares are legal in some
-       target like ARM.  We might get more chance when swapping the compares.
-
-       During expanding, we must make sure that no instruction can clobber the
-       CC reg except the compares.  So clobber_cc_p and check_clobber_cc are
-       introduced to do the check.
-
-     * If the final result is not used in a COND_EXPR (checked by function
-       used_in_cond_stmt_p), it calls cstorecc4 pattern to store the CC to a
-       general register.  */
-
-/* Check whether G is a potential conditional compare candidate.  */
-static bool
-ccmp_candidate_p (gimple g)
-{
-  tree rhs = gimple_assign_rhs_to_tree (g);
-  tree lhs, op0, op1;
-  gimple gs0, gs1;
-  enum tree_code tcode, tcode0, tcode1;
-  tcode = TREE_CODE (rhs);
-
-  if (tcode != BIT_AND_EXPR && tcode != BIT_IOR_EXPR)
-    return false;
-
-  lhs = gimple_assign_lhs (g);
-  op0 = TREE_OPERAND (rhs, 0);
-  op1 = TREE_OPERAND (rhs, 1);
-
-  if ((TREE_CODE (op0) != SSA_NAME) || (TREE_CODE (op1) != SSA_NAME)
-      || !has_single_use (lhs))
-    return false;
-
-  gs0 = get_gimple_for_ssa_name (op0);
-  gs1 = get_gimple_for_ssa_name (op1);
-  if (!gs0 || !gs1 || !is_gimple_assign (gs0) || !is_gimple_assign (gs1)
-      /* g, gs0 and gs1 must be in the same basic block, since current stage
-	 is out-of-ssa.  We can not guarantee the correctness when forwording
-	 the gs0 and gs1 into g whithout DATAFLOW analysis.  */
-      || gimple_bb (gs0) != gimple_bb (gs1)
-      || gimple_bb (gs0) != gimple_bb (g))
-    return false;
-
-  if (!(INTEGRAL_TYPE_P (TREE_TYPE (gimple_assign_rhs1 (gs0)))
-       || POINTER_TYPE_P (TREE_TYPE (gimple_assign_rhs1 (gs0))))
-      || !(INTEGRAL_TYPE_P (TREE_TYPE (gimple_assign_rhs1 (gs1)))
-	   || POINTER_TYPE_P (TREE_TYPE (gimple_assign_rhs1 (gs1)))))
-    return false;
-
-  tcode0 = gimple_assign_rhs_code (gs0);
-  tcode1 = gimple_assign_rhs_code (gs1);
-  if (TREE_CODE_CLASS (tcode0) == tcc_comparison
-      && TREE_CODE_CLASS (tcode1) == tcc_comparison)
-    return true;
-  if (TREE_CODE_CLASS (tcode0) == tcc_comparison
-      && ccmp_candidate_p (gs1))
-    return true;
-  else if (TREE_CODE_CLASS (tcode1) == tcc_comparison
-	   && ccmp_candidate_p (gs0))
-    return true;
-  /* We skip ccmp_candidate_p (gs1) && ccmp_candidate_p (gs0) since
-     there is no way to set the CC flag.  */
-  return false;
-}
-
-/* Check whether EXP is used in a GIMPLE_COND statement or not.  */
-static bool
-used_in_cond_stmt_p (tree exp)
-{
-  bool expand_cond = false;
-  imm_use_iterator ui;
-  gimple use_stmt;
-  FOR_EACH_IMM_USE_STMT (use_stmt, ui, exp)
-    {
-      if (gimple_code (use_stmt) == GIMPLE_COND)
-	{
-	  tree op1 = gimple_cond_rhs (use_stmt);
-	  /* TBD: If we can convert all
-	      _Bool t;
-
-	      if (t == 1)
-	        goto <bb 3>;
-	      else
-	        goto <bb 4>;
-	     to
-	      if (t != 0)
-	        goto <bb 3>;
-	      else
-	        goto <bb 4>;
-	     we can remove the following check.  */
-	  if (integer_zerop (op1))
-	    expand_cond = true;
-	  BREAK_FROM_IMM_USE_STMT (ui);
-	}
-      /* a = EXP ? b : c is also an use in conditional
-         statement. */
-      else if (gimple_code (use_stmt) == GIMPLE_ASSIGN
-	       && gimple_expr_code (use_stmt) == COND_EXPR)
-	{
-	  if (gimple_assign_rhs1 (use_stmt) == exp)
-	    expand_cond = true;
-	}
-    }
-  return expand_cond;
-}
-
-/* If SETTER clobber CC reg, set DATA to TRUE.  */
-
-static void
-check_clobber_cc (rtx reg, const_rtx setter, void *data)
-{
-  if (GET_CODE (setter) == CLOBBER && GET_MODE (reg) == CCmode)
-    *(bool *)data = true;
-}
-
-/* Check whether INSN and all its NEXT_INSN clobber CC reg or not.  */
-
-static bool
-clobber_cc_p (const rtx_insn *insn)
-{
-  bool clobber = false;
-  for (; insn; insn = NEXT_INSN (insn))
-    {
-      note_stores (PATTERN (insn), check_clobber_cc, &clobber);
-      if (clobber)
-	return true;
-    }
-  return false;
-}
-
-/* Help function to generate conditional compare.  PREV is the result of
-   GEN_CCMP_FIRST or GEN_CCMP_NEXT.  G is the next compare.
-   CODE is BIT_AND_EXPR or BIT_IOR_EXPR.  */
-
-static rtx
-gen_ccmp_next (rtx prev, gimple g, enum tree_code code)
-{
-  rtx op0, op1;
-  int unsignedp = TYPE_UNSIGNED (TREE_TYPE (gimple_assign_rhs1 (g)));
-  enum rtx_code rcode = get_rtx_code (gimple_assign_rhs_code (g), unsignedp);
-  rtx_insn *last = get_last_insn ();
-
-  expand_operands (gimple_assign_rhs1 (g),
-		   gimple_assign_rhs2 (g),
-		   NULL_RTX, &op0, &op1, EXPAND_NORMAL);
-
-  /* If any operand clobbers CC reg, we will give up.  */
-  if (clobber_cc_p (NEXT_INSN (last)))
-    return NULL_RTX;
-
-  return targetm.gen_ccmp_next (prev, rcode, op0, op1, get_rtx_code (code, 0));
-}
-
-/* Expand conditional compare gimple G.  A typical CCMP sequence is like:
-
-     CC0 = CMP (a, b);
-     CC1 = CCMP (NE (CC0, 0), CMP (e, f));
-     ...
-     CCn = CCMP (NE (CCn-1, 0), CMP (...));
-
-   hook gen_ccmp_first is used to expand the first compare.
-   hook gen_ccmp_next is used to expand the following CCMP.  */
-
-static rtx
-expand_ccmp_expr_1 (gimple g)
-{
-  tree exp = gimple_assign_rhs_to_tree (g);
-  enum tree_code code = TREE_CODE (exp);
-  gimple gs0 = get_gimple_for_ssa_name (TREE_OPERAND (exp, 0));
-  gimple gs1 = get_gimple_for_ssa_name (TREE_OPERAND (exp, 1));
-  rtx tmp;
-  enum tree_code code0 = gimple_assign_rhs_code (gs0);
-  enum tree_code code1 = gimple_assign_rhs_code (gs1);
-
-  gcc_assert (code == BIT_AND_EXPR || code == BIT_IOR_EXPR);
-  gcc_assert (gs0 && gs1 && is_gimple_assign (gs0) && is_gimple_assign (gs1));
-
-  if (TREE_CODE_CLASS (code0) == tcc_comparison)
-    {
-      if (TREE_CODE_CLASS (code1) == tcc_comparison)
-	{
-	  int unsignedp0, unsignedp1, cmp_order;
-	  enum rtx_code rcode0, rcode1, rcode;
-	  rtx op0, op1, op2, op3, tmp;
-	  gimple first, next;
-
-	  unsignedp0 = TYPE_UNSIGNED (TREE_TYPE (gimple_assign_rhs1 (gs0)));
-	  rcode0 = get_rtx_code (code0, unsignedp0);
-	  unsignedp1 = TYPE_UNSIGNED (TREE_TYPE (gimple_assign_rhs1 (gs1)));
-	  rcode1 = get_rtx_code (code1, unsignedp1);
-
-	  /* For some target (like ARM), the order of two compares is sensitive
-	     for conditional compare.  cmp0-cmp1 might be an invalid combination.
-	     But when swapping the order, cmp1-cmp0 is valid.  The target hook
-	     select_ccmp_cmp_order will return
-		 1: Keep current order.
-		-1: Swap the two compares.
-		 0: Invalid combination.  */
-
-	  cmp_order = targetm.select_ccmp_cmp_order (rcode0, rcode1);
-	  /* Invalid combination.  */
-	  if (!cmp_order)
-	    return NULL_RTX;
-	  /* Swap the compare order.  Do gs1 first.  */
-	  if (cmp_order == -1)
-	    {
-	      first = gs1;
-	      next = gs0;
-	      rcode = rcode1;
-	    }
-	  else
-	    {
-	      first = gs0;
-	      next = gs1;
-	      rcode = rcode0;
-	    }
-	    expand_operands (gimple_assign_rhs1 (first),
-			     gimple_assign_rhs2 (first),
-			     NULL_RTX, &op0, &op1, EXPAND_NORMAL);
-
-	    /* Since the operands of NEXT might clobber CC reg, we expand the
-	       operands of NEXT before GEN_CCMP_FIRST.  */
-	    expand_operands (gimple_assign_rhs1 (next),
-			     gimple_assign_rhs2 (next),
-			     NULL_RTX, &op2, &op3, EXPAND_NORMAL);
-	    tmp = targetm.gen_ccmp_first (rcode, op0, op1);
-	    if (!tmp)
-	      return NULL_RTX;
-
-	    return targetm.gen_ccmp_next (tmp,
-					  rcode == rcode1 ? rcode0 : rcode1,
-					  op2, op3, get_rtx_code (code, 0));
-	}
-      gcc_assert (code1 == BIT_AND_EXPR || code1 == BIT_IOR_EXPR);
-      tmp = expand_ccmp_expr_1 (gs1);
-      if (tmp)
-	return gen_ccmp_next (tmp, gs0, code);
-    }
-  else
-    {
-      gcc_assert (gimple_assign_rhs_code (gs0) == BIT_AND_EXPR
-                  || gimple_assign_rhs_code (gs0) == BIT_IOR_EXPR);
-      if (TREE_CODE_CLASS (gimple_assign_rhs_code (gs1)) == tcc_comparison)
-	{
-	  tmp = expand_ccmp_expr_1 (gs0);
-	  if (tmp)
-	    return gen_ccmp_next (tmp, gs1, code);
-	}
-      else
-	{
-	  gcc_assert (gimple_assign_rhs_code (gs1) == BIT_AND_EXPR
-		      || gimple_assign_rhs_code (gs1) == BIT_IOR_EXPR);
-	}
-    }
-
-  return NULL_RTX;
-}
-
-static rtx
-expand_ccmp_expr (gimple g, machine_mode mode)
-{
-  rtx_insn *last = get_last_insn ();
-  tree lhs = gimple_assign_lhs (g);
-  rtx tmp = expand_ccmp_expr_1 (g);
-
-  if (tmp)
-    {
-      enum insn_code icode;
-      /* TMP should be CC.  If it is used in a GIMPLE_COND, just return it.
-	 Note: Target needs to define "cbranchcc4".  */
-      if (used_in_cond_stmt_p (lhs))
-	return tmp;
-
-      /* If TMP is not used in a GIMPLE_COND, store it with a csctorecc4_optab.
-	 Note: Target needs to define "cstorecc4".  */
-      icode = optab_handler (cstore_optab, CCmode);
-      if (icode != CODE_FOR_nothing)
-	{
-	  rtx target = gen_reg_rtx (mode);
-	  tmp = emit_cstore (target, icode, NE, CCmode, CCmode,
-			     0, tmp, const0_rtx, 1, mode);
-	  if (tmp)
-	    return tmp;
-	}
-    }
-
-  /* Clean up.  */
-  delete_insns_since (last);
-  return NULL_RTX;
-}
-
-/* Return TRUE if value in SSA is zero and sign extended for wider mode MODE
-   using value range information stored.  Return FALSE otherwise.
-
-   This is used to check if SUBREG is zero and sign extended and to set
-   promoted mode SRP_SIGNED_AND_UNSIGNED to SUBREG.  */
-
-bool
-promoted_for_signed_and_unsigned_p (tree ssa, enum machine_mode mode)
-{
-  wide_int min, max;
-
-  if (ssa == NULL_TREE
-      || TREE_CODE (ssa) != SSA_NAME
-      || !INTEGRAL_TYPE_P (TREE_TYPE (ssa))
-      || (TYPE_PRECISION (TREE_TYPE (ssa)) != GET_MODE_PRECISION (mode)))
-    return false;
-
-  /* Return FALSE if value_range is not recorded for SSA.  */
-  if (get_range_info (ssa, &min, &max) != VR_RANGE)
-    return false;
-
-  /* Return true (to set SRP_SIGNED_AND_UNSIGNED to SUBREG) if MSB of the
-     smaller mode is not set (i.e.  MSB of ssa is not set).  */
-  if (!wi::neg_p (min, SIGNED) && !wi::neg_p(max, SIGNED))
-    return true;
-  else
-    return false;
-}
 
 /* Return TRUE if expression STMT is suitable for replacement.  
    Never consider memory loads as replaceable, because those don't ever lead 
@@ -10276,18 +9944,7 @@ expand_expr_real_1 (tree exp, rtx target, machine_mode tmode,
 	g = SSA_NAME_DEF_STMT (exp);
       if (g)
 	{
-	  rtx r = NULL_RTX;
-
-	  set_curr_insn_location (gimple_location (g));
-
-	  if ((targetm.gen_ccmp_first != NULL) && ccmp_candidate_p (g))
-	    {
-	      gcc_checking_assert (targetm.gen_ccmp_next != NULL);
-	      r = expand_ccmp_expr (g, mode);
-	    }
-
-	  if (!r)
-	    {
+	  rtx r;
 	  ops.code = gimple_assign_rhs_code (g);
           switch (get_gimple_rhs_class (ops.code))
 	    {
@@ -10296,6 +9953,15 @@ expand_expr_real_1 (tree exp, rtx target, machine_mode tmode,
 	      /* Fallthru */
 	    case GIMPLE_BINARY_RHS:
 	      ops.op1 = gimple_assign_rhs2 (g);
+
+	      /* Try to expand conditonal compare.  */
+	      if (targetm.gen_ccmp_first)
+		{
+		  gcc_checking_assert (targetm.gen_ccmp_next != NULL);
+		  r = expand_ccmp_expr (g, mode);
+		  if (r)
+		    break;
+		}
 	      /* Fallthru */
 	    case GIMPLE_UNARY_RHS:
 	      ops.op0 = gimple_assign_rhs1 (g);
@@ -10314,7 +9980,6 @@ expand_expr_real_1 (tree exp, rtx target, machine_mode tmode,
 	      }
 	    default:
 	      gcc_unreachable ();
-	    }
 	    }
 	  if (REG_P (r) && !REG_EXPR (r))
 	    set_reg_attrs_for_decl_rtl (SSA_NAME_VAR (exp), r);

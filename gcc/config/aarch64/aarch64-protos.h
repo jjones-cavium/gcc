@@ -266,9 +266,6 @@ void aarch64_print_operand (FILE *, rtx, char);
 void aarch64_print_operand_address (FILE *, rtx);
 void aarch64_emit_call_insn (rtx);
 
-bool aarch64_uimm5 (HOST_WIDE_INT);
-const char* aarch64_output_ccmp (rtx *, bool, int);
-
 /* Initialize builtins for SIMD intrinsics.  */
 void init_aarch64_simd_builtins (void);
 
@@ -332,6 +329,7 @@ extern void aarch64_final_prescan_insn (rtx_insn *);
 extern bool
 aarch64_expand_vec_perm_const (rtx target, rtx op0, rtx op1, rtx sel);
 void aarch64_atomic_assign_expand_fenv (tree *, tree *, tree *);
+int aarch64_ccmp_mode_to_code (enum machine_mode mode);
 
 extern bool aarch64_slow_unaligned_access (enum machine_mode, int);
 #endif /* GCC_AARCH64_PROTOS_H */

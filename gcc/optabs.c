@@ -6567,9 +6567,11 @@ get_rtx_code (enum tree_code tcode, bool unsignedp)
     case BIT_AND_EXPR:
       code = AND;
       break;
+
     case BIT_IOR_EXPR:
       code = IOR;
       break;
+
     default:
       gcc_unreachable ();
     }

@@ -18,11 +18,6 @@
 ;; along with GCC; see the file COPYING3.  If not see
 ;; <http://www.gnu.org/licenses/>.
 
-;; Return true if OP a (const_int 0) operand.
-(define_predicate "const0_operand"
-  (and (match_code "const_int, const_double")
-       (match_test "op == CONST0_RTX (mode)")))
-
 (define_special_predicate "cc_register"
   (and (match_code "reg")
        (and (match_test "REGNO (op) == CC_REGNUM")
@@ -30,6 +25,23 @@
 		 (match_test "mode == VOIDmode
 			      && GET_MODE_CLASS (GET_MODE (op)) == MODE_CC"))))
 )
+
+(define_predicate "aarch64_call_insn_operand"
+  (ior (match_code "symbol_ref")
+       (match_operand 0 "register_operand")))
+
+;; Return true if OP a (const_int 0) operand.
+(define_predicate "const0_operand"
+  (and (match_code "const_int, const_double")
+       (match_test "op == CONST0_RTX (mode)")))
+
+(define_predicate "aarch64_ccmp_immediate"
+  (and (match_code "const_int")
+       (match_test "IN_RANGE (INTVAL (op), -31, 31)")))
+
+(define_predicate "aarch64_ccmp_operand"
+  (ior (match_operand 0 "register_operand")
+       (match_operand 0 "aarch64_ccmp_immediate")))
 
 (define_special_predicate "ccmp_cc_register"
   (and (match_code "reg")
@@ -47,19 +59,6 @@
 				  || GET_MODE (op) == CC_DGEUmode
 				  || GET_MODE (op) == CC_DGTUmode)"))))
 )
-
-(define_predicate "aarch64_ccmp_immediate"
-  (and (match_code "const_int")
-       (ior (match_test "aarch64_uimm5 (INTVAL (op))")
-	    (match_test "aarch64_uimm5 (-INTVAL (op))"))))
-
-(define_predicate "aarch64_ccmp_operand"
-  (ior (match_operand 0 "register_operand")
-       (match_operand 0 "aarch64_ccmp_immediate")))
-
-(define_predicate "aarch64_call_insn_operand"
-  (ior (match_code "symbol_ref")
-       (match_operand 0 "register_operand")))
 
 (define_predicate "aarch64_simd_register"
   (and (match_code "reg")
