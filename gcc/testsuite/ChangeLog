@@ -1,3 +1,95 @@
+2014-11-17  Michael Meissner  <meissner@linux.vnet.ibm.com>
+
+	* gcc.target/powerpc/p8vector-ldst.c: Rewrite to use 40 live
+	floating point variables instead of using asm to test allocating
+	values to the Altivec registers.
+
+	* gcc.target/powerpc/upper-regs-sf.c: New -mupper-regs-sf and
+	-mupper-regs-df tests.
+	* gcc.target/powerpc/upper-regs-df.c: Likewise.
+
+	* config/rs6000/predicates.md (memory_fp_constant): New predicate
+
+2014-11-17  Tom de Vries  <tom@codesourcery.com>
+
+	* gcc.dg/pr43864-2.c: Add -ftree-tail-merge to dg-options.
+	* gcc.dg/pr43864-3.c: Same.
+	* gcc.dg/pr43864-4.c: Same.
+	* gcc.dg/pr43864.c: Same.
+	* gcc.dg/pr50763.c: Same.
+	* gcc.dg/pr51879-12.c: Same.
+	* gcc.dg/pr51879-16.c: Same.
+	* gcc.dg/pr51879-17.c: Same.
+	* gcc.dg/pr51879-18.c: Same.
+	* gcc.dg/pr51879-2.c: Same.
+	* gcc.dg/pr51879-3.c: Same.
+	* gcc.dg/pr51879-4.c: Same.
+	* gcc.dg/pr51879-6.c: Same.
+	* gcc.dg/pr51879-7.c: Same.
+	* gcc.dg/pr51879.c: Same.
+
+2014-11-17  Tom de Vries  <tom@codesourcery.com>
+
+	* gcc.dg/pr43864-2.c: Fix scan-tree-dump-times scan pattern.
+	* gcc.dg/pr43864-3.c: Same.
+	* gcc.dg/pr43864-4.c: Same.
+
+2014-11-17  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* gcc.target/aarch64/vld1_lane.c: New test.
+
+2014-11-17  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* gcc.target/aarch64/simd/vfma_f64.c: Add asm volatile memory.
+	* gcc.target/aarch64/simd/vfms_f64.c: Likewise.
+
+2014-11-17  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	* gcc.target/i386/chkp-strlen-1.c: New.
+	* gcc.target/i386/chkp-strlen-2.c: New.
+	* gcc.target/i386/chkp-strlen-3.c: New.
+	* gcc.target/i386/chkp-strlen-4.c: New.
+	* gcc.target/i386/chkp-strlen-5.c: New.
+
+2014-11-17  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	* gcc.target/i386/chkp-stropt-1.c: New.
+	* gcc.target/i386/chkp-stropt-2.c: New.
+	* gcc.target/i386/chkp-stropt-3.c: New.
+	* gcc.target/i386/chkp-stropt-4.c: New.
+	* gcc.target/i386/chkp-stropt-5.c: New.
+	* gcc.target/i386/chkp-stropt-6.c: New.
+	* gcc.target/i386/chkp-stropt-7.c: New.
+	* gcc.target/i386/chkp-stropt-8.c: New.
+	* gcc.target/i386/chkp-stropt-9.c: New.
+	* gcc.target/i386/chkp-stropt-10.c: New.
+	* gcc.target/i386/chkp-stropt-11.c: New.
+	* gcc.target/i386/chkp-stropt-12.c: New.
+	* gcc.target/i386/chkp-stropt-13.c: New.
+	* gcc.target/i386/chkp-stropt-14.c: New.
+	* gcc.target/i386/chkp-stropt-15.c: New.
+	* gcc.target/i386/chkp-stropt-16.c: New.
+
+2014-11-17  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* g++.dg/ipa/pr63894.C (new): Replace unsigned long with
+	__SIZE_TYPE__.
+
+2014-11-17  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/63898
+	PR middle-end/63883
+	* gfortran.dg/pr63883.f90: New testcase.
+
+2014-11-17  Markus Trippelsdorf  <markus@trippelsdorf.de>
+
+	PR ipa/63894
+	* g++.dg/ipa/pr63894.C: New test.
+
+2014-11-17  Terry Guo  <terry.guo@arm.com>
+
+	* gcc.target/arm/thumb1-ual-1.c: New test.
+
 2014-11-16  Patrick Palka  <ppalka@gcc.gnu.org>
 
 	PR middle-end/63790

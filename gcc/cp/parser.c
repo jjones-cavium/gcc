@@ -11004,7 +11004,10 @@ cp_parser_jump_statement (cp_parser* parser)
     case RID_GOTO:
       if (parser->in_function_body
 	  && DECL_DECLARED_CONSTEXPR_P (current_function_decl))
-	error ("%<goto%> in %<constexpr%> function");
+	{
+	  error ("%<goto%> in %<constexpr%> function");
+	  cp_function_chain->invalid_constexpr = true;
+	}
 
       /* Create the goto-statement.  */
       if (cp_lexer_next_token_is (parser->lexer, CPP_MULT))
@@ -13956,7 +13959,11 @@ cp_parser_template_name (cp_parser* parser,
 
   /* If DECL is a template, then the name was a template-name.  */
   if (TREE_CODE (decl) == TEMPLATE_DECL)
-    ;
+    {
+      if (TREE_DEPRECATED (decl)
+	  && deprecated_state != DEPRECATED_SUPPRESS)
+	warn_deprecated_use (decl, NULL_TREE);
+    }
   else
     {
       tree fn = NULL_TREE;
@@ -14190,7 +14197,11 @@ cp_parser_template_argument (cp_parser* parser)
 	cp_parser_error (parser, "expected template-name");
     }
   if (cp_parser_parse_definitely (parser))
-    return argument;
+    {
+      if (TREE_DEPRECATED (argument))
+	warn_deprecated_use (argument, NULL_TREE);
+      return argument;
+    }
   /* It must be a non-type argument.  There permitted cases are given
      in [temp.arg.nontype]:
 
@@ -16588,7 +16599,10 @@ cp_parser_asm_definition (cp_parser* parser)
 
   if (parser->in_function_body
       && DECL_DECLARED_CONSTEXPR_P (current_function_decl))
-    error ("%<asm%> in %<constexpr%> function");
+    {
+      error ("%<asm%> in %<constexpr%> function");
+      cp_function_chain->invalid_constexpr = true;
+    }
 
   /* See if the next token is `volatile'.  */
   if (cp_parser_allow_gnu_extensions_p (parser)
