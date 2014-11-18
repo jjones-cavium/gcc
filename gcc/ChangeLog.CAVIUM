@@ -1,3 +1,10 @@
+2014-11-17  Andrew Pinski  <apinski@cavium.com>
+
+	Port the patch from
+	https://gcc.gnu.org/ml/gcc-patches/2014-11/msg02047.html:
+	* lra-eliminations.c (update_reg_eliminate): Relax gcc_assert for
+	fixed registers.
+
 2014-11-14  Andrew Pinski  <apinski@cavium.com>
 
 	Revert:
