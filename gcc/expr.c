@@ -85,6 +85,8 @@ along with GCC; see the file COPYING3.  If not see
 #include "rtl-chkp.h"
 #include "ccmp.h"
 
+#include "print-tree.h"
+
 #ifndef STACK_PUSH_CODE
 #ifdef STACK_GROWS_DOWNWARD
 #define STACK_PUSH_CODE PRE_DEC
@@ -8253,7 +8255,7 @@ expand_cond_expr_using_addcc (tree treeop0, tree treeop1, tree treeop2)
     diff = int_const_binop (MINUS_EXPR, treeop1, treeop2);
   /* A ? b : b+c can be expanded as b + (!A)*(c) */
   else if (TREE_CODE (treeop2) == SSA_NAME
-	   && (srcstmt =
+           && (srcstmt =
                  get_def_noter_for_expr_with_code (treeop2, PLUS_EXPR)))
     {
       tree newop0;
@@ -8262,22 +8264,22 @@ expand_cond_expr_using_addcc (tree treeop0, tree treeop1, tree treeop2)
       else if (gimple_assign_rhs2 (srcstmt) == treeop1)
         diff = gimple_assign_rhs1 (srcstmt);
       else
-	return NULL_RTX;
+        return NULL_RTX;
       newop0 = fold_truth_not_expr (UNKNOWN_LOCATION, treeop0);
       if (newop0 == NULL_TREE || !COMPARISON_CLASS_P (newop0))
-	diff = fold_build1 (NEGATE_EXPR, TREE_TYPE (treeop1), diff);
+        diff = fold_build1 (NEGATE_EXPR, TREE_TYPE (treeop1), diff);
       else
-	{
-	  tree tmp = treeop2;
+        {
+          tree tmp = treeop2;
 
-	  treeop0 = newop0;
-	  treeop2 = treeop1;
-	  treeop1 = tmp;
-	}
+          treeop0 = newop0;
+          treeop2 = treeop1;
+          treeop1 = tmp;
+        }
     }
   /* A ? b + c : b can be expanded as b + (!A)*(c) */
   else if (TREE_CODE (treeop1) == SSA_NAME
-	   && (srcstmt =
+           && (srcstmt =
                  get_def_noter_for_expr_with_code (treeop1, PLUS_EXPR)))
     {
       if (gimple_assign_rhs1 (srcstmt) == treeop2)
@@ -8285,34 +8287,43 @@ expand_cond_expr_using_addcc (tree treeop0, tree treeop1, tree treeop2)
       else if (gimple_assign_rhs2 (srcstmt) == treeop2)
         diff = gimple_assign_rhs1 (srcstmt);
       else
-	return NULL_RTX;
+        return NULL_RTX;
     }
   else
     return NULL_RTX;
 
   /* Try to use a conditional add:
-     A ? CST1 : CST1 + CST2 generated as: add_cond<!A>, CST1, diff */
-  start_sequence ();
-
-  get_condition_from_operand (treeop0, &op00, &op01, &unsignedp,
-			      &comparison_mode, &comparison_code);
-
-  expand_operands (diff, treeop2,
-		   NULL_RTX, &op1, &op2, EXPAND_NORMAL);
-
-  temp = emit_conditional_add (NULL_RTX, comparison_code, op00, op01,
-			       comparison_mode, op2, op1, mode, unsignedp);
-
-  seq = get_insns ();
-  end_sequence ();
-
-  if (temp)
+       A ? CST1 : CST1 + CST2
+     is generated as:
+       add_cond<!A>, CST1, diff
+     If A is a conditional that isn't integral, then don't try adding it to
+     the integral then/else arms of the conditional. */
+  bool isConditional = TREE_CODE_CLASS (TREE_CODE (treeop0)) == tcc_comparison;
+  tree opToTest = isConditional ? TREE_OPERAND (treeop0, 0) : treeop0;
+  bool isIntegral = INTEGRAL_TYPE_P ( TREE_TYPE (opToTest));
+  if (isIntegral)
     {
-      emit_insn (seq);
-      if (INTEGRAL_TYPE_P (type)
-	  && GET_MODE_PRECISION (mode) > TYPE_PRECISION (type))
-	return reduce_to_bit_field_precision (temp, NULL_RTX, type);
-      return temp;
+      start_sequence ();
+
+      get_condition_from_operand (treeop0, &op00, &op01, &unsignedp,
+                                  &comparison_mode, &comparison_code);
+
+      expand_operands (diff, treeop2, NULL_RTX, &op1, &op2, EXPAND_NORMAL);
+
+      temp = emit_conditional_add (NULL_RTX, comparison_code, op00, op01,
+                                   comparison_mode, op2, op1, mode, unsignedp);
+
+      seq = get_insns ();
+      end_sequence ();
+
+      if (temp)
+        {
+          emit_insn (seq);
+          if (INTEGRAL_TYPE_P (type)
+              && GET_MODE_PRECISION (mode) > TYPE_PRECISION (type))
+            return reduce_to_bit_field_precision (temp, NULL_RTX, type);
+          return temp;
+        }
     }
 
   /* No conditional add, so try to use conditional store:
@@ -8343,6 +8354,7 @@ expand_cond_expr_using_addcc (tree treeop0, tree treeop1, tree treeop2)
               seq = get_insns ();
               end_sequence ();
               emit_insn (seq);
+	      op2 = expand_expr (treeop2, target, VOIDmode, EXPAND_NORMAL);
               // At this point, tmp is 0 or 1;
               // if  add: op1 is +1, op2 is CST2 => add CST2, tmp
               // if !add: op1 is -1, op2 is CST2 => sub CST2, tmp
