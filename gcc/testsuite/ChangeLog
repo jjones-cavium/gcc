@@ -1,3 +1,23 @@
+2014-11-20  Tejas Belagod  <tejas.belagod@arm.com>
+
+	* gcc.target/aarch64/symbol-range.c: New.
+	* gcc.target/aarch64/symbol-range-tiny.c: New.
+2014-11-20  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/63962
+	* gcc.dg/tree-ssa/forwprop-30.c: New testcase.
+
+2014-11-20   Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/63677
+	* gcc.dg/tree-ssa/ssa-dom-cse-2.c: New testcase.
+	* gcc.dg/tree-ssa/ssa-dom-cse-3.c: Likewise.
+
+2014-11-20  Igor Zamyatin  <igor.zamyatin@intel.com>
+
+	PR sanitizer/63845
+	* gcc.dg/asan/pr63845.c: New test.
+
 2014-11-19  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
 
 	PR sanitizer/63939
