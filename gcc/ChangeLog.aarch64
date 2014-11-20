@@ -1,3 +1,11 @@
+2014-11-20  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* config/aarch64/aarch64.c (aarch64_registers_ok_for_load_pair_peep):
+	Allow const_zero as source in stp instruction to support wzr/xzr.
+	* config/aarch64/aarch64.md (store_pair<mode>): Allow const_zero as
+	source operand for stp instruction.
+	(peephole2s to generate stp): Likewise.
+
 2014-10-31  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/thunderx.md (thunderx_mul): Add
@@ -94,13 +102,13 @@
 	Revert:
 	2014-06-06  James Greenhalgh  <james.greenhalgh@arm.com>
 
-        * config/aarch64/aarch64-protos.h (aarch64_expand_movmem): New.
-        * config/aarch64/aarch64.c (aarch64_move_pointer): New.
-        (aarch64_progress_pointer): Likewise.
-        (aarch64_copy_one_part_and_move_pointers): Likewise.
-        (aarch64_expand_movmen): Likewise.
-        * config/aarch64/aarch64.h (MOVE_RATIO): Set low.
-        * config/aarch64/aarch64.md (movmem<mode>): New.
+	* config/aarch64/aarch64-protos.h (aarch64_expand_movmem): New.
+	* config/aarch64/aarch64.c (aarch64_move_pointer): New.
+	(aarch64_progress_pointer): Likewise.
+	(aarch64_copy_one_part_and_move_pointers): Likewise.
+	(aarch64_expand_movmen): Likewise.
+	* config/aarch64/aarch64.h (MOVE_RATIO): Set low.
+	* config/aarch64/aarch64.md (movmem<mode>): New.
 
 2014-08-02  Andrew Pinski  <apinski@cavium.com>
 
@@ -169,8 +177,8 @@
 
 2014-05-28  Joel Jones  <jjones@cavium.com>
 
-        * gcc/testsuite/gcc.target/aarch64/atomic-comp-swap-release-acquire.c:
-        Skip test for load/store exclusive instructions if TARGET_ATOMIC.
+	* gcc/testsuite/gcc.target/aarch64/atomic-comp-swap-release-acquire.c:
+	Skip test for load/store exclusive instructions if TARGET_ATOMIC.
 
 2014-05-24  Joel Jones  <jjones@cavium.com>
 
@@ -180,26 +188,26 @@
 
 2014-05-24  Joel Jones  <jjones@cavium.com>
 
-        Bug #9775
-        * gcc/config/aarch64/aarch64.c (aarch64_expand_compare_and_swap):
-        Generate a CAS instruction if target supports ARVMv8.1 atomics.
-        * gcc/config/aarch64/atomics.md (define_insn
-        "aarch64_atomic_CAS<mode>") add.
-        * gcc/testsuite/gcc.target/aarch64/aarch64.exp
-        (check_effective_target_aarch64_atomic): Add aarch64 atomic feature
-        test.
-        * testsuite/gcc.target/aarch64/atomicExchangeSwapCAS-1.c: char CAS
-        * testsuite/gcc.target/aarch64/atomicExchangeSwapCAS-2.c: short CAS
-        * testsuite/gcc.target/aarch64/atomicExchangeSwapCAS-3.c: int CAS
+	Bug #9775
+	* gcc/config/aarch64/aarch64.c (aarch64_expand_compare_and_swap):
+	Generate a CAS instruction if target supports ARVMv8.1 atomics.
+	* gcc/config/aarch64/atomics.md (define_insn
+	"aarch64_atomic_CAS<mode>") add.
+	* gcc/testsuite/gcc.target/aarch64/aarch64.exp
+	(check_effective_target_aarch64_atomic): Add aarch64 atomic feature
+	test.
+	* testsuite/gcc.target/aarch64/atomicExchangeSwapCAS-1.c: char CAS
+	* testsuite/gcc.target/aarch64/atomicExchangeSwapCAS-2.c: short CAS
+	* testsuite/gcc.target/aarch64/atomicExchangeSwapCAS-3.c: int CAS
 
 2014-05-23  Joel Jones  <jjones@cavium.com>
 
-        * gcc/config/aarch64/aarch64-cores.def: Associate AARCH64_FL_ATOMIC for
-          thunder.
-        * gcc/config/aarch64/aarch64-option-extensions.def: Add extension
-          "atomic" for AARCH64_FL_ATOMIC
-        * gcc/config/aarch64/aarch64.h: Define __ARM_FEATURE_ATOMIC,
-          AARCH64_FL_ATOMIC, AARCH64_ISA_ATOMIC, and TARGET_ATOMIC
+	* gcc/config/aarch64/aarch64-cores.def: Associate AARCH64_FL_ATOMIC for
+	  thunder.
+	* gcc/config/aarch64/aarch64-option-extensions.def: Add extension
+	  "atomic" for AARCH64_FL_ATOMIC
+	* gcc/config/aarch64/aarch64.h: Define __ARM_FEATURE_ATOMIC,
+	  AARCH64_FL_ATOMIC, AARCH64_ISA_ATOMIC, and TARGET_ATOMIC
 
 2014-04-25  Joel Jones  <jjones@caviumnetworks.com>
 
@@ -221,28 +229,28 @@
 	* config/aarch64/aarch64.c (aarch64_mems_ok_for_pair_peep): Add extra argument and take
 	that into account; copying from the sparc backend.
 	* aarch64.md (peephole2s to generate ldp
-        instruction for 2 consecutive loads from memory): Re-enable.
+	instruction for 2 consecutive loads from memory): Re-enable.
 	Update call to 	aarch64_mems_ok_for_pair_peep.
-        (peephole2s to generate stp instruction for 2 consecutive
-        stores to memory in integer mode): Re-enable.
-        Update call to 	aarch64_mems_ok_for_pair_peep.
-        (peephole2s to generate ldp instruction for 2 consecutive
-        loads from memory in floating point mode): Re-enable.
-        Update call to 	aarch64_mems_ok_for_pair_peep.
-        (peephole2s to generate stp instruction for 2 consecutive
-        stores to memory in floating point mode): Re-enable.
-        Update call to 	aarch64_mems_ok_for_pair_peep.
+	(peephole2s to generate stp instruction for 2 consecutive
+	stores to memory in integer mode): Re-enable.
+	Update call to 	aarch64_mems_ok_for_pair_peep.
+	(peephole2s to generate ldp instruction for 2 consecutive
+	loads from memory in floating point mode): Re-enable.
+	Update call to 	aarch64_mems_ok_for_pair_peep.
+	(peephole2s to generate stp instruction for 2 consecutive
+	stores to memory in floating point mode): Re-enable.
+	Update call to 	aarch64_mems_ok_for_pair_peep.
 
 2014-04-10  Andrew Pinski  <apinski@cavium.com>
 
 	* aarch64.md (peephole2s to generate ldp
-        instruction for 2 consecutive loads from memory): Disable for now.
-        (peephole2s to generate stp instruction for 2 consecutive
-        stores to memory in integer mode): Disable for now.
-        (peephole2s to generate ldp instruction for 2 consecutive
-        loads from memory in floating point mode): Disable for now.
-        (peephole2s to generate stp instruction for 2 consecutive
-        stores to memory in floating point mode): Disable for now.
+	instruction for 2 consecutive loads from memory): Disable for now.
+	(peephole2s to generate stp instruction for 2 consecutive
+	stores to memory in integer mode): Disable for now.
+	(peephole2s to generate ldp instruction for 2 consecutive
+	loads from memory in floating point mode): Disable for now.
+	(peephole2s to generate stp instruction for 2 consecutive
+	stores to memory in floating point mode): Disable for now.
 
 2014-04-07  Andrew Pinski  <apinski@cavium.com>
 

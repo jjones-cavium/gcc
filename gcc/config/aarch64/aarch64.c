@@ -10218,8 +10218,15 @@ aarch64_registers_ok_for_load_pair_peep (rtx op0, rtx op1)
 bool
 aarch64_registers_ok_for_store_pair_peep (rtx op0, rtx op1)
 {
-  return REG_P (op0) && REG_P (op1)
-	 && REGNO_REG_CLASS (REGNO (op0)) == REGNO_REG_CLASS (REGNO (op1));
+  if (op0 == const0_rtx && op1 == const0_rtx)
+    return 1;
+  else if (op0 == const0_rtx && REG_P (op1) && REGNO (op1) <= 30)
+    return 1;
+  else if (op1 == const0_rtx && REG_P (op0) && REGNO (op0) <= 30)
+    return 1;
+  else 
+    return REG_P (op0) && REG_P (op1)
+	   && REGNO_REG_CLASS (REGNO (op0)) == REGNO_REG_CLASS (REGNO (op1));
 }
 
 /* Return 1 if the addresses in mem1 and mem2 are suitable for use in

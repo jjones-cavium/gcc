@@ -1146,9 +1146,9 @@
 ;; fairly lax checking on the second memory operation.
 (define_insn "store_pair<mode>"
   [(set (match_operand:GPI 0 "aarch64_mem_pair_operand" "=Ump, Ump")
-	(match_operand:GPI 1 "register_operand" "r, w"))
+	(match_operand:GPI 1 "aarch64_reg_or_zero" "rZ, w"))
    (set (match_operand:GPI 2 "memory_operand" "=m, m")
-        (match_operand:GPI 3 "register_operand" "r, w"))]
+        (match_operand:GPI 3 "aarch64_reg_or_zero" "rZ, w"))]
   "aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
   "@
    stp\\t%<w>1, %<w>3, %0
@@ -1158,9 +1158,9 @@
 
 (define_peephole2
   [(set (match_operand:GPI 0 "aarch64_mem_pair_operand")
-	(match_operand:GPI 1 "register_operand"))
+	(match_operand:GPI 1 "aarch64_reg_or_zero"))
    (set (match_operand:GPI 2 "memory_operand")
-	(match_operand:GPI 3 "register_operand"))]
+	(match_operand:GPI 3 "aarch64_reg_or_zero"))]
   "aarch64_registers_ok_for_store_pair_peep (operands[1], operands[3])
    && aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
   [(parallel [(set (match_dup 0) (match_dup 1))
@@ -1169,9 +1169,9 @@
 
 (define_peephole2
   [(set (match_operand:GPI 0 "memory_operand")
-	(match_operand:GPI 1 "register_operand"))
+	(match_operand:GPI 1 "aarch64_reg_or_zero"))
    (set (match_operand:GPI 2 "aarch64_mem_pair_operand")
-	(match_operand:GPI 3 "register_operand"))]
+	(match_operand:GPI 3 "aarch64_reg_or_zero"))]
   "aarch64_registers_ok_for_store_pair_peep (operands[3], operands[1])
    && aarch64_mems_ok_for_pair_peep (operands[2], operands[0], NULL_RTX)"
   [(parallel [(set (match_dup 2) (match_dup 3))
