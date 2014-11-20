@@ -2275,6 +2275,20 @@ integer_nonzerop (const_tree expr)
 		  || integer_nonzerop (TREE_IMAGPART (expr)))));
 }
 
+/* Return 1 if EXPR is the integer constant one.  For vector,
+   return 1 if every piece is the integer constant minus one
+   (representing the value TRUE).  */
+
+int
+integer_truep (const_tree expr)
+{
+  STRIP_NOPS (expr);
+
+  if (TREE_CODE (expr) == VECTOR_CST)
+    return integer_all_onesp (expr);
+  return integer_onep (expr);
+}
+
 /* Return 1 if EXPR is the fixed-point constant zero.  */
 
 int
@@ -5524,12 +5538,13 @@ find_decls_types_in_node (struct cgraph_node *n, struct free_lang_data_d *fld)
   /* Traverse every statement in FN.  */
   FOR_EACH_BB_FN (bb, fn)
     {
+      gphi_iterator psi;
       gimple_stmt_iterator si;
       unsigned i;
 
-      for (si = gsi_start_phis (bb); !gsi_end_p (si); gsi_next (&si))
+      for (psi = gsi_start_phis (bb); !gsi_end_p (psi); gsi_next (&psi))
 	{
-	  gimple phi = gsi_stmt (si);
+	  gphi *phi = psi.phi ();
 
 	  for (i = 0; i < gimple_phi_num_args (phi); i++)
 	    {
@@ -12020,17 +12035,17 @@ warn_deprecated_use (tree node, tree attr)
   else
     msg = NULL;
 
+  bool w;
   if (DECL_P (node))
     {
-      expanded_location xloc = expand_location (DECL_SOURCE_LOCATION (node));
       if (msg)
-	warning (OPT_Wdeprecated_declarations,
-		 "%qD is deprecated (declared at %r%s:%d%R): %s",
-		 node, "locus", xloc.file, xloc.line, msg);
+	w = warning (OPT_Wdeprecated_declarations,
+		     "%qD is deprecated: %s", node, msg);
       else
-	warning (OPT_Wdeprecated_declarations,
-		 "%qD is deprecated (declared at %r%s:%d%R)",
-		 node, "locus", xloc.file, xloc.line);
+	w = warning (OPT_Wdeprecated_declarations,
+		     "%qD is deprecated", node);
+      if (w)
+	inform (DECL_SOURCE_LOCATION (node), "declared here");
     }
   else if (TYPE_P (node))
     {
@@ -12048,30 +12063,26 @@ warn_deprecated_use (tree node, tree attr)
 
       if (decl)
 	{
-	  expanded_location xloc
-	    = expand_location (DECL_SOURCE_LOCATION (decl));
 	  if (what)
 	    {
 	      if (msg)
-		warning (OPT_Wdeprecated_declarations,
-			 "%qE is deprecated (declared at %r%s:%d%R): %s",
-			 what, "locus", xloc.file, xloc.line, msg);
+		w = warning (OPT_Wdeprecated_declarations,
+			     "%qE is deprecated: %s", what, msg);
 	      else
-		warning (OPT_Wdeprecated_declarations,
-			 "%qE is deprecated (declared at %r%s:%d%R)",
-			 what, "locus", xloc.file, xloc.line);
+		w = warning (OPT_Wdeprecated_declarations,
+			     "%qE is deprecated", what);
 	    }
 	  else
 	    {
 	      if (msg)
-		warning (OPT_Wdeprecated_declarations,
-			 "type is deprecated (declared at %r%s:%d%R): %s",
-			 "locus", xloc.file, xloc.line, msg);
+		w = warning (OPT_Wdeprecated_declarations,
+			     "type is deprecated: %s", msg);
 	      else
-		warning (OPT_Wdeprecated_declarations,
-			 "type is deprecated (declared at %r%s:%d%R)",
-			 "locus", xloc.file, xloc.line);
+		w = warning (OPT_Wdeprecated_declarations,
+			     "type is deprecated");
 	    }
+	  if (w)
+	    inform (DECL_SOURCE_LOCATION (decl), "declared here");
 	}
       else
 	{
@@ -12308,6 +12319,20 @@ get_base_address (tree t)
     return NULL_TREE;
 
   return t;
+}
+
+/* Return the machine mode of T.  For vectors, returns the mode of the
+   inner type.  The main use case is to feed the result to HONOR_NANS,
+   avoiding the BLKmode that a direct TYPE_MODE (T) might return.  */
+
+machine_mode
+element_mode (const_tree t)
+{
+  if (!TYPE_P (t))
+    t = TREE_TYPE (t);
+  if (VECTOR_TYPE_P (t) || TREE_CODE (t) == COMPLEX_TYPE)
+    t = TREE_TYPE (t);
+  return TYPE_MODE (t);
 }
 
 /* Compare two expressions E1 and E2 and return true if they are equal.  */

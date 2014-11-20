@@ -109,6 +109,7 @@ c-common.h, not after.
       DECLTYPE_FOR_LAMBDA_PROXY (in DECLTYPE_TYPE)
       REF_PARENTHESIZED_P (in COMPONENT_REF, INDIRECT_REF)
       AGGR_INIT_ZERO_FIRST (in AGGR_INIT_EXPR)
+      CONSTRUCTOR_MUTABLE_POISON (in CONSTRUCTOR)
    3: (TREE_REFERENCE_EXPR) (in NON_LVALUE_EXPR) (commented-out).
       ICS_BAD_FLAG (in _CONV)
       FN_TRY_BLOCK_P (in TRY_BLOCK)
@@ -3497,6 +3498,11 @@ more_aggr_init_expr_args_p (const aggr_init_expr_arg_iterator *iter)
 #define CONSTRUCTOR_NO_IMPLICIT_ZERO(NODE) \
   (TREE_LANG_FLAG_1 (CONSTRUCTOR_CHECK (NODE)))
 
+/* True if this CONSTRUCTOR should not be used as a variable initializer
+   because it was loaded from a constexpr variable with mutable fields.  */
+#define CONSTRUCTOR_MUTABLE_POISON(NODE) \
+  (TREE_LANG_FLAG_2 (CONSTRUCTOR_CHECK (NODE)))
+
 #define DIRECT_LIST_INIT_P(NODE) \
    (BRACE_ENCLOSED_INITIALIZER_P (NODE) && CONSTRUCTOR_IS_DIRECT_INIT (NODE))
 
@@ -5545,8 +5551,8 @@ extern tree build_vec_delete			(tree, tree,
 extern tree create_temporary_var		(tree);
 extern void initialize_vtbl_ptrs		(tree);
 extern tree build_java_class_ref		(tree);
-extern tree integral_constant_value		(tree);
-extern tree decl_constant_value_safe	        (tree);
+extern tree scalar_constant_value		(tree);
+extern tree decl_really_constant_value		(tree);
 extern int diagnose_uninitialized_cst_or_ref_member (tree, bool, bool);
 extern tree build_vtbl_address                  (tree);
 
@@ -6343,6 +6349,7 @@ extern tree register_constexpr_fundef           (tree, tree);
 extern bool check_constexpr_ctor_body           (tree, tree, bool);
 extern tree ensure_literal_type_for_constexpr_object (tree);
 extern bool potential_constant_expression       (tree);
+extern bool potential_static_init_expression    (tree);
 extern bool potential_rvalue_constant_expression (tree);
 extern bool require_potential_constant_expression (tree);
 extern bool require_potential_rvalue_constant_expression (tree);

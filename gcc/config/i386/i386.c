@@ -4323,7 +4323,7 @@ static void
 ix86_option_override (void)
 {
   opt_pass *pass_insert_vzeroupper = make_pass_insert_vzeroupper (g);
-  static struct register_pass_info insert_vzeroupper_info
+  struct register_pass_info insert_vzeroupper_info
     = { pass_insert_vzeroupper, "reload",
 	1, PASS_POS_INSERT_AFTER
       };
@@ -14953,7 +14953,7 @@ put_condition_code (enum rtx_code code, machine_mode mode, bool reverse,
       if (mode == CCmode)
 	suffix = "b";
       else if (mode == CCCmode)
-	suffix = "c";
+	suffix = fp ? "b" : "c";
       else
 	gcc_unreachable ();
       break;
@@ -14976,9 +14976,9 @@ put_condition_code (enum rtx_code code, machine_mode mode, bool reverse,
       break;
     case GEU:
       if (mode == CCmode)
-	suffix = fp ? "nb" : "ae";
+	suffix = "nb";
       else if (mode == CCCmode)
-	suffix = "nc";
+	suffix = fp ? "nb" : "nc";
       else
 	gcc_unreachable ();
       break;
@@ -27361,12 +27361,9 @@ ix86_minimum_alignment (tree exp, machine_mode mode,
    This is a register, unless all free registers are used by arguments.  */
 
 static rtx
-ix86_static_chain (const_tree fndecl, bool incoming_p)
+ix86_static_chain (const_tree fndecl_or_type, bool incoming_p)
 {
   unsigned regno;
-
-  if (!DECL_STATIC_CHAIN (fndecl))
-    return NULL;
 
   if (TARGET_64BIT)
     {
@@ -27375,13 +27372,23 @@ ix86_static_chain (const_tree fndecl, bool incoming_p)
     }
   else
     {
-      tree fntype;
+      const_tree fntype, fndecl;
       unsigned int ccvt;
 
       /* By default in 32-bit mode we use ECX to pass the static chain.  */
       regno = CX_REG;
 
-      fntype = TREE_TYPE (fndecl);
+      if (TREE_CODE (fndecl_or_type) == FUNCTION_DECL)
+	{
+          fntype = TREE_TYPE (fndecl_or_type);
+	  fndecl = fndecl_or_type;
+	}
+      else
+	{
+	  fntype = fndecl_or_type;
+	  fndecl = NULL;
+	}
+
       ccvt = ix86_get_callcvt (fntype);
       if ((ccvt & IX86_CALLCVT_FASTCALL) != 0)
 	{

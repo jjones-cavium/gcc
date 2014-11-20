@@ -437,7 +437,7 @@
 		(const_string "yes")
 		(const_string "no")))
 
-(define_attr "compression" "none,all,micromips"
+(define_attr "compression" "none,all,micromips32,micromips"
   (const_string "none"))
 
 (define_attr "enabled" "no,yes"
@@ -448,7 +448,7 @@
 			   || TARGET_O32_FP64A_ABI")
 	      (eq_attr "dword_mode" "yes"))
 	 (const_string "no")
-	 (and (eq_attr "compression" "micromips")
+	 (and (eq_attr "compression" "micromips32,micromips")
 	      (match_test "!TARGET_MICROMIPS"))
 	 (const_string "no")]
 	(const_string "yes")))
@@ -534,7 +534,9 @@
 ;; but there are special cases for branches (which must be handled here)
 ;; and for compressed single instructions.
 (define_attr "length" ""
-   (cond [(and (eq_attr "compression" "micromips,all")
+   (cond [(and (ior (eq_attr "compression" "micromips,all")
+		    (and (eq_attr "compression" "micromips32")
+			 (eq_attr "mode" "SI,SF")))
 	       (eq_attr "dword_mode" "no")
 	       (match_test "TARGET_MICROMIPS"))
 	  (const_int 2)
@@ -989,8 +991,8 @@
 				  (xor "xori")
 				  (and "andi")])
 
-(define_code_attr shift_compression [(ashift "micromips")
-				     (lshiftrt "micromips")
+(define_code_attr shift_compression [(ashift "micromips32")
+				     (lshiftrt "micromips32")
 				     (ashiftrt "none")])
 
 ;; <fcond> is the c.cond.fmt condition associated with a particular code.
@@ -1173,7 +1175,7 @@
     return "<d>addiu\t%0,%1,%2";
 }
   [(set_attr "alu_type" "add")
-   (set_attr "compression" "micromips,*,micromips,micromips,micromips,micromips,*")
+   (set_attr "compression" "micromips32,*,micromips32,micromips32,micromips32,micromips32,*")
    (set_attr "mode" "<MODE>")])
 
 (define_insn "*add<mode>3_mips16"
@@ -1411,7 +1413,7 @@
   ""
   "<d>subu\t%0,%1,%2"
   [(set_attr "alu_type" "sub")
-   (set_attr "compression" "micromips,*")
+   (set_attr "compression" "micromips32,*")
    (set_attr "mode" "<MODE>")])
 
 (define_insn "*subsi3_extended"
@@ -6314,14 +6316,12 @@
 	(label_ref (match_operand 0)))]
   "!TARGET_MIPS16 && TARGET_ABSOLUTE_JUMPS"
 {
-  /* Use a branch for microMIPS.  The assembler will choose
-     a 16-bit branch, a 32-bit branch, or a 32-bit jump.  */
-  if (TARGET_MICROMIPS && !TARGET_ABICALLS_PIC2)
+  if (get_attr_length (insn) <= 8)
     return "%*b\t%l0%/";
   else
     return MIPS_ABSOLUTE_JUMP ("%*j\t%l0%/");
 }
-  [(set_attr "type" "jump")])
+  [(set_attr "type" "branch")])
 
 (define_insn "*jump_pic"
   [(set (pc)

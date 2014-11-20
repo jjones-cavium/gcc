@@ -5,6 +5,2751 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* ipa-icf.c (sem_item_optimizer::~sem_item_optimizer): Free each
+	congruence_class_group *.
+
+2014-11-19  Uros Bizjak  <ubizjak@gmail.com>
+
+	PR target/63947
+	* config/i386/i386.c (put_condition_code) <case LTU, case GEU>:
+	Output "b" and "nb" suffix for FP mode.
+
+2014-11-19  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR bootstrap/63963
+	* tree-streamer-out.c (write_ts_function_decl_tree_pointers): Stream out
+	DECL_FUNCTION_SPECIFIC_TARGET
+	* tree-streamer-in.c (lto_input_ts_function_decl_tree_pointers): Stream in
+	DECL_FUNCTION_SPECIFIC_TARGET.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* pass_manager.h (GCC_PASS_LISTS): Add all_late_ipa_passes.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* lra.c (lra): After creating live ranges in preparation for call
+	to lra_inheritance, set live_p to true.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* tree-ssa-threadedge.c (thread_across_edge): Don't just release
+	"path", delete it.
+	* tree-ssa-threadupdate.c (delete_jump_thread_path): Likewise.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* tree-ssa-pre.c (do_regular_insertion): Convert "avail" from
+	vec<> to auto_vec<> to fix a leak.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* dwarf2out.c (dwarf2out_c_finalize): Free producer_string.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* ira-costs.c (ira_costs_c_finalize): New function.
+	* ira.h (ira_costs_c_finalize): New prototype.
+	* toplev.c (toplev::finalize): Call ira_costs_c_finalize.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* ipa-reference.c (ipa_reference_c_finalize): Release
+	optimization_summary_obstack.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* toplev.c (toplev::finalize): Free opts_obstack.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* toplev.c (toplev::finalize): Clean up save_decoded_options.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* bb-reorder.c
+	(find_rarely_executed_basic_blocks_and_crossing_edges): Convert
+	local bbs_in_hot_partition from vec<> to auto_vec<>.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* config/alpha/alpha.c (alpha_option_override): Remove static from
+	"handle_trap_shadows_info" and "align_insns_info".
+	* config/i386/i386.c (ix86_option_override): Likewise for
+	"insert_vzeroupper_info".
+	* config/rl78/rl78.c (rl78_asm_file_start): Likewise for
+	"rl78_devirt_info" and "rl78_move_elim_info".
+	* config/rs6000/rs6000.c (rs6000_option_override): Likewise for
+	"analyze_swaps_info".
+	* context.c (gcc::context::~context): New.
+	* context.h (gcc::context::~context): New.
+	* dumpfile.c (dump_files): Add "false" initializers for new field
+	"owns_strings".
+	(gcc::dump_manager::~dump_manager): New.
+	(gcc::dump_manager::dump_register): Add param "take_ownership".
+	* dumpfile.h (struct dump_file_info): Add field "owns_strings".
+	(gcc::dump_manager::~dump_manager): New.
+	(gcc::dump_manager::dump_register): Add param "take_ownership".
+	* pass_manager.h (gcc::pass_manager::operator delete): New.
+	(gcc::pass_manager::~pass_manager): New.
+	* passes.c (pass_manager::register_one_dump_file): Pass "true" to
+	new "owns_strings" argument to dump_register.
+	(pass_manager::operator delete): New.
+	(delete_pass_tree): New function.
+	(pass_manager::~pass_manager): New.
+	* statistics.c (statistics_early_init): Pass "false" to
+	new "owns_strings" argument to dump_register.
+	* toplev.c (toplev::finalize): Clean up the context and thus the
+	things it owns.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* reginfo.c (finish_subregs_of_mode): Replace obstack_finish with
+	obstack_free when cleaning up valid_mode_changes_obstack.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* opts.c (finalize_options_struct): New.
+	* opts.h (finalize_options_struct): New.
+	* toplev.c (toplev::finalize): Call finalize_options_struct
+	on global_options and global_options_set.
+
+2014-11-19  Manuel López-Ibáñez  <manu@gcc.gnu.org>
+	    Jakub Jelinek  <jakub@redhat.com>
+
+	PR driver/36312
+	PR driver/63837
+	* gcc.c (process_command): Don't check for input/output
+	filename equality if output is HOST_BIT_BUCKET.
+	* toplev.c (init_asm_output): Likewise.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	Merger of git branch "gimple-classes-v2-option-3".
+
+	* ChangeLog.gimple-classes: New.
+
+	* coretypes.h (struct gcond): Add forward decl.
+	(struct gdebug): Likewise.
+	(struct ggoto): Likewise.
+	(struct glabel): Likewise.
+	(struct gswitch): Likewise.
+	(struct gassign): Likewise.
+	(struct gasm): Likewise.
+	(struct gcall): Likewise.
+	(struct gtransaction): Likewise.
+	(struct greturn): Likewise.
+	(struct gbind): Likewise.
+	(struct gcatch): Likewise.
+	(struct geh_filter): Likewise.
+	(struct geh_mnt): Likewise.
+	(struct geh_else): Likewise.
+	(struct gresx): Likewise.
+	(struct geh_dispatch): Likewise.
+	(struct gphi): Likewise.
+	(struct gtry): Likewise.
+	(struct gomp_atomic_load): Likewise.
+	(struct gomp_atomic_store): Likewise.
+	(struct gomp_continue): Likewise.
+	(struct gomp_critical): Likewise.
+	(struct gomp_for): Likewise.
+	(struct gomp_parallel): Likewise.
+	(struct gomp_task): Likewise.
+	(struct gomp_sections): Likewise.
+	(struct gomp_single): Likewise.
+	(struct gomp_target): Likewise.
+	(struct gomp_teams): Likewise.
+
+	* doc/gimple.texi (Class hierarchy of GIMPLE statements): Update
+	for renaming of gimple subclasses.
+
+	* gdbhooks.py: Update.
+
+	* gimple-iterator.c (gsi_for_phi): New.
+	(gsi_start_phis): Strengthen return type from gimple_stmt_iterator
+	to gphi_iterator.
+	* gimple-iterator.h (struct gphi_iterator): New subclass of
+	gimple_stmt_iterator.
+	(gsi_for_phi): New prototype.
+	(gsi_start_phis): Strengthen return type from gimple_stmt_iterator
+	to gphi_iterator.
+	(gsi_next_nonvirtual_phi): Strengthen param from
+	gimple_stmt_iterator * to gphi_iterator *, and local "phi" from
+	gimple to gphi *.
+
+	* gsstruct.def: Update for renamings of classes.
+
+	* gimple.c (gimple_build_return): Strengthen return type from
+	gimple to greturn *.
+	(gimple_call_reset_alias_info): Strengthen param to gcall *.
+	(gimple_build_call_1): Strengthen return type from gimple to
+	gcall *.
+	(gimple_build_call_vec): Likewise.
+	(gimple_build_call): Likewise.
+	(gimple_build_call_valist): Likewise.
+	(gimple_build_call_internal_1): Likewise.
+	(gimple_build_call_internal): Likewise.
+	(gimple_build_call_internal_vec): Likewise.
+	(gimple_build_call_from_tree): Likewise.
+	(gimple_build_assign_stat): Strengthen return type from gimple to
+	gassign *.
+	(gimple_build_assign_with_ops): Likewise.
+	(gimple_build_assign_with_ops): Likewise.
+	(gimple_build_cond): Strengthen return type from gimple to
+	gcond *.
+	(gimple_build_cond_from_tree): Likewise.
+	(gimple_cond_set_condition_from_tree): Require a gcond *.
+	(gimple_build_label): Strengthen return type from gimple to
+	glabel *.
+	(gimple_build_goto): Strengthen return type from gimple to
+	ggoto *.
+	(gimple_build_bind): Strengthen return type from gimple to
+	gbind *.
+	(gimple_build_asm_1): Strengthen return type from gimple to
+	gasm *.
+	(gimple_build_asm_vec): Likewise.
+	(gimple_build_catch): Strengthen return type from gimple to
+	gcatch *.
+	(gimple_build_eh_filter): Strengthen return type from gimple to
+	geh_filter *.
+	(gimple_build_eh_must_not_throw): Strengthen return type from
+	gimple to geh_mnt *.
+	(gimple_build_eh_else): Strengthen return type from gimple to
+	geh_else *.
+	(gimple_build_try): Update for renaming of gimple_statement_try to
+	gtry.
+	(gimple_build_resx): Strengthen return type from gimple to
+	gresx *.
+	(gimple_build_switch_nlabels): Strengthen return type from gimple
+	to gswitch *.
+	(gimple_build_switch): Likewise.
+	(gimple_build_eh_dispatch): Strengthen return type from gimple to
+	geh_dispatch *.
+	(gimple_build_debug_bind_stat): Strengthen return type from gimple
+	to gdebug *.
+	(gimple_build_debug_source_bind_stat): Strengthen return type from
+	gimple to gdebug *.
+	(gimple_build_omp_critical): Strengthen return type from gimple to
+	gomp_critical *.
+	(gimple_build_omp_for): Strengthen return type from gimple to
+	gomp_for *.
+	(gimple_build_omp_parallel): Strengthen return type from gimple to
+	gomp_parallel *.
+	(gimple_build_omp_task): Strengthen return type from gimple to
+	gomp_task *.
+	(gimple_build_omp_continue): Strengthen return type from gimple to
+	gomp_continue *.
+	(gimple_build_omp_sections): Strengthen return type from gimple to
+	gomp_sections *.
+	(gimple_build_omp_single): Strengthen return type from gimple to
+	gomp_single *.
+	(gimple_build_omp_target): Strengthen return type from gimple to
+	gomp_target *.
+	(gimple_build_omp_teams): Strengthen return type from gimple to
+	gomp_teams *.
+	(gimple_build_omp_atomic_load): Strengthen return type from gimple
+	to gomp_atomic_load *.
+	(gimple_build_omp_atomic_store): Strengthen return type from gimple
+	to gomp_atomic_store *.
+	(gimple_build_transaction): Strengthen return type from gimple
+	to gtransaction *.
+	(empty_stmt_p): Replace check for GIMPLE_BIND with a dyn_cast.
+	(gimple_call_fnspec): Require a const gcall *.
+	(gimple_call_arg_flags): Likewise.
+	(gimple_call_return_flags): Likewise.
+	(gimple_set_bb): Add a checked cast.
+	(gimple_copy): Within the cases, add locals of the appropriate
+	subclass and use in place of "stmt" and "copy" for typesafety.
+	(gimple_has_side_effects): Add a checked cast.
+	(gimple_could_trap_p_1): Likewise.
+	(gimple_call_copy_skip_args): Require a gcall *, and return one.
+	(gimple_asm_clobbers_memory_p): Require a const gasm *.
+	(infer_nonnull_range): Replace a check for GIMPLE_RETURN with a
+	dyn_cast, introducing local "return_stmt" and using ti in place
+	of "stmt".
+
+	* gimple.h (gimple_vec): Eliminate this typedef.
+	(struct gimple_statement_call): Rename to...
+	(struct gcall): ...this.
+	(struct gimple_statement_bind): Rename to...
+	(struct gbind): ...this.
+	(struct gimple_statement_catch): Rename to...
+	(struct gcatch): ...this.
+	(struct gimple_statement_eh_filter): Rename to...
+	(struct geh_filter): ...this.
+	(struct gimple_statement_eh_else): Rename to...
+	(struct geh_else): ...this.
+	(struct gimple_statement_eh_mnt): Rename to...
+	(struct geh_mnt): ...this.
+	(struct gimple_statement_phi): Rename to...
+	(struct gphi): ...this.
+	(struct gimple_statement_resx): Rename to...
+	(struct gresx): ...this.
+	(struct gimple_statement_eh_dispatch): Rename to...
+	(struct geh_dispatch): ...this.
+	(struct gimple_statement_try): Rename to...
+	(struct gtry): ...this.
+	(struct gimple_statement_asm): Rename to...
+	(struct gasm): ...this.
+	(struct gimple_statement_omp_critical): Rename to...
+	(struct gomp_critical): ...this.
+	(struct gimple_statement_omp_for): Rename to...
+	(struct gomp_for): ...this.
+	(struct gimple_statement_omp_parallel): Rename to...
+	(struct gomp_parallel): ...this.
+	(struct gimple_statement_omp_target): Rename to...
+	(struct gomp_target): ...this.
+	(struct gimple_statement_omp_task): Rename to...
+	(struct gomp_task): ...this.
+	(struct gimple_statement_omp_sections): Rename to...
+	(struct gomp_sections): ...this.
+	(struct gimple_statement_omp_continue): Rename to...
+	(struct gomp_continue): ...this.
+	(struct gimple_statement_omp_single): Rename to...
+	(struct gomp_single): ...this.
+	(struct gimple_statement_omp_teams): Rename to...
+	(struct gomp_teams): ...this.
+	(struct gimple_statement_omp_atomic_load): Rename to...
+	(struct gomp_atomic_load): ...this.
+	(struct gimple_statement_omp_atomic_store :): Rename to...
+	(struct gomp_atomic_store :): ...this.
+	(struct gimple_statement_transaction): Rename to...
+	(struct gtransaction): ...this.
+	(struct gcond): New subclass.
+	(struct gdebug): New subclass.
+	(struct ggoto): New subclass.
+	(struct glabel): New subclass.
+	(struct gswitch): New subclass.
+	(struct gassign): New subclass.
+	(struct greturn): New subclass.
+	(is_a_helper <gimple_statement_asm *>::test): Rename to...
+	(is_a_helper <gasm *>::test): ...this.
+	(is_a_helper <gimple_statement_bind *>::test): Rename to...
+	(is_a_helper <gbind *>::test): ...this.
+	(is_a_helper <gassign *>::test): New.
+	(is_a_helper <gimple_statement_call *>::test): Rename to...
+	(is_a_helper <gcall *>::test): ...this.
+	(is_a_helper <gimple_statement_catch *>::test): Rename to...
+	(is_a_helper <gcatch *>::test): ...this.
+	(is_a_helper <gimple_statement_resx *>::test): Rename to...
+	(is_a_helper <gresx *>::test): ...this.
+	(is_a_helper <gcond *>::test): New.
+	(is_a_helper <gdebug *>::test): New.
+	(is_a_helper <ggoto *>::test): New.
+	(is_a_helper <glabel *>::test): New.
+	(is_a_helper <gimple_statement_eh_dispatch *>::test): Rename to...
+	(is_a_helper <geh_dispatch *>::test): ...this.
+	(is_a_helper <gimple_statement_eh_else *>::test): Rename to...
+	(is_a_helper <geh_else *>::test): ...this.
+	(is_a_helper <gimple_statement_eh_filter *>::test): Rename to...
+	(is_a_helper <geh_filter *>::test): ...this.
+	(is_a_helper <gimple_statement_eh_mnt *>::test): Rename to...
+	(is_a_helper <geh_mnt *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_atomic_load *>::test): Rename to...
+	(is_a_helper <gomp_atomic_load *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_atomic_store *>::test): Rename to...
+	(is_a_helper <gomp_atomic_store *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_continue *>::test): Rename to...
+	(is_a_helper <gomp_continue *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_critical *>::test): Rename to...
+	(is_a_helper <gomp_critical *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_for *>::test): Rename to...
+	(is_a_helper <gomp_for *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_parallel *>::test): Rename to...
+	(is_a_helper <gomp_parallel *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_target *>::test): Rename to...
+	(is_a_helper <gomp_target *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_sections *>::test): Rename to...
+	(is_a_helper <gomp_sections *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_single *>::test): Rename to...
+	(is_a_helper <gomp_single *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_teams *>::test): Rename to...
+	(is_a_helper <gomp_teams *>::test): ...this.
+	(is_a_helper <gimple_statement_omp_task *>::test): Rename to...
+	(is_a_helper <gomp_task *>::test): ...this.
+	(is_a_helper <gimple_statement_phi *>::test): Rename to...
+	(is_a_helper <gphi *>::test): ...this.
+	(is_a_helper <gimple_statement_transaction *>::test): Rename to...
+	(is_a_helper <gtransaction *>::test): ...this.
+	(is_a_helper <greturn *>::test): New.
+	(is_a_helper <gswitch *>::test): New.
+	(is_a_helper <gimple_statement_try *>::test): Rename to...
+	(is_a_helper <gtry *>::test): ...this.
+	(is_a_helper <const gimple_statement_asm *>::test): Rename to...
+	(is_a_helper <const gasm *>::test): ...this.
+	(is_a_helper <const gimple_statement_bind *>::test): Rename to...
+	(is_a_helper <const gbind *>::test): ...this.
+	(is_a_helper <const gimple_statement_call *>::test): Rename to...
+	(is_a_helper <const gcall *>::test): ...this.
+	(is_a_helper <const gimple_statement_catch *>::test): Rename to...
+	(is_a_helper <const gcatch *>::test): ...this.
+	(is_a_helper <const gimple_statement_resx *>::test): Rename to...
+	(is_a_helper <const gresx *>::test): ...this.
+	(is_a_helper <const gimple_statement_eh_dispatch *>::test): Rename to...
+	(is_a_helper <const geh_dispatch *>::test): ...this.
+	(is_a_helper <const gimple_statement_eh_filter *>::test): Rename to...
+	(is_a_helper <const geh_filter *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_atomic_load *>::test):
+	Rename to...
+	(is_a_helper <const gomp_atomic_load *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_atomic_store *>::test):
+	Rename to...
+	(is_a_helper <const gomp_atomic_store *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_continue *>::test):
+	Rename to...
+	(is_a_helper <const gomp_continue *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_critical *>::test):
+	Rename to...
+	(is_a_helper <const gomp_critical *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_for *>::test): Rename to...
+	(is_a_helper <const gomp_for *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_parallel *>::test):
+	Rename to...
+	(is_a_helper <const gomp_parallel *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_target *>::test): Rename to...
+	(is_a_helper <const gomp_target *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_sections *>::test):
+	Rename to...
+	(is_a_helper <const gomp_sections *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_single *>::test): Rename to...
+	(is_a_helper <const gomp_single *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_teams *>::test): Rename to...
+	(is_a_helper <const gomp_teams *>::test): ...this.
+	(is_a_helper <const gimple_statement_omp_task *>::test): Rename to...
+	(is_a_helper <const gomp_task *>::test): ...this.
+	(is_a_helper <const gimple_statement_phi *>::test): Rename to...
+	(is_a_helper <const gphi *>::test): ...this.
+	(is_a_helper <const gimple_statement_transaction *>::test): Rename to...
+	(is_a_helper <const gtransaction *>::test): ...this.
+	(gimple_build_return): Strengthen return type to greturn *.
+	(gimple_call_reset_alias_info): Require a gcall *.
+	(gimple_build_call_vec): Return a gcall *.
+	(gimple_build_call): Likewise.
+	(gimple_build_call_valist): Likewise.
+	(gimple_build_call_internal): Likewise.
+	(gimple_build_call_internal_vec): Likewise.
+	(gimple_build_call_from_tree): Likewise.
+	(gimple_build_assign_stat): Return a gassign *.
+	(gimple_build_assign_with_ops): Likewise.
+	(gimple_build_cond): Return a gcond *.
+	(gimple_build_cond_from_tree): Likewise.
+	(gimple_cond_set_condition_from_tree): Require a gcond *.
+	(gimple_build_label): Return a glabel *.
+	(gimple_build_goto): Return a ggoto *.
+	(gimple_build_bind): Return a gbind *.
+	(gimple_build_asm_vec): Return a gasm *.
+	(gimple_build_catch): Return a gcatch *.
+	(gimple_build_eh_filter): Return a geh_filter *.
+	(gimple_build_eh_must_not_throw): Return a geh_mnt *.
+	(gimple_build_eh_else): Return a geh_else *.
+	(gimple_build_try): Return a gtry *.
+	(gimple_build_resx): Return a gresx *.
+	(gimple_build_switch_nlabels): Return a gswitch *.
+	(gimple_build_switch): Return a gswitch *.
+	(gimple_build_eh_dispatch): Return a geh_dispatch *.
+	(gimple_build_debug_bind_stat): Return a gdebug *.
+	(gimple_build_debug_source_bind_stat): Return a gdebug *.
+	(gimple_build_omp_critical): Return a gomp_critical *.
+	(gimple_build_omp_for): Return a gomp_for *.
+	(gimple_build_omp_parallel): Return a gomp_parallel *.
+	(gimple_build_omp_task): Return a gomp_task *.
+	(gimple_build_omp_continue): Return a gomp_continue *.
+	(gimple_build_omp_sections): Return a gomp_sections *.
+	(gimple_build_omp_single): Return a gomp_single *.
+	(gimple_build_omp_target): Return a gomp_target *.
+	(gimple_build_omp_teams): Return a gomp_teams *.
+	(gimple_build_omp_atomic_load): Return a gomp_atomic_load *.
+	(gimple_build_omp_atomic_store): Return a gomp_atomic_store *.
+	(gimple_build_transaction): Return a gtransaction *.
+	(gimple_call_arg_flags): Require a const gcall *.
+	(gimple_call_return_flags): Likewise.
+	(gimple_call_copy_skip_args): Require and return a gcall *.
+	(gimple_asm_clobbers_memory_p): Require a const gasm *.
+	(gimple_seq_first_stmt_as_a_bind): New.
+	(gimple_assign_nontemporal_move_p): Require a const gassign *
+	rather than a const_gimple.
+	(gimple_call_internal_fn): Update for renaming to gcall.
+	(gimple_call_fntype): Likewise.
+	(gimple_call_set_fntype): Require a gcall * rather than a gimple.
+	(gimple_call_set_fn): Likewise.
+	(gimple_call_set_internal_fn): Likewise.
+	(gimple_call_set_chain): Likewise.
+	(gimple_call_set_tail): Likewise.
+	(gimple_call_tail_p): Likewise.
+	(gimple_call_set_return_slot_opt): Likewise.
+	(gimple_call_return_slot_opt_p): Likewise.
+	(gimple_call_set_from_thunk): Likewise.
+	(gimple_call_from_thunk_p): Likewise.
+	(gimple_call_set_va_arg_pack): Likewise.
+	(gimple_call_va_arg_pack_p): Likewise.
+	(gimple_call_set_nothrow): Likewise.
+	(gimple_call_nothrow_p): Likewise.
+	(gimple_call_set_alloca_for_var): Likewise.
+	(gimple_call_alloca_for_var_p): Likewise.
+	(gimple_call_use_set): Likewise.
+	(gimple_call_clobber_set): Likewise.
+	(gimple_call_return_type): Require a const gcall * rather than a
+	const_gimple.
+	(gimple_call_chain_ptr): Likewise.
+	(gimple_call_copy_flags): Require a pair of gcall *.
+	(gimple_cond_set_code): Require a gcond * rather than a gimple
+	(gimple_cond_set_lhs): Likewise.
+	(gimple_cond_set_rhs): Likewise.
+	(gimple_cond_set_true_label): Likewise.
+	(gimple_cond_set_false_label): Likewise.
+	(gimple_cond_make_false): Likewise.
+	(gimple_cond_make_true): Likewise.
+	(gimple_cond_lhs_ptr): Require a const gcond * rather than a
+	const_gimple.
+	(gimple_cond_rhs_ptr): Likewise.
+	(gimple_cond_true_label): Likewise.
+	(gimple_cond_false_label): Likewise.
+	(gimple_cond_true_p): Likewise.
+	(gimple_cond_false_p): Likewise.
+	(gimple_cond_set_condition): Likewise.
+	(gimple_label_label): Require a const glabel *.
+	(gimple_label_set_label): Require a glabel *.
+	(gimple_goto_set_dest): Require a ggoto *.
+	(gimple_bind_vars): Require a const gbind *.
+	(gimple_bind_block): Likewise.
+	(gimple_bind_set_vars): Require a gbind *.
+	(gimple_bind_append_vars): Likewise.
+	(gimple_bind_body_ptr): Likewise.
+	(gimple_bind_body): Likewise.
+	(gimple_bind_set_body): Likewise.
+	(gimple_bind_add_stmt): Likewise.
+	(gimple_bind_add_seq): Likewise.
+	(gimple_bind_set_block): Likewise.
+	(gimple_asm_ninputs): Require a const gasm *.
+	(gimple_asm_noutputs): Likewise.
+	(gimple_asm_nclobbers): Likewise.
+	(gimple_asm_nlabels): Likewise.
+	(gimple_asm_input_op): Likewise.
+	(gimple_asm_input_op_ptr): Likewise.
+	(gimple_asm_output_op): Likewise.
+	(gimple_asm_output_op_ptr): Likewise.
+	(gimple_asm_clobber_op): Likewise.
+	(gimple_asm_label_op): Likewise.
+	(gimple_asm_string): Likewise.
+	(gimple_asm_volatile_p): Likewise.
+	(gimple_asm_input_p): Likewise.
+	(gimple_asm_set_input_op): Require a gasm *.
+	(gimple_asm_set_output_op): Likewise.
+	(gimple_asm_set_clobber_op): Likewise.
+	(gimple_asm_set_label_op): Likewise.
+	(gimple_asm_set_volatile): Likewise.
+	(gimple_asm_set_input): Likewise.
+	(gimple_catch_types): Require a const gcatch *.
+	(gimple_catch_types_ptr): Require a gcatch *.
+	(gimple_catch_handler_ptr): Likewise.
+	(gimple_catch_handler): Likewise.
+	(gimple_catch_set_types): Likewise.
+	(gimple_catch_set_handler): Likewise.
+	(gimple_eh_filter_types): Update for renaming of subclass to
+	geh_filter.
+	(gimple_eh_filter_types_ptr): Likewise.
+	(gimple_eh_filter_failure_ptr): Likewise.
+	(gimple_eh_filter_set_types): Require a geh_filter *.
+	(gimple_eh_filter_set_failure): Likewise.
+	(gimple_eh_must_not_throw_fndecl): Require a geh_mnt *.
+	(gimple_eh_must_not_throw_set_fndecl): Likewise.
+	(gimple_eh_else_n_body_ptr): Require a geh_else *.
+	(gimple_eh_else_n_body): Likewise.
+	(gimple_eh_else_e_body_ptr): Likewise.
+	(gimple_eh_else_e_body): Likewise.
+	(gimple_eh_else_set_n_body): Likewise.
+	(gimple_eh_else_set_e_body): Likewise.
+	(gimple_try_set_kind): Require a gtry *.
+	(gimple_try_set_catch_is_cleanup): Likewise.
+	(gimple_try_set_eval): Likewise.
+	(gimple_try_set_cleanup): Likewise.
+	(gimple_try_eval_ptr): Update for renaming of subclass to gtry.
+	(gimple_try_cleanup_ptr): Likewise.
+	(gimple_phi_capacity): Update for renaming of subclass to gphi.
+	(gimple_phi_num_args): Likewise.
+	(gimple_phi_result): Likewise.
+	(gimple_phi_result_ptr): Likewise.
+	(gimple_phi_arg): Likewise.
+	(gimple_phi_set_result): Require a gphi *.
+	(gimple_phi_set_arg): Likewise.
+	(gimple_phi_arg_def_ptr): Likewise.
+	(gimple_phi_arg_edge): Likewise.
+	(gimple_phi_arg_location): Likewise.
+	(gimple_phi_arg_location_from_edge): Likewise.
+	(gimple_phi_arg_set_location): Likewise.
+	(gimple_phi_arg_has_location): Likewise.
+	(gimple_resx_region): Require a const gresx *.
+	(gimple_resx_set_region): Require a gresx *.
+	(gimple_eh_dispatch_region): Require a const geh_dispatch *.
+	(gimple_eh_dispatch_set_region): Require a geh_dispatch *.
+	(gimple_switch_num_labels): Require a const gswitch *.
+	(gimple_switch_set_num_labels): Likewise.
+	(gimple_switch_index): Likewise.
+	(gimple_switch_index_ptr): Likewise.
+	(gimple_switch_label): Likewise.
+	(gimple_switch_default_label): Likewise.
+	(gimple_switch_set_index): Require a gswitch *.
+	(gimple_switch_set_label): Likewise.
+	(gimple_switch_set_default_label): Likewise.
+	(gimple_omp_critical_name): Require a const gomp_critical *.
+	(gimple_omp_critical_name_ptr): Require a gomp_critical *.
+	(gimple_omp_critical_set_name): Likewise.
+	(gimple_omp_for_set_kind): Require a gomp_for *.
+	(gimple_omp_for_set_combined_p): Likewise.
+	(gimple_omp_for_set_combined_into_p): Likewise.
+	(gimple_omp_for_clauses): Update for renaming of subclass to
+	gomp_for.
+	(gimple_omp_for_clauses_ptr): Likewise.
+	(gimple_omp_for_set_clauses): Likewise.
+	(gimple_omp_for_collapse): Likewise.
+	(gimple_omp_for_index): Likewise.
+	(gimple_omp_for_index_ptr): Likewise.
+	(gimple_omp_for_set_index): Likewise.
+	(gimple_omp_for_initial): Likewise.
+	(gimple_omp_for_initial_ptr): Likewise.
+	(gimple_omp_for_set_initial): Likewise.
+	(gimple_omp_for_final): Likewise.
+	(gimple_omp_for_final_ptr): Likewise.
+	(gimple_omp_for_set_final): Likewise.
+	(gimple_omp_for_incr): Likewise.
+	(gimple_omp_for_incr_ptr): Likewise.
+	(gimple_omp_for_set_incr): Likewise.
+	(gimple_omp_for_pre_body): Likewise.
+	(gimple_omp_for_set_pre_body): Likewise.
+	(gimple_omp_parallel_clauses): Update for renaming of subclass to
+	gomp_parallel.
+	(gimple_omp_parallel_clauses_ptr): Require a gomp_parallel *.
+	(gimple_omp_parallel_set_clauses): Likewise.
+	(gimple_omp_parallel_child_fn_ptr): Likewise.
+	(gimple_omp_parallel_set_child_fn): Likewise.
+	(gimple_omp_parallel_data_arg_ptr): Likewise.
+	(gimple_omp_parallel_set_data_arg): Likewise.
+	(gimple_omp_parallel_child_fn): Require a const gomp_parallel *.
+	(gimple_omp_parallel_data_arg): Likewise.
+	(gimple_omp_task_clauses): Update for renaming of subclass to
+	gomp_task.
+	(gimple_omp_task_clauses_ptr): Likewise.
+	(gimple_omp_task_set_clauses): Likewise.
+	(gimple_omp_task_child_fn): Likewise.
+	(gimple_omp_task_child_fn_ptr): Likewise.
+	(gimple_omp_task_set_child_fn): Likewise.
+	(gimple_omp_task_data_arg): Likewise.
+	(gimple_omp_task_data_arg_ptr): Likewise.
+	(gimple_omp_task_set_data_arg): Likewise.
+	(gimple_omp_taskreg_clauses): Whitespace fixes.
+	(gimple_omp_taskreg_clauses_ptr): Likewise.
+	(gimple_omp_taskreg_set_clauses): Likewise.
+	(gimple_omp_taskreg_child_fn): Likewise.
+	(gimple_omp_taskreg_child_fn_ptr): Likewise.
+	(gimple_omp_taskreg_set_child_fn): Likewise.
+	(gimple_omp_taskreg_data_arg): Likewise.
+	(gimple_omp_taskreg_data_arg_ptr): Likewise.
+	(gimple_omp_taskreg_set_data_arg): Likewise.
+	(gimple_omp_task_copy_fn): Update for renaming of subclass to
+	gomp_task.
+	(gimple_omp_task_copy_fn_ptr): Likewise.
+	(gimple_omp_task_set_copy_fn): Likewise.
+	(gimple_omp_task_arg_size): Likewise.
+	(gimple_omp_task_arg_size_ptr): Likewise.
+	(gimple_omp_task_set_arg_size): Likewise.
+	(gimple_omp_task_arg_align): Likewise.
+	(gimple_omp_task_arg_align_ptr): Likewise.
+	(gimple_omp_task_set_arg_align): Likewise.
+	(gimple_omp_single_clauses): Update for renaming of subclass to
+	gomp_single.
+	(gimple_omp_single_clauses_ptr): Likewise.
+	(gimple_omp_single_set_clauses): Likewise.
+	(gimple_omp_target_clauses): Update for renaming of subclass to
+	gomp_target.
+	(gimple_omp_target_clauses_ptr): Likewise.
+	(gimple_omp_target_set_clauses): Require a gomp_target *.
+	(gimple_omp_target_set_kind): Likewise.
+	(gimple_omp_target_child_fn_ptr): Likewise.
+	(gimple_omp_target_set_child_fn): Likewise.
+	(gimple_omp_target_data_arg_ptr): Likewise.
+	(gimple_omp_target_set_data_arg): Likewise.
+	(gimple_omp_target_child_fn): Require a const gomp_target *.
+	(gimple_omp_target_data_arg): Likewise.
+	(gimple_omp_teams_clauses): Update for renaming of subclass to
+	gomp_teams.
+	(gimple_omp_teams_clauses_ptr): Likewise.
+	(gimple_omp_teams_set_clauses): Require a gomp_teams *.
+	(gimple_omp_sections_clauses): Update for renaming of subclass to
+	gomp_sections.
+	(gimple_omp_sections_clauses_ptr): Likewise.
+	(gimple_omp_sections_set_clauses): Likewise.
+	(gimple_omp_sections_control): Likewise.
+	(gimple_omp_sections_control_ptr): Likewise.
+	(gimple_omp_sections_set_control): Likewise.
+	(gimple_omp_for_set_cond): Likewise.
+	(gimple_omp_for_cond): Likewise.
+	(gimple_omp_atomic_store_set_val): Require a gomp_atomic_store *.
+	(gimple_omp_atomic_store_val_ptr): Likewise.
+	(gimple_omp_atomic_load_set_lhs): Likewise.
+	(gimple_omp_atomic_store_val): Require a const gomp_atomic_store *.
+	(gimple_omp_atomic_load_lhs): Likewise.
+	(gimple_omp_atomic_load_rhs): Likewise.
+	(gimple_omp_atomic_load_lhs_ptr): Require a gomp_atomic_load *.
+	(gimple_omp_atomic_load_set_rhs): Likewise.
+	(gimple_omp_atomic_load_rhs_ptr): Likewise.
+	(gimple_omp_continue_control_def): Require a const gomp_continue *.
+	(gimple_omp_continue_control_use): Likewise.
+	(gimple_omp_continue_control_def_ptr): Require a gomp_continue *.
+	(gimple_omp_continue_set_control_def): Likewise.
+	(gimple_omp_continue_control_use_ptr): Likewise.
+	(gimple_omp_continue_set_control_use): Likewise.
+	(gimple_transaction_body_ptr): Require a gtransaction *.
+	(gimple_transaction_body): Likewise.
+	(gimple_transaction_label_ptr): Likewise.
+	(gimple_transaction_label): Require a const gtransaction *.
+	(gimple_transaction_subcode): Likewise.
+	(gimple_transaction_set_body): Require a gtransaction *.
+	(gimple_transaction_set_label): Likewise.
+	(gimple_transaction_set_subcode): Likewise.
+	(gimple_return_retval_ptr): Require a const greturn *.
+	(gimple_return_retval): Likewise.
+	(gimple_return_set_retval): Require a greturn *.
+	(gimple_expr_type): Introduce local "call_stmt" and use in place of
+	"stmt" for typesafety.
+
+	* asan.c: Use gimple subclasses.
+	* auto-profile.c: Likewise.
+	* builtins.c: Likewise.
+	* builtins.h: Likewise.
+	* cfgexpand.c: Likewise.
+	* cfgloop.c: Likewise.
+	* cfgloopmanip.c: Likewise.
+	* cgraph.c: Likewise.
+	* cgraph.h: Likewise.
+	* cgraphbuild.c: Likewise.
+	* cgraphclones.c: Likewise.
+	* cgraphunit.c: Likewise.
+	* expr.h: Likewise.
+	* gimple-builder.c: Likewise.
+	* gimple-builder.h: Likewise.
+	* gimple-fold.c: Likewise.
+	* gimple-low.c: Likewise.
+	* gimple-pretty-print.c: Likewise.
+	* gimple-ssa-isolate-paths.c: Likewise.
+	* gimple-ssa-strength-reduction.c: Likewise.
+	* gimple-streamer-in.c: Likewise.
+	* gimple-streamer-out.c: Likewise.
+	* gimple-walk.c: Likewise.
+	* gimplify-me.c: Likewise.
+	* gimplify.c: Likewise.
+	* gimplify.h: Likewise.
+	* graphite-scop-detection.c: Likewise.
+	* graphite-sese-to-poly.c: Likewise.
+	* internal-fn.c: Likewise.
+	* internal-fn.def:: Likewise.
+	* internal-fn.h: Likewise.
+	* ipa-icf-gimple.c: Likewise.
+	* ipa-icf-gimple.h: Likewise.
+	* ipa-icf.c: Likewise.
+	* ipa-inline-analysis.c: Likewise.
+	* ipa-prop.c: Likewise.
+	* ipa-prop.h: Likewise.
+	* ipa-pure-const.c: Likewise.
+	* ipa-split.c: Likewise.
+	* lto-streamer-in.c: Likewise.
+	* lto-streamer-out.c: Likewise.
+	* omp-low.c: Likewise.
+	* predict.c: Likewise.
+	* sanopt.c: Likewise.
+	* sese.c: Likewise.
+	* ssa-iterators.h: Likewise.
+	* stmt.c: Likewise.
+	* trans-mem.c: Likewise.
+	* tree-call-cdce.c: Likewise.
+	* tree-cfg.c: Likewise.
+	* tree-cfg.h: Likewise.
+	* tree-cfgcleanup.c: Likewise.
+	* tree-chkp.c: Likewise.
+	* tree-chkp.h: Likewise.
+	* tree-complex.c: Likewise.
+	* tree-data-ref.c: Likewise.
+	* tree-dfa.c: Likewise.
+	* tree-eh.c: Likewise.
+	* tree-eh.h: Likewise.
+	* tree-emutls.c: Likewise.
+	* tree-if-conv.c: Likewise.
+	* tree-inline.c: Likewise.
+	* tree-inline.h: Likewise.
+	* tree-into-ssa.c: Likewise.
+	* tree-into-ssa.h: Likewise.
+	* tree-loop-distribution.c: Likewise.
+	* tree-nrv.c: Likewise.
+	* tree-object-size.c: Likewise.
+	* tree-outof-ssa.c: Likewise.
+	* tree-parloops.c: Likewise.
+	* tree-phinodes.c: Likewise.
+	* tree-phinodes.h: Likewise.
+	* tree-predcom.c: Likewise.
+	* tree-profile.c: Likewise.
+	* tree-scalar-evolution.c: Likewise.
+	* tree-scalar-evolution.h
+	* tree-sra.cn_function):
+	* tree-ssa-alias.c: Likewise.
+	* tree-ssa-alias.h: Likewise.
+	* tree-ssa-ccp.c: Likewise.
+	* tree-ssa-coalesce.c: Likewise.
+	* tree-ssa-copy.c: Likewise.
+	* tree-ssa-copyrename.c: Likewise.
+	* tree-ssa-dce.c: Likewise.
+	* tree-ssa-dom.c: Likewise.
+	* tree-ssa-forwprop.c: Likewise.
+	* tree-ssa-ifcombine.c: Likewise.
+	* tree-ssa-live.c: Likewise.
+	* tree-ssa-loop-im.c: Likewise.
+	* tree-ssa-loop-ivcanon.c: Likewise.
+	* tree-ssa-loop-ivopts.c: Likewise.
+	* tree-ssa-loop-manip.c: Likewise.
+	* tree-ssa-loop-niter.c: Likewise.
+	* tree-ssa-loop-prefetch.c: Likewise.
+	* tree-ssa-loop-unswitch.c: Likewise.
+	* tree-ssa-math-opts.c: Likewise.
+	* tree-ssa-operands.c: Likewise.
+	* tree-ssa-phiopt.c: Likewise.
+	* tree-ssa-phiprop.c: Likewise.
+	* tree-ssa-pre.c: Likewise.
+	* tree-ssa-propagate.c: Likewise.
+	* tree-ssa-propagate.h: Likewise.
+	* tree-ssa-reassoc.c: Likewise.
+	* tree-ssa-sccvn.c: Likewise.
+	* tree-ssa-sccvn.h: Likewise.
+	* tree-ssa-sink.c: Likewise.
+	* tree-ssa-strlen.c
+	* tree-ssa-structalias.c
+	* tree-ssa-tail-merge.c: Likewise.
+	* tree-ssa-ter.c: Likewise.
+	* tree-ssa-threadedge.c: Likewise.
+	* tree-ssa-threadedge.h: Likewise.
+	* tree-ssa-threadupdate.c: Likewise.
+	* tree-ssa-uncprop.c: Likewise.
+	* tree-ssa-uninit.c: Likewise.
+	* tree-ssa.c: Likewise.
+	* tree-stdarg.c: Likewise.
+	* tree-switch-conversion.c: Likewise.
+	* tree-tailcall.c: Likewise.
+	* tree-vect-data-refs.c: Likewise.
+	* tree-vect-generic.c: Likewise.
+	* tree-vect-loop-manip.c: Likewise.
+	* tree-vect-loop.c: Likewise.
+	* tree-vect-patterns.c: Likewise.
+	* tree-vect-slp.c: Likewise.
+	* tree-vect-stmts.c: Likewise.
+	* tree-vectorizer.h: Likewise.
+	* tree-vrp.c: Likewise.
+	* tree.c: Likewise.
+	* ubsan.c: Likewise.
+	* value-prof.c: Likewise.
+	* value-prof.h: Likewise.
+	* vtable-verify.c: Likewise.
+
+2014-11-19  Markus Trippelsdorf  <markus@trippelsdorf.de>
+
+	* config/rs6000/constraints.md: Avoid signed integer overflows.
+	* config/rs6000/predicates.md: Likewise.
+
+2014-11-19  Renlin Li  <Renlin.Li@arm.com>
+
+	PR target/63424
+	* config/aarch64/aarch64-simd.md (<su><maxmin>v2di3): New.
+
+2014-11-19  Renlin Li  <Renlin.Li@arm.com>
+
+	PR middle-end/63762
+	* ira.c (ira): Update preferred class.
+
+2014-11-19  Jakub Jelinek  <jakub@redhat.com>
+
+	* gimple.h (gimple_build_assign_with_ops): Add unary arg overload.
+	(gimple_assign_set_rhs_with_ops_1): Renamed to ...
+	(gimple_assign_set_rhs_with_ops): ... this.  Adjust binary arg
+	inline overload to use it.  Add unary arg overload.
+	* gimple.c (gimple_build_assign_with_ops): New unary arg overload.
+	(gimple_assign_set_rhs_from_tree): Use
+	gimple_assign_set_rhs_with_ops instead of
+	gimple_assign_set_rhs_with_ops_1.
+	(gimple_assign_set_rhs_with_ops_1): Renamed to ...
+	(gimple_assign_set_rhs_with_ops): ... this.
+	* ipa-split.c (split_function): Remove last NULL argument
+	from gimple_build_assign_with_ops call.
+	* tree-ssa-loop-im.c
+	(move_computations_dom_walker::before_dom_children): Likewise.
+	* tsan.c (instrument_builtin_call): Likewise.
+	* tree-vect-stmts.c (vect_init_vector, vectorizable_mask_load_store,
+	vectorizable_conversion, vectorizable_load): Likewise.
+	* tree-vect-loop.c (vect_is_simple_reduction_1,
+	get_initial_def_for_induction): Likewise.
+	* tree-loop-distribution.c (generate_memset_builtin): Likewise.
+	* tree-vect-patterns.c (vect_handle_widen_op_by_const,
+	vect_recog_widen_mult_pattern, vect_operation_fits_smaller_type,
+	vect_recog_over_widening_pattern, vect_recog_rotate_pattern,
+	vect_recog_vector_vector_shift_pattern, vect_recog_divmod_pattern,
+	vect_recog_mixed_size_cond_pattern, adjust_bool_pattern_cast,
+	adjust_bool_pattern, vect_recog_bool_pattern): Likewise.
+	* tree-ssa-phiopt.c (conditional_replacement, abs_replacement,
+	neg_replacement): Likewise.
+	* asan.c (build_shadow_mem_access, maybe_create_ssa_name,
+	maybe_cast_to_ptrmode, asan_expand_check_ifn): Likewise.
+	* tree-vect-slp.c (vect_get_constant_vectors): Likewise.
+	* omp-low.c (lower_rec_input_clauses, expand_omp_for_generic,
+	expand_omp_for_static_nochunk, expand_omp_for_static_chunk,
+	simd_clone_adjust): Likewise.
+	* tree-vect-loop-manip.c (vect_create_cond_for_align_checks): Likewise.
+	* gimple-ssa-strength-reduction.c (introduce_cast_before_cand,
+	replace_one_candidate): Likewise.
+	* gimple-builder.c (build_type_cast): Likewise.
+	* tree-ssa-forwprop.c (simplify_rotate): Likewise.
+	(forward_propagate_addr_expr_1): Remove last NULL argument
+	from gimple_assign_set_rhs_with_ops call.
+	(simplify_vector_constructor): Use gimple_assign_set_rhs_with_ops
+	instead of gimple_assign_set_rhs_with_ops_1.
+	* tree-ssa-reassoc.c (maybe_optimize_range_tests): Remove last NULL
+	argument from gimple_build_assign_with_ops call.
+	(repropagate_negates): Remove last NULL argument from
+	gimple_assign_set_rhs_with_ops call.
+	* ubsan.c (ubsan_expand_null_ifn, ubsan_expand_objsize_ifn): Remove
+	last NULL argument from gimple_build_assign_with_ops call.
+	(instrument_bool_enum_load): Likewise.  Remove last NULL argument
+	from gimple_assign_set_rhs_with_ops call.
+	* tree-ssa-math-opts.c (build_and_insert_cast, convert_mult_to_fma):
+	Remove last NULL argument from gimple_build_assign_with_ops call.
+	(bswap_replace): Likewise.  Use gimple_assign_set_rhs_with_ops instead
+	of gimple_assign_set_rhs_with_ops_1.
+	(convert_plusminus_to_widen): Use gimple_assign_set_rhs_with_ops
+	instead of gimple_assign_set_rhs_with_ops_1.
+	* gimple-fold.c (replace_stmt_with_simplification): Likewise.
+	(rewrite_to_defined_overflow, gimple_build): Remove last NULL argument
+	from gimple_build_assign_with_ops call.
+	* tree-ssa-strlen.c (handle_pointer_plus): Remove last NULL argument
+	from gimple_assign_set_rhs_with_ops call.
+	* tree-vrp.c (simplify_truth_ops_using_ranges,
+	simplify_bit_ops_using_ranges): Remove last NULL argument from
+	gimple_assign_set_rhs_with_ops call.
+	(simplify_float_conversion_using_ranges,
+	simplify_internal_call_using_ranges): Remove last NULL argument from
+	gimple_build_assign_with_ops call.
+
+2014-11-19  Wilco Dijkstra  <wdijkstr@arm.com>
+
+	PR target/61915
+	* config/aarch64/aarch64.c (generic_regmove_cost): Increase FP move
+	cost.
+
+2014-11-19  Marek Polacek  <polacek@redhat.com>
+
+	PR sanitizer/63690
+	* ubsan.c (instrument_object_size): Check for MEM_REF.
+
+2014-11-19  Ilya Verbin  <ilya.verbin@intel.com>
+
+	PR regression/63868
+	* cgraph.c (cgraph_node::create): Guard g->have_offload with
+	ifdef ENABLE_OFFLOADING.
+	* omp-low.c (create_omp_child_function): Likewise.
+	(expand_omp_target): Guard node->mark_force_output and offload_funcs
+	with ifdef ENABLE_OFFLOADING.
+	* varpool.c (varpool_node::get_create): Guard g->have_offload and
+	offload_vars with ifdef ENABLE_OFFLOADING.
+
+2014-11-19  Felix Yang  <felix.yang@huawei.com>
+	    Shanyao Chen  <chenshanyao@huawei.com>
+
+	PR target/59593
+	* config/arm/arm.md (define_attr "arch"): Add v6t2.
+	(define_attr "arch_enabled"): Add test for the above.
+	(*movhi_insn_arch4): Add new alternative.
+
+2014-11-19  Richard Henderson  <rth@redhat.com>
+
+	* c-family/c-common.c (c_common_reswords): Add
+	__builtin_call_with_static_chain.
+	* c-family/c-common.h (RID_BUILTIN_CALL_WITH_STATIC_CHAIN): New.
+	* c/c-parser.c (c_parser_postfix_expression): Handle it.
+	* doc/extend.texi (__builtin_call_with_static_chain): Document it.
+
+	* calls.c (prepare_call_address): Allow decl or type for first arg.
+	(expand_call): Pass type to prepare_call_address if no decl.
+	* gimple-fold.c (gimple_fold_call): Eliminate the static chain if
+	the function doesn't use it; fold it otherwise.
+	* gimplify.c (gimplify_call_expr): Gimplify the static chain.
+	* tree-cfg.c (verify_gimple_call): Allow a static chain on indirect
+	function calls.
+
+	* targhooks.c (default_static_chain): Remove check for
+	DECL_STATIC_CHAIN.
+	* config/moxie/moxie.c (moxie_static_chain): Likewise.
+	* config/i386/i386.c (ix86_static_chain): Allow decl or type
+	as the first argument.
+	* config/xtensa/xtensa.c (xtensa_static_chain): Change the name
+	of the unused first parameter.
+	* doc/tm.texi (TARGET_STATIC_CHAIN): Document the first parameter
+	may be a type.
+	* target.def (static_chain): Likewise.
+
+2014-11-19  Renlin Li  <renlin.li@arm.com>
+
+    * config/aarch64/aarch64.h (TARGET_CPU_CPP_BUILTINS): Define __ARM_FP_FAST,
+	__ARM_FEATURE_FMA, __ARM_FP, __ARM_FEATURE_NUMERIC_MAXMIN, __ARM_NEON_FP.
+
+2014-11-19  Marek Polacek  <polacek@redhat.com>
+
+	PR sanitizer/63879
+	* fold-const.c (negate_expr_p) <case NEGATE_EXPR>: Return
+	!TYPE_OVERFLOW_SANITIZED.
+	(fold_negate_expr) <case INTEGER_CST>: Fold when overflow
+	does not trap and when overflow wraps, or when SANITIZE_SI_OVERFLOW
+	is 0.
+
+2014-11-19  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* collect2.c (main): Don't call fatal_error before
+	diagnostic_initialize.
+	* lto-wrapper.c (main): Likewise.
+
+2014-11-19  Tom de Vries  <tom@codesourcery.com>
+
+	PR tree-optimization/62167
+	* tree-ssa-tail-merge.c (stmt_local_def): Handle statements with vuse
+	conservatively.
+	(gimple_equal_p): Don't use vn_valueize to compare for lhs equality of
+	assigns.
+
+2014-11-19  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/63915
+	* tree-vect-stmts.c (vectorizable_simd_clone_call): Pass
+	true instead of false as last argument to gsi_replace.
+
+	PR sanitizer/63520
+	* internal-fn.c (expand_ubsan_result_store): New function.
+	(expand_addsub_overflow, expand_neg_overflow, expand_mul_overflow):
+	Use it instead of just emit_move_insn.
+
+2014-11-19  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/63844
+	* omp-low.c (fixup_child_record_type): Use a restrict qualified
+	referece type for the receiver parameter.
+
+2014-11-19  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/63913
+	* ubsan.c: Include tree-eh.h.
+	(instrument_bool_enum_load): Handle loads that can throw.
+
+	PR rtl-optimization/63843
+	* simplify-rtx.c (simplify_binary_operation_1) <case ASHIFTRT>: For
+	optimization of ashiftrt of subreg of lshiftrt, check that code
+	is ASHIFTRT.
+
+2014-11-18  Andrew MacLeod  <amacleod@redhat.com>
+
+	* attribs.c (decl_attributes): Remove always true condition,
+	TREE_TYPE(x) will never compare equal to a TYPE_DECL.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	PR target/63937
+	* target.def (use_by_pieces_infrastructure_p): Take unsigned
+	HOST_WIDE_INT as the size parameter.
+	* targhooks.c (default_use_by_pieces_infrastructure_p): Likewise.
+	* targhooks.h (default_use_by_pieces_infrastructure_p): Likewise.
+	* config/arc/arc.c (arc_use_by_pieces_infrastructure_p)): Likewise.
+	* config/mips/mips.c (mips_use_by_pieces_infrastructure_p)): Likewise.
+	* config/s390/s390.c (s390_use_by_pieces_infrastructure_p)): Likewise.
+	* config/sh/sh.c (sh_use_by_pieces_infrastructure_p)): Likewise.
+	* config/aarch64/aarch64.c
+	(aarch64_use_by_pieces_infrastructure_p)): Likewise.
+	* doc/tm.texi: Regenerate.
+
+2014-11-18  Jan Hubicka  <hubicka@ucw.cz>
+
+	* ipa-cp.c (ipcp_cloning_candidate_p): Use opt_for_fn.
+	(ipa_value_from_jfunc, ipa_context_from_jfunc): Skip sanity check.
+	(ipa_get_indirect_edge_target_1): Use opt_for_fn.
+	(good_cloning_opportunity_p): Likewise.
+	(ipa-cp gate): Enable ipa-cp with LTO.
+	* ipa-profile.c (ipa_propagate_frequency): Use opt_for_fn.
+	* ipa.c (symbol_table::remove_unreachable_nodes): Always build type
+	inheritance.
+	* ipa-inline-transform.c (inline_transform): Check if there are inlines
+	to apply even at -O0.
+	* cgraphunit.c (cgraph_node::finalize_function): Use opt_for_fn.
+	(analyze_functions): Build type inheritance graph.
+	* ipa-inline.c (can_inline_edge_p): Use opt_for_fn.
+	(want_early_inline_function_p, want_inline_small_function_p):
+	Likewise.
+	(check_callers): Likewise.
+	(edge_badness): Likewise.
+	(inline_small_functions): Always be ready for indirect inlining
+	to happend.
+	(ipa_inline): Always use want_inline_function_to_all_callers_p.
+	(early_inline_small_functions): Use opt_for_fn.
+	* ipa-inline-analysis.c (estimate_function_body_sizes): use opt_for_fn.
+	(estimate_function_body_sizes): Likewise.
+	(compute_inline_parameters): Likewise.
+	(estimate_edge_devirt_benefit): Likewise.
+	(inline_analyze_function): Likewise.
+	* ipa-devirt.c (ipa_devirt): Likewise.
+	(gate): Use in_lto_p.
+	* ipa-prop.c (ipa_func_spec_opts_forbid_analysis_p): Use opt_for_fn.
+	(try_make_edge_direct_virtual_call): Likewise.
+	(update_indirect_edges_after_inlining): Likewise.
+	(ipa_free_all_structures_after_ipa_cp): Add in_lto_p check.
+	* common.opt (findirect-inlining): Turn into optimization.
+	* ipa-pure-const.c (add_new_function): Use opt_for_fn.
+	(pure_const_generate_summary): Likewise.
+	(gate_pure_const): Always enable with in_lto_p.
+
+2014-11-18  Maciej W. Rozycki  <macro@codesourcery.com>
+
+	* config/mips/mips.md (compression): Add `micromips32' setting.
+	(enabled, length): Handle it.
+	(shift_compression): Replace `micromips' with `micromips32' in
+	the `compression' attribute.
+	(*add<mode>3, sub<mode>3): Likewise.
+
+2014-11-18  Maciej W. Rozycki  <macro@codesourcery.com>
+
+	* gcc/config/mips/mips.md (*jump_absolute): Use a branch when in
+	range, a jump otherwise.
+
+2014-11-18  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/arm/cortex-a15-neon.md (cortex_a15_vfp_to_from_gp):
+	Split into...
+	(cortex_a15_gp_to_vfp): ...This.
+	(cortex_a15_fp_to_gp): ...And this.
+	Define and comment bypass from vfp operations to fp->gp moves.
+
+2014-11-18  Martin Liska  <mliska@suse.cz>
+
+	* var-tracking.c (vt_find_locations): New fibonacci_node is used.
+
+2014-11-18  Martin Liska  <mliska@suse.cz>
+
+	* bt-load.c (add_btr_def): New fibonacci_heap is used.
+	(migrate_btr_defs): Likewise.
+
+2014-11-18  Martin Liska  <mliska@suse.cz>
+
+	* tracer.c (tail_duplicate): New fibonacci_heap class is used.
+
+2014-11-18  Martin Liska  <mliska@suse.cz>
+
+	* bb-reorder.c (mark_bb_visited): New fibonacci_heap is used.
+	(find_traces): Likewise.
+	(find_traces_1_round): Likewise.
+
+2014-11-18  Martin Liska  <mliska@suse.cz>
+
+	* fibonacci_heap.h: New file.
+	(fibonacci_heap::insert): Created from fibheap_insert.
+	(fibonacci_heap::empty): Created from fibheap_empty.
+	(fibonacci_heap::nodes): Created from fibheap_nodes.
+	(fibonacci_heap::min_key): Created from fibheap_min_key.
+	(fibonacci_heap::decrease_key): Created from fibheap_replace_key.
+	(fibonacci_heap::replace_key_data): Created from fibheap_replace_key_data.
+	(fibonacci_heap::extract_min): Created from fibheap_extract_min.
+	(fibonacci_heap::min): Created from fibheap_min.
+	(fibonacci_heap::replace_data): Created from fibheap_replace_data.
+	(fibonacci_heap::delete_node): Created from fibheap_delete_node.
+	(fibonacci_heap::union_with): Created from fibheap_union.
+	* ipa-inline.c (update_edge_key): New heap API is used.
+	(update_caller_keys): Likewise.
+	(update_callee_keys): Likewise.
+	(lookup_recursive_calls): Likewise.
+	(recursive_inlining): Likewise.
+	(add_new_edges_to_heap): Likewise.
+	(heap_edge_removal_hook): Likewise.
+	(inline_small_functions): Likewise.
+
+2014-11-18  Marek Polacek  <polacek@redhat.com>
+
+	PR sanitizer/63866
+	* asan.c (asan_global_struct): Create a TYPE_DECL for "__asan_global",
+	put it into TYPE_NAME and TYPE_STUB_DECL.
+	* ubsan.c (ubsan_type_descriptor_type): New variable.
+	Function renamed to ...
+	(ubsan_get_type_descriptor_type): ... this.  Cache
+	return value in ubsan_type_descriptor_type variable.
+	Create a TYPE_DECL for "__ubsan_type_descriptor", put it into
+	TYPE_NAME and TYPE_STUB_DECL.
+	(ubsan_get_source_location_type): Create a TYPE_DECL for
+	"__ubsan_source_location", put it into TYPE_NAME and TYPE_STUB_DECL.
+	(ubsan_type_descriptor, ubsan_create_data): Call
+	ubsan_get_type_descriptor_type instead of ubsan_type_descriptor_type.
+	Create a TYPE_DECL for name, put it into TYPE_NAME and TYPE_STUB_DECL.
+
+2014-11-18  Felix Yang  <felix.yang@huawei.com>
+
+	* config/aarch64/aarch64.c (doloop_end): New pattern.
+	* config/aarch64/aarch64.md (TARGET_CAN_USE_DOLOOP_P): Implement.
+
+2014-11-18  Jason Merrill  <jason@redhat.com>
+
+	* tree.c (warn_deprecated_use): Show declaration with inform.
+
+2014-11-18  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/63914
+	* tree-ssa-ccp.c (canonicalize_value): Remove float value
+	canonicalization.
+	(valid_lattice_transition): Allow (partial) transition
+	from NaN to non-NaN if !HONOR_NANS.
+	(set_lattice_value): Check for valid lattice transitions
+	only when checking is enabled.
+
+2014-11-18  Bernd Schmidt  <bernds@codesourcery.com>
+
+	* config/nvptx/nvptx.c: Include <sstream> directly after "config.h".
+
+2014-11-18  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* config/arm/neon-testgen.ml (emit_prologue): Handle new
+	compile_test_optim argument.
+	(emit_automatics): Rename to emit_variables. Support variable
+	indentation of its output.
+	(compile_test_optim): New function.
+	(test_intrinsic): Call compile_test_optim.
+	* config/arm/neon.ml (features): Add Compiler_optim.
+	(ops): Add Compiler_optim feature to Vbic and Vorn.
+	(type_in_crypto_only): Replace 'or' by '||'.
+	(reinterp): Likewise.
+	(reinterpq): Likewise.
+
+2014-11-18  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/arm_neon.h (vld1_dup_f32, vld1_dup_f64, vld1_dup_p8,
+	vld1_dup_p16, vld1_dup_s8, vld1_dup_s16, vld1_dup_s32, vld1_dup_s64,
+	vld1_dup_u8, vld1_dup_u16, vld1_dup_u32, vld1_dup_u64, vld1q_dup_f32,
+	vld1q_dup_f64, vld1q_dup_p8, vld1q_dup_p16, vld1q_dup_s8, vld1q_dup_s16,
+	vld1q_dup_s32, vld1q_dup_s64, vld1q_dup_u8, vld1q_dup_u16,
+	vld1q_dup_u32, vld1q_dup_u64): Replace inline asm with vdup_n_ and
+	pointer dereference.
+
+2014-11-18  Marc Glisse  <marc.glisse@inria.fr>
+
+	* tree.c (element_mode, integer_truep): New functions.
+	* tree.h (element_mode, integer_truep): Declare them.
+	* fold-const.c (negate_expr_p, fold_negate_expr, combine_comparisons,
+	fold_cond_expr_with_comparison, fold_real_zero_addition_p,
+	fold_comparison, fold_ternary_loc, tree_call_nonnegative_warnv_p,
+	fold_strip_sign_ops): Use element_mode.
+	(fold_binary_loc): Use element_mode and element_precision.
+	* match.pd: Use integer_truep, element_mode, element_precision,
+	VECTOR_TYPE_P and build_one_cst. Extend some transformations to
+	vectors. Simplify A/-A.
+
+2014-11-18  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/arm/arm.md (unaligned_loaddi): Use std::swap instead of
+	manual swapping implementation.
+	(movcond_addsi): Likewise.
+	* config/arm/arm.c (arm_canonicalize_comparison): Likewise.
+	(arm_select_dominance_cc_mode): Likewise.
+	(arm_reload_out_hi): Likewise.
+	(gen_operands_ldrd_strd): Likewise.
+	(output_move_double): Likewise.
+	(arm_print_operand_address): Likewise.
+	(thumb_output_move_mem_multiple): Likewise.
+	(SWAP_RTX): Delete.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/arm/arm-builtins.c (CONVERT_QUALIFIERS): Delete.
+	(COPYSIGNF_QUALIFIERS): Likewise.
+	(CREATE_QUALIFIERS): Likewise.
+	(DUP_QUALIFIERS): Likewise.
+	(FLOAT_WIDEN_QUALIFIERS): Likewise.
+	(FLOAT_NARROW_QUALIFIERS): Likewise.
+	(REINTERP_QUALIFIERS): Likewise.
+	(RINT_QUALIFIERS): Likewise.
+	(SPLIT_QUALIFIERS): Likewise.
+	(FIXCONV_QUALIFIERS): Likewise.
+	(SCALARMUL_QUALIFIERS): Likewise.
+	(SCALARMULL_QUALIFIERS): Likewise.
+	(SCALARMULH_QUALIFIERS): Likewise.
+	(SELECT_QUALIFIERS): Likewise.
+	(VTBX_QUALIFIERS): Likewise.
+	(SHIFTIMM_QUALIFIERS): Likewise.
+	(SCALARMAC_QUALIFIERS): Likewise.
+	(LANEMUL_QUALIFIERS): Likewise.
+	(LANEMULH_QUALIFIERS): Likewise.
+	(LANEMULL_QUALIFIERS): Likewise.
+	(SHIFTACC_QUALIFIERS): Likewise.
+	(SHIFTINSERT_QUALIFIERS): Likewise.
+	(VTBL_QUALIFIERS): Likewise.
+	(LOADSTRUCT_QUALIFIERS): Likewise.
+	(LOADSTRUCTLANE_QUALIFIERS): Likewise.
+	(STORESTRUCT_QUALIFIERS): Likewise.
+	(STORESTRUCTLANE_QUALIFIERS): Likewise.
+	(neon_builtin_type_mode): Delete.
+	(v8qi_UP): Map to V8QImode.
+	(v8qi_UP): Map to V8QImode.
+	(v4hi_UP): Map to V4HImode.
+	(v4hf_UP): Map to V4HFmode.
+	(v2si_UP): Map to V2SImode.
+	(v2sf_UP): Map to V2SFmode.
+	(di_UP): Map to DImode.
+	(v16qi_UP): Map to V16QImode.
+	(v8hi_UP): Map to V8HImode.
+	(v4si_UP): Map to V4SImode.
+	(v4sf_UP): Map to V4SFmode.
+	(v2di_UP): Map to V2DImode.
+	(ti_UP): Map to TImode.
+	(ei_UP): Map to EImode.
+	(oi_UP): Map to OImode.
+	(neon_itype): Delete.
+	(neon_builtin_datum): Remove itype, make mode a machine_mode.
+	(VAR1): Update accordingly.
+	(arm_init_neon_builtins): Use machine_mode directly.
+	(neon_dereference_pointer): Likewise.
+	(arm_expand_neon_args): Use qualifiers to decide operand types.
+	(arm_expand_neon_builtin): Likewise.
+	* config/arm/arm_neon_builtins.def: Remap operation type for
+	many builtins.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/arm/arm-builtins.c (arm_scalar_builtin_types): New.
+	(enum arm_simd_type): Likewise.
+	(struct arm_simd_type_info): Likewise
+	(arm_mangle_builtin_scalar_type): Likewise.
+	(arm_mangle_builtin_vector_type): Likewise.
+	(arm_mangle_builtin_type): Likewise.
+	(arm_simd_builtin_std_type): Likewise.
+	(arm_lookup_simd_builtin_type): Likewise.
+	(arm_simd_builtin_type): Likewise.
+	(arm_init_simd_builtin_types): Likewise.
+	(arm_init_simd_builtin_scalar_types): Likewise.
+	(arm_init_neon_builtins): Rewrite using qualifiers.
+	* config/arm/arm-protos.h (arm_mangle_builtin_type): New.
+	* config/arm/arm-simd-builtin-types.def: New file.
+	* config/arm/t-arm (arm-builtins.o): Depend on it.
+	* config/arm/arm.c (arm_mangle_type): Call arm_mangle_builtin_type.
+	* config/arm/arm_neon.h (int8x8_t): Use new internal type.
+	(int16x4_t): Likewise.
+	(int32x2_t): Likewise.
+	(float16x4_t): Likewise.
+	(float32x2_t): Likewise.
+	(poly8x8_t): Likewise.
+	(poly16x4_t): Likewise.
+	(uint8x8_t): Likewise.
+	(uint16x4_t): Likewise.
+	(uint32x2_t): Likewise.
+	(int8x16_t): Likewise.
+	(int16x8_t): Likewise.
+	(int32x4_t): Likewise.
+	(int64x2_t): Likewise.
+	(float32x4_t): Likewise.
+	(poly8x16_t): Likewise.
+	(poly16x8_t): Likewise.
+	(uint8x16_t): Likewise.
+	(uint16x8_t): Likewise.
+	(uint32x4_t): Likewise.
+	(uint64x2_t): Likewise.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* gcc/config/arm/arm-builtins.c	(arm_type_qualifiers): New.
+	(neon_itype): Add new types corresponding to the types used in
+	qualifiers names.
+	(arm_unop_qualifiers): New.
+	(arm_bswap_qualifiers): Likewise.
+	(arm_binop_qualifiers): Likewise.
+	(arm_ternop_qualifiers): Likewise.
+	(arm_getlane_qualifiers): Likewise.
+	(arm_lanemac_qualifiers): Likewise.
+	(arm_setlane_qualifiers): Likewise.
+	(arm_combine_qualifiers): Likewise.
+	(arm_load1_qualifiers): Likewise.
+	(arm_load1_lane_qualifiers): Likewise.
+	(arm_store1_qualifiers): Likewise.
+	(arm_storestruct_lane_qualifiers): Likewise.
+	(UNOP_QUALIFIERS): Likewise.
+	(DUP_QUALIFIERS): Likewise.
+	(SPLIT_QUALIFIERS): Likewise.
+	(CONVERT_QUALIFIERS): Likewise.
+	(FLOAT_WIDEN_QUALIFIERS): Likewise.
+	(FLOAT_NARROW_QUALIFIERS): Likewise.
+	(RINT_QUALIFIERS): Likewise.
+	(COPYSIGNF_QUALIFIERS): Likewise.
+	(CREATE_QUALIFIERS): Likewise.
+	(REINTERP_QUALIFIERS): Likewise.
+	(BSWAP_QUALIFIERS): Likewise.
+	(BINOP_QUALIFIERS): Likewise.
+	(FIXCONV_QUALIFIERS): Likewise.
+	(SCALARMUL_QUALIFIERS): Likewise.
+	(SCALARMULL_QUALIFIERS): Likewise.
+	(SCALARMULH_QUALIFIERS): Likewise.
+	(TERNOP_QUALIFIERS): Likewise.
+	(SELECT_QUALIFIERS): Likewise.
+	(VTBX_QUALIFIERS): Likewise.
+	(GETLANE_QUALIFIERS): Likewise.
+	(SHIFTIMM_QUALIFIERS): Likewise.
+	(LANEMAC_QUALIFIERS): Likewise.
+	(SCALARMAC_QUALIFIERS): Likewise.
+	(SETLANE_QUALIFIERS): Likewise.
+	(SHIFTINSERT_QUALIFIERS): Likewise.
+	(SHIFTACC_QUALIFIERS): Likewise.
+	(LANEMUL_QUALIFIERS): Likewise.
+	(LANEMULL_QUALIFIERS): Likewise.
+	(LANEMULH_QUALIFIERS): Likewise.
+	(COMBINE_QUALIFIERS): Likewise.
+	(VTBL_QUALIFIERS): Likewise.
+	(LOAD1_QUALIFIERS): Likewise.
+	(LOADSTRUCT_QUALIFIERS): Likewise.
+	(LOAD1LANE_QUALIFIERS): Likewise.
+	(LOADSTRUCTLANE_QUALIFIERS): Likewise.
+	(STORE1_QUALIFIERS): Likewise.
+	(STORESTRUCT_QUALIFIERS): Likewise.
+	(STORE1LANE_QUALIFIERS): Likewise.
+	(STORESTRUCTLANE_QUALIFIERS): Likewise.
+	(neon_builtin_datum): Keep track of qualifiers.
+	(VAR1): Likewise.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/arm/arm-builtins.c (VAR1): Add a comma.
+	(VAR2): Rewrite in terms of VAR1.
+	(VAR3-10): Likewise.
+	(arm_builtins): Remove leading comma before ARM_BUILTIN_MAX.
+	* config/arm/arm_neon_builtins.def: Remove trailing commas.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config.gcc (extra_objs): Add arm-builtins.o for arm*-*-*.
+	(target_gtfiles): Add config/arm/arm-builtins.c for arm*-*-*.
+	* config/arm/arm-builtins.c: New.
+	* config/arm/t-arm (arm_builtins.o): New.
+	* config/arm/arm-protos.h (arm_expand_builtin): New.
+	(arm_builtin_decl): Likewise.
+	(arm_init_builtins): Likewise.
+	(arm_atomic_assign_expand_fenv): Likewise.
+	* config/arm/arm.c (arm_atomic_assign_expand_fenv): Remove prototype.
+	(arm_init_builtins): Likewise.
+	(arm_init_iwmmxt_builtins): Likewise
+	(safe_vector_operand): Likewise
+	(arm_expand_binop_builtin): Likewise
+	(arm_expand_unop_builtin): Likewise
+	(arm_expand_builtin): Likewise
+	(arm_builtin_decl): Likewise
+	(insn_flags): Remove static.
+	(tune_flags): Likewise.
+	(enum arm_builtins): Move to config/arm/arm-builtins.c.
+	(arm_init_neon_builtins): Likewise.
+	(struct builtin_description): Likewise.
+	(arm_init_iwmmxt_builtins): Likewise.
+	(arm_init_fp16_builtins): Likewise.
+	(arm_init_crc32_builtins): Likewise.
+	(arm_init_builtins): Likewise.
+	(arm_builtin_decl): Likewise.
+	(safe_vector_operand): Likewise.
+	(arm_expand_ternop_builtin): Likewise.
+	(arm_expand_binop_builtin): Likewise.
+	(arm_expand_unop_builtin): Likewise.
+	(neon_dereference_pointer): Likewise.
+	(arm_expand_neon_args): Likewise.
+	(arm_expand_neon_builtin): Likewise.
+	(neon_split_vcombine): Likewise.
+	(arm_expand_builtin): Likewise.
+	(arm_builtin_vectorized_function): Likewise.
+	(arm_atomic_assign_expand_fenv): Likewise.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/arm/t-arm (arm.o): Include arm-protos.h in the recipe.
+	* config/arm/arm.c (FL_CO_PROC): Move to arm-protos.h.
+	(FL_ARCH3M): Likewise.
+	(FL_MODE26): Likewise.
+	(FL_MODE32): Likewise.
+	(FL_ARCH4): Likewise.
+	(FL_ARCH5): Likewise.
+	(FL_THUMB): Likewise.
+	(FL_LDSCHED): Likewise.
+	(FL_STRONG): Likewise.
+	(FL_ARCH5E): Likewise.
+	(FL_XSCALE): Likewise.
+	(FL_ARCH6): Likewise.
+	(FL_VFPV2): Likewise.
+	(FL_WBUF): Likewise.
+	(FL_ARCH6K): Likewise.
+	(FL_THUMB2): Likewise.
+	(FL_NOTM): Likewise.
+	(FL_THUMB_DIV): Likewise.
+	(FL_VFPV3): Likewise.
+	(FL_NEON): Likewise.
+	(FL_ARCH7EM): Likewise.
+	(FL_ARCH7): Likewise.
+	(FL_ARM_DIV): Likewise.
+	(FL_ARCH8): Likewise.
+	(FL_CRC32): Likewise.
+	(FL_SMALLMUL): Likewise.
+	(FL_IWMMXT): Likewise.
+	(FL_IWMMXT2): Likewise.
+	(FL_TUNE): Likewise.
+	(FL_FOR_ARCH2): Likewise.
+	(FL_FOR_ARCH3): Likewise.
+	(FL_FOR_ARCH3M): Likewise.
+	(FL_FOR_ARCH4): Likewise.
+	(FL_FOR_ARCH4T): Likewise.
+	(FL_FOR_ARCH5): Likewise.
+	(FL_FOR_ARCH5T): Likewise.
+	(FL_FOR_ARCH5E): Likewise.
+	(FL_FOR_ARCH5TE): Likewise.
+	(FL_FOR_ARCH5TEJ): Likewise.
+	(FL_FOR_ARCH6): Likewise.
+	(FL_FOR_ARCH6J): Likewise.
+	(FL_FOR_ARCH6K): Likewise.
+	(FL_FOR_ARCH6Z): Likewise.
+	(FL_FOR_ARCH6ZK): Likewise.
+	(FL_FOR_ARCH6T2): Likewise.
+	(FL_FOR_ARCH6M): Likewise.
+	(FL_FOR_ARCH7): Likewise.
+	(FL_FOR_ARCH7A): Likewise.
+	(FL_FOR_ARCH7VE): Likewise.
+	(FL_FOR_ARCH7R): Likewise.
+	(FL_FOR_ARCH7M): Likewise.
+	(FL_FOR_ARCH7EM): Likewise.
+	(FL_FOR_ARCH8A): Likewise.
+	* config/arm/arm-protos.h: Take definitions moved from arm.c.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/arm/arm.c (arm_expand_neon_builtin): Remove "Magic Word"
+	parameter, rearrange switch statement accordingly.
+	(arm_evpc_neon_vrev): Remove "Magic Word".
+	* config/arm/unspecs.md (unspec): Split many UNSPECs to
+	rounding, or signed/unsigned variants.
+	* config/arm/neon.md (vcond<mode><mode>): Remove "Magic Word" code.
+	(vcondu<mode><mode>): Likewise.
+	(neon_vadd): Remove "Magic Word" operand.
+	(neon_vaddl): Remove "Magic Word" operand, convert to use
+	signed/unsigned iterator.
+	(neon_vaddw): Likewise.
+	(neon_vhadd): Likewise, also iterate over "rounding" forms.
+	(neon_vqadd): Remove "Magic Word" operand, convert to use
+	signed/unsigned iterator.
+	(neon_v<r>addhn): Remove "Magic Word" operand, convert to iterate
+	over "rounding" forms.
+	(neon_vmul): Remove "Magic Word" operand, iterate over
+	polynomial/float instruction forms.
+	(neon_vmla): Remove "Magic Word" operand.
+	(neon_vfma): Likewise.
+	(neon_vfms): Likewise.
+	(neon_vmls): Likewise.
+	(neon_vmlal): Remove "Magic Word" operand, iterate over
+	signed/unsigned forms.
+	(neon_vmlsl): Likewise.
+	(neon_vqdmulh): Remove "Magic Word" operand, iterate over "rounding"
+	forms.
+	(neon_vqdmlal): Remove "Magic Word" operand, iterate over
+	signed/unsigned forms.
+	(neon_vqdmlsl): Likewise.
+	(neon_vmull): Likewise.
+	(neon_vqdmull): Remove "Magic Word" operand.
+	(neon_vsub): Remove "Magic Word" operand.
+	(neon_vsubl): Remove "Magic Word" operand, convert to use
+	signed/unsigned iterator.
+	(neon_vsubw): Likewise.
+	(neon_vhsub): Likewise.
+	(neon_vqsub): Likewise.
+	(neon_v<r>subhn): Remove "Magic Word" operand, convert to iterate
+	over "rounding" forms.
+	(neon_vceq): Remove "Magic Word" operand.
+	(neon_vcge): Likewise.
+	(neon_vcgeu): Likewise.
+	(neon_vcgt): Likewise.
+	(neon_vcgtu): Likewise.
+	(neon_vcle): Likewise.
+	(neon_vclt): Likewise.
+	(neon_vcage): Likewise.
+	(neon_vcagt): Likewise.
+	(neon_vabd): Remove "Magic Word" operand, iterate over
+	signed/unsigned forms, and split out...
+	(neon_vabdf): ...this as new.
+	(neon_vabdl): Remove "Magic Word" operand, iterate over
+	signed/unsigned forms.
+	(neon_vaba): Likewise.
+	(neon_vmax): Remove "Magic Word" operand, iterate over
+	signed/unsigned and max/min forms, and split out...
+	(neon_v<maxmin>f): ...this as new.
+	(neon_vmin): Delete.
+	(neon_vpadd): Remove "Magic Word" operand.
+	(neon_vpaddl): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vpadal): Likewise.
+	(neon_vpmax): Remove "Magic Word" operand, iterate over
+	signed/unsigned and max/min forms, and split out...
+	(neon_vp<maxmin>f): ...this as new.
+	(neon_vpmin): Delete.
+	(neon_vrecps): Remove "Magic Word" operand.
+	(neon_vrsqrts): Likewise.
+	(neon_vabs): Likewise.
+	(neon_vqabs): Likewise.
+	(neon_vneg): Likewise.
+	(neon_vqneg): Likewise.
+	(neon_vcls): Likewise.
+	(neon_vcnt): Likewise.
+	(neon_vrecpe): Likewise.
+	(neon_vrsqrte): Likewise.
+	(neon_vmvn): Likewise.
+	(neon_vget_lane): Likewise.
+	(neon_vget_laneu): New.
+	(neon_vget_lanedi): Remove "Magic Word" operand.
+	(neon_vget_lanev2di): Likewise.
+	(neon_vcvt): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vcvt_n): Likewise.
+	(neon_vmovn): Remove "Magic Word" operand.
+	(neon_vqmovn): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vmovun): Remove "Magic Word" operand.
+	(neon_vmovl): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vmul_lane): Remove "Magic Word" operand.
+	(neon_vmull_lane): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vqdmull_lane): Remove "Magic Word" operand.
+	(neon_vqdmulh_lane): Remove "Magic Word" operand, iterate over
+	rounding variants.
+	(neon_vmla_lane): Remove "Magic Word" operand.
+	(neon_vmlal_lane): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vqdmlal_lane): Remove "Magic Word" operand.
+	(neon_vmls_lane): Likewise.
+	(neon_vmlsl_lane): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vqdmlsl_lane): Remove "Magic Word" operand.
+	(neon_vmul_n): Remove "Magic Word" operand.
+	(neon_vmull_n): Rename to...
+	(neon_vmulls_n): ...this, remove "Magic Word" operand.
+	(neon_vmullu_n): New.
+	(neon_vqdmull_n): Remove "Magic Word" operand.
+	(neon_vqdmulh_n): Likewise.
+	(neon_vqrdmulh_n): New.
+	(neon_vmla_n): Remove "Magic Word" operand.
+	(neon_vmls_n): Likewise.
+	(neon_vmlal_n): Rename to...
+	(neon_vmlals_n): ...this, remove "Magic Word" operand.
+	(neon_vmlalu_n): New.
+	(neon_vqdmlal_n): Remove "Magic Word" operand.
+	(neon_vmlsl_n): Rename to...
+	(neon_vmlsls_n): ...this, remove "Magic Word" operand.
+	(neon_vmlslu_n): New.
+	(neon_vqdmlsl_n): Remove "Magic Word" operand.
+	(neon_vrev64): Remove "Magic Word" operand.
+	(neon_vrev32): Likewise.
+	(neon_vrev16): Likewise.
+	(neon_vshl): Remove "Magic Word" operand, iterate over
+	signed/unsigned and "rounding" forms.
+	(neon_vqshl): Likewise.
+	(neon_vshr_n): Likewise.
+	(neon_vshrn_n): Remove "Magic Word" operand, iterate over
+	"rounding" forms.
+	(neon_vqshrn_n): Remove "Magic Word" operand, iterate over
+	signed/unsigned and "rounding" forms.
+	(neon_vqshrun_n): Remove "Magic Word" operand, iterate over
+	"rounding" forms.
+	(neon_vshl_n): Remove "Magic Word" operand.
+	(neon_vqshl_n): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vqshlu_n): Remove "Magic Word" operand.
+	(neon_vshll_n): Remove "Magic Word" operand, iterate over
+	signed/unsigned variants.
+	(neon_vsra_n): Remove "Magic Word" operand, iterate over
+	signed/unsigned and "rounding" forms.
+	* config/arm/iterators.md (VPF): New.
+	(VADDL): Likewise.
+	(VADDW): Likewise.
+	(VHADD): Likewise.
+	(VQADD): Likewise.
+	(VADDHN): Likewise.
+	(VMLAL): Likewise.
+	(VMLAL_LANE): Likewise.
+	(VLMSL): Likewise.
+	(VMLSL_LANE): Likewise.
+	(VQDMULH): Likewise,
+	(VQDMULH_LANE): Likewise.
+	(VMULL): Likewise.
+	(VMULL_LANE): Likewise.
+	(VSUBL): Likewise.
+	(VSUBW): Likewise.
+	(VHSUB): Likewise.
+	(VQSUB): Likewise.
+	(VSUBHN): Likewise.
+	(VABD): Likewise.
+	(VABDL): Likewise.
+	(VMAXMIN): Likewise.
+	(VMAXMINF): Likewise.
+	(VPADDL): Likewise.
+	(VPADAL): Likewise.
+	(VPMAXMIN): Likewise.
+	(VPMAXMINF): Likewise.
+	(VCVT_US): Likewise.
+	(VCVT_US_N): Likewise.
+	(VQMOVN): Likewise.
+	(VMOVL): Likewise.
+	(VSHL): Likewise.
+	(VQSHL): Likewise.
+	(VSHR_N): Likewise.
+	(VSHRN_N): Likewise.
+	(VQSHRN_N): Likewise.
+	(VQSHRUN_N): Likewise.
+	(VQSHL_N): Likewise.
+	(VSHLL_N): Likewise.
+	(VSRA_N): Likewise.
+	(pf): Likewise.
+	(sup): Likewise.
+	(r): Liekwise.
+	(maxmin): Likewise.
+	(shift_op): Likewise.
+	* config/arm/arm_neon_builtins.def (vaddl): Split to...
+	(vaddls): ...this and...
+	(vaddlu): ...this.
+	(vaddw): Split to...
+	(vaddws): ...this and...
+	(vaddwu): ...this.
+	(vhadd): Split to...
+	(vhadds): ...this and...
+	(vhaddu): ...this and...
+	(vrhadds): ...this and...
+	(vrhaddu): ...this.
+	(vqadd): Split to...
+	(vqadds): ...this and...
+	(vqaddu): ...this.
+	(vaddhn): Split to itself and...
+	(vraddhn): ...this.
+	(vmul): Split to...
+	(vmulf): ...this and...
+	(vmulp): ...this.
+	(vmlal): Split to...
+	(vmlals): ...this and...
+	(vmlalu): ...this.
+	(vmlsl): Split to...
+	(vmlsls): ...this and...
+	(vmlslu): ...this.
+	(vqdmulh): Split to itself and...
+	(vqrdmulh): ...this.
+	(vmull): Split to...
+	(vmullp): ...this and...
+	(vmulls): ...this and...
+	(vmullu): ...this.
+	(vmull_n): Split to...
+	(vmulls_n): ...this and...
+	(vmullu_n): ...this.
+	(vmull_lane): Split to...
+	(vmulls_lane): ...this and...
+	(vmullu_lane): ...this.
+	(vqdmulh_n): Split to itself and...
+	(vqrdmulh_n): ...this.
+	(vqdmulh_lane): Split to itself and...
+	(vqrdmulh_lane): ...this.
+	(vshl): Split to...
+	(vshls): ...this and...
+	(vshlu): ...this and...
+	(vrshls): ...this and...
+	(vrshlu): ...this.
+	(vqshl): Split to...
+	(vqshls): ...this and...
+	(vqrshlu): ...this and...
+	(vqrshls): ...this and...
+	(vqrshlu): ...this.
+	(vshr_n): Split to...
+	(vshrs_n): ...this and...
+	(vshru_n): ...this and...
+	(vrshrs_n): ...this and...
+	(vrshru_n): ...this.
+	(vshrn_n): Split to itself and...
+	(vrshrn_n): ...this.
+	(vqshrn_n): Split to...
+	(vqshrns_n): ...this and...
+	(vqshrnu_n): ...this and...
+	(vqrshrns_n): ...this and...
+	(vqrshrnu_n): ...this.
+	(vqshrun_n): Split to itself and...
+	(vqrshrun_n): ...this.
+	(vqshl_n): Split to...
+	(vqshl_s_n): ...this and...
+	(vqshl_u_n): ...this.
+	(vshll_n): Split to...
+	(vshlls_n): ...this and...
+	(vshllu_n): ...this.
+	(vsra_n): Split to...
+	(vsras_n): ...this and...
+	(vsrau_n): ...this and.
+	(vrsras_n): ...this and...
+	(vrsrau_n): ...this and.
+	(vsubl): Split to...
+	(vsubls): ...this and...
+	(vsublu): ...this.
+	(vsubw): Split to...
+	(vsubws): ...this and...
+	(vsubwu): ...this.
+	(vqsub): Split to...
+	(vqsubs): ...this and...
+	(vqsubu): ...this.
+	(vhsub): Split to...
+	(vhsubs): ...this and...
+	(vhsubu): ...this.
+	(vsubhn): Split to itself and...
+	(vrsubhn): ...this.
+	(vabd): Split to...
+	(vabds): ...this and...
+	(vabdu): ...this and...
+	(vabdf): ...this.
+	(vabdl): Split to...
+	(vabdls): ...this and...
+	(vabdlu): ...this.
+	(vaba): Split to...
+	(vabas): ...this and...
+	(vabau): ...this and...
+	(vabal): Split to...
+	(vabals): ...this and...
+	(vabalu): ...this.
+	(vmax): Split to...
+	(vmaxs): ...this and...
+	(vmaxu): ...this and...
+	(vmaxf): ...this.
+	(vmin): Split to...
+	(vmins): ...this and...
+	(vminu): ...this and...
+	(vminf): ...this.
+	(vpmax): Split to...
+	(vpmaxs): ...this and...
+	(vpmaxu): ...this and...
+	(vpmaxf): ...this.
+	(vpmin): Split to...
+	(vpmins): ...this and...
+	(vpminu): ...this and...
+	(vpminf): ...this.
+	(vpaddl): Split to...
+	(vpaddls): ...this and...
+	(vpaddlu): ...this.
+	(vpadal): Split to...
+	(vpadals): ...this and...
+	(vpadalu): ...this.
+	(vget_laneu): New.
+	(vqmovn): Split to...
+	(vqmovns): ...this and...
+	(vqmovnu): ...this.
+	(vmovl): Split to...
+	(vmovls): ...this and...
+	(vmovlu): ...this.
+	(vmlal_lane): Split to...
+	(vmlals_lane): ...this and...
+	(vmlalu_lane): ...this.
+	(vmlsl_lane): Split to...
+	(vmlsls_lane): ...this and...
+	(vmlslu_lane): ...this.
+	(vmlal_n): Split to...
+	(vmlals_n): ...this and...
+	(vmlalu_n): ...this.
+	(vmlsl_n): Split to...
+	(vmlsls_n): ...this and...
+	(vmlslu_n): ...this.
+	(vext): Make type "SHIFTINSERT".
+	(vcvt): Split to...
+	(vcvts): ...this and...
+	(vcvtu): ...this.
+	(vcvt_n): Split to...
+	(vcvts_n): ...this and...
+	(vcvtu_n): ...this.
+	* config/arm/arm_neon.h (vaddl_s8): Remove "Magic Word".
+	(vaddl_s16): Likewise.
+	(vaddl_s32): Likewise.
+	(vaddl_u8): Likewise.
+	(vaddl_u16): Likewise.
+	(vaddl_u32): Likewise.
+	(vaddw_s8): Likewise.
+	(vaddw_s16): Likewise.
+	(vaddw_s32): Likewise.
+	(vaddw_u8): Likewise.
+	(vaddw_u16): Likewise.
+	(vaddw_u32): Likewise.
+	(vhadd_s8): Likewise.
+	(vhadd_s16): Likewise.
+	(vhadd_s32): Likewise.
+	(vhadd_u8): Likewise.
+	(vhadd_u16): Likewise.
+	(vhadd_u32): Likewise.
+	(vhaddq_s8): Likewise.
+	(vhaddq_s16): Likewise.
+	(vhaddq_s32): Likewise.
+	(vhaddq_u8): Likewise.
+	(vhaddq_u16): Likewise.
+	(vrhadd_s8): Likewise.
+	(vrhadd_s16): Likewise.
+	(vrhadd_s32): Likewise.
+	(vrhadd_u8): Likewise.
+	(vrhadd_u16): Likewise.
+	(vrhadd_u32): Likewise.
+	(vrhaddq_s8): Likewise.
+	(vrhaddq_s16): Likewise.
+	(vrhaddq_s32): Likewise.
+	(vrhaddq_u8): Likewise.
+	(vrhaddq_u16): Likewise.
+	(vrhaddq_u32): Likewise.
+	(vqadd_s8): Likewise.
+	(vqadd_s16): Likewise.
+	(vqadd_s32): Likewise.
+	(vqadd_s64): Likewise.
+	(vqadd_u8): Likewise.
+	(vqadd_u16): Likewise.
+	(vqadd_u32): Likewise.
+	(vqadd_u64): Likewise.
+	(vqaddq_s8): Likewise.
+	(vqaddq_s16): Likewise.
+	(vqaddq_s32): Likewise.
+	(vqaddq_s64): Likewise.
+	(vqaddq_u8): Likewise.
+	(vqaddq_u16): Likewise.
+	(vqaddq_u32): Likewise.
+	(vqaddq_u64): Likewise.
+	(vaddhn_s16): Likewise.
+	(vaddhn_s32): Likewise.
+	(vaddhn_s64): Likewise.
+	(vaddhn_u16): Likewise.
+	(vaddhn_u32): Likewise.
+	(vaddhn_u64): Likewise.
+	(vraddhn_s16): Likewise.
+	(vraddhn_s32): Likewise.
+	(vraddhn_s64): Likewise.
+	(vraddhn_u16): Likewise.
+	(vraddhn_u32): Likewise.
+	(vraddhn_u64): Likewise.
+	(vmul_p8): Likewise.
+	(vmulq_p8): Likewise.
+	(vqdmulh_s16): Likewise.
+	(vqdmulh_s32): Likewise.
+	(vqdmulhq_s16): Likewise.
+	(vqdmulhq_s32): Likewise.
+	(vqrdmulh_s16): Likewise.
+	(vqrdmulh_s32): Likewise.
+	(vqrdmulhq_s16): Likewise.
+	(vqrdmulhq_s32): Likewise.
+	(vmull_s8): Likewise.
+	(vmull_s16): Likewise.
+	(vmull_s32): Likewise.
+	(vmull_u8): Likewise.
+	(vmull_u16): Likewise.
+	(vmull_u32): Likewise.
+	(vmull_p8): Likewise.
+	(vqdmull_s16): Likewise.
+	(vqdmull_s32): Likewise.
+	(vmla_s8): Likewise.
+	(vmla_s16): Likewise.
+	(vmla_s32): Likewise.
+	(vmla_f32): Likewise.
+	(vmla_u8): Likewise.
+	(vmla_u16): Likewise.
+	(vmla_u32): Likewise.
+	(vmlaq_s8): Likewise.
+	(vmlaq_s16): Likewise.
+	(vmlaq_s32): Likewise.
+	(vmlaq_f32): Likewise.
+	(vmlaq_u8): Likewise.
+	(vmlaq_u16): Likewise.
+	(vmlaq_u32): Likewise.
+	(vmlal_s8): Likewise.
+	(vmlal_s16): Likewise.
+	(vmlal_s32): Likewise.
+	(vmlal_u8): Likewise.
+	(vmlal_u16): Likewise.
+	(vmlal_u32): Likewise.
+	(vqdmlal_s16): Likewise.
+	(vqdmlal_s32): Likewise.
+	(vmls_s8): Likewise.
+	(vmls_s16): Likewise.
+	(vmls_s32): Likewise.
+	(vmls_f32): Likewise.
+	(vmls_u8): Likewise.
+	(vmls_u16): Likewise.
+	(vmls_u32): Likewise.
+	(vmlsq_s8): Likewise.
+	(vmlsq_s16): Likewise.
+	(vmlsq_s32): Likewise.
+	(vmlsq_f32): Likewise.
+	(vmlsq_u8): Likewise.
+	(vmlsq_u16): Likewise.
+	(vmlsq_u32): Likewise.
+	(vmlsl_s8): Likewise.
+	(vmlsl_s16): Likewise.
+	(vmlsl_s32): Likewise.
+	(vmlsl_u8): Likewise.
+	(vmlsl_u16): Likewise.
+	(vmlsl_u32): Likewise.
+	(vqdmlsl_s16): Likewise.
+	(vqdmlsl_s32): Likewise.
+	(vfma_f32): Likewise.
+	(vfmaq_f32): Likewise.
+	(vfms_f32): Likewise.
+	(vfmsq_f32): Likewise.
+	(vsubl_s8): Likewise.
+	(vsubl_s16): Likewise.
+	(vsubl_s32): Likewise.
+	(vsubl_u8): Likewise.
+	(vsubl_u16): Likewise.
+	(vsubl_u32): Likewise.
+	(vsubw_s8): Likewise.
+	(vsubw_s16): Likewise.
+	(vsubw_s32): Likewise.
+	(vsubw_u8): Likewise.
+	(vsubw_u16): Likewise.
+	(vsubw_u32): Likewise.
+	(vhsub_s8): Likewise.
+	(vhsub_s16): Likewise.
+	(vhsub_s32): Likewise.
+	(vhsub_u8): Likewise.
+	(vhsub_u16): Likewise.
+	(vhsub_u32): Likewise.
+	(vhsubq_s8): Likewise.
+	(vhsubq_s16): Likewise.
+	(vhsubq_s32): Likewise.
+	(vhsubq_u8): Likewise.
+	(vhsubq_u16): Likewise.
+	(vhsubq_u32): Likewise.
+	(vqsub_s8): Likewise.
+	(vqsub_s16): Likewise.
+	(vqsub_s32): Likewise.
+	(vqsub_s64): Likewise.
+	(vqsub_u8): Likewise.
+	(vqsub_u16): Likewise.
+	(vqsub_u32): Likewise.
+	(vqsub_u64): Likewise.
+	(vqsubq_s8): Likewise.
+	(vqsubq_s16): Likewise.
+	(vqsubq_s32): Likewise.
+	(vqsubq_s64): Likewise.
+	(vqsubq_u8): Likewise.
+	(vqsubq_u16): Likewise.
+	(vqsubq_u32): Likewise.
+	(vqsubq_u64): Likewise.
+	(vsubhn_s16): Likewise.
+	(vsubhn_s32): Likewise.
+	(vsubhn_s64): Likewise.
+	(vsubhn_u16): Likewise.
+	(vsubhn_u32): Likewise.
+	(vsubhn_u64): Likewise.
+	(vrsubhn_s16): Likewise.
+	(vrsubhn_s32): Likewise.
+	(vrsubhn_s64): Likewise.
+	(vrsubhn_u16): Likewise.
+	(vrsubhn_u32): Likewise.
+	(vrsubhn_u64): Likewise.
+	(vceq_s8): Likewise.
+	(vceq_s16): Likewise.
+	(vceq_s32): Likewise.
+	(vceq_f32): Likewise.
+	(vceq_u8): Likewise.
+	(vceq_u16): Likewise.
+	(vceq_u32): Likewise.
+	(vceq_p8): Likewise.
+	(vceqq_s8): Likewise.
+	(vceqq_s16): Likewise.
+	(vceqq_s32): Likewise.
+	(vceqq_f32): Likewise.
+	(vceqq_u8): Likewise.
+	(vceqq_u16): Likewise.
+	(vceqq_u32): Likewise.
+	(vceqq_p8): Likewise.
+	(vcge_s8): Likewise.
+	(vcge_s16): Likewise.
+	(vcge_s32): Likewise.
+	(vcge_f32): Likewise.
+	(vcge_u8): Likewise.
+	(vcge_u16): Likewise.
+	(vcge_u32): Likewise.
+	(vcgeq_s8): Likewise.
+	(vcgeq_s16): Likewise.
+	(vcgeq_s32): Likewise.
+	(vcgeq_f32): Likewise.
+	(vcgeq_u8): Likewise.
+	(vcgeq_u16): Likewise.
+	(vcgeq_u32): Likewise.
+	(vcle_s8): Likewise.
+	(vcle_s16): Likewise.
+	(vcle_s32): Likewise.
+	(vcle_f32): Likewise.
+	(vcle_u8): Likewise.
+	(vcle_u16): Likewise.
+	(vcle_u32): Likewise.
+	(vcleq_s8): Likewise.
+	(vcleq_s16): Likewise.
+	(vcleq_s32): Likewise.
+	(vcleq_f32): Likewise.
+	(vcleq_u8): Likewise.
+	(vcleq_u16): Likewise.
+	(vcleq_u32): Likewise.
+	(vcgt_s8): Likewise.
+	(vcgt_s16): Likewise.
+	(vcgt_s32): Likewise.
+	(vcgt_f32): Likewise.
+	(vcgt_u8): Likewise.
+	(vcgt_u16): Likewise.
+	(vcgt_u32): Likewise.
+	(vcgtq_s8): Likewise.
+	(vcgtq_s16): Likewise.
+	(vcgtq_s32): Likewise.
+	(vcgtq_f32): Likewise.
+	(vcgtq_u8): Likewise.
+	(vcgtq_u16): Likewise.
+	(vcgtq_u32): Likewise.
+	(vclt_s8): Likewise.
+	(vclt_s16): Likewise.
+	(vclt_s32): Likewise.
+	(vclt_f32): Likewise.
+	(vclt_u8): Likewise.
+	(vclt_u16): Likewise.
+	(vclt_u32): Likewise.
+	(vcltq_s8): Likewise.
+	(vcltq_s16): Likewise.
+	(vcltq_s32): Likewise.
+	(vcltq_f32): Likewise.
+	(vcltq_u8): Likewise.
+	(vcltq_u16): Likewise.
+	(vcltq_u32): Likewise.
+	(vcage_f32): Likewise.
+	(vcageq_f32): Likewise.
+	(vcale_f32): Likewise.
+	(vcaleq_f32): Likewise.
+	(vcagt_f32): Likewise.
+	(vcagtq_f32): Likewise.
+	(vcalt_f32): Likewise.
+	(vcaltq_f32): Likewise.
+	(vtst_s8): Likewise.
+	(vtst_s16): Likewise.
+	(vtst_s32): Likewise.
+	(vtst_u8): Likewise.
+	(vtst_u16): Likewise.
+	(vtst_u32): Likewise.
+	(vtst_p8): Likewise.
+	(vtstq_s8): Likewise.
+	(vtstq_s16): Likewise.
+	(vtstq_s32): Likewise.
+	(vtstq_u8): Likewise.
+	(vtstq_u16): Likewise.
+	(vtstq_u32): Likewise.
+	(vtstq_p8): Likewise.
+	(vabd_s8): Likewise.
+	(vabd_s16): Likewise.
+	(vabd_s32): Likewise.
+	(vabd_f32): Likewise.
+	(vabd_u8): Likewise.
+	(vabd_u16): Likewise.
+	(vabd_u32): Likewise.
+	(vabdq_s8): Likewise.
+	(vabdq_s16): Likewise.
+	(vabdq_s32): Likewise.
+	(vabdq_f32): Likewise.
+	(vabdq_u8): Likewise.
+	(vabdq_u16): Likewise.
+	(vabdq_u32): Likewise.
+	(vabdl_s8): Likewise.
+	(vabdl_s16): Likewise.
+	(vabdl_s32): Likewise.
+	(vabdl_u8): Likewise.
+	(vabdl_u16): Likewise.
+	(vabdl_u32): Likewise.
+	(vaba_s8): Likewise.
+	(vaba_s16): Likewise.
+	(vaba_s32): Likewise.
+	(vaba_u8): Likewise.
+	(vaba_u16): Likewise.
+	(vaba_u32): Likewise.
+	(vabaq_s8): Likewise.
+	(vabaq_s16): Likewise.
+	(vabaq_s32): Likewise.
+	(vabaq_u8): Likewise.
+	(vabaq_u16): Likewise.
+	(vabaq_u32): Likewise.
+	(vabal_s8): Likewise.
+	(vabal_s16): Likewise.
+	(vabal_s32): Likewise.
+	(vabal_u8): Likewise.
+	(vabal_u16): Likewise.
+	(vabal_u32): Likewise.
+	(vmax_s8): Likewise.
+	(vmax_s16): Likewise.
+	(vmax_s32): Likewise.
+	(vmax_f32): Likewise.
+	(vmax_u8): Likewise.
+	(vmax_u16): Likewise.
+	(vmax_u32): Likewise.
+	(vmaxq_s8): Likewise.
+	(vmaxq_s16): Likewise.
+	(vmaxq_s32): Likewise.
+	(vmaxq_f32): Likewise.
+	(vmaxq_u8): Likewise.
+	(vmaxq_u16): Likewise.
+	(vmaxq_u32): Likewise.
+	(vmin_s8): Likewise.
+	(vmin_s16): Likewise.
+	(vmin_s32): Likewise.
+	(vmin_f32): Likewise.
+	(vmin_u8): Likewise.
+	(vmin_u16): Likewise.
+	(vmin_u32): Likewise.
+	(vminq_s8): Likewise.
+	(vminq_s16): Likewise.
+	(vminq_s32): Likewise.
+	(vminq_f32): Likewise.
+	(vminq_u8): Likewise.
+	(vminq_u16): Likewise.
+	(vminq_u32): Likewise.
+	(vpadd_s8): Likewise.
+	(vpadd_s16): Likewise.
+	(vpadd_s32): Likewise.
+	(vpadd_f32): Likewise.
+	(vpadd_u8): Likewise.
+	(vpadd_u16): Likewise.
+	(vpadd_u32): Likewise.
+	(vpaddl_s8): Likewise.
+	(vpaddl_s16): Likewise.
+	(vpaddl_s32): Likewise.
+	(vpaddl_u8): Likewise.
+	(vpaddl_u16): Likewise.
+	(vpaddl_u32): Likewise.
+	(vpaddlq_s8): Likewise.
+	(vpaddlq_s16): Likewise.
+	(vpaddlq_s32): Likewise.
+	(vpaddlq_u8): Likewise.
+	(vpaddlq_u16): Likewise.
+	(vpaddlq_u32): Likewise.
+	(vpadal_s8): Likewise.
+	(vpadal_s16): Likewise.
+	(vpadal_s32): Likewise.
+	(vpadal_u8): Likewise.
+	(vpadal_u16): Likewise.
+	(vpadal_u32): Likewise.
+	(vpadalq_s8): Likewise.
+	(vpadalq_s16): Likewise.
+	(vpadalq_s32): Likewise.
+	(vpadalq_u8): Likewise.
+	(vpadalq_u16): Likewise.
+	(vpadalq_u32): Likewise.
+	(vpmax_s8): Likewise.
+	(vpmax_s16): Likewise.
+	(vpmax_s32): Likewise.
+	(vpmax_f32): Likewise.
+	(vpmax_u8): Likewise.
+	(vpmax_u16): Likewise.
+	(vpmax_u32): Likewise.
+	(vpmin_s8): Likewise.
+	(vpmin_s16): Likewise.
+	(vpmin_s32): Likewise.
+	(vpmin_f32): Likewise.
+	(vpmin_u8): Likewise.
+	(vpmin_u16): Likewise.
+	(vpmin_u32): Likewise.
+	(vrecps_f32): Likewise.
+	(vrecpsq_f32): Likewise.
+	(vrsqrts_f32): Likewise.
+	(vrsqrtsq_f32): Likewise.
+	(vshl_s8): Likewise.
+	(vshl_s16): Likewise.
+	(vshl_s32): Likewise.
+	(vshl_s64): Likewise.
+	(vshl_u8): Likewise.
+	(vshl_u16): Likewise.
+	(vshl_u32): Likewise.
+	(vshl_u64): Likewise.
+	(vshlq_s8): Likewise.
+	(vshlq_s16): Likewise.
+	(vshlq_s32): Likewise.
+	(vshlq_s64): Likewise.
+	(vshlq_u8): Likewise.
+	(vshlq_u16): Likewise.
+	(vshlq_u32): Likewise.
+	(vshlq_u64): Likewise.
+	(vrshl_s8): Likewise.
+	(vrshl_s16): Likewise.
+	(vrshl_s32): Likewise.
+	(vrshl_s64): Likewise.
+	(vrshl_u8): Likewise.
+	(vrshl_u16): Likewise.
+	(vrshl_u32): Likewise.
+	(vrshl_u64): Likewise.
+	(vrshlq_s8): Likewise.
+	(vrshlq_s16): Likewise.
+	(vrshlq_s32): Likewise.
+	(vrshlq_s64): Likewise.
+	(vrshlq_u8): Likewise.
+	(vrshlq_u16): Likewise.
+	(vrshlq_u32): Likewise.
+	(vrshlq_u64): Likewise.
+	(vqshl_s8): Likewise.
+	(vqshl_s16): Likewise.
+	(vqshl_s32): Likewise.
+	(vqshl_s64): Likewise.
+	(vqshl_u8): Likewise.
+	(vqshl_u16): Likewise.
+	(vqshl_u32): Likewise.
+	(vqshl_u64): Likewise.
+	(vqshlq_s8): Likewise.
+	(vqshlq_s16): Likewise.
+	(vqshlq_s32): Likewise.
+	(vqshlq_s64): Likewise.
+	(vqshlq_u8): Likewise.
+	(vqshlq_u16): Likewise.
+	(vqshlq_u32): Likewise.
+	(vqshlq_u64): Likewise.
+	(vqrshl_s8): Likewise.
+	(vqrshl_s16): Likewise.
+	(vqrshl_s32): Likewise.
+	(vqrshl_s64): Likewise.
+	(vqrshl_u8): Likewise.
+	(vqrshl_u16): Likewise.
+	(vqrshl_u32): Likewise.
+	(vqrshl_u64): Likewise.
+	(vqrshlq_s8): Likewise.
+	(vqrshlq_s16): Likewise.
+	(vqrshlq_s32): Likewise.
+	(vqrshlq_s64): Likewise.
+	(vqrshlq_u8): Likewise.
+	(vqrshlq_u16): Likewise.
+	(vqrshlq_u32): Likewise.
+	(vqrshlq_u64): Likewise.
+	(vshr_n_s8): Likewise.
+	(vshr_n_s16): Likewise.
+	(vshr_n_s32): Likewise.
+	(vshr_n_s64): Likewise.
+	(vshr_n_u8): Likewise.
+	(vshr_n_u16): Likewise.
+	(vshr_n_u32): Likewise.
+	(vshr_n_u64): Likewise.
+	(vshrq_n_s8): Likewise.
+	(vshrq_n_s16): Likewise.
+	(vshrq_n_s32): Likewise.
+	(vshrq_n_s64): Likewise.
+	(vshrq_n_u8): Likewise.
+	(vshrq_n_u16): Likewise.
+	(vshrq_n_u32): Likewise.
+	(vshrq_n_u64): Likewise.
+	(vrshr_n_s8): Likewise.
+	(vrshr_n_s16): Likewise.
+	(vrshr_n_s32): Likewise.
+	(vrshr_n_s64): Likewise.
+	(vrshr_n_u8): Likewise.
+	(vrshr_n_u16): Likewise.
+	(vrshr_n_u32): Likewise.
+	(vrshr_n_u64): Likewise.
+	(vrshrq_n_s8): Likewise.
+	(vrshrq_n_s16): Likewise.
+	(vrshrq_n_s32): Likewise.
+	(vrshrq_n_s64): Likewise.
+	(vrshrq_n_u8): Likewise.
+	(vrshrq_n_u16): Likewise.
+	(vrshrq_n_u32): Likewise.
+	(vrshrq_n_u64): Likewise.
+	(vshrn_n_s16): Likewise.
+	(vshrn_n_s32): Likewise.
+	(vshrn_n_s64): Likewise.
+	(vshrn_n_u16): Likewise.
+	(vshrn_n_u32): Likewise.
+	(vshrn_n_u64): Likewise.
+	(vrshrn_n_s16): Likewise.
+	(vrshrn_n_s32): Likewise.
+	(vrshrn_n_s64): Likewise.
+	(vrshrn_n_u16): Likewise.
+	(vrshrn_n_u32): Likewise.
+	(vrshrn_n_u64): Likewise.
+	(vqshrn_n_s16): Likewise.
+	(vqshrn_n_s32): Likewise.
+	(vqshrn_n_s64): Likewise.
+	(vqshrn_n_u16): Likewise.
+	(vqshrn_n_u32): Likewise.
+	(vqshrn_n_u64): Likewise.
+	(vqrshrn_n_s16): Likewise.
+	(vqrshrn_n_s32): Likewise.
+	(vqrshrn_n_s64): Likewise.
+	(vqrshrn_n_u16): Likewise.
+	(vqrshrn_n_u32): Likewise.
+	(vqrshrn_n_u64): Likewise.
+	(vqshrun_n_s16): Likewise.
+	(vqshrun_n_s32): Likewise.
+	(vqshrun_n_s64): Likewise.
+	(vqrshrun_n_s16): Likewise.
+	(vqrshrun_n_s32): Likewise.
+	(vqrshrun_n_s64): Likewise.
+	(vshl_n_s8): Likewise.
+	(vshl_n_s16): Likewise.
+	(vshl_n_s32): Likewise.
+	(vshl_n_s64): Likewise.
+	(vshl_n_u8): Likewise.
+	(vshl_n_u16): Likewise.
+	(vshl_n_u32): Likewise.
+	(vshl_n_u64): Likewise.
+	(vshlq_n_s8): Likewise.
+	(vshlq_n_s16): Likewise.
+	(vshlq_n_s32): Likewise.
+	(vshlq_n_s64): Likewise.
+	(vshlq_n_u8): Likewise.
+	(vshlq_n_u16): Likewise.
+	(vshlq_n_u32): Likewise.
+	(vshlq_n_u64): Likewise.
+	(vqshl_n_s8): Likewise.
+	(vqshl_n_s16): Likewise.
+	(vqshl_n_s32): Likewise.
+	(vqshl_n_s64): Likewise.
+	(vqshl_n_u8): Likewise.
+	(vqshl_n_u16): Likewise.
+	(vqshl_n_u32): Likewise.
+	(vqshl_n_u64): Likewise.
+	(vqshlq_n_s8): Likewise.
+	(vqshlq_n_s16): Likewise.
+	(vqshlq_n_s32): Likewise.
+	(vqshlq_n_s64): Likewise.
+	(vqshlq_n_u8): Likewise.
+	(vqshlq_n_u16): Likewise.
+	(vqshlq_n_u32): Likewise.
+	(vqshlq_n_u64): Likewise.
+	(vqshlu_n_s8): Likewise.
+	(vqshlu_n_s16): Likewise.
+	(vqshlu_n_s32): Likewise.
+	(vqshlu_n_s64): Likewise.
+	(vqshluq_n_s8): Likewise.
+	(vqshluq_n_s16): Likewise.
+	(vqshluq_n_s32): Likewise.
+	(vqshluq_n_s64): Likewise.
+	(vshll_n_s8): Likewise.
+	(vshll_n_s16): Likewise.
+	(vshll_n_s32): Likewise.
+	(vshll_n_u8): Likewise.
+	(vshll_n_u16): Likewise.
+	(vshll_n_u32): Likewise.
+	(vsra_n_s8): Likewise.
+	(vsra_n_s16): Likewise.
+	(vsra_n_s32): Likewise.
+	(vsra_n_s64): Likewise.
+	(vsra_n_u8): Likewise.
+	(vsra_n_u16): Likewise.
+	(vsra_n_u32): Likewise.
+	(vsra_n_u64): Likewise.
+	(vsraq_n_s8): Likewise.
+	(vsraq_n_s16): Likewise.
+	(vsraq_n_s32): Likewise.
+	(vsraq_n_s64): Likewise.
+	(vsraq_n_u8): Likewise.
+	(vsraq_n_u16): Likewise.
+	(vsraq_n_u32): Likewise.
+	(vsraq_n_u64): Likewise.
+	(vrsra_n_s8): Likewise.
+	(vrsra_n_s16): Likewise.
+	(vrsra_n_s32): Likewise.
+	(vrsra_n_s64): Likewise.
+	(vrsra_n_u8): Likewise.
+	(vrsra_n_u16): Likewise.
+	(vrsra_n_u32): Likewise.
+	(vrsra_n_u64): Likewise.
+	(vrsraq_n_s8): Likewise.
+	(vrsraq_n_s16): Likewise.
+	(vrsraq_n_s32): Likewise.
+	(vrsraq_n_s64): Likewise.
+	(vrsraq_n_u8): Likewise.
+	(vrsraq_n_u16): Likewise.
+	(vrsraq_n_u32): Likewise.
+	(vrsraq_n_u64): Likewise.
+	(vabs_s8): Likewise.
+	(vabs_s16): Likewise.
+	(vabs_s32): Likewise.
+	(vabs_f32): Likewise.
+	(vabsq_s8): Likewise.
+	(vabsq_s16): Likewise.
+	(vabsq_s32): Likewise.
+	(vabsq_f32): Likewise.
+	(vqabs_s8): Likewise.
+	(vqabs_s16): Likewise.
+	(vqabs_s32): Likewise.
+	(vqabsq_s8): Likewise.
+	(vqabsq_s16): Likewise.
+	(vqabsq_s32): Likewise.
+	(vneg_s8): Likewise.
+	(vneg_s16): Likewise.
+	(vneg_s32): Likewise.
+	(vneg_f32): Likewise.
+	(vnegq_s8): Likewise.
+	(vnegq_s16): Likewise.
+	(vnegq_s32): Likewise.
+	(vnegq_f32): Likewise.
+	(vqneg_s8): Likewise.
+	(vqneg_s16): Likewise.
+	(vqneg_s32): Likewise.
+	(vqnegq_s8): Likewise.
+	(vqnegq_s16): Likewise.
+	(vqnegq_s32): Likewise.
+	(vmvn_s8): Likewise.
+	(vmvn_s16): Likewise.
+	(vmvn_s32): Likewise.
+	(vmvn_u8): Likewise.
+	(vmvn_u16): Likewise.
+	(vmvn_u32): Likewise.
+	(vmvn_p8): Likewise.
+	(vmvnq_s8): Likewise.
+	(vmvnq_s16): Likewise.
+	(vmvnq_s32): Likewise.
+	(vmvnq_u8): Likewise.
+	(vmvnq_u16): Likewise.
+	(vmvnq_u32): Likewise.
+	(vmvnq_p8): Likewise.
+	(vcls_s8): Likewise.
+	(vcls_s16): Likewise.
+	(vcls_s32): Likewise.
+	(vclsq_s8): Likewise.
+	(vclsq_s16): Likewise.
+	(vclsq_s32): Likewise.
+	(vclz_s8): Likewise.
+	(vclz_s16): Likewise.
+	(vclz_s32): Likewise.
+	(vclz_u8): Likewise.
+	(vclz_u16): Likewise.
+	(vclz_u32): Likewise.
+	(vclzq_s8): Likewise.
+	(vclzq_s16): Likewise.
+	(vclzq_s32): Likewise.
+	(vclzq_u8): Likewise.
+	(vclzq_u16): Likewise.
+	(vclzq_u32): Likewise.
+	(vcnt_s8): Likewise.
+	(vcnt_u8): Likewise.
+	(vcnt_p8): Likewise.
+	(vcntq_s8): Likewise.
+	(vcntq_u8): Likewise.
+	(vcntq_p8): Likewise.
+	(vrecpe_f32): Likewise.
+	(vrecpe_u32): Likewise.
+	(vrecpeq_f32): Likewise.
+	(vrecpeq_u32): Likewise.
+	(vrsqrte_f32): Likewise.
+	(vrsqrte_u32): Likewise.
+	(vrsqrteq_f32): Likewise.
+	(vrsqrteq_u32): Likewise.
+	(vget_lane_s8): Likewise.
+	(vget_lane_s16): Likewise.
+	(vget_lane_s32): Likewise.
+	(vget_lane_f32): Likewise.
+	(vget_lane_u8): Likewise.
+	(vget_lane_u16): Likewise.
+	(vget_lane_u32): Likewise.
+	(vget_lane_p8): Likewise.
+	(vget_lane_p16): Likewise.
+	(vget_lane_s64): Likewise.
+	(vget_lane_u64): Likewise.
+	(vgetq_lane_s8): Likewise.
+	(vgetq_lane_s16): Likewise.
+	(vgetq_lane_s32): Likewise.
+	(vgetq_lane_f32): Likewise.
+	(vgetq_lane_u8): Likewise.
+	(vgetq_lane_u16): Likewise.
+	(vgetq_lane_u32): Likewise.
+	(vgetq_lane_p8): Likewise.
+	(vgetq_lane_p16): Likewise.
+	(vgetq_lane_s64): Likewise.
+	(vgetq_lane_u64): Likewise.
+	(vcvt_s32_f32): Likewise.
+	(vcvt_f32_s32): Likewise.
+	(vcvt_f32_u32): Likewise.
+	(vcvt_u32_f32): Likewise.
+	(vcvtq_s32_f32): Likewise.
+	(vcvtq_f32_s32): Likewise.
+	(vcvtq_f32_u32): Likewise.
+	(vcvtq_u32_f32): Likewise.
+	(vcvt_n_s32_f32): Likewise.
+	(vcvt_n_f32_s32): Likewise.
+	(vcvt_n_f32_u32): Likewise.
+	(vcvt_n_u32_f32): Likewise.
+	(vcvtq_n_s32_f32): Likewise.
+	(vcvtq_n_f32_s32): Likewise.
+	(vcvtq_n_f32_u32): Likewise.
+	(vcvtq_n_u32_f32): Likewise.
+	(vmovn_s16): Likewise.
+	(vmovn_s32): Likewise.
+	(vmovn_s64): Likewise.
+	(vmovn_u16): Likewise.
+	(vmovn_u32): Likewise.
+	(vmovn_u64): Likewise.
+	(vqmovn_s16): Likewise.
+	(vqmovn_s32): Likewise.
+	(vqmovn_s64): Likewise.
+	(vqmovn_u16): Likewise.
+	(vqmovn_u32): Likewise.
+	(vqmovn_u64): Likewise.
+	(vqmovun_s16): Likewise.
+	(vqmovun_s32): Likewise.
+	(vqmovun_s64): Likewise.
+	(vmovl_s8): Likewise.
+	(vmovl_s16): Likewise.
+	(vmovl_s32): Likewise.
+	(vmovl_u8): Likewise.
+	(vmovl_u16): Likewise.
+	(vmovl_u32): Likewise.
+	(vmul_lane_s16): Likewise.
+	(vmul_lane_s32): Likewise.
+	(vmul_lane_f32): Likewise.
+	(vmul_lane_u16): Likewise.
+	(vmul_lane_u32): Likewise.
+	(vmulq_lane_s16): Likewise.
+	(vmulq_lane_s32): Likewise.
+	(vmulq_lane_f32): Likewise.
+	(vmulq_lane_u16): Likewise.
+	(vmulq_lane_u32): Likewise.
+	(vmla_lane_s16): Likewise.
+	(vmla_lane_s32): Likewise.
+	(vmla_lane_f32): Likewise.
+	(vmla_lane_u16): Likewise.
+	(vmla_lane_u32): Likewise.
+	(vmlaq_lane_s16): Likewise.
+	(vmlaq_lane_s32): Likewise.
+	(vmlaq_lane_f32): Likewise.
+	(vmlaq_lane_u16): Likewise.
+	(vmlaq_lane_u32): Likewise.
+	(vmlal_lane_s16): Likewise.
+	(vmlal_lane_s32): Likewise.
+	(vmlal_lane_u16): Likewise.
+	(vmlal_lane_u32): Likewise.
+	(vqdmlal_lane_s16): Likewise.
+	(vqdmlal_lane_s32): Likewise.
+	(vmls_lane_s16): Likewise.
+	(vmls_lane_s32): Likewise.
+	(vmls_lane_f32): Likewise.
+	(vmls_lane_u16): Likewise.
+	(vmls_lane_u32): Likewise.
+	(vmlsq_lane_s16): Likewise.
+	(vmlsq_lane_s32): Likewise.
+	(vmlsq_lane_f32): Likewise.
+	(vmlsq_lane_u16): Likewise.
+	(vmlsq_lane_u32): Likewise.
+	(vmlsl_lane_s16): Likewise.
+	(vmlsl_lane_s32): Likewise.
+	(vmlsl_lane_u16): Likewise.
+	(vmlsl_lane_u32): Likewise.
+	(vqdmlsl_lane_s16): Likewise.
+	(vqdmlsl_lane_s32): Likewise.
+	(vmull_lane_s16): Likewise.
+	(vmull_lane_s32): Likewise.
+	(vmull_lane_u16): Likewise.
+	(vmull_lane_u32): Likewise.
+	(vqdmull_lane_s16): Likewise.
+	(vqdmull_lane_s32): Likewise.
+	(vqdmulhq_lane_s16): Likewise.
+	(vqdmulhq_lane_s32): Likewise.
+	(vqdmulh_lane_s16): Likewise.
+	(vqdmulh_lane_s32): Likewise.
+	(vqrdmulhq_lane_s16): Likewise.
+	(vqrdmulhq_lane_s32): Likewise.
+	(vqrdmulh_lane_s16): Likewise.
+	(vqrdmulh_lane_s32): Likewise.
+	(vmul_n_s16): Likewise.
+	(vmul_n_s32): Likewise.
+	(vmul_n_f32): Likewise.
+	(vmul_n_u16): Likewise.
+	(vmul_n_u32): Likewise.
+	(vmulq_n_s16): Likewise.
+	(vmulq_n_s32): Likewise.
+	(vmulq_n_f32): Likewise.
+	(vmulq_n_u16): Likewise.
+	(vmulq_n_u32): Likewise.
+	(vmull_n_s16): Likewise.
+	(vmull_n_s32): Likewise.
+	(vmull_n_u16): Likewise.
+	(vmull_n_u32): Likewise.
+	(vqdmull_n_s16): Likewise.
+	(vqdmull_n_s32): Likewise.
+	(vqdmulhq_n_s16): Likewise.
+	(vqdmulhq_n_s32): Likewise.
+	(vqdmulh_n_s16): Likewise.
+	(vqdmulh_n_s32): Likewise.
+	(vqrdmulhq_n_s16): Likewise.
+	(vqrdmulhq_n_s32): Likewise.
+	(vqrdmulh_n_s16): Likewise.
+	(vqrdmulh_n_s32): Likewise.
+	(vmla_n_s16): Likewise.
+	(vmla_n_s32): Likewise.
+	(vmla_n_f32): Likewise.
+	(vmla_n_u16): Likewise.
+	(vmla_n_u32): Likewise.
+	(vmlaq_n_s16): Likewise.
+	(vmlaq_n_s32): Likewise.
+	(vmlaq_n_f32): Likewise.
+	(vmlaq_n_u16): Likewise.
+	(vmlaq_n_u32): Likewise.
+	(vmlal_n_s16): Likewise.
+	(vmlal_n_s32): Likewise.
+	(vmlal_n_u16): Likewise.
+	(vmlal_n_u32): Likewise.
+	(vqdmlal_n_s16): Likewise.
+	(vqdmlal_n_s32): Likewise.
+	(vmls_n_s16): Likewise.
+	(vmls_n_s32): Likewise.
+	(vmls_n_f32): Likewise.
+	(vmls_n_u16): Likewise.
+	(vmls_n_u32): Likewise.
+	(vmlsq_n_s16): Likewise.
+	(vmlsq_n_s32): Likewise.
+	(vmlsq_n_f32): Likewise.
+	(vmlsq_n_u16): Likewise.
+	(vmlsq_n_u32): Likewise.
+	(vmlsl_n_s16): Likewise.
+	(vmlsl_n_s32): Likewise.
+	(vmlsl_n_u16): Likewise.
+	(vmlsl_n_u32): Likewise.
+	(vqdmlsl_n_s16): Likewise.
+	(vqdmlsl_n_s32): Likewise.
+
+2014-11-18  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/arm/arm.c (arm_new_rtx_costs, case PLUS, MINUS):
+	Add cost of alu.arith in simple SImode case.
+
+2014-11-18  Jiong Wang  <jiong.wang@arm.com>
+
+	* lra-eliminations.c (update_reg_eliminate): Relax gcc_assert for fixed
+	registers.
+
+2014-11-18  Marat Zakirov  <m.zakirov@samsung.com>
+
+	* opts.c (finish_options): Disable aggressive opts for sanitizer.  
+	(common_handle_option): Move code to finish_options.  
+
+2014-11-18  Yury Gribov  <y.gribov@samsung.com>
+
+	PR sanitizer/63802
+	* stor-layout.c (min_align_of_type): Respect user alignment
+	more.
+
+2014-11-18  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	* passes.c (remove_cgraph_node_from_order): New.
+	(do_per_function_toporder): Register cgraph removal
+	hook.
+
+2014-11-17  Terry Guo  <terry.guo@arm.com>
+
+	* config/arm/arm.c (arm_issue_rate): Return 2 for cortex-m7.
+	* config/arm/arm.md (generic_sched): Exclude cortex-m7.
+	(generic_vfp): Likewise.
+	* config/arm/cortex-m7.md: Pipeline description for cortex-m7.
+
 2014-11-17  Vladimir Makarov  <vmakarov@redhat.com>
 
 	PR rtl-optimization/63906

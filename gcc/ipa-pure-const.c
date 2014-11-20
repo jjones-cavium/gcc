@@ -518,7 +518,7 @@ special_builtin_state (enum pure_const_state_e *state, bool *looping,
    the entire call expression.  */
 
 static void
-check_call (funct_state local, gimple call, bool ipa)
+check_call (funct_state local, gcall *call, bool ipa)
 {
   int flags = gimple_call_flags (call);
   tree callee_t = gimple_call_fndecl (call);
@@ -745,10 +745,10 @@ check_stmt (gimple_stmt_iterator *gsip, funct_state local, bool ipa)
   switch (gimple_code (stmt))
     {
     case GIMPLE_CALL:
-      check_call (local, stmt, ipa);
+      check_call (local, as_a <gcall *> (stmt), ipa);
       break;
     case GIMPLE_LABEL:
-      if (DECL_NONLOCAL (gimple_label_label (stmt)))
+      if (DECL_NONLOCAL (gimple_label_label (as_a <glabel *> (stmt))))
 	/* Target of long jump. */
 	{
           if (dump_file)
@@ -757,7 +757,7 @@ check_stmt (gimple_stmt_iterator *gsip, funct_state local, bool ipa)
 	}
       break;
     case GIMPLE_ASM:
-      if (gimple_asm_clobbers_memory_p (stmt))
+      if (gimple_asm_clobbers_memory_p (as_a <gasm *> (stmt)))
 	{
 	  if (dump_file)
 	    fprintf (dump_file, "    memory asm clobber is not const/pure\n");
@@ -765,7 +765,7 @@ check_stmt (gimple_stmt_iterator *gsip, funct_state local, bool ipa)
 	  local->pure_const_state = IPA_NEITHER;
 	  local->can_free = true;
 	}
-      if (gimple_asm_volatile_p (stmt))
+      if (gimple_asm_volatile_p (as_a <gasm *> (stmt)))
 	{
 	  if (dump_file)
 	    fprintf (dump_file, "    volatile is not const/pure\n");
@@ -914,7 +914,8 @@ add_new_function (struct cgraph_node *node, void *data ATTRIBUTE_UNUSED)
      static declarations.  We do not need to scan them more than once
      since all we would be interested in are the addressof
      operations.  */
-  if (node->get_availability () > AVAIL_INTERPOSABLE)
+  if (node->get_availability () > AVAIL_INTERPOSABLE
+      && opt_for_fn (node->decl, flag_ipa_pure_const))
     set_function_state (node, analyze_function (node, true));
 }
 
@@ -984,7 +985,8 @@ pure_const_generate_summary (void)
      when function got cloned and the clone is AVAILABLE.  */
 
   FOR_EACH_DEFINED_FUNCTION (node)
-    if (node->get_availability () >= AVAIL_INTERPOSABLE)
+    if (node->get_availability () >= AVAIL_INTERPOSABLE
+        && opt_for_fn (node->decl, flag_ipa_pure_const))
       set_function_state (node, analyze_function (node, true));
 }
 
@@ -1595,9 +1597,7 @@ execute (function *)
 static bool
 gate_pure_const (void)
 {
-  return (flag_ipa_pure_const
-	  /* Don't bother doing anything if the program has errors.  */
-	  && !seen_error ());
+  return flag_ipa_pure_const || in_lto_p;
 }
 
 pass_ipa_pure_const::pass_ipa_pure_const(gcc::context *ctxt)

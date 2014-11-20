@@ -1,3 +1,288 @@
+2014-11-19  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	PR sanitizer/63939
+	* c-c++-common/asan/global-overflow-1.c: Allow extra spaces after
+	stack pointer address, to fit darwin output when symbolizer is not
+	present.
+	* c-c++-common/asan/heap-overflow-1.c: Likewise.
+	* c-c++-common/asan/memcmp-1.c: Likewise.
+	* c-c++-common/asan/misalign-1.c: Likewise.
+	* c-c++-common/asan/misalign-2.c: Likewise.
+	* c-c++-common/asan/null-deref-1.c: Likewise.
+	* c-c++-common/asan/stack-overflow-1.c: Likewise.
+	* c-c++-common/asan/strlen-overflow-1.c: Likewise.
+	* c-c++-common/asan/strncpy-overflow-1.c: Likewise.
+	* c-c++-common/asan/use-after-free-1.c: Likewise.
+	* g++.dg/asan/deep-stack-uaf-1.C: Likewise.
+	* g++.dg/asan/deep-tail-call-1.C: Likewise.
+	* g++.dg/asan/large-func-test-1.C: Likewise.
+
+2014-11-19  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	PR sanitizer/63939
+	* g++.dg/asan/large-func-test-1.C: Ajust dg-output.
+
+2014-11-19  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	PR sanitizer/63939
+	* c-c++-common/asan/heap-overflow-1.c: Ajust dg-output.
+	* c-c++-common/asan/memcmp-1.c: Likewise.
+	* c-c++-common/asan/strncpy-overflow-1.c: Likewise.
+	* c-c++-common/asan/use-after-free-1.c: Likewise.
+
+2014-11-19  David Malcolm  <dmalcolm@redhat.com>
+
+	PR jit/63854
+	* jit.dg/test-fuzzer.c (fuzzer_init): Free malloced buffers.
+	(make_random_function): Free ff->locals.
+
+2014-11-19  Uros Bizjak  <ubizjak@gmail.com>
+
+	PR target/63947
+	* gcc.target/i386/pr63947.c: New test.
+
+2014-11-19  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/55425
+	* g++.dg/cpp0x/constexpr-__func__.C: New.
+
+2014-11-19  Renlin Li  <Renlin.Li@arm.com>
+
+	PR target/63424
+	* gcc.target/aarch64/pr63424.c: New test.
+
+2014-11-19  Renlin Li  <Renlin.Li@arm.com>
+
+	PR middle-end/63762
+	* gcc.dg/pr63762.c: New test.
+
+2014-11-19  Marek Polacek  <polacek@redhat.com>
+
+	PR sanitizer/63690
+	* gcc.dg/ubsan/pr63690.c: New test.
+
+2014-11-19  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	PR sanitizer/62132
+	* c-c++-common/asan/misalign-1.c: Pass -fno-omit-frame-pointer on
+	darwin, adjust dg-output.
+	* c-c++-common/asan/misalign-2.c: Likewise.
+
+2014-11-19  Richard Henderson  <rth@redhat.com>
+
+	* gcc.dg/cwsc0.c: New test.
+	* gcc.dg/cwsc1.c: New test.
+
+2014-11-19  Marek Polacek  <polacek@redhat.com>
+
+	PR sanitizer/63879
+	* c-c++-common/ubsan/pr63879-1.c: New test.
+	* c-c++-common/ubsan/pr63879-2.c: New test.
+
+2014-11-19  Tom de Vries  <tom@codesourcery.com>
+
+	PR tree-optimization/62167
+	* gcc.dg/pr51879-12.c: Add xfails.
+	* gcc.dg/pr62167-run.c: New test.
+	* gcc.dg/pr62167.c: New test.
+
+2014-11-19  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/63915
+	* c-c++-common/gomp/pr60823-4.c: New test.
+
+	PR sanitizer/63520
+	* c-c++-common/ubsan/pr63520.c: New test.
+
+2014-11-19  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/57654
+	* g++.dg/cpp0x/constexpr-ref7.C: New.
+
+2014-11-19  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/63913
+	* g++.dg/ubsan/pr63913.C: New test.
+
+2014-11-19  Andreas Schwab  <schwab@suse.de>
+
+	* gcc.dg/pure-2.c: Update line numbers.
+
+2014-11-19  Jakub Jelinek  <jakub@redhat.com>
+
+	PR rtl-optimization/63843
+	* gcc.c-torture/execute/pr63843.c: New test.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	PR target/63937
+	* gcc.dg/memset-2.c: New.
+
+2014-11-18  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/63813
+	* g++.dg/ubsan/pr63813.C: New test.
+
+	PR tree-optimization/61042
+	* gcc.c-torture/compile/pr61042.c: New test.
+
+2014-11-18  Maciej W. Rozycki  <macro@codesourcery.com>
+
+	* gcc.dg/atomic/c11-atomic-exec-5.c (dg-timeout-factor): New
+	setting.
+
+2014-11-18  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/55942
+	* g++.dg/cpp0x/constexpr-55942.C: New.
+
+2014-11-18  Marek Polacek  <polacek@redhat.com>
+
+	PR sanitizer/63866
+	* c-c++-common/ubsan/pr63866.c: New test.
+
+2014-11-18  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/63914
+	* gcc.dg/pr63914.c: New testcase.
+
+2014-11-18  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/55443
+	* g++.dg/cpp0x/noexcept26.C: New.
+	* g++.dg/cpp0x/noexcept27.C: Likewise.
+
+2014-11-18  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/60245
+	* g++.dg/cpp0x/constexpr-60245.C: New.
+
+2014-11-18  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/60771
+	* g++.dg/cpp0x/constexpr-ref6.C: New.
+
+2014-11-18  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/arm/neon/vbicQs16.c: Regenerate.
+	* gcc.target/arm/neon/vbicQs32.c: Likewise.
+	* gcc.target/arm/neon/vbicQs64.c: Likewise.
+	* gcc.target/arm/neon/vbicQs8.c: Likewise.
+	* gcc.target/arm/neon/vbicQu16.c: Likewise.
+	* gcc.target/arm/neon/vbicQu32.c: Likewise.
+	* gcc.target/arm/neon/vbicQu64.c: Likewise.
+	* gcc.target/arm/neon/vbicQu8.c: Likewise.
+	* gcc.target/arm/neon/vbics16.c: Likewise.
+	* gcc.target/arm/neon/vbics32.c: Likewise.
+	* gcc.target/arm/neon/vbics64.c: Likewise.
+	* gcc.target/arm/neon/vbics8.c: Likewise.
+	* gcc.target/arm/neon/vbicu16.c: Likewise.
+	* gcc.target/arm/neon/vbicu32.c: Likewise.
+	* gcc.target/arm/neon/vbicu64.c: Likewise.
+	* gcc.target/arm/neon/vbicu8.c: Likewise.
+	* gcc.target/arm/neon/vornQs16.c: Likewise.
+	* gcc.target/arm/neon/vornQs32.c: Likewise.
+	* gcc.target/arm/neon/vornQs64.c: Likewise.
+	* gcc.target/arm/neon/vornQs8.c: Likewise.
+	* gcc.target/arm/neon/vornQu16.c: Likewise.
+	* gcc.target/arm/neon/vornQu32.c: Likewise.
+	* gcc.target/arm/neon/vornQu64.c: Likewise.
+	* gcc.target/arm/neon/vornQu8.c: Likewise.
+	* gcc.target/arm/neon/vorns16.c: Likewise.
+	* gcc.target/arm/neon/vorns32.c: Likewise.
+	* gcc.target/arm/neon/vorns64.c: Likewise.
+	* gcc.target/arm/neon/vorns8.c: Likewise.
+	* gcc.target/arm/neon/vornu16.c: Likewise.
+	* gcc.target/arm/neon/vornu32.c: Likewise.
+	* gcc.target/arm/neon/vornu64.c: Likewise.
+	* gcc.target/arm/neon/vornu8.c: Likewise.
+
+2014-11-18  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vcls.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vcnt.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vcombine.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vcreate.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vcvt.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vdup_lane.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vext.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vget_high.c: New test.
+	* gcc.target/aarch64/advsimd-intrinsics/vget_low.c: New test.
+
+2014-11-18  Alexander Ivchenko  <alexander.ivchenko@intel.com>
+
+	* c-c++-common/tm/safe-3.c: Add bind_pic_locally.
+	* g++.dg/ipa/devirt-15.C: Ditto.
+	* g++.dg/ipa/devirt-7.C: Ditto.
+	* g++.dg/ipa/pr60600.C: Ditto.
+	* g++.dg/opt/vt2.C: Ditto.
+	* g++.dg/opt/vt4.C: Ditto.
+	* g++.dg/pr48484.C: Ditto.
+	* g++.dg/tm/pr47746.C: Ditto.
+	* g++.dg/tree-ssa/pr57380.C: Ditto.
+	* gcc.dg/ipa/inline-4.c: Ditto.
+	* gcc.dg/ipa/inlinehint-1.c: Ditto.
+	* gcc.dg/ipa/inlinehint-2.c: Ditto.
+	* gcc.dg/ipa/inlinehint-3.c: Ditto.
+	* gcc.dg/pr47276.c: Ditto.
+	* gcc.dg/pure-2.c: Ditto.
+	* gcc.dg/tm/nested-2.c: Ditto.
+	* gcc.dg/tree-ssa/alias-29.c: Ditto.
+	* gcc.target/i386/3dnow-1.c: Ditto.
+	* gcc.target/i386/3dnow-2.c: Ditto.
+	* gcc.target/i386/3dnowA-1.c: Ditto.
+	* gcc.target/i386/3dnowA-2.c: Ditto.
+	* gcc.target/i386/avx-1.c: Ditto.
+	* gcc.target/i386/avx-2.c: Ditto.
+	* gcc.target/i386/memcpy-1.c: Ditto.
+	* gcc.target/i386/mmx-1.c: Ditto.
+	* gcc.target/i386/mmx-2.c: Ditto.
+	* gcc.target/i386/sse-14.c: Ditto.
+	* gcc.target/i386/sse-22.c: Ditto.
+	* gcc.target/i386/sse-22a.c: Ditto.
+	* gcc.target/i386/sse-23.c: Ditto.
+	* gcc.target/i386/sse-24.c: Ditto.
+	* gcc.target/i386/vect-double-1.c: Ditto.
+	* g++.dg/fstack-protector-strong.C: Add target nonpic.
+	* gcc.dg/fstack-protector-strong.c: Ditto.
+
+2014-11-18  Hale Wang  <hale.wang@arm.com>
+
+	* gcc.target/arm/small-multiply-m0-1.c: Only apply when
+	"-mcpu=cortex-m0/m1/m0plus.small-multiply".
+	* gcc.target/arm/small-multiply-m0-2.c: Likewise.
+	* gcc.target/arm/small-multiply-m0-3.c: Likewise.
+	* gcc.target/arm/small-multiply-m0plus-1.c: Likewise.
+	* gcc.target/arm/small-multiply-m0plus-2.c: Likewise.
+	* gcc.target/arm/small-multiply-m0plus-3.c: Likewise.
+	* gcc.target/arm/small-multiply-m1-1.c: Likewise.
+	* gcc.target/arm/small-multiply-m1-2.c: Likewise.
+	* gcc.target/arm/small-multiply-m1-3.c: Likewise.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* g++.dg/abi/mangle-arm-crypto.C: New.
+	* g++.dg/abi/mangle-neon.C (f19): New.
+	(f20): Likewise.
+
+2014-11-18  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* gcc.target/arm/pr51968.c (foo): Fix call to
+	__builtin_neon_vqmovunv8hi.
+
+2014-11-18  Marat Zakirov  <m.zakirov@samsung.com>
+
+	* c-c++-common/asan/aggressive-opts.c: New test.
+
+2014-11-18  Yury Gribov  <y.gribov@samsung.com>
+
+	PR sanitizer/63802
+	* c-c++-common/ubsan/pr63802.c: New test.
+
+2014-11-18  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	* g++.dg/pr63766.C: New.
+
 2014-11-17  Michael Meissner  <meissner@linux.vnet.ibm.com>
 
 	* gcc.target/powerpc/p8vector-ldst.c: Rewrite to use 40 live

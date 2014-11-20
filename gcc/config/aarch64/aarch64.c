@@ -230,8 +230,10 @@ __extension__
 static const struct cpu_regmove_cost generic_regmove_cost =
 {
   NAMED_PARAM (GP2GP, 1),
-  NAMED_PARAM (GP2FP, 2),
-  NAMED_PARAM (FP2GP, 2),
+  /* Avoid the use of slow int<->fp moves for spilling by setting
+     their cost higher than memmov_cost.  */
+  NAMED_PARAM (GP2FP, 5),
+  NAMED_PARAM (FP2GP, 5),
   NAMED_PARAM (FP2FP, 2)
 };
 
@@ -10381,7 +10383,7 @@ aarch64_asan_shadow_offset (void)
 }
 
 static bool
-aarch64_use_by_pieces_infrastructure_p (unsigned int size,
+aarch64_use_by_pieces_infrastructure_p (unsigned HOST_WIDE_INT size,
 					unsigned int align,
 					enum by_pieces_operation op,
 					bool speed_p)
@@ -10798,6 +10800,9 @@ aarch64_gen_ccmp_next (rtx prev, int cmp_code, rtx op0, rtx op1, int bit_code)
 #undef TARGET_USE_BY_PIECES_INFRASTRUCTURE_P
 #define TARGET_USE_BY_PIECES_INFRASTRUCTURE_P \
   aarch64_use_by_pieces_infrastructure_p
+
+#undef TARGET_CAN_USE_DOLOOP_P
+#define TARGET_CAN_USE_DOLOOP_P can_use_doloop_if_innermost
 
 struct gcc_target targetm = TARGET_INITIALIZER;
 

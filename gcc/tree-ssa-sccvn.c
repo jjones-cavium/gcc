@@ -1130,7 +1130,7 @@ ao_ref_init_from_vn_reference (ao_ref *ref,
    vn_reference_op_s's.  */
 
 static void
-copy_reference_ops_from_call (gimple call,
+copy_reference_ops_from_call (gcall *call,
 			      vec<vn_reference_op_s> *result)
 {
   vn_reference_op_s temp;
@@ -1462,7 +1462,7 @@ valueize_shared_reference_ops_from_ref (tree ref, bool *valueized_anything)
    this function.  */
 
 static vec<vn_reference_op_s> 
-valueize_shared_reference_ops_from_call (gimple call)
+valueize_shared_reference_ops_from_call (gcall *call)
 {
   if (!call)
     return vNULL;
@@ -1636,7 +1636,8 @@ vn_reference_lookup_3 (ao_ref *ref, tree vuse, void *vr_,
 	}
       if (valueized_anything)
 	{
-	  bool res = call_may_clobber_ref_p_1 (def_stmt, ref);
+	  bool res = call_may_clobber_ref_p_1 (as_a <gcall *> (def_stmt),
+					       ref);
 	  for (unsigned i = 0; i < gimple_call_num_args (def_stmt); ++i)
 	    gimple_call_set_arg (def_stmt, i, oldargs[i]);
 	  if (!res)
@@ -2162,7 +2163,7 @@ vn_reference_lookup (tree op, tree vuse, vn_lookup_kind kind,
    *VNRESULT if found.  Populates *VR for the hashtable lookup.  */
 
 void
-vn_reference_lookup_call (gimple call, vn_reference_t *vnresult,
+vn_reference_lookup_call (gcall *call, vn_reference_t *vnresult,
 			  vn_reference_t vr)
 {
   if (vnresult)
@@ -2865,7 +2866,7 @@ visit_nary_op (tree lhs, gimple stmt)
    of the LHS has changed as a result.  */
 
 static bool
-visit_reference_op_call (tree lhs, gimple stmt)
+visit_reference_op_call (tree lhs, gcall *stmt)
 {
   bool changed = false;
   struct vn_reference_s vr1;
@@ -3350,7 +3351,7 @@ simplify_binary_expression (gimple stmt, bool *looked_up)
    simplified. */
 
 static tree
-simplify_unary_expression (gimple stmt, bool *looked_up)
+simplify_unary_expression (gassign *stmt, bool *looked_up)
 {
   tree result = NULL_TREE;
   tree orig_op0, op0 = gimple_assign_rhs1 (stmt);
@@ -3444,7 +3445,7 @@ simplify_unary_expression (gimple stmt, bool *looked_up)
 /* Try to simplify RHS using equivalences and constant folding.  */
 
 static tree
-try_to_simplify (gimple stmt, bool *looked_up)
+try_to_simplify (gassign *stmt, bool *looked_up)
 {
   enum tree_code code = gimple_assign_rhs_code (stmt);
   tree tem;
@@ -3533,7 +3534,7 @@ visit_use (tree use)
 	      changed = visit_copy (lhs, rhs1);
 	      goto done;
 	    }
-	  simplified = try_to_simplify (stmt, &looked_up);
+	  simplified = try_to_simplify (as_a <gassign *> (stmt), &looked_up);
 	  if (simplified)
 	    {
 	      if (dump_file && (dump_flags & TDF_DETAILS))
@@ -3664,7 +3665,7 @@ visit_use (tree use)
 	  else
 	    changed = defs_to_varying (stmt);
 	}
-      else if (is_gimple_call (stmt))
+      else if (gcall *call_stmt = dyn_cast <gcall *> (stmt))
 	{
 	  tree lhs = gimple_call_lhs (stmt);
 	  if (lhs && TREE_CODE (lhs) == SSA_NAME)
@@ -3750,11 +3751,11 @@ visit_use (tree use)
 		         not alias with anything else.  In which case the
 			 information that the values are distinct are encoded
 			 in the IL.  */
-		      && !(gimple_call_return_flags (stmt) & ERF_NOALIAS)
+		      && !(gimple_call_return_flags (call_stmt) & ERF_NOALIAS)
 		      /* Only perform the following when being called from PRE
 			 which embeds tail merging.  */
 		      && default_vn_walk_kind == VN_WALK)))
-	    changed = visit_reference_op_call (lhs, stmt);
+	    changed = visit_reference_op_call (lhs, call_stmt);
 	  else
 	    changed = defs_to_varying (stmt);
 	}
@@ -4017,8 +4018,8 @@ start_over:
   if (!gimple_nop_p (defstmt))
     {
       /* Push a new iterator.  */
-      if (gimple_code (defstmt) == GIMPLE_PHI)
-	usep = op_iter_init_phiuse (&iter, defstmt, SSA_OP_ALL_USES);
+      if (gphi *phi = dyn_cast <gphi *> (defstmt))
+	usep = op_iter_init_phiuse (&iter, phi, SSA_OP_ALL_USES);
       else
 	usep = op_iter_init_use (&iter, defstmt, SSA_OP_ALL_USES);
     }
@@ -4340,7 +4341,7 @@ cond_dom_walker::before_dom_children (basic_block bb)
 	break;
       }
     case GIMPLE_SWITCH:
-      val = gimple_switch_index (stmt);
+      val = gimple_switch_index (as_a <gswitch *> (stmt));
       break;
     case GIMPLE_GOTO:
       val = gimple_goto_dest (stmt);

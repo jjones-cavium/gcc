@@ -776,7 +776,8 @@ pass_manager::register_one_dump_file (opt_pass *pass)
   if (optgroup_flags == OPTGROUP_NONE)
     optgroup_flags = OPTGROUP_OTHER;
   id = dumps->dump_register (dot_name, flag_name, glob_name, flags,
-			     optgroup_flags);
+			     optgroup_flags,
+			     true);
   set_pass_for_id (id, pass);
   full_name = concat (prefix, pass->name, num, NULL);
   register_pass_name (pass, full_name);
@@ -1527,6 +1528,12 @@ pass_manager::operator new (size_t sz)
   return xcalloc (1, sz);
 }
 
+void
+pass_manager::operator delete (void *ptr)
+{
+  free (ptr);
+}
+
 pass_manager::pass_manager (context *ctxt)
 : all_passes (NULL), all_small_ipa_passes (NULL), all_lowering_passes (NULL),
   all_regular_ipa_passes (NULL),
@@ -1584,6 +1591,36 @@ pass_manager::pass_manager (context *ctxt)
   register_dump_files (all_passes);
 }
 
+static void
+delete_pass_tree (opt_pass *pass)
+{
+  while (pass)
+    {
+      /* Recurse into child passes.  */
+      delete_pass_tree (pass->sub);
+
+      opt_pass *next = pass->next;
+
+      /* Delete this pass.  */
+      delete pass;
+
+      /* Iterate onto sibling passes.  */
+      pass = next;
+    }
+}
+
+pass_manager::~pass_manager ()
+{
+  XDELETEVEC (passes_by_id);
+
+  /* Call delete_pass_tree on each of the pass_lists.  */
+#define DEF_PASS_LIST(LIST) \
+    delete_pass_tree (*pass_lists[PASS_LIST_NO_##LIST]);
+  GCC_PASS_LISTS
+#undef DEF_PASS_LIST
+
+}
+
 /* If we are in IPA mode (i.e., current_function_decl is NULL), call
    function CALLBACK for every function in the call graph.  Otherwise,
    call CALLBACK on the current function.  */
@@ -1609,6 +1646,24 @@ do_per_function (void (*callback) (function *, void *data), void *data)
 static int nnodes;
 static GTY ((length ("nnodes"))) cgraph_node **order;
 
+/* Hook called when NODE is removed and therefore should be
+   excluded from order vector.  DATA is an array of integers.
+   DATA[0] holds max index it may be accessed by.  For cgraph
+   node DATA[node->uid + 1] holds index of this node in order
+   vector.  */
+static void
+remove_cgraph_node_from_order (cgraph_node *node, void *data)
+{
+  int *order_idx = (int *)data;
+
+  if (node->uid >= order_idx[0])
+    return;
+
+  int idx = order_idx[node->uid + 1];
+  if (idx >= 0 && idx < nnodes && order[idx] == node)
+    order[idx] = NULL;
+}
+
 /* If we are in IPA mode (i.e., current_function_decl is NULL), call
    function CALLBACK for every function in the call graph.  Otherwise,
    call CALLBACK on the current function.
@@ -1622,13 +1677,29 @@ do_per_function_toporder (void (*callback) (function *, void *data), void *data)
     callback (cfun, data);
   else
     {
+      cgraph_node_hook_list *hook;
+      int *order_idx;
       gcc_assert (!order);
       order = ggc_vec_alloc<cgraph_node *> (symtab->cgraph_count);
+
+      order_idx = XALLOCAVEC (int, symtab->cgraph_max_uid + 1);
+      memset (order_idx + 1, -1, sizeof (int) * symtab->cgraph_max_uid);
+      order_idx[0] = symtab->cgraph_max_uid;
+
       nnodes = ipa_reverse_postorder (order);
       for (i = nnodes - 1; i >= 0; i--)
-        order[i]->process = 1;
+	{
+	  order[i]->process = 1;
+	  order_idx[order[i]->uid + 1] = i;
+	}
+      hook = symtab->add_cgraph_removal_hook (remove_cgraph_node_from_order,
+					      order_idx);
       for (i = nnodes - 1; i >= 0; i--)
 	{
+	  /* Function could be inlined and removed as unreachable.  */
+	  if (!order[i])
+	    continue;
+
 	  struct cgraph_node *node = order[i];
 
 	  /* Allow possibly removed nodes to be garbage collected.  */
@@ -1637,6 +1708,7 @@ do_per_function_toporder (void (*callback) (function *, void *data), void *data)
 	  if (node->has_gimple_body_p ())
 	    callback (DECL_STRUCT_FUNCTION (node->decl), data);
 	}
+      symtab->remove_cgraph_removal_hook (hook);
     }
   ggc_free (order);
   order = NULL;
