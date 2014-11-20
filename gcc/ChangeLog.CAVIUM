@@ -1,5 +1,13 @@
 2014-11-17  Andrew Pinski  <apinski@cavium.com>
 
+	PR ipa/63981
+	* ipa-polymorphic-call.c (possible_placement_new):
+	Use POINTER_SIZE instead of GET_MODE_BITSIZE (Pmode).
+	(ipa_polymorphic_call_context::restrict_to_inner_class): Likewise.
+	(extr_type_from_vtbl_ptr_store): Likewise.
+
+2014-11-17  Andrew Pinski  <apinski@cavium.com>
+
 	Port the patch from
 	https://gcc.gnu.org/ml/gcc-patches/2014-11/msg02047.html:
 	* lra-eliminations.c (update_reg_eliminate): Relax gcc_assert for
