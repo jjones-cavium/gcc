@@ -1,6 +1,8 @@
 /* { dg-do link { target *-octeon-* } } */
 /* { dg-options "-O2" } */
 
+void linker_error (void);
+
 typedef unsigned long long uint64_t;
 
 static inline void cvmx_write64_uint64(uint64_t addr, uint64_t val)

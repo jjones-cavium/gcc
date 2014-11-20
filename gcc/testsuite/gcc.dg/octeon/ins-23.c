@@ -16,6 +16,8 @@ unsigned long long g (unsigned long long a)
   return a | 0x8000000000000000ull;
 }
 
+unsigned long long gs(unsigned long long);
+
 unsigned long long h (unsigned long long a, unsigned long long b)
 {
   return gs (a | 0x100000000ull, b | 0x600000000ull);

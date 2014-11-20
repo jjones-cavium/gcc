@@ -2,8 +2,9 @@
 /* { dg-options "-O2" } */
 /* { dg-final { scan-assembler "bne\t.*,\\\$0," } } */
 
+void g(void);
 
-f (int i)
+void f (int i)
 {
   if (__builtin_expect (i < 9, 0))
     g ();

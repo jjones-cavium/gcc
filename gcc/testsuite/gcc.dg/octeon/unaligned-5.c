@@ -18,7 +18,8 @@ struct from
   int i;			/* make it 32-bit aligned */
 };
 
-f (struct to *to, struct from *from, unsigned n)
+void g(void);
+void f (struct to *to, struct from *from, unsigned n)
 {
   int i;
   for (i = 0; i < n; i++)

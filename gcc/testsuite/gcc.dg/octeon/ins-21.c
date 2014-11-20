@@ -15,6 +15,8 @@ unsigned long long g (unsigned long long a)
   return a & 0xfffffffffffeffffull;
 }
 
+unsigned sh(unsigned long long);
+
 unsigned long long h (unsigned long long a)
 {
   return sh (a & 0xfffffffcffffffffull);

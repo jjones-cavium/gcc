@@ -7,7 +7,9 @@
 
 unsigned m (unsigned e);
 
-f (unsigned i)
+void h(unsigned, unsigned);
+
+void f (unsigned i)
 {
   unsigned j = m (i);
   h (j, i != j);

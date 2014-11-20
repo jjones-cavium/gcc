@@ -18,7 +18,7 @@ unsigned short g ();
 
 void h(three_byte_t *);
 
-main ()
+int main ()
 {
   three_byte_t three_byte;
   three_byte.a = f ();

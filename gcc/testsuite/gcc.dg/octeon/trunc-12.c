@@ -5,7 +5,7 @@
 /* { dg-final { scan-assembler-not "seb"  } } */
 /* { dg-final { scan-assembler-not "sll"  } } */
 
-div1 (char x)
+int div1 (char x)
 {
   return x / -1;
 }

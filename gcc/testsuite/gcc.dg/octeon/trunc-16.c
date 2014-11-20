@@ -2,6 +2,7 @@
 /* { dg-options "-O2" } */
 /* { dg-final { scan-assembler-not "sll" } } */
 
+void g(void);
 unsigned short
 f (unsigned short a, unsigned short b)
 {

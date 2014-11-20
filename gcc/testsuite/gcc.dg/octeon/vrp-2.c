@@ -3,6 +3,8 @@
 
 typedef unsigned long long uint64_t;
 
+void linker_error(void);
+
 static inline void cvmx_write64_uint64(uint64_t addr, uint64_t val)
 {
   *(volatile uint64_t *)(long)addr = val;

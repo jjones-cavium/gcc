@@ -10,7 +10,8 @@ struct s
   long long d:52;
 };
 
-f ()
+void g(struct s);
+void f ()
 {
   struct s s;
   s.a = 1;

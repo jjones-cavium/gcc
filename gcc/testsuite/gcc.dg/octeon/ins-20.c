@@ -7,7 +7,7 @@
 
 typedef unsigned int uint;
 typedef unsigned int uint32_t;
-typedef unsigned long int uint64_t;
+typedef unsigned long long int uint64_t;
 typedef struct
 {
   uint64_t tag:32;
@@ -23,6 +23,7 @@ typedef union
   s;
 }
 cvmx_pow_tag_req_t;
+void cvmx_write_io(uint64_t);
 static inline void
 cvmx_pow_tag_sw_nocheck (uint32_t tag)
 {

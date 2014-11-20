@@ -17,7 +17,8 @@ struct r
 
 struct s *ss;
 
-f (struct r *p, unsigned long long l)
+void g(void);
+int f (struct r *p, unsigned long long l)
 {
   unsigned long long i;
   for (i = 0; i < l; i++)

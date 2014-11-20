@@ -7,8 +7,11 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <unistd.h>
 
 #define BUFSIZE 1024
+
+int _open(const char*, int, ...);
 
 char *buf;
 
@@ -31,7 +34,7 @@ open (const char *str, int flags, ...)
 }
 
 void
-foo ()
+foo (void)
 {
   int j, fd;
 
@@ -49,7 +52,7 @@ foo ()
   write (fd, buf, BUFSIZE);
 }
 
-main ()
+int main ()
 {
   foo ();
   return 0;

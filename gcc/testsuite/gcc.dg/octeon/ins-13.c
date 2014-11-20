@@ -16,7 +16,7 @@ f (struct s s, char a)
   return s;
 }
 
-main ()
+int main (void)
 {
   struct s s;
   s = f (s, -4);

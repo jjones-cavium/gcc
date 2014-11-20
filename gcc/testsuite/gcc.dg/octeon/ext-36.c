@@ -7,6 +7,8 @@
 /* { dg-final { scan-assembler "exts\t" } } */
 /* { dg-final { scan-assembler-not "sra\t|sll\t" } } */
 
+void remove_from_table(int);
+
 void
 invalidate_memory (int i)
 {

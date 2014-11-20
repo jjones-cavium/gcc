@@ -15,7 +15,8 @@ struct s
   unsigned long long d:3;
 };
 
-int
+void g(void);
+void
 f (struct s *s, struct s *d)
 {
   *d = *s;

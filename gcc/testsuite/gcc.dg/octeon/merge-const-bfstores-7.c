@@ -18,7 +18,8 @@ union u
   } s;
 };
 
-f (int i)
+void g(union u);
+void f (int i)
 {
   union u u;
 

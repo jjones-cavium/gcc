@@ -17,7 +17,7 @@ f (unsigned int i)
   return s;
 }
 
-main ()
+int main (void)
 {
   struct s s = f (0x80000000u);
   if (s.b != 0x80000001u)

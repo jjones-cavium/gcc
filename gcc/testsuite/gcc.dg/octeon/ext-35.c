@@ -12,7 +12,7 @@ struct  prts
   uint64_t pad:8;
   uint64_t prts:33;
 };
-decode_sd (uint16_t s) {}
+int decode_sd (uint16_t s) {}
 typedef struct flow_record
 {
   struct prts key2;
@@ -22,19 +22,19 @@ FlowRecord, *Flow;
 
 long long g;
 
-f (long long i, int j)
+void f (long long i, int j)
 {
   g = i;
 }
 
-fw_flow_dump (Flow flow)
+void fw_flow_dump (Flow flow)
 {
   f ((int) flow->key2.prts, decode_sd (flow->dstsd));
 }
 
 FlowRecord fl;
 
-main ()
+int main (void)
 {
   fl.key2.prts = 0x176543210ull;
   fw_flow_dump (&fl);

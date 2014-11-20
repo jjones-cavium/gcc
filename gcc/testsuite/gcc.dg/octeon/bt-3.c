@@ -9,6 +9,7 @@
 extern func_t functions[];
 
 int i = 1;
+int bar (int i) __attribute__ ((noinline));
 
 __attribute__ ((noinline)) int
 foo (int j)

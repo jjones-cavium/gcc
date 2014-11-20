@@ -18,7 +18,7 @@ g (long long a)
   asm ("");
 }
 
-main ()
+int main (void)
 {
   g (0x1234567812345678ll);
   return 0;

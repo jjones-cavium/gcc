@@ -4,8 +4,7 @@
 
 void abort (void);
 
-f (c)
-     unsigned char c;
+void f (unsigned char c)
 {
   if (c != 0xFF)
     abort ();

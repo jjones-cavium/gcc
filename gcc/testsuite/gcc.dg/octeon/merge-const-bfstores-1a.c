@@ -9,8 +9,8 @@ struct s
   long long b:4;
   long long c:4;
 };
-
-f ()
+void g(struct s);
+void f ()
 {
   struct s s;
   s.a = 1;

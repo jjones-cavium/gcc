@@ -13,7 +13,7 @@
 
 void abort (void);
 
-main()
+int main()
 {
   unsigned int proc_id;
 

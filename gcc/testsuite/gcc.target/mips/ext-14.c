@@ -13,16 +13,18 @@ struct s
   unsigned long long d:40;
 };
 
+void z(void);
+
 /* Both of these are subject to optimize_bit_field_compare so we
    similar things in backend as in the f* functions below.  */
 
-int f(struct s s)
+void f(struct s s)
 {
   if (s.b == 2)
     z ();
 }
 
-int ff(struct s s)
+void ff(struct s s)
 {
   if (s.b == 1)
     z ();
@@ -31,21 +33,21 @@ int ff(struct s s)
 /* Note that the shift values on the two sides of the comparison are
    different.  */
 
-g (unsigned long long i)
+void g (unsigned long long i)
 {
   if ((i & 0xfff0000000000ull) == 0x1200000000000ull)
     z ();
 }
 
 
-gg (unsigned long long i)
+void gg (unsigned long long i)
 {
   if ((i & 0xfff0000000000ull) == 0x1230000000000ull)
     z ();
 }
 
 
-fff (unsigned long long i)
+void fff (unsigned long long i)
 {
   if (i & 0xfff0000000000ull)
     z ();

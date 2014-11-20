@@ -13,12 +13,12 @@ typedef struct
 }
 three_byte_t;
 
-unsigned char f ();
-unsigned short g ();
+unsigned char f (void);
+unsigned short g (void);
 
 void h(three_byte_t *);
 
-main ()
+int main (void)
 {
   three_byte_t three_byte;
   three_byte.a = f ();

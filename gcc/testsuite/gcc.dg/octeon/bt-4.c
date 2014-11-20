@@ -11,12 +11,6 @@ extern func_t functions[];
 int i = 1;
 
 int
-foo (int j)
-{
-  return bar (j);
-}
-
-int
 bar (int i)
 {
   if (i)
@@ -24,6 +18,12 @@ bar (int i)
   else
     check_backtrace ();
   return 1;
+}
+
+int
+foo (int j)
+{
+  return bar (j);
 }
 
 int

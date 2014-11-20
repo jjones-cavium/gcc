@@ -4,7 +4,7 @@
 
 void abort (void);
 
-main ()
+int main (void)
 {
   struct
   {

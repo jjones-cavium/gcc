@@ -8,7 +8,9 @@ uint8_t *data;
 unsigned length;
 long last_data_offset;
 
-f ()
+void g(uint64_t, uint64_t);
+
+void f (void)
 {
   uint8_t *input_pointer = data, *input_limit = data + length;
   uint64_t next_byte, byte;

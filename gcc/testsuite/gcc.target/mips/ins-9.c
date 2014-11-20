@@ -15,7 +15,9 @@ union u
   long long l;
 };
 
-f (int a, int b)
+void g(union u);
+
+void f (int a, int b)
 {
   union u u;
   u.l = 0;
