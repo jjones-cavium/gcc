@@ -1,3 +1,45 @@
+2014-11-21  Jason Merrill  <jason@redhat.com>
+
+	PR c++/63657
+	PR c++/38958
+	* call.c (set_up_extended_ref_temp): Set TREE_USED on the reference
+	if the temporary has a non-trivial destructor.
+	* decl.c (poplevel): Don't look through references.
+
+	PR c++/63942
+	* name-lookup.c (supplement_binding_1): Override a mangling alias.
+	* mangle.c (maybe_remove_implicit_alias): New.
+	(mangle_decl): Always avoid creating conflicting alias.
+	* cp-tree.h: Adjust.
+
+	PR c++/63849
+	* mangle.c (decl_mangling_context): Use template_type_parameter_p.
+
+	PR c++/63588
+	* pt.c (uses_template_parms): Handle null argument.
+
+2014-11-21  Jakub Jelinek  <jakub@redhat.com>
+
+	PR target/63764
+	* typeck.c (cp_build_array_ref): Adjust
+	convert_vector_to_pointer_for_subscript caller.  If it returns true,
+	call non_lvalue_loc on the result.
+
+2014-11-20  Jason Merrill  <jason@redhat.com>
+
+	PR c++/63658
+	* pt.c (convert_nontype_argument): Call convert_from_reference.
+	(check_instantiated_arg): Don't be confused by reference refs.
+	(unify): Look through reference refs on the arg, too.
+	* mangle.c (write_template_arg): Look through reference refs.
+
+	* error.c (dump_expr): Avoid printing (*&i) for references.
+
+2014-11-20  Ville Voutilainen  <ville.voutilainen@gmail.com>
+
+	PR c++/63959
+	* tree.c (trivially_copyable_p): Check for CP_TYPE_VOLATILE_P.
+
 2014-11-20  Trevor Saunders  <tsaunders@mozilla.com>
 
 	* cp-objcp-common.c: Use hash_table instead of htab.

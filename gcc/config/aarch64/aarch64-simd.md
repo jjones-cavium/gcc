@@ -303,6 +303,20 @@
   [(set_attr "type" "neon_rbit")]
 )
 
+(define_expand "ctz<mode>2"
+  [(set (match_operand:VS 0 "register_operand")
+        (ctz:VS (match_operand:VS 1 "register_operand")))]
+  "TARGET_SIMD"
+  {
+     emit_insn (gen_bswap<mode>2 (operands[0], operands[1]));
+     rtx op0_castsi2qi = simplify_gen_subreg(<VS:VSI2QI>mode, operands[0],
+					     <MODE>mode, 0);
+     emit_insn (gen_aarch64_rbit<VS:vsi2qi> (op0_castsi2qi, op0_castsi2qi));
+     emit_insn (gen_clz<mode>2 (operands[0], operands[0]));
+     DONE;
+  }
+)
+
 (define_insn "*aarch64_mul3_elt<mode>"
  [(set (match_operand:VMUL 0 "register_operand" "=w")
     (mult:VMUL
@@ -1175,7 +1189,7 @@
 			       (match_operand:VQW 2 "vect_par_cnst_lo_half" "")
 			    )))]
   "TARGET_SIMD"
-  "<su>shll %0.<Vwtype>, %1.<Vhalftype>, 0"
+  "<su>shll\t%0.<Vwtype>, %1.<Vhalftype>, 0"
   [(set_attr "type" "neon_shift_imm_long")]
 )
 
@@ -1186,7 +1200,7 @@
 			       (match_operand:VQW 2 "vect_par_cnst_hi_half" "")
 			    )))]
   "TARGET_SIMD"
-  "<su>shll2 %0.<Vwtype>, %1.<Vtype>, 0"
+  "<su>shll2\t%0.<Vwtype>, %1.<Vtype>, 0"
   [(set_attr "type" "neon_shift_imm_long")]
 )
 
@@ -2601,7 +2615,7 @@
 		       (ANY_EXTEND:<VWIDE>
 			   (match_operand:VDW 2 "register_operand" "w"))))]
   "TARGET_SIMD"
-  "<ANY_EXTEND:su><ADDSUB:optab>l %0.<Vwtype>, %1.<Vtype>, %2.<Vtype>"
+  "<ANY_EXTEND:su><ADDSUB:optab>l\t%0.<Vwtype>, %1.<Vtype>, %2.<Vtype>"
   [(set_attr "type" "neon_<ADDSUB:optab>_long")]
 )
 

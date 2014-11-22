@@ -5,6 +5,407 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2014-11-21  Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR target/63897
+	* lra-lives.c (mark_regno_live, mark_regno_dead): Remove last
+	argument.
+	(process_bb_lives): Rename dead_insn_p on remove_p
+	and global_live_info_p on dead_insn_p.  Calculate local live info
+	unconditionally.  Remove last argument in calls mark_regno_live and
+	mark_regno_dead.  Reorganize body of EXECUTE_IF_SET_IN_BITMAP.
+	(lra_create_live_ranges): Rename to lra_create_live_ranges_1.
+	Return bool.  Rename global_live_info_p on dead_insn_p.  Return
+	flag of live info change.
+	(lra_create_live_ranges): New.
+
+2014-11-21  Jakub Jelinek  <jakub@redhat.com>
+
+	PR target/63848
+	PR target/63975
+	* internal-fn.c (expand_arith_overflow_result_store,
+	expand_addsub_overflow, expand_neg_overflow, expand_mul_overflow): Use
+	do_compare_rtx_and_jump instead of emit_cmp_and_jump_insns everywhere,
+	adjust arguments to those functions.  Use unsignedp = true for
+	EQ, NE, GEU, LEU, LTU and GTU comparisons.
+
+	PR tree-optimization/64006
+	* tree-vrp.c (stmt_interesting_for_vrp): Return true
+	for {ADD,SUB,MUL}_OVERFLOW internal calls.
+	(vrp_visit_assignment_or_call): For {ADD,SUB,MUL}_OVERFLOW
+	internal calls, check if any REALPART_EXPR/IMAGPART_EXPR
+	immediate uses would change their value ranges and return
+	SSA_PROP_INTERESTING if so, or SSA_PROP_NOT_INTERESTING
+	if there are some REALPART_EXPR/IMAGPART_EXPR immediate uses
+	interesting for vrp.
+
+2014-11-21  Michael Meissner  <meissner@linux.vnet.ibm.com>
+
+	PR target/63965
+	* config/rs6000/rs6000.c (rs6000_setup_reg_addr_masks): Do not set
+	Altivec & -16 mask if the type is not valid for Altivec registers.
+	(rs6000_secondary_reload_memory): Add support for ((reg + const) +
+	reg) that occurs during push_reload processing.
+
+	* config/rs6000/altivec.md (altivec_mov<mode>): Add instruction
+	alternative for moving constant vectors which are easy altivec
+	constants to GPRs.  Set the length attribute each of the
+	alternatives.
+
+2014-11-21  Matthew Fortune  <matthew.fortune@imgtec.com>
+
+	* configure.ac: When checking for MIPS .module support ensure that
+	o32 FPXX is supported to avoid a second configure check.
+	* configure: Regenerate.
+
+2014-11-21  Jiong Wang  <jiong.wang@arm.com>
+
+	* config/aarch64/iterators.md (VS): New mode iterator.
+	(vsi2qi): New mode attribute.
+	(VSI2QI): Likewise.
+	* config/aarch64/aarch64-simd-builtins.def: New entry for ctz.
+	* config/aarch64/aarch64-simd.md (ctz<mode>2): New pattern for ctz.
+	* config/aarch64/aarch64-builtins.c
+	(aarch64_builtin_vectorized_function): Support BUILT_IN_CTZ.
+
+2014-11-21  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR bootstrap/63784
+	* configure: Regenerated.
+
+2014-11-21  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/aarch64/arm_neon.h (vsqrt_f64): New intrinsic.
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* common/config/i386/i386-common.c (OPTION_MASK_ISA_PCOMMIT_UNSET,
+	OPTION_MASK_ISA_PCOMMIT_SET): New.
+	(ix86_handle_option): Handle OPT_mpcommit.
+	* config.gcc: Add pcommitintrin.h
+	* config/i386/pcommitintrin.h: New file.
+	* config/i386/cpuid.h (bit_PCOMMIT): Define.
+	* config/i386/driver-i386.c (host_detect_local_cpu): Detect pcommit.
+	* config/i386/i386-c.c (ix86_target_macros_internal): Define
+	__PCOMMIT__.
+	* config/i386/i386.c (ix86_target_string): Add -mpcommit.
+	(PTA_PCOMMIT): Define.
+	(ix86_option_override_internal): Handle new option.
+	(ix86_valid_target_attribute_inner_p): Add pcommit.
+	(ix86_builtins): Add IX86_BUILTIN_PCOMMIT.
+	(bdesc_special_args): Add __builtin_ia32_pcommit.
+	* config/i386/i386.h (TARGET_PCOMMIT, TARGET_PCOMMIT_P): Define.
+	* config/i386/i386.md (unspecv): Add UNSPECV_PCOMMIT.
+	(pcommit): New instruction.
+	* config/i386/i386.opt: Add mpcommit.
+	* config/i386/x86intrin.h: Include pcommitintrin.h.
+
+2014-11-20  Mark Wielaard  <mjw@redhat.com>
+
+	PR debug/38757
+	* config/avr/avr-c.c (avr_cpu_cpp_builtins): Use lang_GNU_C.
+	* config/darwin.c (darwin_file_end): Use lang_GNU_CXX.
+	(darwin_override_options): Likewise.
+	* config/ia64/ia64.c (ia64_struct_retval_addr_is_first_parm_p):
+	Likewise.
+	* config/rs6000/rs6000.c (rs6000_output_function_epilogue):
+	Likewise.
+	* dbxout.c (get_lang_number): Likewise.
+	(dbxout_type): Likewise.
+	(dbxout_symbol_location): Likewise.
+	* dwarf2out.c (add_prototyped_attribute): Add DW_AT_prototype
+	also for DW_LANG_{C,C99,ObjC}.
+	(highest_c_language): New function.
+	(gen_compile_unit_die): Call highest_c_language to merge LTO
+	TRANSLATION_UNIT_LANGUAGE. Use strncmp language_string to
+	determine if DW_LANG_C99 or DW_LANG_C89 should be returned.
+	* fold-const.c (fold_cond_expr_with_comparison): Use lang_GNU_CXX.
+	* langhooks.h (struct lang_hooks): Add version comment to name.
+	(lang_GNU_C): New function declaration.
+	(lang_GNU_CXX): Likewise.
+	* langhooks.c (lang_GNU_C): New function.
+	(lang_GNU_CXX): Likewise.
+	* vmsdbgout.c (vmsdbgout_init): Use lang_GNU_C and lang_GNU_CXX.
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* common/config/i386/i386-common.c (OPTION_MASK_ISA_CLWB_UNSET,
+	OPTION_MASK_ISA_CLWB_SET): New.
+	(ix86_handle_option): Handle OPT_mclwb.
+	* config.gcc: Add clwbintrin.h.
+	* config/i386/clwbintrin.h: New file.
+	* config/i386/cpuid.h (bit_CLWB): Define.
+	* config/i386/driver-i386.c (host_detect_local_cpu): Detect clwb.
+	* config/i386/i386-c.c (ix86_target_macros_internal): Define
+	__CLWB__.
+	* config/i386/i386.c (ix86_target_string): Add -mclwb.
+	(PTA_CLWB): Define.
+	(ix86_option_override_internal): Handle new option.
+	(ix86_valid_target_attribute_inner_p): Add clwb.
+	(ix86_builtins): Add IX86_BUILTIN_CLWB.
+	(ix86_init_mmx_sse_builtins): Add __builtin_ia32_clwb.
+	(ix86_expand_builtin): Handle IX86_BUILTIN_CLWB.
+	* config/i386/i386.h (TARGET_CLWB, TARGET_CLWB_P): Define.
+	* config/i386/i386.md (unspecv): Add UNSPECV_CLWB.
+	(clwb): New instruction.
+	* config/i386/i386.opt: Add mclwb.
+	* config/i386/x86intrin.h: Include clwbintrin.h.
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* common/config/i386/i386-common.c (OPTION_MASK_ISA_AVX512VBMI_SET
+	OPTION_MASK_ISA_AVX512VBMI_UNSET): New.
+	(ix86_handle_option): Handle OPT_mavx512vbmi.
+	* config.gcc: Add avx512vbmiintrin.h, avx512vbmivlintrin.h.
+	* config/i386/avx512vbmiintrin.h: New file.
+	* config/i386/avx512vbmivlintrin.h: Ditto.
+	* config/i386/cpuid.h (bit_AVX512VBMI): New.
+	* config/i386/driver-i386.c (host_detect_local_cpu): Detect avx512vbmi.
+	* config/i386/i386-c.c (ix86_target_macros_internal): Define
+	__AVX512VBMI__.
+	* config/i386/i386.c (ix86_target_string): Add -mavx512vbmi.
+	(PTA_AVX512VBMI): Define.
+	(ix86_option_override_internal): Handle new options.
+	(ix86_valid_target_attribute_inner_p): Add avx512vbmi,
+	(ix86_builtins): Add IX86_BUILTIN_VPMULTISHIFTQB512,
+	IX86_BUILTIN_VPMULTISHIFTQB256, IX86_BUILTIN_VPMULTISHIFTQB128,
+	IX86_BUILTIN_VPERMVARQI512_MASK, IX86_BUILTIN_VPERMT2VARQI512,
+	IX86_BUILTIN_VPERMT2VARQI512_MASKZ, IX86_BUILTIN_VPERMI2VARQI512,
+	IX86_BUILTIN_VPERMVARQI256_MASK, IX86_BUILTIN_VPERMVARQI128_MASK,
+	IX86_BUILTIN_VPERMT2VARQI256, IX86_BUILTIN_VPERMT2VARQI256_MASKZ,
+	IX86_BUILTIN_VPERMT2VARQI128, IX86_BUILTIN_VPERMI2VARQI256,
+	IX86_BUILTIN_VPERMI2VARQI128.
+	(bdesc_special_args): Add __builtin_ia32_vpmultishiftqb512_mask,
+	__builtin_ia32_vpmultishiftqb256_mask,
+	__builtin_ia32_vpmultishiftqb128_mask,
+	__builtin_ia32_permvarqi512_mask, __builtin_ia32_vpermt2varqi512_mask,
+	__builtin_ia32_vpermt2varqi512_maskz,
+	__builtin_ia32_vpermi2varqi512_mask, __builtin_ia32_permvarqi256_mask,
+	__builtin_ia32_permvarqi128_mask, __builtin_ia32_vpermt2varqi256_mask,
+	__builtin_ia32_vpermt2varqi256_maskz,
+	__builtin_ia32_vpermt2varqi128_mask,
+	__builtin_ia32_vpermt2varqi128_maskz,
+	__builtin_ia32_vpermi2varqi256_mask,
+	__builtin_ia32_vpermi2varqi128_mask.
+	(ix86_hard_regno_mode_ok): Allow big masks for AVX512VBMI.
+	* config/i386/i386.h (TARGET_AVX512VBMI, TARGET_AVX512VBMI_P): Define.
+	* config/i386/i386.opt: Add mavx512vbmi.
+	* config/i386/immintrin.h: Include avx512vbmiintrin.h,
+	avx512vbmivlintrin.h.
+	* config/i386/sse.md (unspec): Add UNSPEC_VPMULTISHIFT.
+	(VI1_AVX512VL): New iterator.
+	(<avx512>_permvar<mode><mask_name>): Use it.
+	(<avx512>_vpermi2var<mode>3_maskz): Ditto.
+	(<avx512>_vpermi2var<mode>3<sd_maskz_name>): Ditto.
+	(<avx512>_vpermi2var<mode>3_mask): Ditto.
+	(<avx512>_vpermt2var<mode>3_maskz): Ditto.
+	(<avx512>_vpermt2var<mode>3<sd_maskz_name>): Ditto.
+	(<avx512>_vpermt2var<mode>3_mask): Ditto.
+	(vpmultishiftqb<mode><mask_name>): Ditto.
+
+2014-11-21  Ulrich Weigand  <Ulrich.Weigand@de.ibm.com>
+
+	PR rtl-optimization/63952
+	* optabs.c (prepare_cmp_insn): Do not call can_compare_p for CCmode.
+	* config/s390/s390.md ("cbranchcc4"): Accept any s390_comparison.
+	Remove incorrect TARGET_HARD_FLOAT check and no-op expander code.
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* common/config/i386/i386-common.c (OPTION_MASK_ISA_AVX512IFMA_SET,
+	OPTION_MASK_ISA_AVX512IFMA_UNSET): New.
+	(ix86_handle_option): Handle OPT_mavx512ifma.
+	* config.gcc: Add avx512ifmaintrin.h, avx512ifmavlintrin.h.
+	* config/i386/avx512ifmaintrin.h: New file.
+	* config/i386/avx512ifmaivlntrin.h: Ditto.
+	* config/i386/cpuid.h (bit_AVX512IFMA): New.
+	* config/i386/driver-i386.c (host_detect_local_cpu): Detect
+	avx512ifma.
+	* config/i386/i386-c.c (ix86_target_macros_internal): Define
+	__AVX512IFMA__.
+	* config/i386/i386.c (ix86_target_string): Add -mavx512ifma.
+	(PTA_AVX512IFMA): Define.
+	(ix86_option_override_internal): Handle new options.
+	(ix86_valid_target_attribute_inner_p): Add avx512ifma.
+	(ix86_builtins): Add IX86_BUILTIN_VPMADD52LUQ512,
+	IX86_BUILTIN_VPMADD52HUQ512, IX86_BUILTIN_VPMADD52LUQ256,
+	IX86_BUILTIN_VPMADD52HUQ256, IX86_BUILTIN_VPMADD52LUQ128,
+	IX86_BUILTIN_VPMADD52HUQ128, IX86_BUILTIN_VPMADD52LUQ512_MASKZ,
+	IX86_BUILTIN_VPMADD52HUQ512_MASKZ, IX86_BUILTIN_VPMADD52LUQ256_MASKZ,
+	IX86_BUILTIN_VPMADD52HUQ256_MASKZ, IX86_BUILTIN_VPMADD52LUQ128_MASKZ,
+	IX86_BUILTIN_VPMADD52HUQ128_MASKZ.
+	(bdesc_special_args): Add __builtin_ia32_vpmadd52luq512_mask,
+	__builtin_ia32_vpmadd52luq512_maskz,
+	__builtin_ia32_vpmadd52huq512_mask,
+	__builtin_ia32_vpmadd52huq512_maskx,
+	__builtin_ia32_vpmadd52luq256_mask,
+	__builtin_ia32_vpmadd52luq256_maskz,
+	__builtin_ia32_vpmadd52huq256_mask,
+	__builtin_ia32_vpmadd52huq256_maskz,
+	__builtin_ia32_vpmadd52luq128_mask,
+	__builtin_ia32_vpmadd52luq128_maskz,
+	__builtin_ia32_vpmadd52huq128_mask,
+	__builtin_ia32_vpmadd52huq128_maskz,
+	* config/i386/i386.h (TARGET_AVX512IFMA, TARGET_AVX512IFMA_P): Define.
+	* config/i386/i386.opt: Add mavx512ifma.
+	* config/i386/immintrin.h: Include avx512ifmaintrin.h,
+	avx512ifmavlintrin.h.
+	* config/i386/sse.md (unspec): Add UNSPEC_VPMADD52LUQ,
+	UNSPEC_VPMADD52HUQ.
+	(VPMADD52): New iterator.
+	(vpmadd52type): New attribute.
+	(vpamdd52huq<mode>_maskz): New.
+	(vpamdd52luq<mode>_maskz): Ditto.
+	(vpamdd52<vpmadd52type><mode><sd_maskz_name>): Ditto.
+	(vpamdd52<vpmadd52type><mode>_mask): Ditto.
+
+2014-11-21  Alan Lawrence  <alan.lawrence@arm.com>
+
+	Revert:
+	2014-09-22  Alan Lawrence  <alan.lawrence@arm.com>
+	* fold-const.c (tree_swap_operands_p): Strip only sign-preserving NOPs.
+
+2014-11-21  Andrew Bennett  <andrew.bennett@imgtec.com>
+
+	* config/mips/mips.c (mips_process_sync_loop): Place a 
+	nop in the delay slot of the branch likely instruction.
+	(mips_output_sync_loop): Ensure mips_branch_likely is 
+	set before calling mips_output_sync_loop.
+	(mips_sync_loop_insns): Likewise.
+
+2014-11-21  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
+
+	PR/target 63673
+	* config/rs6000/rs6000-c.c (altivec_overloaded_builtins): Allow
+	the base pointer of vec_vsx_ld and vec_vsx_st to take a pointer to
+	double.
+
+2014-11-21  Georg-Johann Lay  <avr@gjlay.de>
+
+	Forward-port from 2014-10-30 4_9-branch r216934
+
+	PR target/63633
+	* config/avr/avr-protos.h (regmask): New inline function.
+	(avr_fix_inputs, avr_emit3_fix_outputs): New protos.
+	* config/avr/avr.c (avr_fix_operands, avr_move_fixed_operands)
+	(avr_fix_inputs, avr_emit3_fix_outputs): New functions.
+	* config/avr/avr-fixed.md (mulqq3_nomul, muluqq3_nomul)
+	(mul<ALL2QA>3, mul<ALL4A>3, <usdiv><ALL1Q>3, <usdiv><ALL2QA>3)
+	(<usdiv><ALL4A>3, round<ALL124QA>3): Fix input operands.
+	* config/avr/avr-dimode.md (add<ALL8>3, sub<ALL8>3)
+	(<ss_addsub><ALL8S>3, <us_addsub><ALL8U>3, cbranch<ALL8>4)
+	(<di_shifts><ALL8>3, <any_extend>mulsidi3): Fix input operands.
+	* config/avr/avr.md (mulqi3_call, mulhi3_call, mulsi3, mulpsi3)
+	(mulu<QIHI>si3, muls<QIHI>si3, mulohisi3, <any_extend>mulhisi3)
+	(usmulhisi3, <any_extend>mulhi3_highpart, mulsqipsi3)
+	(fmul, fmuls, fmulsu): Fix operands.  Turn insn into expander as
+	needed.
+
+2014-11-21  Jakub Jelinek  <jakub@redhat.com>
+
+	PR target/61137
+	* config/ia64/ia64.c (ia64_attribute_takes_identifier_p): New function.
+	(TARGET_ATTRIBUTE_TAKES_IDENTIFIER_P): Redefine to it.
+
+2014-11-21  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/aarch64/aarch64-simd.md
+	(aarch64_<ANY_EXTEND:su><ADDSUB:optab>l<mode>): Add a tab between
+	output mnemonic and operands.
+	(aarch64_simd_vec_unpack<su>_lo_<mode>): Likewise.
+	(aarch64_simd_vec_unpack<su>_hi_<mode>): Likewise.
+
+2014-11-21  Evgeny Stupachenko  <evstupac@gmail.com>
+
+	* config/i386/i386.c (ix86_option_override_internal): Increase
+	PARAM_MAX_COMPLETELY_PEELED_INSNS.
+
+2014-11-21  Evgeny Stupachenko  <evstupac@gmail.com>
+
+	PR target/60451
+	* config/i386/i386.c (expand_vec_perm_even_odd_pack): New.
+	(expand_vec_perm_even_odd_1): Add new expand for V8HI mode,
+	replace for V16QI, V16HI and V32QI modes.
+	(ix86_expand_vec_perm_const_1): Add new expand.
+
+2014-11-21  Nick Clifton  <nickc@redhat.com>
+
+	* config/rl78/rl78-real.md (movqi_from_es): New pattern.
+	* config/rl78/rl78.c (struct machine_function): Add uses_es field.
+	(rl78_expand_prologue): Save the ES register in interrupt handlers
+	that use it.
+	(rl78_expand_epilogue): Restore the ES register if necessary.
+	(rl78_start_function): Mention if the function uses the ES
+	register.
+	(rl78_lo16): Record the use of the ES register.
+	(transcode_memory_rtx): Likewise.
+
+2014-11-21  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/61773
+	* tree-ssa-strlen.c (get_string_length): Don't assert
+	stpcpy has been prototyped if si->stmt is BUILT_IN_MALLOC.
+
+	PR target/63910
+	* simplify-rtx.c (simplify_immed_subreg): Return NULL for integer
+	modes wider than MAX_BITSIZE_MODE_ANY_INT.  If not using
+	CONST_WIDE_INT, make sure r fits into CONST_DOUBLE.
+
+2014-11-21  Markus Trippelsdorf  <markus@trippelsdorf.de>
+
+	* config/rs6000/rs6000.c (includes_rldic_lshift_p): Use
+	HOST_WIDE_INT_M1U instead of ~0.
+	(includes_rldicr_lshift_p): Likewise.
+
+2014-11-21  Chung-Ju Wu  <jasonwucj@gmail.com>
+
+	* config/nds32/nds32.c (nds32_legitimate_address_p): For LO_SUM,
+	we need to look into its operand to determine if it is a valid
+	address.
+
+2014-11-21  Chung-Ju Wu  <jasonwucj@gmail.com>
+
+	* config/nds32/nds32.c (nds32_emit_stack_push_multiple): Add new
+	vaarg_p argument and create correct CFI info.
+	(nds32_expand_prologue): Pass true or false to
+	nds32_emit_stack_push_multiple function.
+
+2014-11-21  Chung-Ju Wu  <jasonwucj@gmail.com>
+
+	* config/nds32/nds32.c (nds32_expand_prologue): Set fp_adjust_insn
+	as RTX_FRAME_RELATED_P rtx.
+
+2014-11-21  Chung-Ju Wu  <jasonwucj@gmail.com>
+
+	* config/nds32/nds32.opt (march): Add help message.
+
+2014-11-20  Patrick Palka  <ppalka@gcc.gnu.org>
+
+	* tree-vrp.c (test_for_singularity): New parameter
+	strict_overflow_p.  Set *strict_overflow_p to true if signed
+	overflow must be undefined for the return value to satisfy the
+	conditional.
+	(simplify_cond_using_ranges): Don't perform the simplification
+	if it violates overflow rules.
+
+2014-11-20  Marek Polacek  <polacek@redhat.com>
+
+	* tree-ssa-loop-niter.c (maybe_lower_iteration_bound): Fix typo.
+
+2014-11-20  Andrew Stubbs  <ams@codesourcery.com>
+
+	* tree-ssa-loop-niter.c (maybe_lower_iteration_bound): Warn if a loop
+	condition would be removed due to undefined behaviour.
+
+2014-11-20  Andrew Pinski  <apinski@cavium.com>
+
+	PR ipa/63981
+	PR ipa/63982
+	* ipa-polymorphic-call.c (possible_placement_new):
+	Use POINTER_SIZE instead of GET_MODE_BITSIZE (Pmode).
+	(ipa_polymorphic_call_context::restrict_to_inner_class): Likewise.
+	(extr_type_from_vtbl_ptr_store): Likewise.
+
 2014-11-20  Markus Trippelsdorf  <markus@trippelsdorf.de>
 
 	* config/rs6000/constraints.md: Avoid signed integer overflows.

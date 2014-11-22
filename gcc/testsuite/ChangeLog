@@ -1,3 +1,143 @@
+2014-11-21  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/64006
+	* gcc.c-torture/execute/pr64006.c: New test.
+
+2014-11-21  Lynn Boger  <laboger@linux.vnet.ibm.com>
+
+	* go.test/go-test.exp (go-set-goarch): Add case for ppc64le goarch
+	value for go testing.
+
+2014-11-21  Jiong Wang  <jiong.wang@arm.com>
+
+	* gcc.target/aarch64/vect_ctz_1.c: New testcase.
+
+2014-11-21  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* gcc.target/aarch64/simd/vsqrt_f64_1.c
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* g++.dg/other/i386-2.C: Add -mpcommit.
+	* g++.dg/other/i386-3.C: Ditto.
+	* gcc.target/i386/pcommit-1.c: New test.
+	* gcc.target/i386/sse-12.c: Add new options.
+	* gcc.target/i386/sse-13.c: Ditto.
+	* gcc.target/i386/sse-14.c: Ditto.
+	* gcc.target/i386/sse-22.c: Ditto.
+	* gcc.target/i386/sse-23.c: Ditto.
+
+2014-11-20  Mark Wielaard  <mjw@redhat.com>
+
+	PR debug/38757
+	* gcc.dg/debug/dwarf2/lang-c89.c: New test.
+	* gcc.dg/debug/dwarf2/lang-c99.c: Likewise.
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* g++.dg/other/i386-2.C: Add -mclwb.
+	* g++.dg/other/i386-3.C: Ditto.
+	* gcc.target/i386/clwb-1.c: New test.
+	* gcc.target/i386/sse-12.c: Add new options.
+	* gcc.target/i386/sse-13.c: Ditto.
+	* gcc.target/i386/sse-14.c: Ditto.
+	* gcc.target/i386/sse-22.c: Ditto.
+	* gcc.target/i386/sse-23.c: Ditto.
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* g++.dg/other/i386-2.C: Add -mavx512vbmi.
+	* g++.dg/other/i386-3.C: Ditto.
+	* gcc.target/i386/avx512f-helper.h: Add avx512vbmi-check.h.
+	* gcc.target/i386/avx512vbmi-check.h: Ditto.
+	* gcc.target/i386/avx512vbmi-vpermb-1.c: Ditto.
+	* gcc.target/i386/avx512vbmi-vpermb-2.c: Ditto.
+	* gcc.target/i386/avx512vbmi-vpermi2b-1.c: Ditto.
+	* gcc.target/i386/avx512vbmi-vpermi2b-2.c: Ditto.
+	* gcc.target/i386/avx512vbmi-vpermt2b-1.c: Ditto.
+	* gcc.target/i386/avx512vbmi-vpermt2b-2.c: Ditto.
+	* gcc.target/i386/avx512vbmi-vpmultishiftqb-1.c: Ditto.
+	* gcc.target/i386/avx512vbmi-vpmultishiftqb-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpermb-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpermi2b-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpermt2b-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpmaddhuq-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpmaddluq-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpmultishiftqb-2.c: Ditto.
+	* gcc.target/i386/i386.exp (check_effective_target_avx512vbmi): New.
+	* gcc.target/i386/sse-12.c: Add new options.
+	* gcc.target/i386/sse-13.c: Ditto.
+	* gcc.target/i386/sse-14.c: Ditto.
+	* gcc.target/i386/sse-22.c: Ditto.
+	* gcc.target/i386/sse-23.c: Ditto.
+
+2014-11-21  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* g++.dg/other/i386-2.C: Add -mavx512ifma.
+	* g++.dg/other/i386-3.C: Ditto.
+	* gcc.target/i386/avx512f-helper.h: Add avx512ifma-check.h.
+	* gcc.target/i386/avx512ifma-check.h: New.
+	* gcc.target/i386/avx512ifma-vpmaddhuq-1.c: Ditto.
+	* gcc.target/i386/avx512ifma-vpmaddhuq-2.c: Ditto.
+	* gcc.target/i386/avx512ifma-vpmaddluq-1.c: Ditto.
+	* gcc.target/i386/avx512ifma-vpmaddluq-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpmaddhuq-2.c: Ditto.
+	* gcc.target/i386/avx512vl-vpmaddluq-2.c: Ditto.
+	* gcc.target/i386/i386.exp (check_effective_target_avx512ifma): New.
+	* gcc.target/i386/sse-12.c: Add new options.
+	* gcc.target/i386/sse-13.c: Ditto.
+	* gcc.target/i386/sse-14.c: Ditto.
+	* gcc.target/i386/sse-22.c: Ditto.
+	* gcc.target/i386/sse-23.c: Ditto.
+
+2014-11-21  Georg-Johann Lay  <avr@gjlay.de>
+
+	Forward-port from 2014-10-30 4_9-branch r216934
+
+	PR target/63633
+	* gcc.target/avr/torture/pr63633-ice-mult.c: New test.
+
+2014-11-21  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	PR debug/63239
+	* g++.dg/debug/dwarf2/deleted-member-function.C: Pass
+	-gno-strict-dwarf.
+
+2014-11-21  Tom de Vries  <tom@codesourcery.com>
+
+	* gcc.dg/store-motion-fgcse-sm.c: New test.
+
+2014-11-21  Evgeny Stupachenko  <evstupac@gmail.com>
+
+	PR target/60451
+	* gcc.target/i386/pr60451.c: New.
+
+2014-11-21  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/61773
+	* gcc.dg/pr61773.c: New test.
+
+	PR target/63764
+	* c-c++-common/pr63764-1.c: New test.
+	* c-c++-common/pr63764-2.c: New test.
+
+	PR target/63910
+	* gcc.target/i386/pr63910.c: New test.
+
+2014-11-21  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+
+	PR lto/63998
+	* gcc.dg/lto/pr60820_0.c: Skip on darwin.
+
+2014-11-20  Patrick Palka  <ppalka@gcc.gnu.org>
+
+	* gcc.dg/no-strict-overflow-8.c: New test.
+
+2014-11-20  Andrew Stubbs  <ams@codesourcery.com>
+
+	* gcc.dg/undefined-loop-1.c: New file.
+	* gcc.dg/undefined-loop-2.c: New file.
+
 2014-11-20  Tejas Belagod  <tejas.belagod@arm.com>
 
 	* gcc.target/aarch64/symbol-range.c: New.
