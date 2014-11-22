@@ -1,3 +1,9 @@
+2014-11-22  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #13244
+	* lra.c (lra_substitute_pseudo): Use gen_lowpart_if_possible
+	instead of gen_rtx_SUBREG/gen_lowpart_SUBREG.
+
 2014-11-17  Andrew Pinski  <apinski@cavium.com>
 
 	PR ipa/63981
