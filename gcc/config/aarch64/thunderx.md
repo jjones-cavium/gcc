@@ -63,18 +63,23 @@
 
 (define_insn_reservation "thunderx_mul" 4
   (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "mul,muls,mla,mlas,clz,smull,umull,smlal,umlal")
-       (not (eq_attr "mode" "TI")))
+       (eq_attr "type" "mul,muls,mla,mlas,clz,smull,umull,smlal,umlal"))
   "thunderx_pipe1 + thunderx_mult")
 
-;; Multiply high instructions take an extra cycle and cause the muliply unit to
-;; be busy for an extra cycle.
+;; crcb,crch,crcw is 4 cycles and can only happen on pipe 1
 
-(define_insn_reservation "thunderx_mul_high" 5
+(define_insn_reservation "thunderx_crc32" 4
   (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "smull,umull")
-       (eq_attr "mode" "TI"))
-  "thunderx_pipe1 + thunderx_mult, thunderx_mult")
+       (eq_attr "type" "crc")
+       (not (eq_attr "mode" "DI")))
+  "thunderx_pipe1 + thunderx_mult")
+
+;; crcx is 5 cycles and only happen on pipe 1
+(define_insn_reservation "thunderx_crc64" 5
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "crc")
+       (eq_attr "mode" "DI"))
+  "thunderx_pipe1 + thunderx_mult")
 
 (define_insn_reservation "thunderx_div32" 22
   (and (eq_attr "tune" "thunderx")

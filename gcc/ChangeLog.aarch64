@@ -1,3 +1,12 @@
+2014-11-22  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.md (CRC): Add mode attribute.
+	* config/aarch64/thunderx.md (thunderx_mul): Remove
+	check for mode. It was not correct.
+	(thunderx_mul_high): Delete.
+	(thunderx_crc32): New reservation.
+	(thunderx_crc64): Likewise.
+
 2014-11-21  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13243

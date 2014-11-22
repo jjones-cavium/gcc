@@ -2852,8 +2852,8 @@
     else
       return "<crc_variant>\\t%w0, %w1, %w2";
   }
-  [(set_attr "type" "crc")]
-)
+  [(set_attr "type" "crc")
+   (set_attr "mode" "<crc_mode>")])
 
 (define_insn "*csinc2<mode>_insn"
   [(set (match_operand:GPI 0 "register_operand" "=r")
