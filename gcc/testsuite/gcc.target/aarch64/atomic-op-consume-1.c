@@ -1,6 +1,5 @@
 /* { dg-do compile } */
-/* { dg-skip-if "" { aarch64_atomic } } */
-/* { dg-options "-O2 -march=armv8-a+noatomic" } */
+/* { dg-options "-O2 -march=armv8-a+nolse" } */
 
 #include "atomic-op-consume.x"
 

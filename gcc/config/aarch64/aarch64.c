@@ -9021,7 +9021,7 @@ aarch64_expand_compare_and_swap (rtx operands[])
     case HImode:
       /* For short modes, we're going to perform the comparison in SImode,
 	 so do the zero-extension now.  */
-      if (!TARGET_ATOMIC) { /* atomic supports QI and HI directly */
+      if (!TARGET_LSE) { /* atomic supports QI and HI directly */
         cmp_mode = SImode;
         rval = gen_reg_rtx (SImode);
         oldval = convert_modes (SImode, mode, oldval, true);
@@ -9031,7 +9031,7 @@ aarch64_expand_compare_and_swap (rtx operands[])
     case SImode:
     case DImode:
       /* Force the value into a register if needed.  */
-      if (!aarch64_plus_operand (oldval, mode) || TARGET_ATOMIC)
+      if (!aarch64_plus_operand (oldval, mode) || TARGET_LSE)
 	oldval = force_reg (cmp_mode, oldval);
       break;
 
@@ -9039,7 +9039,7 @@ aarch64_expand_compare_and_swap (rtx operands[])
       gcc_unreachable ();
     }
 
-  if (TARGET_ATOMIC)
+  if (TARGET_LSE)
     {
       rtx (*gen) (rtx, rtx, rtx, rtx, rtx, rtx);
       rtx x;

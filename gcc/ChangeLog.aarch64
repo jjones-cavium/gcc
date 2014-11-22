@@ -1,3 +1,16 @@
+2014-11-21  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #13243
+	* config/aarch64/aarch64-option-extensions.def: s/atomic/lse/. s/ATOMIC/LSE/.
+	* config/aarch64/aarch64.c (aarch64_expand_compare_and_swap):
+	s/TARGET_ATOMIC/TARGET_LSE/.
+	* config/aarch64/aarch64.h: s/TARGET_ATOMIC/TARGET_LSE/. s/AARCH64_FL_ATOMIC/AARCH64_FL_LSE/.
+	s/AARCH64_ISA_ATOMIC/AARCH64_ISA_LSE.
+	* config/aarch64/atomics.md: s/TARGET_ATOMIC/TARGET_LSE/.
+	* testsuite/gcc.target/aarch64/*.c: s/noatomic/nolse.
+	Also fix up all atomic testcase so they are tested
+	even when the target at hand does not turn on LSE.
+
 2014-11-20  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	* config/aarch64/aarch64.c (aarch64_registers_ok_for_load_pair_peep):

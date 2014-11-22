@@ -192,7 +192,7 @@
   {
     bool isLdOp = false;;
     rtx (*gen) (rtx, rtx, rtx, rtx);
-    if (TARGET_ATOMIC)
+    if (TARGET_LSE)
       {
         switch (<CODE>) {
           default:
@@ -213,7 +213,7 @@
             break;
           }
       }
-    if (!TARGET_ATOMIC || !isLdOp)
+    if (!TARGET_LSE || !isLdOp)
       {
         operands[4] = gen_reg_rtx(<MODE>mode);
         operands[5] = gen_reg_rtx(SImode);
@@ -242,7 +242,7 @@
               (match_operand:ALLI 2 "<atomic_op_operand>" "r"))]
           UNSPECV_ATOMIC_OP))
     (match_operand:SI 3 "const_int_operand")])]          ;; memory model
-  "TARGET_ATOMIC"
+  "TARGET_LSE"
   "ld<atomic_ldop_optab>%Q3%R3<atomic_sfx>\t%<w>2, %<w>0, %w1"
 )
 

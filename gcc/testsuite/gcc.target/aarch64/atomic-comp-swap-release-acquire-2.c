@@ -1,6 +1,5 @@
 /* { dg-do compile } */
-/* { dg-options "-O2" } */
-/* { dg-require-effective-target aarch64_atomic } */
+/* { dg-options "-O2 -march=armv8-a+lse" } */
 
 #include "atomic-comp-swap-release-acquire.x"
 

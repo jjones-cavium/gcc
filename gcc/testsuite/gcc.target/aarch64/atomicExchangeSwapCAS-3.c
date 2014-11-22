@@ -1,5 +1,5 @@
 /* { dg-do compile } */
-/* { dg-require-effective-target aarch64_atomic } */
+/* { dg-options "-O2 -march=armv8-a+lse" } */
 /* { dg-final { scan-assembler-times "cas\\t" 2 } } */
 /* { dg-final { scan-assembler-times "casa\\t" 2 } } */
 /* { dg-final { scan-assembler-times "casal\\t" 4 } } */

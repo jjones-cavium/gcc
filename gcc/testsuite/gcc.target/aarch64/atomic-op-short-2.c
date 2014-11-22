@@ -1,6 +1,5 @@
 /* { dg-do compile } */
-/* { dg-require-effective-target aarch64_atomic } */
-/* { dg-options "-O2" } */
+/* { dg-options "-O2 -march=armv8-a+lse" } */
 
 #include "atomic-op-short.x"
 

@@ -93,8 +93,8 @@
 	}						\
       if (TARGET_CRYPTO)				\
 	builtin_define ("__ARM_FEATURE_CRYPTO");	\
-      if (TARGET_ATOMIC)				\
-	builtin_define ("__ARM_FEATURE_ATOMIC");	\
+      if (TARGET_LSE)					\
+	builtin_define ("__ARM_FEATURE_LSE");		\
     } while (0)
 
 
@@ -202,7 +202,7 @@ extern unsigned aarch64_architecture_version;
 #define AARCH64_FL_CRYPTO     (1 << 2)	/* Has crypto.  */
 #define AARCH64_FL_SLOWMUL    (1 << 3)	/* A slow multiply core.  */
 #define AARCH64_FL_CRC        (1 << 4)	/* Has CRC.  */
-#define AARCH64_FL_ATOMIC     (1 << 5)	/* Has ARMV8.1 atomic instructions.  */
+#define AARCH64_FL_LSE        (1 << 5)	/* Has LSE Atomic instructions.  */
 
 /* Has FP and SIMD.  */
 #define AARCH64_FL_FPSIMD     (AARCH64_FL_FP | AARCH64_FL_SIMD)
@@ -219,7 +219,7 @@ extern unsigned long aarch64_isa_flags;
 #define AARCH64_ISA_CRYPTO         (aarch64_isa_flags & AARCH64_FL_CRYPTO)
 #define AARCH64_ISA_FP             (aarch64_isa_flags & AARCH64_FL_FP)
 #define AARCH64_ISA_SIMD           (aarch64_isa_flags & AARCH64_FL_SIMD)
-#define AARCH64_ISA_ATOMIC         (aarch64_isa_flags & AARCH64_FL_ATOMIC)
+#define AARCH64_ISA_LSE		   (aarch64_isa_flags & AARCH64_FL_LSE)
 
 /* Macros to test tuning flags.  */
 extern unsigned long aarch64_tune_flags;
@@ -228,8 +228,8 @@ extern unsigned long aarch64_tune_flags;
 /* Crypto is an optional extension to AdvSIMD.  */
 #define TARGET_CRYPTO (TARGET_SIMD && AARCH64_ISA_CRYPTO)
 
-/* Atomics are an optional feature.  */
-#define TARGET_ATOMIC AARCH64_ISA_ATOMIC
+/* Large System extensions are an optional feature.  */
+#define TARGET_LSE AARCH64_ISA_LSE
 
 /* CRC instructions that can be enabled through +crc arch extension.  */
 #define TARGET_CRC32 (AARCH64_ISA_CRC)
