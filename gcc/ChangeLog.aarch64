@@ -1,3 +1,9 @@
+2014-11-23  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (AARCH64_FUSE_CMP_BRANCH): New define.
+	(thunderx_tunings): Add AARCH64_FUSE_CMP_BRANCH to fuseable_ops.
+	(aarch_macro_fusion_pair_p): Handle AARCH64_FUSE_CMP_BRANCH.
+
 2014-11-22  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.md (CRC): Add mode attribute.

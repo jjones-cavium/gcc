@@ -326,6 +326,7 @@ static const struct prefetch_cost thunderx_prefetch_costs = {
 #define AARCH64_FUSE_ADRP_ADD	(1 << 1)
 #define AARCH64_FUSE_MOVK_MOVK	(1 << 2)
 #define AARCH64_FUSE_ADRP_LDR	(1 << 3)
+#define AARCH64_FUSE_CMP_BRANCH	(1 << 4)
 
 #if HAVE_DESIGNATED_INITIALIZERS && GCC_VERSION >= 2007
 __extension__
@@ -380,7 +381,7 @@ static const struct tune_params thunderx_tunings =
   NAMED_PARAM (memmov_cost, 6),
   NAMED_PARAM (issue_rate, 2),
   NAMED_PARAM (align, 8),
-  NAMED_PARAM (fuseable_ops, AARCH64_FUSE_NOTHING)
+  NAMED_PARAM (fuseable_ops, AARCH64_FUSE_CMP_BRANCH)
 };
 
 /* A processor implementing AArch64.  */
@@ -10669,6 +10670,23 @@ aarch_macro_fusion_pair_p (rtx_insn *prev, rtx_insn *curr)
                               XEXP (SET_SRC (prev_set), 0)))
               return true;
         }
+    }
+
+  if ((aarch64_tune_params->fuseable_ops & AARCH64_FUSE_CMP_BRANCH)
+      && any_condjump_p (curr))
+    {
+      /* FIXME: this misses some which are considered simple arthematic
+         instructions for ThunderX.  Simple shifts are missed here.  */
+      switch (get_attr_type (prev))
+	{
+	  case TYPE_ALUS_SREG:
+	  case TYPE_ALUS_IMM:
+	  case TYPE_LOGICS_REG:
+	  case TYPE_LOGICS_IMM:
+	    return true;
+	  default:
+	    ;
+	}
     }
 
   return false;
