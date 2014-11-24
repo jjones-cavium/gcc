@@ -182,7 +182,7 @@ struct tune_params
   const int memmov_cost;
   const int issue_rate;
   const int align;
-  bool (*macro_fusion_pair) (rtx_insn *, rtx_insn *);
+  const unsigned int fuseable_ops;
 };
 
 HOST_WIDE_INT aarch64_initial_elimination_offset (unsigned, unsigned);

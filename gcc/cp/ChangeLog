@@ -1,3 +1,21 @@
+2014-11-24  Jonathan Wakely  <jwakely@redhat.com>
+	    Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/63203
+	* decl.c (initialize_local_var): Add -Winit-self warning for
+	references initialized with themselves.
+
+2014-11-24  Jason Merrill  <jason@redhat.com>
+
+	PR c++/63942
+	* mangle.c (mangle_decl): If we aren't going to create a symbol
+	alias, don't build the alias DECL either.
+
+2014-11-24  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/63905
+	* cp-tree.h (lang_decl_fn): Remove constructor_attr, destructor_attr.
+
 2014-11-21  Jason Merrill  <jason@redhat.com>
 
 	PR c++/63657
