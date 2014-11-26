@@ -1,6 +1,137 @@
+2014-11-26  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/59114
+	* g++.dg/cpp0x/auto43.C: New.
+
+2014-11-26  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/63738
+	* gcc.dg/torture/pr63738.c: New testcase.
+
+2014-11-26  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	PR bootstrap/63995
+	* gcc.target/i386/pr63995-2.c: New.
+
+2014-11-26  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	PR lto/64075
+	* gcc.dg/pr64075.c: New.
+
+2014-11-26  Rainer Orth  <ro@CeBiTec.Uni-Bielefeld.DE>
+
+	* gcc.target/i386/pr63620.c: XFAIL get_pc_thunk scan on
+	*-*-solaris* && !gld.
+	* gcc.target/i386/mcount_pic.c: Likewise.
+	Use -pg.
+
+2014-11-21  Mark Wielaard  <mjw@redhat.com>
+
+	* gcc.dg/debug/dwarf2/lang-c11.c: New test.
+	* gcc.dg/debug/dwarf2/lang-c11-d4-strict.c: Likewise.
+	* g++.dg/debug/dwarf2/lang-cpp11.C: Likewise.
+	* g++.dg/debug/dwarf2/lang-cpp14.C: Likewise.
+	* g++.dg/debug/dwarf2/lang-cpp98.C: Likewise.
+
+2014-11-24  Mark Wielaard  <mjw@redhat.com>
+
+	* g++.dg/debug/dwarf2/noreturn-function.C: New test.
+	* gcc.dg/debug/dwarf2/noreturn-function-attribute.c: Likewise.
+	* gcc.dg/debug/dwarf2/noreturn-function-keyword.c: Likewise.
+
+2014-11-26  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/62238
+	* gcc.dg/torture/pr62238.c: New testcase.
+
+2014-11-25  Andrew Pinski <apinski@cavium.com>
+
+	* gcc.c-torture/execute/20141125-1.c: New testcase.
+
+2014-11-25  Tobias Burnus  <burnus@net-b.de>
+
+	* gfortran.dg/empty_label.f: Change test to continue testing
+	for -fmax-errors=1.
+	* gfortran.dg/empty_label.f90: Ditto.
+	* gfortran.dg/warnings_are_errors_1.f90: Update dg-*.
+
+2014-11-26  Andreas Tobler  <andreast@gcc.gnu.org>
+
+	* g++.old-deja/g++.jason/enum6.C: Use arm_eabi for dg-options.
+	Update comment.
+	* g++.old-deja/g++.law/enum9.C: Likewise.
+	* g++.old-deja/g++.other/enum4.C: Likewise.
+
+2014-11-25  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR target/63534
+	* gcc.target/i386/pr63534.c: New test.
+
+2014-11-25  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR target/63527
+	* gcc.target/i386/pr63527.c: New test.
+
+2014-11-25  Martin Liska  <mliska@suse.cz>
+
+	PR bootstrap/64050
+	PR ipa/64060
+	* gcc.dg/plugin/plugin.exp: New plugin.
+	* gcc.dg/plugin/sreal-test-1.c: New test.
+	* gcc.dg/plugin/sreal_plugin.c: New test.
+
+2014-11-25  Matthew Fortune  <matthew.fortune@imgtec.com>
+
+	* gcc.target/mips/mips.exp: Add support for -msoft-float and
+	-mhard-float options.  Ensure that explicit -mfp* options imply
+	both -mhard-float and -mdouble-float.
+	* gcc.target/mips/call-clobbered-1.c: Add -mhard-float to the
+	compile options.
+
+2014-11-25  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/63786
+	* g++.dg/cpp0x/variadic163.C: New.
+
+2014-11-25  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	PR target/64056
+	* gcc.target/i386/chkp-strlen-4.c: Add mempcpy target check.
+	* gcc.target/i386/chkp-stropt-4.c: Likewise.
+	* gcc.target/i386/chkp-stropt-8.c: Likewise.
+	* gcc.target/i386/chkp-stropt-12.c: Likewise.
+	* gcc.target/i386/chkp-stropt-16.c: Likewise.
+
+2014-10-25  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* gcc.target/powerpc/longcall-2.c: New test.
+
+2014-11-25  Marek Polacek  <polacek@redhat.com>
+
+	PR c/63877
+	* gcc.dg/pr63877.c: New test.
+
+2014-11-25  Markus Trippelsdorf  <markus@trippelsdorf.de>
+
+	PR ipa/64059
+	* g++.dg/ipa/pr64059.C: New test.
+
+2014-11-24  Uros Bizjak  <ubizjak@gmail.com>
+
+	PR target/63847
+	* c-c++-common/cilk-plus/AN/builtin_fn_custom.c: Add -ffloat-store
+	for 32bit x86 targets.
+	* c-c++-common/cilk-plus/AN/builtin_fn_mutating.c: Ditto.
+
+2014-11-24  Tobias Burnus  <burnus@net-b.de>
+
+	* gfortran.dg/coarray_collectives_3.f90: Add dg-excess-errors.
+	* gfortran.dg/dollar_sym_1.f90: Ditto.
+	* gfortran.dg/dollar_sym_3.f: Ditto.
+
 2014-11-24  Alan Lawrence  <alan.lawrence@arm.com>
 
-        * lib/target-supports.exp (check_effective_target_whole_vector_shift):
+	* lib/target-supports.exp (check_effective_target_whole_vector_shift):
 	Add aarch64{,_be}.
 
 2014-11-24  Richard Biener  <rguenther@suse.de>
@@ -43,7 +174,7 @@
 2014-11-24  Tobias Burnus  <burnus@net-b.de>
 
 	* gfortran.dg/dollar_sym_3.f: Update dg-error.
-	* gfortran.dg/dollar_sym_3.f: Ditto.
+	* gfortran.dg/coarray_collectives_3.f90: Ditto.
 
 2014-11-23  David Edelsohn  <dje.gcc@gmail.com>
 
@@ -51,7 +182,7 @@
 	* gcc.dg/torture/pr59166.c: XFAIL on AIX.
 	* gcc.dg/pr63914.c: Ignore non-standard ABI warning.
 	* gcc.dg/pr63594-[12].c: Ignore non-standard ABI warning.
-	
+
 2014-11-23  Tobias Burnus  <burnus@net-b.de>
 
 	* gfortran.dg/tab_continuation.f: Update dg-*.

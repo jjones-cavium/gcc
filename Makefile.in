@@ -10991,7 +10991,7 @@ configure-gmp:
 	  $$s/$$module_srcdir/configure \
 	  --srcdir=$${topdir}/$$module_srcdir \
 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=none-${host_vendor}-${host_os} \
-	  --target=none-${host_vendor}-${host_os} --disable-shared \
+	  --target=none-${host_vendor}-${host_os} --disable-shared LEX="touch lex.yy.c" \
 	  || exit 1
 @endif gmp
 
@@ -11027,7 +11027,7 @@ configure-stage1-gmp:
 	  --target=none-${host_vendor}-${host_os} \
 	   \
 	  $(STAGE1_CONFIGURE_FLAGS) \
-	  --disable-shared
+	  --disable-shared LEX="touch lex.yy.c"
 @endif gmp-bootstrap
 
 .PHONY: configure-stage2-gmp maybe-configure-stage2-gmp
@@ -11061,7 +11061,7 @@ configure-stage2-gmp:
 	  --target=none-${host_vendor}-${host_os} \
 	   --with-build-libsubdir=$(HOST_SUBDIR)  \
 	  $(STAGE2_CONFIGURE_FLAGS) \
-	  --disable-shared
+	  --disable-shared LEX="touch lex.yy.c"
 @endif gmp-bootstrap
 
 .PHONY: configure-stage3-gmp maybe-configure-stage3-gmp
@@ -11095,7 +11095,7 @@ configure-stage3-gmp:
 	  --target=none-${host_vendor}-${host_os} \
 	   --with-build-libsubdir=$(HOST_SUBDIR)  \
 	  $(STAGE3_CONFIGURE_FLAGS) \
-	  --disable-shared
+	  --disable-shared LEX="touch lex.yy.c"
 @endif gmp-bootstrap
 
 .PHONY: configure-stage4-gmp maybe-configure-stage4-gmp
@@ -11129,7 +11129,7 @@ configure-stage4-gmp:
 	  --target=none-${host_vendor}-${host_os} \
 	   --with-build-libsubdir=$(HOST_SUBDIR)  \
 	  $(STAGE4_CONFIGURE_FLAGS) \
-	  --disable-shared
+	  --disable-shared LEX="touch lex.yy.c"
 @endif gmp-bootstrap
 
 .PHONY: configure-stageprofile-gmp maybe-configure-stageprofile-gmp
@@ -11163,7 +11163,7 @@ configure-stageprofile-gmp:
 	  --target=none-${host_vendor}-${host_os} \
 	   --with-build-libsubdir=$(HOST_SUBDIR)  \
 	  $(STAGEprofile_CONFIGURE_FLAGS) \
-	  --disable-shared
+	  --disable-shared LEX="touch lex.yy.c"
 @endif gmp-bootstrap
 
 .PHONY: configure-stagefeedback-gmp maybe-configure-stagefeedback-gmp
@@ -11197,7 +11197,7 @@ configure-stagefeedback-gmp:
 	  --target=none-${host_vendor}-${host_os} \
 	   --with-build-libsubdir=$(HOST_SUBDIR)  \
 	  $(STAGEfeedback_CONFIGURE_FLAGS) \
-	  --disable-shared
+	  --disable-shared LEX="touch lex.yy.c"
 @endif gmp-bootstrap
 
 

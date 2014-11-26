@@ -5,6 +5,189 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2014-11-26  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/63738
+	* tree-data-ref.c (split_constant_offset_1): Do not follow
+	SSA edges for SSA names with SSA_NAME_OCCURS_IN_ABNORMAL_PHI.
+
+2014-11-26  Richard Biener  <rguenther@suse.de>
+
+	* fold-const.h (const_unop): Declare.
+	(const_binop): Likewise.
+	* fold-const.c (const_binop): Export overload that expects
+	a type parameter and dispatches to fold_relational_const as well.
+	Check both operand kinds for guarding the transforms.
+	(const_unop): New function, with constant folding from fold_unary_loc.
+	(fold_unary_loc): Dispatch to const_unop for tcc_constant operand.
+	Remove constant folding done there from the simplifications.
+	(fold_binary_loc): Check for constants using CONSTANT_CLASS_P.
+	(fold_negate_expr): Remove dead code from the REAL_CST case.
+	Avoid building garbage in the COMPLEX_CST case.
+	* gimple-match-head.c (gimple_resimplify1): Dispatch to
+	const_unop.
+	(gimple_resimplify2): Dispatch to const_binop.
+	(gimple_simplify): Likewise.
+
+2014-11-26  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	PR bootstrap/63995
+	* tree-chkp-opt.c (chkp_reduce_bounds_lifetime): Ignore
+	debug statement when searching for a new position for
+	bounds load/creation statement.
+
+2014-11-26  Marek Polacek  <polacek@redhat.com>
+
+	PR sanitizer/63788
+	* asan.c (initialize_sanitizer_builtins): Add BT_FN_SIZE_CONST_PTR_INT
+	var.  Conditionally build BUILT_IN_OBJECT_SIZE decl.
+	(ATTR_PURE_NOTHROW_LEAF_LIST): Define.
+
+2014-11-26  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	PR lto/64075
+	* tree-streamer-in.c (unpack_ts_function_decl_value_fields): Use
+	proper size for function_code bitfield.
+	(pack_ts_function_decl_value_fields): Likewise.
+
+2014-11-21  Mark Wielaard  <mjw@redhat.com>
+
+	* doc/invoke.texi (-gdwarf-@{version}): Mention experimental DWARFv5.
+	* opts.c (common_handle_option): Accept -gdwarf-5.
+	* dwarf2out.c (is_cxx): Add DW_LANG_C_plus_plus_11 and
+	DW_LANG_C_plus_plus_14.
+	(lower_bound_default): Likewise. Plus DW_LANG_C11.
+	(gen_compile_unit_die): Output DW_LANG_C_plus_plus_11,
+	DW_LANG_C_plus_plus_14 or DW_LANG_C11.
+	(output_compilation_unit_header): Output at most a DWARFv4 header.
+	(output_skeleton_debug_sections): Likewise.
+	(output_line_info): Likewise.
+	(output_aranges): Document header version number.
+
+2014-11-26  Richard Biener  <rguenther@suse.de>
+
+	* gimple-fold.c (get_symbol_constant_value): Allow all
+	GIMPLE register type zero-constants.
+
+2014-11-26  Mark Wielaard  <mjw@redhat.com>
+
+	* dwarf2out.c (gen_subprogram_die): Add DW_AT_noreturn when the
+	function decl has TREE_THIS_VOLATILE.
+
+2014-11-26  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/62238
+	* tree-predcom.c (ref_at_iteration): Unshare the expression
+	before gimplifying it.
+	(prepare_initializers_chain): Discard unused seq.
+
+2014-11-25  Vladimir Makarov  <vmakarov@redhat.com>
+
+	* ira-lives.c (process_bb_node_lives): Make code with conditional
+	REAL_PIC_OFFSET_TABLE_REGNUM.
+
+2014-11-25  Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR target/63527
+	* ira-lives.c (process_bb_node_lives): Check and remove conflict
+	of pic pseudo with pic hard reg.
+
+2014-11-25  Rohit  <rohitarulraj@freescale.com>
+
+	PR bootstrap/63703
+	* config/rs6000/darwin.h (REGISTER_NAMES): Update based on 32 newly
+	added GCC hard register numbers for SPE high registers.
+
+2014-11-25  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* bt-load.c (migrate_btr_defs): Get the key of a heap entry
+	before removing it, not after.
+
+2014-11-25  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* config/mn10300/mn10300.c (mn10300_insert_setlb_lcc): Remove
+	PATTERN call.
+
+2014-11-25  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* config/rs6000/sysv4.h (ASM_OUTPUT_REG_POP): Use addi instead
+	of addic.
+
+2014-11-25  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* config/rs6000/rs6000.md (iorxor, IORXOR): Delete code_attrs.
+	(rest of file): Replace those with code resp. CODE.
+
+2014-11-25  Tom de Vries  <tom@codesourcery.com>
+
+	* tree-cfg.c (verify_sese): New function.
+	(move_sese_region_to_fn): Call verify_sese.
+	* tree-cfg.h (verify_sese): Declare.
+
+2014-11-25  Richard Biener  <rguenther@suse.de>
+
+	PR lto/64065
+	* lto-streamer-out.c (output_struct_function_base): Stream
+	last_clique field.
+	* lto-streamer-in.c (input_struct_function_base): Likewise.
+
+2014-11-25  Martin Liska  <mliska@suse.cz>
+
+	PR bootstrap/64050
+	PR ipa/64060
+	* sreal.c (sreal::operator+): Addition fixed.
+	(sreal::signedless_plus): Negative numbers are
+	handled correctly.
+	(sreal::operator-): Subtraction is fixed.
+	(sreal::signedless_minus): Negative numbers are
+	handled correctly.
+	* sreal.h (sreal::operator<): Equal negative numbers
+	are compared correctly.
+	(sreal::shift): New checking asserts are introduced.
+	Operation is fixed.
+
+2014-11-25  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/61927
+	* tree-vect-loop.c (vect_analyze_loop_2): Revert ordering
+	of group and pattern analysis to the one in GCC 4.8.
+
+2014-11-25  Ilya Tocar  <ilya.tocar@intel.com>
+	    Jakub Jelinek  <jakub@redhat.com>
+
+	* gcc.c (handle_foffload_option): Remove unnecessary calls to strchr,
+	strlen, strncpy.
+	* lto-wrapper.c (append_offload_options): Likewise.
+
+2014-11-25  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* config/rs6000/rs6000.c (rs6000_call_aix): For the AIX ABI, do not
+	load the static chain if the call was originally direct.
+
+2014-11-25  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/64059
+	* ipa-prop.c (ipa_analyze_call_uses): Don't call get_dynamic_type when
+	devirtualization is disabled.
+
+2014-11-24  Michael Meissner  <meissner@linux.vnet.ibm.com>
+
+	PR target/63965
+	* config/rs6000/rs6000.c (rs6000_setup_reg_addr_masks): Do not set
+	Altivec & -16 mask if the type is not valid for Altivec registers.
+	(rs6000_secondary_reload_memory): Add support for ((reg + const) +
+	reg) that occurs during push_reload processing.
+
+	* config/rs6000/altivec.md (altivec_mov<mode>): Add instruction
+	alternative for moving constant vectors which are easy altivec
+	constants to GPRs.  Set the length attribute each of the
+	alternatives.
+
+	* config/rs6000/rs6000-cpus.def: Undo November 21st changes, a
+	work in progress patch was committed instead of the fixes for
+	63965.
+	* config/rs6000/rs6000.c: Likewise.
+
 2014-11-22  Jan Hubicka  <hubicka@ucw.cz>
 
 	PR ipa/63671
