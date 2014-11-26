@@ -27,6 +27,12 @@
 	PR target/61749
 	* gcc.target/aarch64/vqdml_lane_intrinsics-bad_1.c: New test.
 
+    
+2014-09-04  Guozhi Wei  <carrot@google.com>
+	
+	PR target/62040
+	* gcc.target/aarch64/pr62040.c: New test.
+
 2014-06-24  Yufeng Zhang  <yufeng.zhang@arm.com>
 
 	* gcc.target/aarch64/aapcs64/abitest-2.h (saved_return_address): New
