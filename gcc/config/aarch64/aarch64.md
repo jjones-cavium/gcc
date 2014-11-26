@@ -3191,9 +3191,9 @@
                   (match_operand:GPI 1 "const_int_operand" "n")
 		  (match_operand:GPI 2 "const_int_operand" "n"))
 	 (const_int 0)))]
-  "aarch64_bitmask_imm ((((1 << UINTVAL (operands[1])) - 1) << UINTVAL (operands[2])),<MODE>mode)"
+  "aarch64_bitmask_imm ((((HOST_WIDE_INT_1U << UINTVAL (operands[1])) - 1) << UINTVAL (operands[2])),<MODE>mode)"
   {
-    unsigned HOST_WIDE_INT value  = (((1 << UINTVAL (operands[1])) - 1) << UINTVAL (operands[2]));
+    unsigned HOST_WIDE_INT value  = (((HOST_WIDE_INT_1U << UINTVAL (operands[1])) - 1) << UINTVAL (operands[2]));
     operands[1] = GEN_INT (value);
     return "tst\\t%<w>0, %<w>1";
   }
