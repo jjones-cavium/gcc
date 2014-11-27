@@ -5,6 +5,157 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2014-11-27  Uros Bizjak  <ubizjak@gmail.com>
+
+	* config/i386/i386.md (preferred_for_size): New attribute
+	(*pushxf): Split Yx*r constraints to r,*r.  Use preferred_for_size
+	attribute to conditionally disable alternative 1.
+	(*pushdf): Split Yd*r constraints to r,*r.  Use preferred_for_size
+	and prefered_for_speed attributes to conditionally disable
+	alternative 1.
+	(*movxf_internal): Split Yx*r constraints to r,*r.  Use
+	preferred_for_size attribute to conditionally disable
+	alternatives 3 and 4.
+	(*movdf_internal): Split Yd*r constraints to r,*r.  Use
+	preferred_for_size and prefered_for_speed attributes to conditionally
+	disable alternatives 3 and 4.
+	* config/i386/constraints.md (Yd, Yx): Remove register constraints.
+
+2014-11-27  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* dwarf2out.c (set_block_origin_self): Skip nested functions.
+
+2014-11-27  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR target/63833
+	* config/i386/i386.h (REAL_PIC_OFFSET_TABLE_REGNUM): Use
+	R15_REG for 64-bit.
+	* config/i386/rdos64.h (REAL_PIC_OFFSET_TABLE_REGNUM): Removed.
+
+2014-11-27  Martin Liska  <mliska@suse.cz>
+	    David Malcolm  <dmalcolm@redhat.com>
+
+	* ipa-icf.c (sem_function::equals_private): int* is replaced with
+	auto_vec.
+	(sem_function::bb_dict_test): Likewise.
+	* ipa-icf.h: Likewise.
+
+2014-11-27  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/64088
+	* fold-const.c (const_unop): Re-instantiate missing condition
+	before calling fold_abs_const.
+
+	PR tree-optimization/64088
+	* tree-ssa-tail-merge.c (update_debug_stmt): After resetting
+	the stmt break from the loop over use operands.
+
+2014-11-27  Ilya Tocar  <ilya.tocar@intel.com>
+
+	* config/i386/cpuid.h (bit_MPX, bit_BNDREGS, bit_BNDCSR):
+	Define.
+	* config/i386/i386.c (get_builtin_code_for_version): Add avx512f.
+	(fold_builtin_cpu): Ditto.
+	* doc/extend.texi: Documment it.
+
+2014-11-27  Jakub Jelinek  <jakub@redhat.com>
+
+	PR middle-end/64067
+	* expr.c (expand_expr_addr_expr_1) <case COMPOUND_LITERAL_EXPR>:
+	Handle it by returning address of COMPOUND_LITERAL_EXPR_DECL
+	not only if modifier is EXPAND_INITIALIZER, but whenever
+	COMPOUND_LITERAL_EXPR_DECL is non-NULL and TREE_STATIC.
+
+	PR tree-optimization/64024
+	* tree-vectorizer.h (struct _stmt_vec_info): Remove simd_clone_fndecl
+	field.  Add simd_clone_info field.
+	(STMT_VINFO_SIMD_CLONE_FNDECL): Remove.
+	(STMT_VINFO_SIMD_CLONE_INFO): Define.
+	* tree-vect-stmts.c (vectorizable_simd_clone_call): Adjust for
+	STMT_VINFO_SIMD_CLONE_FNDECL becoming first element of
+	STMT_VINFO_SIMD_CLONE_INFO vector.  For linear arguments, remember
+	base and linear_step from analysis phase and use it during transform
+	phase, biased by the difference between LOOP_VINFO_NITERS{_UNCHANGED,}
+	multiplied by linear_step.
+	(free_stmt_vec_info): Release STMT_VINFO_SIMD_CLONE_INFO.
+
+	PR lto/64025
+	* alias.c (find_base_term): Use std::swap.  Prefer tmp2
+	if it is CONSTANT_P other than CONST_INT.
+
+2014-11-27  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR target/59593
+	* config/arm/arm.c (dump_minipool): dispatch to consttable pattern
+	based on mode size.
+	* config/arm/arm.md (consttable_1): Move from config/arm/thumb1.md and
+	make it TARGET_EITHER.
+	(consttable_2): Move from config/arm/thumb1.md, make it TARGET_EITHER
+	and move HFmode handling from consttable_4 to it.
+	(consttable_4): Move HFmode handling to consttable_2 pattern.
+	* config/arm/thumb1.md (consttable_1): Move to config/arm/arm.md.
+	(consttable_2): Ditto.
+
+2014-11-27  Richard Biener  <rguenther@suse.de>
+
+	* tree-ssa-sccvn.c (try_to_simplify): Allow
+	gimple_fold_stmt_to_constant_1 to follow SSA edges.
+
+2014-11-27  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64083
+	* tree-ssa-threadupdate.c (thread_through_all_blocks): Do not
+	forcibly mark loop for removal the wrong way.
+
+2014-11-27  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/63704
+	* alias.c (mems_in_disjoint_alias_sets_p): Remove assert
+	and instead return false when !fstrict-aliasing.
+
+2014-11-27  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/61634
+	* tree-vect-slp.c: Include gimple-walk.h.
+	(vect_detect_hybrid_slp_stmts): Rewrite to propagate hybrid
+	down the SLP tree for one scalar statement.
+	(vect_detect_hybrid_slp_1): New walker function.
+	(vect_detect_hybrid_slp_2): Likewise.
+	(vect_detect_hybrid_slp): Properly handle pattern statements
+	in a pre-scan over all loop stmts.
+
+2014-11-27  Zhenqiang Chen  <zhenqiang.chen@linaro.org>
+
+	Revert:
+	2014-11-17  Zhenqiang Chen  <zhenqiang.chen@linaro.org>
+	* config/aarch64/aarch64.c (aarch64_code_to_ccmode,
+	aarch64_convert_mode, aarch64_gen_ccmp_first,
+	aarch64_gen_ccmp_next): New functions.
+	(TARGET_GEN_CCMP_FIRST, TARGET_GEN_CCMP_NEXT): Define.
+
+2014-11-26  Jakub Jelinek  <jakub@redhat.com>
+
+	* gcc.c (SANITIZER_SPEC): Don't error on -fsanitize=thread
+	without -pie or -shared, error on -fsanitize=thread -static instead.
+
+2014-11-26  Bernd Edlinger  <bernd.edlinger@hotmail.de>
+
+	PR ipa/61190
+	* cgraph.h (symtab_node::call_for_symbol_and_aliases): Fix comment.
+	(cgraph_node::function_or_virtual_thunk_symbol): New function.
+	(cgraph_node::call_for_symbol_and_aliases): Fix comment.
+	(cgraph_node::call_for_symbol_thunks_and_aliases): Adjust comment.
+	Add new optional parameter exclude_virtual_thunks.
+	* cgraph.c (cgraph_node::call_for_symbol_thunks_and_aliases): Add new
+	optional parameter exclude_virtual_thunks.
+	(cgraph_node::set_const_flag): Don't propagate to virtual thunks.
+	(cgraph_node::set_pure_flag): Likewise.
+	(cgraph_node::function_symbol): Simplified.
+	(cgraph_node::function_or_virtual_thunk_symbol): New function.
+	* ipa-pure-const.c (analyze_function): For virtual thunks set
+	pure_const_state to IPA_NEITHER.
+	(propagate_pure_const): Use function_or_virtual_thunk_symbol.
+
 2014-11-26  Richard Biener  <rguenther@suse.de>
 
 	PR middle-end/63738

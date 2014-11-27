@@ -1344,7 +1344,7 @@ cxx_eval_call_expression (const constexpr_ctx *ctx, tree t,
 	      else
 		{
 		  result = *ctx->values->get (slot ? slot : res);
-		  if (result == NULL_TREE)
+		  if (result == NULL_TREE && !*non_constant_p)
 		    {
 		      if (!ctx->quiet)
 			error ("constexpr call flows off the end "
@@ -2013,12 +2013,12 @@ cxx_eval_vec_init_1 (const constexpr_ctx *ctx, tree atype, tree init,
 		     bool *non_constant_p, bool *overflow_p)
 {
   tree elttype = TREE_TYPE (atype);
-  int max = tree_to_shwi (array_type_nelts (atype));
+  unsigned HOST_WIDE_INT max = tree_to_uhwi (array_type_nelts_top (atype));
   verify_ctor_sanity (ctx, atype);
   vec<constructor_elt, va_gc> **p = &CONSTRUCTOR_ELTS (ctx->ctor);
   vec_alloc (*p, max + 1);
   bool pre_init = false;
-  int i;
+  unsigned HOST_WIDE_INT i;
 
   /* For the default constructor, build up a call to the default
      constructor of the element type.  We only need to handle class types
@@ -2043,7 +2043,7 @@ cxx_eval_vec_init_1 (const constexpr_ctx *ctx, tree atype, tree init,
       pre_init = true;
     }
 
-  for (i = 0; i <= max; ++i)
+  for (i = 0; i < max; ++i)
     {
       tree idx = build_int_cst (size_type_node, i);
       tree eltinit;
@@ -2974,11 +2974,22 @@ cxx_eval_constant_expression (const constexpr_ctx *ctx, tree t,
       *jump_target = t;
       break;
 
+    case SAVE_EXPR:
+      /* Avoid evaluating a SAVE_EXPR more than once.  */
+      if (tree *p = ctx->values->get (t))
+	r = *p;
+      else
+	{
+	  r = cxx_eval_constant_expression (ctx, TREE_OPERAND (t, 0), addr,
+					    non_constant_p, overflow_p);
+	  ctx->values->put (t, r);
+	}
+      break;
+
     case NON_LVALUE_EXPR:
     case TRY_CATCH_EXPR:
     case CLEANUP_POINT_EXPR:
     case MUST_NOT_THROW_EXPR:
-    case SAVE_EXPR:
     case EXPR_STMT:
     case EH_SPEC_BLOCK:
       r = cxx_eval_constant_expression (ctx, TREE_OPERAND (t, 0),
