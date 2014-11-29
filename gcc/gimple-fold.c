@@ -861,8 +861,7 @@ gimple_fold_builtin_memory_op (gimple_stmt_iterator *gsi,
 			    srcmem = make_ssa_name (TREE_TYPE (srcmem),
 						    new_stmt);
 			  else
-			    srcmem = create_tmp_reg (TREE_TYPE (srcmem),
-						     NULL);
+			    srcmem = create_tmp_reg (TREE_TYPE (srcmem));
 			  gimple_assign_set_lhs (new_stmt, srcmem);
 			  gimple_set_vuse (new_stmt, gimple_vuse (stmt));
 			  gsi_insert_before (gsi, new_stmt, GSI_SAME_STMT);
@@ -1147,7 +1146,7 @@ gimple_fold_builtin_memory_op (gimple_stmt_iterator *gsi,
 	  if (gimple_in_ssa_p (cfun))
 	    srcvar = make_ssa_name (TREE_TYPE (srcvar), new_stmt);
 	  else
-	    srcvar = create_tmp_reg (TREE_TYPE (srcvar), NULL);
+	    srcvar = create_tmp_reg (TREE_TYPE (srcvar));
 	  gimple_assign_set_lhs (new_stmt, srcvar);
 	  gimple_set_vuse (new_stmt, gimple_vuse (stmt));
 	  gsi_insert_before (gsi, new_stmt, GSI_SAME_STMT);
@@ -1555,9 +1554,9 @@ gimple_fold_builtin_strcat (gimple_stmt_iterator *gsi, tree dst, tree src)
   gimple repl = gimple_build_call (strlen_fn, 1, dst);
   gimple_set_location (repl, loc);
   if (gimple_in_ssa_p (cfun))
-    newdst = make_ssa_name (size_type_node, NULL);
+    newdst = make_ssa_name (size_type_node);
   else
-    newdst = create_tmp_reg (size_type_node, NULL);
+    newdst = create_tmp_reg (size_type_node);
   gimple_call_set_lhs (repl, newdst);
   gimple_seq_add_stmt_without_update (&stmts, repl);
 
@@ -2686,7 +2685,7 @@ gimple_fold_call (gimple_stmt_iterator *gsi, bool inplace)
 		    {
 		      if (TREE_CODE (lhs) == SSA_NAME)
 			{
-			  tree var = create_tmp_var (TREE_TYPE (lhs), NULL);
+			  tree var = create_tmp_var (TREE_TYPE (lhs));
 			  tree def = get_or_create_ssa_default_def (cfun, var);
 			  gimple new_stmt = gimple_build_assign (lhs, def);
 			  gsi_insert_before (gsi, new_stmt, GSI_SAME_STMT);
@@ -2701,7 +2700,7 @@ gimple_fold_call (gimple_stmt_iterator *gsi, bool inplace)
 		  gimple_set_location (new_stmt, gimple_location (stmt));
 		  if (lhs && TREE_CODE (lhs) == SSA_NAME)
 		    {
-		      tree var = create_tmp_var (TREE_TYPE (lhs), NULL);
+		      tree var = create_tmp_var (TREE_TYPE (lhs));
 		      tree def = get_or_create_ssa_default_def (cfun, var);
 
 		      /* To satisfy condition for
@@ -5667,9 +5666,9 @@ gimple_build (gimple_seq *seq, location_t loc,
   if (!res)
     {
       if (gimple_in_ssa_p (cfun))
-	res = make_ssa_name (type, NULL);
+	res = make_ssa_name (type);
       else
-	res = create_tmp_reg (type, NULL);
+	res = create_tmp_reg (type);
       gimple stmt;
       if (code == REALPART_EXPR
 	  || code == IMAGPART_EXPR
@@ -5699,9 +5698,9 @@ gimple_build (gimple_seq *seq, location_t loc,
   if (!res)
     {
       if (gimple_in_ssa_p (cfun))
-	res = make_ssa_name (type, NULL);
+	res = make_ssa_name (type);
       else
-	res = create_tmp_reg (type, NULL);
+	res = create_tmp_reg (type);
       gimple stmt = gimple_build_assign_with_ops (code, res, op0, op1);
       gimple_set_location (stmt, loc);
       gimple_seq_add_stmt_without_update (seq, stmt);
@@ -5725,9 +5724,9 @@ gimple_build (gimple_seq *seq, location_t loc,
   if (!res)
     {
       if (gimple_in_ssa_p (cfun))
-	res = make_ssa_name (type, NULL);
+	res = make_ssa_name (type);
       else
-	res = create_tmp_reg (type, NULL);
+	res = create_tmp_reg (type);
       gimple stmt;
       if (code == BIT_FIELD_REF)
 	stmt = gimple_build_assign_with_ops (code, res,
@@ -5761,9 +5760,9 @@ gimple_build (gimple_seq *seq, location_t loc,
       if (!VOID_TYPE_P (type))
 	{
 	  if (gimple_in_ssa_p (cfun))
-	    res = make_ssa_name (type, NULL);
+	    res = make_ssa_name (type);
 	  else
-	    res = create_tmp_reg (type, NULL);
+	    res = create_tmp_reg (type);
 	  gimple_call_set_lhs (stmt, res);
 	}
       gimple_set_location (stmt, loc);
@@ -5792,9 +5791,9 @@ gimple_build (gimple_seq *seq, location_t loc,
       if (!VOID_TYPE_P (type))
 	{
 	  if (gimple_in_ssa_p (cfun))
-	    res = make_ssa_name (type, NULL);
+	    res = make_ssa_name (type);
 	  else
-	    res = create_tmp_reg (type, NULL);
+	    res = create_tmp_reg (type);
 	  gimple_call_set_lhs (stmt, res);
 	}
       gimple_set_location (stmt, loc);
@@ -5824,9 +5823,9 @@ gimple_build (gimple_seq *seq, location_t loc,
       if (!VOID_TYPE_P (type))
 	{
 	  if (gimple_in_ssa_p (cfun))
-	    res = make_ssa_name (type, NULL);
+	    res = make_ssa_name (type);
 	  else
-	    res = create_tmp_reg (type, NULL);
+	    res = create_tmp_reg (type);
 	  gimple_call_set_lhs (stmt, res);
 	}
       gimple_set_location (stmt, loc);

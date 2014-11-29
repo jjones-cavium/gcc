@@ -1,3 +1,70 @@
+2014-11-29  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR target/64114
+	* gcc.target/i386/pr64114.c: New test.
+
+2014-11-29  Joseph Myers  <joseph@codesourcery.com>
+
+	PR preprocessor/41698
+	* gcc/testsuite/g++.dg/cpp/utf16-pr41698-1.C: New test.
+
+2014-11-28  Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR target/64061
+	* gcc.target/i386/pr64061.c: New.
+
+2014-11-28  Marek Polacek  <polacek@redhat.com>
+
+	* c-c++-common/ubsan/shift-8.c: New test.
+
+2014-11-28  Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR rtl-optimization/64087
+	* gcc.dg/pr64087.c: New.
+
+2014-11-28  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR rtl-optimization/64037
+	* g++.dg/pr64037.C: New test.
+
+2014-11-28  Evgeny Stupachenko  <evstupac@gmail.com>
+
+	* gcc.target/i386/pr52252-atom-1.c: Delete.
+
+2014-11-28  Jiong Wang  <jiong.wang@arm.com>
+
+	* gcc.target/arm/copysign_softfloat_1.c: New copysign/copysignf
+	testcase for soft-float.
+
+2014-11-28  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc.target/i386/pr63661.c: Replace -mtune=native with
+	-mtune=nehalem.
+	(foo): Replace "!=" with delta.
+	(main): Remove __builtin_printf.
+
+2014-11-28  Renlin Li  <renlin.li@arm.com>
+
+	PR target/63661
+	* gcc.target/i386/pr63661.c: Use native tune.
+
+2014-11-28  Renlin Li  <renlin.li@arm.com>
+
+	PR target/63661
+	* gcc.target/i386/pr63661.c: New test.
+
+2014-11-28  Marek Polacek  <polacek@redhat.com>
+
+	PR c/63862
+	* gcc.c-torture/execute/shiftopt-1.c: Don't XFAIL anymore.
+	* c-c++-common/ubsan/shift-7.c: New test.
+
+2014-11-28  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/64084
+	* gcc.dg/tree-ssa/ssa-ccp-34.c: New testcase.
+	* gcc.dg/tree-ssa/forwprop-31.c: Likewise.
+
 2014-11-27  Richard Biener  <rguenther@suse.de>
 
 	PR middle-end/64088
