@@ -1,3 +1,18 @@
+2014-11-30  Jonathan Wakely  <jwakely@redhat.com>
+
+	* config/abi/pre/gnu.ver: Fix ios_base::failure exports.
+
+2014-11-29  Jonathan Wakely  <jwakely@redhat.com>
+
+	* include/bits/locale_facets/nonio.h (__timepunct): Remove unused
+	typedef.
+	(time_get): Likewise. Fix comments.
+
+	* src/c++98/locale_init.cc (locale::_Impl::_Impl(size_t)): Use
+	new-initializer instead of loop.
+	* src/c++98/localename.cc (locale::_Impl::_Impl(const char*, size_t)):
+	Likewise.
+
 2014-11-26  Jonathan Wakely  <jwakely@redhat.com>
 	    Rainer Orth  <ro@CeBiTec.Uni-Bielefeld.DE>
 
