@@ -7,6 +7,11 @@
 	(thunderx_crc32): New reservation.
 	(thunderx_crc64): Likewise.
 
+2014-11-17  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/thunderx.md: Remove copyright which should not
+	have been there.
+
 2014-11-11  Andrew Pinski  <apinski@cavium.com>
 
 	Bug target/61997
