@@ -701,7 +701,7 @@ main (int argc, char **argv)
 	  core = strtoul (p + 5, &r, 10);
 	  if (p == r
 	      || *r != '\0'
-	      || core < 0 || 31 < core)
+	      || core < 0 || (128+47) < core)
 	    continue;
 
 	  if (strncmp (basename, filename, p + 5 - filename) != 0)

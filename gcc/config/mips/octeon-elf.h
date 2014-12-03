@@ -83,13 +83,13 @@ Boston, MA 02110-1301, USA.  */
 
 /* Append the core number to the GCOV filename FN.  */
 
-#define GCOV_TARGET_SUFFIX_LENGTH 2
+#define GCOV_TARGET_SUFFIX_LENGTH 3
 #define ADD_GCOV_TARGET_SUFFIX(FN)		\
 do						\
   {						\
     char *fn = FN;				\
     int core;					\
-    char s[3];					\
+    char s[4];					\
 						\
     asm ("rdhwr %0, $0" : "=r"(core));		\
     sprintf (s, "%d", core);			\

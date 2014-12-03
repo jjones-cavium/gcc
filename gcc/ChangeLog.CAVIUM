@@ -1,3 +1,13 @@
+2014-12-03  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #11607
+	* gcc/config/mips/octeon-elf.h (GCOV_TARGET_SUFFIX_LENGTH): Increase the size
+	to fit in the number of cores.
+	(ADD_GCOV_TARGET_SUFFIX): Increase the char array size to fit core value greater
+	than 2 digits.
+	* gcc/merge-gcda.c (main): Change the upper limit to accommodate more number of 
+	cores (128+47).
+
 2014-10-22  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #12749
