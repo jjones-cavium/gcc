@@ -5935,6 +5935,22 @@ simplify_subreg (machine_mode outermode, rtx op,
       return NULL_RTX;
     }
 
+  if ((GET_CODE (op) == SIGN_EXTRACT || GET_CODE (op) == ZERO_EXTRACT)
+       && subreg_lowpart_offset (outermode, innermode) == byte
+       && GET_MODE_SIZE (outermode) < GET_MODE_SIZE (innermode)
+       && SCALAR_INT_MODE_P (innermode) && SCALAR_INT_MODE_P (outermode)
+       && GET_MODE (op) == GET_MODE (XEXP (op, 0))
+       && GET_CODE (XEXP (op, 0)) != REG)
+    {
+      rtx newop0 = simplify_gen_subreg (outermode, XEXP (op, 0), innermode, byte);
+      rtx newop1 = XEXP (op, 1);
+      rtx newop2 = XEXP (op, 2);
+      if (CONST_INT_P (newop1) && CONST_INT_P (newop2)
+	  && IN_RANGE (INTVAL (newop1), 0, GET_MODE_BITSIZE (outermode) - 1)
+	  && IN_RANGE (INTVAL (newop2), 0, GET_MODE_BITSIZE (outermode) - 1))
+      return simplify_gen_ternary (GET_CODE (op), outermode, innermode, newop0, newop1, newop2);
+    }
+
   /* A SUBREG resulting from a zero extension may fold to zero if
      it extracts higher bits that the ZERO_EXTEND's source bits.  */
   if (GET_CODE (op) == ZERO_EXTEND && SCALAR_INT_MODE_P (innermode))
