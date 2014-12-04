@@ -5303,7 +5303,6 @@ aarch64_rtx_arith_op_extract_p (rtx x, machine_mode mode)
       rtx op0 = XEXP (x, 0);
       rtx op1 = XEXP (x, 1);
       rtx op2 = XEXP (x, 2);
-      HOST_WIDE_INT extract_val = INTVAL (op1);
 
       if (GET_CODE (op0) == MULT
 	  && CONST_INT_P (op1)
@@ -5314,18 +5313,6 @@ aarch64_rtx_arith_op_extract_p (rtx x, machine_mode mode)
 					     op1))
 	{
 	  return true;
-	}
-      else if (GET_CODE (op0) == ASHIFT)
-	{
-	  if (! CONST_INT_P (op1) || ! CONST_INT_P (XEXP (op0, 1)))
-	    return false;
-	  if (op2 != const0_rtx)
-	    return false;
-	  if (extract_val > 8
-	      && extract_val < GET_MODE_BITSIZE (mode)
-	      && exact_log2 (extract_val & ~7) > 0
-	      && (extract_val & 7) <= 4)
-	    return true;
 	}
     }
 

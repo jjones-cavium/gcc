@@ -1,14 +1,3 @@
-2014-12-03  Andrew Pinski  <apinski@cavium.com>
-	    Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
-
-	* config/aarch64/aarch64.c (aarch64_rtx_arith_op_extract_p):
-	Add a case for handling ASHIFT with sign or zero extract.
-	* config/aarch64/aarch64.md (*add_<optab><mode>_ashift, 
-	add_<optab>si_ashift_uxtw, *sub_<optab><mode>_ashift,
-	sub_<optab>si_ashift_uxtw): New Patterns.
-	* simplify-rtx.c (simplify_subreg): Add a case for handling
-	sign or zero extract.
-
 2014-08-20  Andrew Pinski  <apinski@cavium.com>
 	    Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
