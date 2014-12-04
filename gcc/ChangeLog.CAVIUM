@@ -1,3 +1,11 @@
+2014-12-04  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Reverted:
+	2013-06-10  Andrew Pinski  <apinski@cavium.com>
+
+	* config/mips/mips.c (mips_classify_symbol): Consider local
+	symbols as global when -mxgot is used.
+
 2014-11-22  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13244
