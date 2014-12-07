@@ -728,7 +728,7 @@
 (define_insn "*sibcall_value_insn"
   [(set (match_operand 0 "" "")
 	(call (mem:DI
-		(match_operand:DI 1 "aarch64_call_insn_operand" "Ucs, Usf"))
+		(match_operand:P 1 "aarch64_call_insn_operand" "Ucs, Usf"))
 	      (match_operand 2 "" "")))
    (return)
    (use (match_operand 3 "" ""))]

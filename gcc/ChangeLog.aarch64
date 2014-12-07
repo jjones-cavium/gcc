@@ -1,3 +1,9 @@
+2014-12-06  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	Bug #12471
+	* config/aarch64/aarch64.md (*sibcall_value_insn): Support
+	1st operand for ILP32 by making it Pmode.
+
 2014-11-25  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13262
