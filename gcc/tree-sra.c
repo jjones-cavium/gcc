@@ -3710,38 +3710,37 @@ lower_bitfield_write (gimple_stmt_iterator * gsi, unsigned HOST_WIDE_INT off,
   tree mask = double_int_to_tree (TREE_TYPE (rep),
                                  ~double_int::mask
                                  (TREE_INT_CST_LOW (size)).lshift (off));
-  gimple tems = gimple_build_assign_with_ops (BIT_AND_EXPR,
-                                             masked, loadres, mask);
+  gimple tems = gimple_build_assign (masked, BIT_AND_EXPR,
+                                     loadres, mask);
   gsi_insert_before (gsi, tems, GSI_SAME_STMT);
   /* Zero-extend the value to representative size.  */
   tree tem2;
   if (!TYPE_UNSIGNED (TREE_TYPE (field)))
     {
       tem2 = make_ssa_name (unsigned_type_for (TREE_TYPE (field)), NULL);
-      tems = gimple_build_assign_with_ops (NOP_EXPR, tem2,
-                                          gimple_assign_rhs1 (stmt),
-                                          NULL_TREE);
+      tems = gimple_build_assign (tem2, NOP_EXPR,
+                                  gimple_assign_rhs1 (stmt));
       gsi_insert_before (gsi, tems, GSI_SAME_STMT);
     }
   else
     tem2 = gimple_assign_rhs1 (stmt);
   tree tem = make_ssa_name (TREE_TYPE (rep), NULL);
-  tems = gimple_build_assign_with_ops (NOP_EXPR, tem, tem2, NULL_TREE);
+  tems = gimple_build_assign (tem, NOP_EXPR, tem2);
   gsi_insert_before (gsi, tems, GSI_SAME_STMT);
   /* Shift the value into place.  */
   if (off != 0)
     {
       tem2 = make_ssa_name (TREE_TYPE (rep), NULL);
-      tems = gimple_build_assign_with_ops (LSHIFT_EXPR, tem2, tem,
-                                          size_int (off));
+      tems = gimple_build_assign (tem2, LSHIFT_EXPR, tem,
+				  size_int (off));
       gsi_insert_before (gsi, tems, GSI_SAME_STMT);
     }
   else
     tem2 = tem;
   /* Merge masked loaded value and value.  */
   tree modres = make_ssa_name (TREE_TYPE (rep), NULL);
-  gimple mod = gimple_build_assign_with_ops (BIT_IOR_EXPR, modres,
-                                            masked, tem2);
+  gimple mod = gimple_build_assign (modres, BIT_IOR_EXPR,
+                                    masked, tem2);
   gsi_insert_before (gsi, mod, GSI_SAME_STMT);
   /* Finally adjust the store.  */
   gimple_assign_set_rhs1 (stmt, modres);

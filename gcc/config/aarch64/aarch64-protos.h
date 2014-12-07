@@ -307,6 +307,7 @@ bool aarch64_registers_ok_for_load_pair_peep (rtx, rtx);
 bool aarch64_registers_ok_for_store_pair_peep (rtx, rtx);
 bool aarch64_mems_ok_for_pair_peep (rtx, rtx, rtx);
 
+bool aarch64_gen_adjusted_ldpstp (rtx *, bool, enum machine_mode, RTX_CODE);
 #endif /* RTX_CODE */
 
 void aarch64_init_builtins (void);
@@ -332,4 +333,7 @@ void aarch64_atomic_assign_expand_fenv (tree *, tree *, tree *);
 int aarch64_ccmp_mode_to_code (enum machine_mode mode);
 
 extern bool aarch64_slow_unaligned_access (enum machine_mode, int);
+bool extract_base_offset_in_addr (rtx mem, rtx *base, rtx *offset);
+bool aarch64_operands_ok_for_ldpstp (rtx *, bool, enum machine_mode);
+bool aarch64_operands_adjust_ok_for_ldpstp (rtx *, bool, enum machine_mode);
 #endif /* GCC_AARCH64_PROTOS_H */

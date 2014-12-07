@@ -379,73 +379,32 @@
   [(set_attr "type" "no_insn")]
 )
 
-(define_insn "*prefetch"
-  [(prefetch (plus:DI (match_operand:DI 0 "register_operand" "r")
-                      (match_operand:DI 1 "aarch64_prefetch_pimm" "")
-             )
-            (match_operand:QI 2 "const_int_operand" "n")
-           (match_operand:QI 3 "const_int_operand" "n"))]
-  ""
-  "*
-{
-  int locality = INTVAL (operands[3]);
-
-  gcc_assert (IN_RANGE (locality, 0, 3));
-
-  if (locality == 0)
-     /* non temporal locality */
-     return (INTVAL(operands[2])) ? \"prfm\\tPSTL1STRM, [%0, %1]\" : \"prfm\\tPLDL1STRM, [%0, %1]\";
-
-  /* temporal locality */
-  return (INTVAL(operands[2])) ? \"prfm\\tPSTL%3KEEP, [%0, %1]\" : \"prfm\\tPLDL%3KEEP, [%0, %1]\";
-}"
-  [(set_attr "type" "prefetch")]
-)
-
-(define_insn "*prefetch"
-  [(prefetch (plus:DI (match_operand:DI 0 "register_operand" "r")
-                      (match_operand:DI 1 "aarch64_prefetch_unscaled" "")
-             )
-            (match_operand:QI 2 "const_int_operand" "n")
-            (match_operand:QI 3 "const_int_operand" "n"))]
-  ""
-  "*
-{
-  int locality = INTVAL (operands[3]);
-
-  gcc_assert (IN_RANGE (locality, 0, 3));
-
-  if (locality == 0)
-     /* non temporal locality */
-     return (INTVAL(operands[2])) ? \"prfum\\tPSTL1STRM, [%0, %1]\" : \"prfm\\tPLDL1STRM, [%0, %1]\";
-
-  /* temporal locality */
-  return (INTVAL(operands[2])) ? \"prfum\\tPSTL%3KEEP, [%0, %1]\" : \"prfm\\tPLDL%3KEEP, [%0, %1]\";
-}"
-  [(set_attr "type" "prefetch")]
-)
-
 (define_insn "prefetch"
   [(prefetch (match_operand:DI 0 "address_operand" "r")
-            (match_operand:QI 1 "const_int_operand" "n")
-            (match_operand:QI 2 "const_int_operand" "n"))]
+            (match_operand:QI 1 "const_int_operand" "")
+            (match_operand:QI 2 "const_int_operand" ""))]
   ""
-  "*
-{
-  int locality = INTVAL (operands[2]);
+  {
+    const char * pftype[2][4] = 
+    {
+      {"prfm\\tPLDL1STRM, %a0",
+       "prfm\\tPLDL3KEEP, %a0",
+       "prfm\\tPLDL2KEEP, %a0",
+       "prfm\\tPLDL1KEEP, %a0"},
+      {"prfm\\tPSTL1STRM, %a0",
+       "prfm\\tPSTL3KEEP, %a0",
+       "prfm\\tPSTL2KEEP, %a0",
+       "prfm\\tPSTL1KEEP, %a0"},
+    };
 
-  gcc_assert (IN_RANGE (locality, 0, 3));
+    int locality = INTVAL (operands[2]);
 
-  if (locality == 0)
-     /* non temporal locality */
-     return (INTVAL(operands[1])) ? \"prfm\\tPSTL1STRM, [%0, #0]\" : \"prfm\\tPLDL1STRM, [%0, #0]\";
+    gcc_assert (IN_RANGE (locality, 0, 3));
 
-  /* temporal locality */
-  return (INTVAL(operands[1])) ? \"prfm\\tPSTL%2KEEP, [%0, #0]\" : \"prfm\\tPLDL%2KEEP, [%0, #0]\";
-}"
-  [(set_attr "type" "prefetch")]
+    return pftype[INTVAL(operands[1])][locality];
+  }
+  [(set_attr "type" "load1")]
 )
-
 
 (define_insn "trap"
   [(trap_if (const_int 1) (const_int 8))]
@@ -1109,147 +1068,64 @@
 ;; Operands 1 and 3 are tied together by the final condition; so we allow
 ;; fairly lax checking on the second memory operation.
 (define_insn "load_pair<mode>"
-  [(set (match_operand:GPI 0 "register_operand" "=r, w")
+  [(set (match_operand:GPI 0 "register_operand" "=r,*w")
 	(match_operand:GPI 1 "aarch64_mem_pair_operand" "Ump, Ump"))
-   (set (match_operand:GPI 2 "register_operand" "=r, w")
+   (set (match_operand:GPI 2 "register_operand" "=r,*w")
         (match_operand:GPI 3 "memory_operand" "m, m"))]
   "aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
   "@
    ldp\\t%<w>0, %<w>2, %1
    ldp\\t%<v>0, %<v>2, %1"
-  [(set_attr "type" "load2")]
-)
+  [(set_attr "type" "load2,neon_load1_2reg")
+   (set_attr "fp" "*,yes")])
 
-(define_peephole2
-  [(set (match_operand:GPI 0 "register_operand")
-	(match_operand:GPI 1 "aarch64_mem_pair_operand"))
-   (set (match_operand:GPI 2 "register_operand")
-	(match_operand:GPI 3 "memory_operand"))]
-  "aarch64_registers_ok_for_load_pair_peep (operands[0], operands[2])
-   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], operands[0])"
-  [(parallel [(set (match_dup 0) (match_dup 1))
-	      (set (match_dup 2) (match_dup 3))])]
-)
-
-(define_peephole2
-  [(set (match_operand:GPI 0 "register_operand")
-	(match_operand:GPI 1 "memory_operand"))
-   (set (match_operand:GPI 2 "register_operand")
-	(match_operand:GPI 3 "aarch64_mem_pair_operand"))]
-  "aarch64_registers_ok_for_load_pair_peep (operands[2], operands[0])
-   && aarch64_mems_ok_for_pair_peep (operands[3], operands[1], operands[0])"
-  [(parallel [(set (match_dup 2) (match_dup 3))
-	      (set (match_dup 0) (match_dup 1))])]
-)
 
 ;; Operands 0 and 2 are tied together by the final condition; so we allow
 ;; fairly lax checking on the second memory operation.
 (define_insn "store_pair<mode>"
   [(set (match_operand:GPI 0 "aarch64_mem_pair_operand" "=Ump, Ump")
-	(match_operand:GPI 1 "aarch64_reg_or_zero" "rZ, w"))
+	(match_operand:GPI 1 "aarch64_reg_or_zero" "rZ,*w"))
    (set (match_operand:GPI 2 "memory_operand" "=m, m")
-        (match_operand:GPI 3 "aarch64_reg_or_zero" "rZ, w"))]
+        (match_operand:GPI 3 "aarch64_reg_or_zero" "rZ,*w"))]
   "aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
   "@
    stp\\t%<w>1, %<w>3, %0
    stp\\t%<v>1, %<v>3, %0"
-  [(set_attr "type" "store2")]
-)
+  [(set_attr "type" "store2,neon_store1_2reg")
+   (set_attr "fp" "*,yes")])
 
-(define_peephole2
-  [(set (match_operand:GPI 0 "aarch64_mem_pair_operand")
-	(match_operand:GPI 1 "aarch64_reg_or_zero"))
-   (set (match_operand:GPI 2 "memory_operand")
-	(match_operand:GPI 3 "aarch64_reg_or_zero"))]
-  "aarch64_registers_ok_for_store_pair_peep (operands[1], operands[3])
-   && aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
-  [(parallel [(set (match_dup 0) (match_dup 1))
-	      (set (match_dup 2) (match_dup 3))])]
-)
 
-(define_peephole2
-  [(set (match_operand:GPI 0 "memory_operand")
-	(match_operand:GPI 1 "aarch64_reg_or_zero"))
-   (set (match_operand:GPI 2 "aarch64_mem_pair_operand")
-	(match_operand:GPI 3 "aarch64_reg_or_zero"))]
-  "aarch64_registers_ok_for_store_pair_peep (operands[3], operands[1])
-   && aarch64_mems_ok_for_pair_peep (operands[2], operands[0], NULL_RTX)"
-  [(parallel [(set (match_dup 2) (match_dup 3))
-	      (set (match_dup 0) (match_dup 1))])]
-)
 
 ;; Operands 1 and 3 are tied together by the final condition; so we allow
 ;; fairly lax checking on the second memory operation.
 (define_insn "load_pair<mode>"
-  [(set (match_operand:GPF 0 "register_operand" "=w")
-	(match_operand:GPF 1 "aarch64_mem_pair_operand" "Ump"))
-   (set (match_operand:GPF 2 "register_operand" "=w")
-        (match_operand:GPF 3 "memory_operand" "m"))]
+  [(set (match_operand:GPF 0 "register_operand" "=w,*r")
+	(match_operand:GPF 1 "aarch64_mem_pair_operand" "Ump,Ump"))
+   (set (match_operand:GPF 2 "register_operand" "=w,*r")
+        (match_operand:GPF 3 "memory_operand" "m,m"))]
   "aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
-  "ldp\\t%<w>0, %<w>2, %1"
-  [(set_attr "type" "neon_load1_2reg<q>")]
-)
+  "@
+   ldp\\t%<v>0, %<v>2, %1
+   ldp\\t%<w1>0, %<w1>2, %1"
+  [(set_attr "type" "neon_load1_2reg<q>,load2")
+  (set_attr "fp" "yes,*")])
 
-(define_peephole2
-  [(set (match_operand:GPF 0 "register_operand")
-	(match_operand:GPF 1 "aarch64_mem_pair_operand"))
-   (set (match_operand:GPF 2 "register_operand")
-	(match_operand:GPF 3 "memory_operand"))]
-  "aarch64_registers_ok_for_load_pair_peep (operands[0], operands[2])
-   && REGNO (operands[0]) >= 32 && REGNO (operands[2]) >= 32
-   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], operands[0])"
-  [(parallel [(set (match_dup 0) (match_dup 1))
-	      (set (match_dup 2) (match_dup 3))])]
-)
-
-(define_peephole2
-  [(set (match_operand:GPF 0 "register_operand")
-	(match_operand:GPF 1 "memory_operand"))
-   (set (match_operand:GPF 2 "register_operand")
-	(match_operand:GPF 3 "aarch64_mem_pair_operand"))]
-  "aarch64_registers_ok_for_load_pair_peep (operands[2], operands[0])
-   && REGNO (operands[0]) >= 32 && REGNO (operands[2]) >= 32
-   && aarch64_mems_ok_for_pair_peep (operands[3], operands[1], operands[0])"
-  [(parallel [(set (match_dup 2) (match_dup 3))
-	      (set (match_dup 0) (match_dup 1))])]
-)
 
 ;; Operands 0 and 2 are tied together by the final condition; so we allow
 ;; fairly lax checking on the second memory operation.
 (define_insn "store_pair<mode>"
-  [(set (match_operand:GPF 0 "aarch64_mem_pair_operand" "=Ump")
-	(match_operand:GPF 1 "register_operand" "w"))
-   (set (match_operand:GPF 2 "memory_operand" "=m")
-        (match_operand:GPF 3 "register_operand" "w"))]
+  [(set (match_operand:GPF 0 "aarch64_mem_pair_operand" "=Ump,Ump")
+	(match_operand:GPF 1 "register_operand" "w,*r"))
+   (set (match_operand:GPF 2 "memory_operand" "=m,m")
+        (match_operand:GPF 3 "register_operand" "w,*r"))]
   "aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
-  "stp\\t%<w>1, %<w>3, %0"
-  [(set_attr "type" "neon_store1_2reg<q>")]
-)
-
-(define_peephole2
-  [(set (match_operand:GPF 0 "aarch64_mem_pair_operand")
-	(match_operand:GPF 1 "register_operand"))
-   (set (match_operand:GPF 2 "memory_operand")
-	(match_operand:GPF 3 "register_operand"))]
-  "aarch64_registers_ok_for_store_pair_peep (operands[1], operands[3])
-   && REGNO (operands[1]) >= 32 && REGNO (operands[3]) >= 32
-   && aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
-  [(parallel [(set (match_dup 0) (match_dup 1))
-	      (set (match_dup 2) (match_dup 3))])]
-)
+  "@
+   stp\\t%<v>1, %<v>3, %0
+   stp\\t%<w1>1, %<w1>3, %0"
+  [(set_attr "type" "neon_store1_2reg,store2")
+   (set_attr "fp" "yes,*")])
 
 
-(define_peephole2
-  [(set (match_operand:GPF 0 "memory_operand")
-	(match_operand:GPF 1 "register_operand"))
-   (set (match_operand:GPF 2 "aarch64_mem_pair_operand")
-	(match_operand:GPF 3 "register_operand"))]
-  "aarch64_registers_ok_for_store_pair_peep (operands[3], operands[1])
-   && REGNO (operands[1]) >= 32 && REGNO (operands[3]) >= 32
-   && aarch64_mems_ok_for_pair_peep (operands[2], operands[0], NULL_RTX)"
-  [(parallel [(set (match_dup 2) (match_dup 3))
-	      (set (match_dup 0) (match_dup 1))])]
-)
 
 ;; Load pair with post-index writeback.  This is primarily used in function
 ;; epilogues.
@@ -1337,6 +1213,16 @@
   [(set_attr "type" "extend,load1")]
 )
 
+(define_insn "*load_pair_extendsidi2_aarch64"
+  [(set (match_operand:DI 0 "register_operand" "=r")
+	(sign_extend:DI (match_operand:SI 1 "aarch64_mem_pair_operand" "Ump")))
+   (set (match_operand:DI 2 "register_operand" "=r")
+	(sign_extend:DI (match_operand:SI 3 "memory_operand" "m")))]
+  "aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
+  "ldpsw\\t%0, %2, %1"
+  [(set_attr "type" "load2")]
+)
+
 (define_insn "*zero_extendsidi2_aarch64"
   [(set (match_operand:DI 0 "register_operand" "=r,r")
         (zero_extend:DI (match_operand:SI 1 "nonimmediate_operand" "r,m")))]
@@ -1345,6 +1231,16 @@
    uxtw\t%0, %w1
    ldr\t%w0, %1"
   [(set_attr "type" "extend,load1")]
+)
+
+(define_insn "*load_pair_zero_extendsidi2_aarch64"
+  [(set (match_operand:DI 0 "register_operand" "=r")
+	(zero_extend:DI (match_operand:SI 1 "aarch64_mem_pair_operand" "Ump")))
+   (set (match_operand:DI 2 "register_operand" "=r")
+	(zero_extend:DI (match_operand:SI 3 "memory_operand" "m")))]
+  "aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
+  "ldp\\t%w0, %w2, %1"
+  [(set_attr "type" "load2")]
 )
 
 (define_expand "<ANY_EXTEND:optab><SHORT:mode><GPI:mode>2"
@@ -4398,3 +4294,6 @@
 
 ;; Atomic Operations
 (include "atomics.md")
+
+;; ldp/stp peephole patterns
+(include "aarch64-ldpstp.md")
