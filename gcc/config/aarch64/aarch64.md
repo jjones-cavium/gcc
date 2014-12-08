@@ -1648,6 +1648,33 @@
   [(set_attr "type" "alu_ext")]
 )
 
+(define_insn "*add_<optab><mode>_ashift"
+  [(set (match_operand:GPI 0 "register_operand" "=rk")
+       (plus:GPI (ANY_EXTRACT:GPI
+                  (ashift:GPI (match_operand:GPI 1 "register_operand" "r")
+                              (match_operand 2 "aarch64_imm3" "Ui3"))
+                  (match_operand 3 "const_int_operand" "n")
+                  (const_int 0))
+                 (match_operand:GPI 4 "register_operand" "r")))]
+  ""
+  "add\\t%<w>0, %<w>4, %<w>1, <su>xt%e3 %2"
+  [(set_attr "type" "alu_ext")]
+)
+
+(define_insn "*add_<optab>si_ashift_uxtw"
+  [(set (match_operand:DI 0 "register_operand" "=rk")
+       (zero_extend:DI
+        (plus:SI (ANY_EXTRACT:SI
+                  (ashift:SI (match_operand:SI 1 "register_operand" "r")
+                             (match_operand 2 "aarch64_imm3" "Ui3"))
+                  (match_operand 3 "const_int_operand" "n")
+                  (const_int 0))
+                 (match_operand:SI 4 "register_operand" "r"))))]
+  ""
+  "sub\\t%w0, %w4, %w1, <su>xt%e3 %2"
+  [(set_attr "type" "alu_ext")]
+)
+
 (define_insn "*add_<optab><mode>_multp2"
   [(set (match_operand:GPI 0 "register_operand" "=rk")
 	(plus:GPI (ANY_EXTRACT:GPI
@@ -1979,6 +2006,33 @@
 			      (match_operand 3 "aarch64_imm3" "Ui3")))))]
   ""
   "sub\\t%w0, %w1, %w2, <su>xt<SHORT:size> %3"
+  [(set_attr "type" "alu_ext")]
+)
+
+(define_insn "*sub_<optab><mode>_ashift"
+  [(set (match_operand:GPI 0 "register_operand" "=rk")
+       (minus:GPI (match_operand:GPI 4 "register_operand" "r")
+                  (ANY_EXTRACT:GPI
+                   (ashift:GPI (match_operand:GPI 1 "register_operand" "r")
+                               (match_operand 2 "aarch64_imm3" "Ui3"))
+                   (match_operand 3 "const_int_operand" "n")
+                   (const_int 0))))]
+  ""
+  "sub\\t%<w>0, %<w>4, %<w>1, <su>xt%e3 %2"
+  [(set_attr "type" "alu_ext")]
+)
+
+(define_insn "*sub_<optab>si_ashift_uxtw"
+  [(set (match_operand:DI 0 "register_operand" "=rk")
+       (zero_extend:DI
+        (minus:SI (match_operand:SI 4 "register_operand" "r")
+                  (ANY_EXTRACT:SI
+                   (ashift:SI (match_operand:SI 1 "register_operand" "r")
+                              (match_operand 2 "aarch64_imm3" "Ui3"))
+                   (match_operand 3 "const_int_operand" "n")
+                   (const_int 0)))))]
+  ""
+  "sub\\t%w0, %w4, %w1, <su>xt%e3 %2"
   [(set_attr "type" "alu_ext")]
 )
 
