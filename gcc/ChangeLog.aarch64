@@ -1,3 +1,7 @@
+2014-12-04 Ganesh Gopalasubramanian  <Ganesh.Gopalasubramanian@amd.com>
+
+	* config/aarch64/aarch64.md (define_insn "prefetch"): New.
+
 2014-11-22  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.md (CRC): Add mode attribute.
