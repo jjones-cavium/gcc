@@ -1903,12 +1903,28 @@
   DONE;
 })
 
+(define_insn "clrsb<mode>2"
+  [(set (match_operand:VDQ_BHSI 0 "register_operand" "=w")
+        (clrsb:VDQ_BHSI (match_operand:VDQ_BHSI 1 "register_operand" "w")))]
+  "TARGET_SIMD"
+  "cls\\t%0.<Vtype>, %1.<Vtype>"
+  [(set_attr "type" "neon_cls<q>")]
+)
+
 (define_insn "clz<mode>2"
  [(set (match_operand:VDQ_BHSI 0 "register_operand" "=w")
        (clz:VDQ_BHSI (match_operand:VDQ_BHSI 1 "register_operand" "w")))]
  "TARGET_SIMD"
  "clz\\t%0.<Vtype>, %1.<Vtype>"
   [(set_attr "type" "neon_cls<q>")]
+)
+
+(define_insn "popcount<mode>2"
+  [(set (match_operand:VB 0 "register_operand" "=w")
+        (popcount:VB (match_operand:VB 1 "register_operand" "w")))]
+  "TARGET_SIMD"
+  "cnt\\t%0.<Vbtype>, %1.<Vbtype>"
+  [(set_attr "type" "neon_cnt<q>")]
 )
 
 ;; 'across lanes' max and min ops.
@@ -4823,6 +4839,14 @@
   "frecps\\t%<v>0<Vmtype>, %<v>1<Vmtype>, %<v>2<Vmtype>"
   [(set_attr "type" "neon_fp_recps_<Vetype><q>")]
 )
+
+(define_insn "aarch64_urecpe<mode>"
+  [(set (match_operand:VDQ_SI 0 "register_operand" "=w")
+        (unspec:VDQ_SI [(match_operand:VDQ_SI 1 "register_operand" "w")]
+                UNSPEC_URECPE))]
+ "TARGET_SIMD"
+ "urecpe\\t%0.<Vtype>, %1.<Vtype>"
+  [(set_attr "type" "neon_fp_recpe_<Vetype><q>")])
 
 ;; Standard pattern name vec_extract<mode>.
 

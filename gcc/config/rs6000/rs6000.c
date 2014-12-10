@@ -8396,9 +8396,11 @@ rs6000_emit_move (rtx dest, rtx source, machine_mode mode)
 	  || ! nonimmediate_operand (operands[0], mode)))
     goto emit_set;
 
-  /* 128-bit constant floating-point values on Darwin should really be
-     loaded as two parts.  */
+  /* 128-bit constant floating-point values on Darwin should really be loaded
+     as two parts.  However, this premature splitting is a problem when DFmode
+     values can go into Altivec registers.  */
   if (!TARGET_IEEEQUAD && TARGET_LONG_DOUBLE_128
+      && !reg_addr[DFmode].scalar_in_vmx_p
       && mode == TFmode && GET_CODE (operands[1]) == CONST_DOUBLE)
     {
       rs6000_emit_move (simplify_gen_subreg (DFmode, operands[0], mode, 0),
@@ -17379,12 +17381,7 @@ rs6000_secondary_reload_inner (rtx reg, rtx mem, rtx scratch, bool store_p)
     case SYMBOL_REF:
     case CONST:
     case LABEL_REF:
-      if (TARGET_TOC)
-	emit_insn (gen_rtx_SET (VOIDmode, scratch,
-				create_TOC_reference (addr, scratch)));
-      else
-	rs6000_emit_move (scratch, addr, Pmode);
-
+      rs6000_emit_move (scratch, addr, Pmode);
       new_addr = scratch;
       break;
 
