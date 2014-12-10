@@ -2438,22 +2438,9 @@
   [(set_attr "type" "neon_to_gp<q>")]
 )
 
-(define_expand "aarch64_be_checked_get_lane<mode>"
-  [(match_operand:<VEL> 0 "aarch64_simd_nonimmediate_operand")
-   (match_operand:VALL 1 "register_operand")
-   (match_operand:SI 2 "immediate_operand")]
-  "TARGET_SIMD"
-  {
-    operands[2] = GEN_INT (ENDIAN_LANE_N (<MODE>mode, INTVAL (operands[2])));
-    emit_insn (gen_aarch64_get_lane<mode> (operands[0],
-					   operands[1],
-					   operands[2]));
-    DONE;
-  }
-)
-
 ;; Lane extraction of a value, neither sign nor zero extension
 ;; is guaranteed so upper bits should be considered undefined.
+;; RTL uses GCC vector extension indices throughout so flip only for assembly.
 (define_insn "aarch64_get_lane<mode>"
   [(set (match_operand:<VEL> 0 "aarch64_simd_nonimmediate_operand" "=r, w, Utv")
 	(vec_select:<VEL>
@@ -2476,17 +2463,6 @@
   }
   [(set_attr "type" "neon_to_gp<q>, neon_dup<q>, neon_store1_one_lane<q>")]
 )
-
-(define_expand "aarch64_get_lanedi"
-  [(match_operand:DI 0 "register_operand")
-   (match_operand:DI 1 "register_operand")
-   (match_operand:SI 2 "immediate_operand")]
-  "TARGET_SIMD"
-{
-  aarch64_simd_lane_bounds (operands[2], 0, 1, NULL);
-  emit_move_insn (operands[0], operands[1]);
-  DONE;
-})
 
 ;; In this insn, operand 1 should be low, and operand 2 the high part of the
 ;; dest vector.
@@ -4594,19 +4570,6 @@
   return "ext\\t%0.<Vbtype>, %1.<Vbtype>, %2.<Vbtype>, #%3";
 }
   [(set_attr "type" "neon_ext<q>")]
-)
-
-;; This exists solely to check the arguments to the corresponding __builtin.
-;; Used where we want an error for out-of-range indices which would otherwise
-;; be silently wrapped (e.g. the mask to a __builtin_shuffle).
-(define_expand "aarch64_im_lane_boundsi"
-  [(match_operand:SI 0 "immediate_operand" "i")
-   (match_operand:SI 1 "immediate_operand" "i")]
-  "TARGET_SIMD"
-{
-  aarch64_simd_lane_bounds (operands[0], 0, INTVAL (operands[1]), NULL);
-  DONE;
-}
 )
 
 (define_insn "aarch64_rev<REVERSE:rev_op><mode>"

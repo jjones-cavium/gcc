@@ -341,7 +341,10 @@ static const struct tune_params generic_tunings =
   NAMED_PARAM (memmov_cost, 4),
   NAMED_PARAM (issue_rate, 2),
   NAMED_PARAM (align, 8),
-  NAMED_PARAM (fuseable_ops, AARCH64_FUSE_NOTHING)
+  NAMED_PARAM (fuseable_ops, AARCH64_FUSE_NOTHING),
+  2,	/* int_reassoc_width.  */
+  4,	/* fp_reassoc_width.  */
+  1	/* vec_reassoc_width.  */
 };
 
 static const struct tune_params cortexa53_tunings =
@@ -355,7 +358,10 @@ static const struct tune_params cortexa53_tunings =
   NAMED_PARAM (issue_rate, 2),
   NAMED_PARAM (align, 8),
   NAMED_PARAM (fuseable_ops, (AARCH64_FUSE_MOV_MOVK | AARCH64_FUSE_ADRP_ADD
-                             | AARCH64_FUSE_MOVK_MOVK | AARCH64_FUSE_ADRP_LDR))
+                             | AARCH64_FUSE_MOVK_MOVK | AARCH64_FUSE_ADRP_LDR)),
+  2,	/* int_reassoc_width.  */
+  4,	/* fp_reassoc_width.  */
+  1	/* vec_reassoc_width.  */
 };
 
 static const struct tune_params cortexa57_tunings =
@@ -368,7 +374,10 @@ static const struct tune_params cortexa57_tunings =
   NAMED_PARAM (memmov_cost, 4),
   NAMED_PARAM (issue_rate, 3),
   NAMED_PARAM (align, 8),
-  NAMED_PARAM (fuseable_ops, (AARCH64_FUSE_MOV_MOVK | AARCH64_FUSE_ADRP_ADD | AARCH64_FUSE_MOVK_MOVK))
+  NAMED_PARAM (fuseable_ops, (AARCH64_FUSE_MOV_MOVK | AARCH64_FUSE_ADRP_ADD | AARCH64_FUSE_MOVK_MOVK)),
+  2,	/* int_reassoc_width.  */
+  4,	/* fp_reassoc_width.  */
+  1	/* vec_reassoc_width.  */
 };
 
 static const struct tune_params thunderx_tunings =
@@ -381,7 +390,10 @@ static const struct tune_params thunderx_tunings =
   NAMED_PARAM (memmov_cost, 6),
   NAMED_PARAM (issue_rate, 2),
   NAMED_PARAM (align, 8),
-  NAMED_PARAM (fuseable_ops, AARCH64_FUSE_CMP_BRANCH)
+  NAMED_PARAM (fuseable_ops, AARCH64_FUSE_CMP_BRANCH),
+  2,	/* int_reassoc_width.  */
+  4,	/* fp_reassoc_width.  */
+  1	/* vec_reassoc_width.  */
 };
 
 /* A processor implementing AArch64.  */
@@ -473,6 +485,19 @@ static const char * const aarch64_condition_codes[] =
   "eq", "ne", "cs", "cc", "mi", "pl", "vs", "vc",
   "hi", "ls", "ge", "lt", "gt", "le", "al", "nv"
 };
+
+static int
+aarch64_reassociation_width (unsigned opc ATTRIBUTE_UNUSED,
+			     enum machine_mode mode)
+{
+  if (VECTOR_MODE_P (mode))
+    return aarch64_tune_params->vec_reassoc_width;
+  if (INTEGRAL_MODE_P (mode))
+    return aarch64_tune_params->int_reassoc_width;
+  if (FLOAT_MODE_P (mode))
+    return aarch64_tune_params->fp_reassoc_width;
+  return 1;
+}
 
 /* Provide a mapping from gcc register numbers to dwarf register numbers.  */
 unsigned
@@ -10686,18 +10711,15 @@ aarch_macro_fusion_pair_p (rtx_insn *prev, rtx_insn *curr)
   if ((aarch64_tune_params->fuseable_ops & AARCH64_FUSE_CMP_BRANCH)
       && any_condjump_p (curr))
     {
-      /* FIXME: this misses some which are considered simple arthematic
+      enum attr_type prev_type = get_attr_type (prev);
+
+      /* FIXME: this misses some which is considered simple arthematic
          instructions for ThunderX.  Simple shifts are missed here.  */
-      switch (get_attr_type (prev))
-	{
-	  case TYPE_ALUS_SREG:
-	  case TYPE_ALUS_IMM:
-	  case TYPE_LOGICS_REG:
-	  case TYPE_LOGICS_IMM:
-	    return true;
-	  default:
-	    ;
-	}
+      if (prev_type == TYPE_ALUS_SREG
+          || prev_type == TYPE_ALUS_IMM
+          || prev_type == TYPE_LOGICS_REG
+          || prev_type == TYPE_LOGICS_IMM)
+        return true;
     }
 
   return false;
@@ -11336,6 +11358,9 @@ aarch64_gen_adjusted_ldpstp (rtx *operands, bool load,
 
 #undef TARGET_PREFERRED_RELOAD_CLASS
 #define TARGET_PREFERRED_RELOAD_CLASS aarch64_preferred_reload_class
+
+#undef TARGET_SCHED_REASSOCIATION_WIDTH
+#define TARGET_SCHED_REASSOCIATION_WIDTH aarch64_reassociation_width
 
 #undef TARGET_SECONDARY_RELOAD
 #define TARGET_SECONDARY_RELOAD aarch64_secondary_reload
