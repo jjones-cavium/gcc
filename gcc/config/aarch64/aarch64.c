@@ -411,12 +411,10 @@ struct processor
 static const struct processor all_cores[] =
 {
 #define AARCH64_CORE(NAME, IDENT, SCHED, ARCH, FLAGS, COSTS) \
-  {NAME, SCHED, #ARCH, ARCH,\
-    FLAGS | AARCH64_FL_FOR_ARCH##ARCH, &COSTS##_tunings},
+  {NAME, SCHED, #ARCH, ARCH, FLAGS, &COSTS##_tunings},
 #include "aarch64-cores.def"
 #undef AARCH64_CORE
-  {"generic", cortexa53, "8", 8,\
-    AARCH64_FL_FPSIMD | AARCH64_FL_FOR_ARCH8, &generic_tunings},
+  {"generic", cortexa53, "8", 8, AARCH64_FL_FOR_ARCH8, &generic_tunings},
   {NULL, aarch64_none, NULL, 0, 0, NULL}
 };
 
@@ -6608,7 +6606,8 @@ aarch64_parse_extension (char *str)
 
       if (len == 0)
 	{
-	  error ("missing feature modifier after %qs", "+no");
+	  error ("missing feature modifier after %qs", adding_ext ? "+"
+	                                                          : "+no");
 	  return;
 	}
 
@@ -6874,6 +6873,18 @@ aarch64_override_options (void)
 #else
       aarch64_fix_a53_err835769 = 0;
 #endif
+    }
+
+  /* If not opzimizing for size, set the default
+     alignment to what the target wants */
+  if (!optimize_size)
+    {
+      if (align_loops <= 0)
+	align_loops = aarch64_tune_params->align;
+      if (align_jumps <= 0)
+	align_jumps = aarch64_tune_params->align;
+      if (align_functions <= 0)
+	align_functions = aarch64_tune_params->align;
     }
 
   aarch64_override_options_after_change ();
