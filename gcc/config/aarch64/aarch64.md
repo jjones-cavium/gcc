@@ -1672,7 +1672,7 @@
                   (const_int 0))
                  (match_operand:SI 4 "register_operand" "r"))))]
   ""
-  "sub\\t%w0, %w4, %w1, <su>xt%e3 %2"
+  "add\\t%w0, %w4, %w1, <su>xt%e3 %2"
   [(set_attr "type" "alu_ext")]
 )
 
