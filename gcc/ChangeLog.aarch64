@@ -1,5 +1,10 @@
 2014-12-11  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64.c (aarch64_array_mode_supported_p):
+	Return false always for ThunderX.
+
+2014-12-11  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #13500
 	* config/aarch64/aarch64.md (*add_<optab>si_ashift_uxtw):
 	Fix resulting assembly.
