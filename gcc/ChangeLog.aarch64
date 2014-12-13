@@ -1,5 +1,12 @@
+2014-12-13  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #13577
+	* config/aarch64/aarch64.c (aarch64_override_options):
+	Fix handling of -fprefetch-loop-arrays default.
+
 2014-12-11  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #12470
 	* config/aarch64/aarch64.c (aarch64_array_mode_supported_p):
 	Return false always for ThunderX.
 

@@ -6860,11 +6860,11 @@ aarch64_override_options (void)
 			 global_options_set.x_param_values);
 
   /* Enable sw prefetching at -O3 for CPUS that prefetching is helpful.  */
-  if (global_options_set.x_flag_prefetch_loop_arrays < 0
+  if (!global_options_set.x_flag_prefetch_loop_arrays
       && !optimize_size
-      && (global_options_set.x_optimize >= 3 || global_options_set.x_flag_profile_use)
+      && (global_options.x_optimize >= 3 || global_options.x_flag_profile_use)
       && aarch64_tune_params->prefetch_costs->prefetch_beneficial)
-    global_options_set.x_flag_prefetch_loop_arrays = 1;
+    global_options.x_flag_prefetch_loop_arrays = 1;
 
   if (aarch64_fix_a53_err835769 == 2)
     {
