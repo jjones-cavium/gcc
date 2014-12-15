@@ -1,3 +1,63 @@
+2014-12-14  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/61602
+	* gcc.dg/torture/pr61602.c: New testcase.
+
+2014-12-14  Jan Hubicka  <hubicka@ucw.cz>	
+	
+	PR ipa/61558
+	* g++.dg/torture/pr61558.C: New testcase.
+
+2014-12-14  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR lto/64043
+	* g++.dg/lto/pr64043_0.C: New testcase.
+
+2014-12-14  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR rtl-optimization/64037
+	* g++.dg/pr64037.C: New test.
+
+2014-12-14  Janus Weil  <janus@gcc.gnu.org>
+
+	PR fortran/63674
+	* gfortran.dg/proc_ptr_comp_39.f90: New.
+	* gfortran.dg/pure_dummy_length_1.f90: Modified error message.
+	* gfortran.dg/stfunc_6.f90: Ditto.
+	* gfortran.dg/typebound_operator_4.f90: Ditto.
+
+2014-12-13  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/53513
+	* gcc.target/sh/attr-isr-nosave_low_regs.c: Fix matching of expected
+	register push/pop sequences.
+	* gcc.target/sh/attr-isr.c: Likewise.
+	* gcc.target/sh/attr-isr-trapa.c: Likewise.
+	* gcc.target/sh/pragma-isr-nosave_low_regs.c: Likewise.
+	* gcc.target/sh/pragma-isr-trapa.c: Likewise.
+	* gcc.target/sh/pragma-isr-trapa2.c: Likewise.
+
+2014-12-13  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	* gcc.target/sh/sp-switch.c: Match zero or more underscores in
+	alt_stack symbol.
+
+2014-12-13  Tobias Burnus  <burnus@net-b.de>
+
+	* gfortran.dg/realloc_on_assign_21.f90: Update dg-error.
+	* gfortran.dg/warnings_are_errors_1.f: Ditto.
+	* gfortran.dg/warnings_are_errors_1.f90: Ditto.
+
+2014-12-12  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/59240
+	* g++.dg/torture/pr59240.C: New.
+
+2014-12-12  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/59628
+	* g++.dg/gomp/pr59628.C: New.
+
 2014-12-12  Paolo Carlini  <paolo.carlini@oracle.com>
 
 	PR c++/61924
