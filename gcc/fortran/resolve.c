@@ -1740,6 +1740,7 @@ resolve_actual_arglist (gfc_actual_arglist *arg, procedure_type ptype,
   gfc_symbol *sym;
   gfc_symtree *parent_st;
   gfc_expr *e;
+  gfc_component *comp;
   int save_need_full_assumed_size;
   bool return_value = false;
   bool actual_arg_sav = actual_arg, first_actual_arg_sav = first_actual_arg;
@@ -1965,6 +1966,14 @@ resolve_actual_arglist (gfc_actual_arglist *arg, procedure_type ptype,
 		  goto cleanup;
 		}
 	    }
+	}
+
+      comp = gfc_get_proc_ptr_comp(e);
+      if (comp && comp->attr.elemental)
+	{
+	    gfc_error ("ELEMENTAL procedure pointer component %qs is not "
+		       "allowed as an actual argument at %L", comp->name,
+		       &e->where);
 	}
 
       /* Fortran 2008, C1237.  */
@@ -2808,7 +2817,7 @@ pure_stmt_function (gfc_expr *e, gfc_symbol *sym)
 }
 
 
-/* Check if a non-pure function function is allowed in the current context. */
+/* Check if an impure function is allowed in the current context. */
 
 static bool check_pure_function (gfc_expr *e)
 {
@@ -2817,21 +2826,21 @@ static bool check_pure_function (gfc_expr *e)
     {
       if (forall_flag)
 	{
-	  gfc_error ("Reference to non-PURE function %qs at %L inside a "
+	  gfc_error ("Reference to impure function %qs at %L inside a "
 		     "FORALL %s", name, &e->where,
 		     forall_flag == 2 ? "mask" : "block");
 	  return false;
 	}
       else if (gfc_do_concurrent_flag)
 	{
-	  gfc_error ("Reference to non-PURE function %qs at %L inside a "
+	  gfc_error ("Reference to impure function %qs at %L inside a "
 		     "DO CONCURRENT %s", name, &e->where,
 		     gfc_do_concurrent_flag == 2 ? "mask" : "block");
 	  return false;
 	}
       else if (gfc_pure (NULL))
 	{
-	  gfc_error ("Reference to non-PURE function %qs at %L "
+	  gfc_error ("Reference to impure function %qs at %L "
 		     "within a PURE procedure", name, &e->where);
 	  return false;
 	}
