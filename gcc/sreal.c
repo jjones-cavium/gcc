@@ -47,9 +47,9 @@ along with GCC; see the file COPYING3.  If not see
 	sig == 0 && exp == -SREAL_MAX_EXP
 */
 
-#include <math.h>
 #include "config.h"
 #include "system.h"
+#include <math.h>
 #include "coretypes.h"
 #include "sreal.h"
 
@@ -264,7 +264,7 @@ sreal
 sreal::operator* (const sreal &other) const
 {
   sreal r;
-  if (std::abs (m_sig) < SREAL_MIN_SIG || std::abs (other.m_sig) < SREAL_MIN_SIG)
+  if (absu_hwi (m_sig) < SREAL_MIN_SIG || absu_hwi (other.m_sig) < SREAL_MIN_SIG)
     {
       r.m_sig = 0;
       r.m_exp = -SREAL_MAX_EXP;
