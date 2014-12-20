@@ -16,9 +16,519 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2014-12-20  Martin Uecker <uecker@eecs.berkeley.edu>
+
+	* doc/invoke.texi: Document -Wdiscarded-array-qualifiers.
+	* doc/extend.texi: Document new behavior for pointers to arrays
+	with qualifiers.
+
+2014-12-19  Jan Hubicka  <hubicka@ucw.cz>
+
+	* hash-table.h (struct pointer_hash): Fix formating.
+	(hash_table_higher_prime_index): Declare pure.
+	(hash_table_mod2, hash_table_mod1, mul_mod): Move inline;
+	assume that uint64_t always exists.
+	(hash_table<Descriptor, Allocator, false>): Use gcc_checking_assert.
+	(hash_table<Descriptor, Allocator, false>::expand ()): Fix formating.
+	(hash_table<Descriptor, Allocator, false>::clear_slot (value_type **slot)):
+	Use checking assert.
+	* hash-table.c: Remove #if 0 code.
+	(hash_table_higher_prime_index): Use gcc_assert.
+	(mul_mod, hash-table_mod1, hash_table_mod2): move to hash-table.h
+
+2014-12-19  Matthew Fortune  <matthew.fortune@imgtec.com>
+
+	* config.gcc: Support mips*-img-linux* and mips*-img-elf*.
+	* config/mips/mti-linux.h: Support mips32r6 as being the default arch.
+	* config/mips/t-img-elf: New.
+	* config/mips/t-img-linux: New.
+
+2014-12-19  Matthew Fortune  <matthew.fortune@imgtec.com>
+
+	* config.gcc: Add mipsisa64r6 and mipsisa32r6 cpu support.
+	* config/mips/constraints.md (ZD): Add r6 restrictions.
+	* config/mips/gnu-user.h (DRIVER_SELF_SPECS): Add MIPS_ISA_LEVEL_SPEC.
+	* config/mips/loongson.md
+	(<u>div<mode>3, <u>mod<mode>3): Move to mips.md.
+	* config/mips/mips-cpus.def (mips32r6, mips64r6): Define.
+	* config/mips/mips-modes.def (CCF): New mode.
+	* config/mips/mips-protos.h
+	(mips_9bit_offset_address_p): New prototype.
+	* config/mips/mips-tables.opt: Regenerate.
+	* config/mips/mips.c (MIPS_JR): Use JALR $, <reg> for R6.
+	(mips_rtx_cost_data): Add pseudo-processors W32 and W64.
+	(mips_9bit_offset_address_p): New function.
+	(mips_rtx_costs): Account for R6 multiply and FMA instructions.
+	(mips_emit_compare): Implement R6 FPU comparisons.
+	(mips_expand_conditional_move): Implement R6 selects.
+	(mips_expand_conditional_trap): Account for removed trap immediate.
+	(mips_expand_block_move): Disable inline move when LWL/LWR are removed.
+	(mips_print_float_branch_condition): Update for R6 FPU branches.
+	(mips_print_operand): Handle CCF mode compares.
+	(mips_interrupt_extra_call_saved_reg_p): Do not attempt to callee-save
+	MD_REGS for R6.
+	(mips_hard_regno_mode_ok_p): Support CCF mode.
+	(mips_mode_ok_for_mov_fmt_p): Likewise.
+	(mips_secondary_reload_class): CCFmode can be loaded directly.
+	(mips_set_fast_mult_zero_zero_p): Account for R6 multiply instructions.
+	(mips_option_override): Ensure R6 is used with fp64.  Set default
+	mips_nan modes.  Check for mips_nan support.  Prevent DSP with R6.
+	(mips_conditional_register_usage): Disable MD_REGS for R6. Disable
+	FPSW for R6.
+	(mips_mulsidi3_gen_fn): Support R6 multiply instructions.
+	* config/mips/mips.h (ISA_MIPS32R6, ISA_MIPS64R6): Define.
+	(TARGET_CPU_CPP_BUILTINS): Rework for mips32/mips64.
+	(ISA_HAS_JR): New macro.
+	(ISA_HAS_HILO): New macro.
+	(ISA_HAS_R6MUL): Likewise.
+	(ISA_HAS_R6DMUL): Likewise.
+	(ISA_HAS_R6DIV): Likewise.
+	(ISA_HAS_R6DDIV): Likewise.
+	(ISA_HAS_CCF): Likewise.
+	(ISA_HAS_SEL): Likewise.
+	(ISA_HAS_COND_TRAPI): Likewise.
+	(ISA_HAS_FP_MADDF_MSUBF): Likewise.
+	(ISA_HAS_LWL_LWR): Likewise.
+	(ISA_HAS_IEEE_754_LEGACY): Likewise.
+	(ISA_HAS_IEEE_754_2008): Likewise.
+	(ISA_HAS_PREFETCH_9BIT): Likewise.
+	(MIPSR6_9BIT_OFFSET_P): New macro.
+	(BASE_DRIVER_SELF_SPECS): Use MIPS_ISA_DRIVER_SELF_SPECS.
+	(DRIVER_SELF_SPECS): Use MIPS_ISA_LEVEL_SPEC.
+	(MULTILIB_ISA_DEFAULT): Handle mips32r6 and mips64r6.
+	(MIPS_ISA_LEVEL_SPEC): Likewise.
+	(MIPS_ISA_SYNCI_SPEC): Likewise.
+	(ISA_HAS_64BIT_REGS): Likewise.
+	(ISA_HAS_BRANCHLIKELY): Likewise.
+	(ISA_HAS_MUL3): Likewise.
+	(ISA_HAS_DMULT): Likewise.
+	(ISA_HAS_DDIV): Likewise.
+	(ISA_HAS_DIV): Likewise.
+	(ISA_HAS_MULT): Likewise.
+	(ISA_HAS_FP_CONDMOVE): Likewise.
+	(ISA_HAS_8CC): Likewise.
+	(ISA_HAS_FP4): Likewise.
+	(ISA_HAS_PAIRED_SINGLE): Likewise.
+	(ISA_HAS_MADD_MSUB): Likewise.
+	(ISA_HAS_FP_RECIP_RSQRT): Likewise.
+	* config/mips/mips.md (processor): Add w32 and w64.
+	(FPCC): New mode iterator.
+	(reg): Add CCF mode.
+	(fpcmp): New mode attribute.
+	(fcond): Add ordered, ltgt and ne codes.
+	(fcond): Update code attribute.
+	(sel): New code attribute.
+	(selinv): Likewise.
+	(ctrap<mode>4): Update condition.
+	(*conditional_trap_reg<mode>): New define_insn.
+	(*conditional_trap<mode>): Update condition.
+	(mul<mode>3): Expand R6 multiply instructions.
+	(<su>mulsi3_highpart): Likewise.
+	(<su>muldi3_highpart): Likewise.
+	(mul<mode>3_mul3_loongson): Rename...
+	(mul<mode>3_mul3_hilo): To this.  Add R6 mul instruction.
+	(<u>mulsidi3_32bit_r6): New expander.
+	(<u>mulsidi3_32bit): Restrict to pre-r6 multiplies.
+	(<u>mulsidi3_32bit_r4000): Likewise.
+	(<u>mulsidi3_64bit): Likewise.
+	(<su>mulsi3_highpart_internal): Likewise.
+	(mulsidi3_64bit_r6dmul): New instruction.
+	(<su>mulsi3_highpart_r6): Likewise.
+	(<su>muldi3_highpart_r6): Likewise.
+	(fma<mode>4): Likewise.
+	(movccf): Likewise.
+	(*sel<code><GPR:mode>_using_<GPR2:mode>): Likewise.
+	(*sel<mode>): Likewise.
+	(<u>div<mode>3): Moved from loongson.md.  Add R6 instructions.
+	(<u>mod<mode>3): Likewise.
+	(extvmisalign<mode>): Require ISA_HAS_LWL_LWR.
+	(extzvmisalign<mode>): Likewise.
+	(insvmisalign<mode>): Likewise.
+	(mips_cache): Account for R6 displacement field sizes.
+	(*branch_fp): Rename...
+	(*branch_fp_<mode>): To this.  Add CCFmode support.
+	(*branch_fp_inverted): Rename...
+	(*branch_fp_inverted_<mode>): To this.  Add CCFmode support.
+	(s<code>_<mode>): Rename...
+	(s<code>_<SCALARF:mode>_using_<FPCC:mode>): To this.  Add FCCmode
+	condition support.
+	(s<code>_<mode> swapped): Rename...
+	(s<code>_<SCALARF:mode>_using_<FPCC:mode> swapped): To this. Add
+	CCFmode condition support.
+	(mov<mode>cc GPR): Expand R6 selects.
+	(mov<mode>cc FPR): Expand R6 selects.
+	(*tls_get_tp_<mode>_split): Do not .set push for >= mips32r2.
+	* config/mips/netbsd.h (TARGET_CPU_CPP_BUILTINS): Update similarly to
+	mips.h.
+	(ASM_SPEC): Add mips32r6, mips64r6.
+	* config/mips/t-isa3264 (MULTILIB_OPTIONS, MULTILIB_DIRNAMES): Update
+	for mips32r6/mips64r6.
+	* doc/invoke.texi: Document -mips32r6,-mips64r6.
+	* doc/md.texi: Update comment for ZD constraint.
+
+2014-12-19  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	PR target/64268
+	* combine.c (try_combine): Immediately return if any of I0,I1,I2
+	are the same insn.
+
+2014-12-19  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/aarch64.c (<LOGICAL:optab>_one_cmpl<mode>3):
+	Reparameterize to...
+	(<NLOGICAL:optab>_one_cmpl<mode>3): with extra SIMD-register variant.
+	(xor_one_cmpl<mode>3): New define_insn_and_split.
+
+	* config/aarch64/iterators.md (NLOGICAL): New define_code_iterator.
+
+2014-12-19  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/aarch64.md (<optab><mode>3, one_cmpl<mode>2):
+	Add SIMD-register variant.
+	* config/aarch64/iterators.md (Vbtype): Add value for SI.
+
+2014-12-19  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/aarch64.md (subdi3, adddi3_aarch64): Don't penalize
+	SIMD reg variant.
+
+2014-12-19  Martin Liska  <mliska@suse.cz>
+
+	PR ipa/63569
+	* ipa-icf-gimple.c (func_checker::compare_operand): Add missing
+	comparison for volatile flag.
+
+2014-12-19  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* doc/invoke.texi (ARM options): Remove mention of Advanced RISC
+	Machines.
+
+2014-12-19  Xingxing Pan  <xxingpan@marvell.com>
+
+	* config/arm/cortex-a9-neon.md (cortex_a9_neon_vmov): Change
+	reservation to cortex_a9_neon_dp.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* config/sh/sh.c (prepare_move_operands): Split HI/QImode load/store
+	to two move insns via r0.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* config/sh/predicates.md (arith_or_int_operand): New predicate.
+	* config/sh/sh.md (addsi3): Use arith_or_int_operand for operand 2.
+	Return fail if operands[0] and operands[1] are overlap when
+	operands[2] is integer constant.
+	(*addsi3_compact): Make it define_insn_and_split which splits
+	reg0 := reg1 + constant to reg0 = constant and reg0 := reg0 + reg1.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* config/sh/sh-protos.h (sh_movsf_ie_ra_split_p): Declare.
+	* config/sh/sh.c (sh_movsf_ie_ra_split_p): New function.
+	* config/sh/sh.md (movsi_ie): Use "mr" constraint for the 8-th
+	altarnative of operand 0.
+	(movesf_ie): Use "X" constraint instead of "Bsc".
+	(movsf_ie_ra): New insn_and_split.
+	(movsf): Use movsfie_ra when lra_in_progress is true.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* config/sh/predicates.md (general_movsrc_operand): Allow only
+	valid plus address expressions.
+	(general_movdst_operand): Likewise.
+	(t_reg_operand): Allow (zero_extend (reg t)).
+	* config/sh/sh-protos.h (sh_hard_regno_caller_save_mode): Declare.
+	* config/sh/sh.c (sh_hard_regno_caller_save_mode): New function.
+	(sh_secondary_reload): Return NO_REGS instead of FPUL_REGS in one
+	case.
+	* config/sh/sh.h (HARD_REGNO_CALLER_SAVE_MODE): Define.
+	* config/sh/sh.md (untyped_call): Clobber function value
+	registers before call.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* config/sh/sh.c (sh_lra_p): New function.
+	(TARGET_LRA_P): Define.
+	(sh_legitimize_reload_address): Return false if sh_lra_p is true.
+	* config/sh/sh.opt (mlra): New option.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* lra-constraints.c (process_address_1): Try if target can split
+	displacement with targetm.legitimize_address_displacement.
+	* target.def (legitimize_address_displacement): New hook.
+	* targhooks.c (default_legitimize_address_displacement): New function.
+	* targhooks.h (default_legitimize_address_displacement): Declare.
+	* config/sh/sh.c (sh_legitimize_address_displacement): New function.
+	(TARGET_LEGITIMIZE_ADDRESS_DISPLACEMENT): Define.
+	* doc/tm.texi.in (TARGET_LEGITIMIZE_ADDRESS_DISPLACEMENT): New hook.
+	* doc/tm.texi: Regenerate.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* lra-constraints.c (get_equiv): Don't return memory equivalence
+	when targetm.cannot_substitute_mem_equiv_p is true.
+	* target.def (cannot_substitute_mem_equiv_p): New hook.
+	* config/sh/sh.c (sh_cannot_substitute_mem_equiv_p): New function.
+	(TARGET_CANNOT_SUBSTITUTE_MEM_EQUIV_P): Define.
+	* doc/tm.texi.in (TARGET_CANNOT_SUBSTITUTE_MEM_EQUIV_P): New hook.
+	* doc/tm.texi: Regenerate.
+
+2014-12-19  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* lra-constraints.c (process_address_1): Swap base_term and
+	index_term if INDEX_REG_CLASS is assigned to base_term already
+	when INDEX_REG_CLASS is a single register class.
+
+2014-12-18  Vladimir Makarov  <vmakarov@redhat.com>
+
+	* lra-constraints.c (lra-constraints.c): Exchange places of sclass
+	and dclass.
+
+2014-12-18  Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR rtl-optimization/64291
+	* lra-remat.c (bad_for_rematerialization_p): Add UNPSEC_VLOATILE.
+	(create_cands): Process only output reload insn with potential
+	cands.
+
+2014-12-18  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* config/i386/i386.c (ix86_expand_call): Skip setting up RAX
+	register for -mskip-rax-setup when there are no parameters
+	passed in vector registers.
+	* config/i386/i386.opt (mskip-rax-setup): New option.
+	* doc/invoke.texi: Document -mskip-rax-setup.
+
+2014-12-18  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/aarch64-simd.md (aarch64_lshr_simddi): Handle shift
+	by 64 by moving const0_rtx.
+	(aarch64_ushr_simddi): Delete.
+
+	* config/aarch64/aarch64.md (enum unspec): Delete UNSPEC_USHR64.
+
+2014-12-18  Alan Lawrence  <alan.lawrence@arm.com>
+
+	* config/aarch64/aarch64.md (enum "unspec"): Remove UNSPEC_SSHR64.
+
+	* config/aarch64/aarch64-simd.md (aarch64_ashr_simddi): Change shift
+	amount to 63 if was 64.
+	(aarch64_sshr_simddi): Remove.
+
+2014-12-18  Wilco Dijkstra  <wilco.dijkstra@arm.com>
+
+	* gcc/config/aarch64/aarch64.c (TARGET_MIN_DIVISIONS_FOR_RECIP_MUL):
+	Define.
+	(aarch64_min_divisions_for_recip_mul): New function.
+
+2014-12-18  Wilco Dijkstra  <wilco.dijkstra@arm.com>
+
+	* config/aarch64/aarch64-protos.h (tune-params): Add code alignment
+	tuning parameters.
+	* gcc/config/aarch64/aarch64.c (generic_tunings): Add code alignment
+	tuning parameters.
+	(cortexa53_tunings): Likewise.
+	(cortexa57_tunings): Likewise.
+	(thunderx_tunings): Likewise.
+	(aarch64_override_options): Use new alignment tunings.
+
+2014-12-18  Martin Liska  <mliska@suse.cz>
+
+	PR tree-optimization/64330
+	* ipa-icf.c (sem_variable::parse): Add checking
+	for externally visible symbols and do not introduce
+	an alias for an external declaration.
+
+2014-12-18  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR bootstrap/63573
+	* tree-inline.c (remap_gimple_stmt): Handle gimple_call_from_thunk_p
+	predicate.
+
+2014-12-18  Martin Liska  <mliska@suse.cz>
+
+	PR ipa/64146
+	* ipa-icf.c (sem_function::merge): Check for
+	decl_binds_to_current_def_p is newly added to merge operation.
+
+2014-12-18  Bin Cheng  <bin.cheng@arm.com>
+
+	PR tree-optimization/62178
+	* tree-ssa-loop-ivopts.c (cheaper_cost_with_cand): New function.
+	(iv_ca_replace): New function.
+	(try_improve_iv_set): New parameter try_replace_p.
+	Break local optimal fixed-point by calling iv_ca_replace.
+	(find_optimal_iv_set_1): Pass new argument to try_improve_iv_set.
+
+2014-12-17  Dehao Chen  <dehao@google.com>
+
+	* auto-profile.c (afdo_annotate_cfg): Invoke update_ssa in the right
+	place.
+	(auto_profile): Recompute inline summary after processing cgraph node.
+
+2014-12-17  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/51244
+	* config/sh/sh_treg_combine.cc (is_conditional_insn): New function.
+	(cbranch_trace): Add member rtx* condition_rtx_in_insn, initialize it
+	accordingly in constructor.
+	(cbranch_trace::branch_condition_rtx_ref): New function.
+	(cbranch_trace::branch_condition_rtx): Use branch_condition_rtx_ref.
+	(sh_treg_combine::try_invert_branch_condition): Invert condition rtx
+	in insn using reversed_comparison_code and validate_change instead of
+	invert_jump_1.
+	(sh_treg_combine::execute): Look for conditional insns in basic blocks
+	in addition to conditional branches.
+	* config/sh/sh.md (*movsicc_div0s): Remove combine patterns.
+
+2014-12-17  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/51244
+	* config/sh/sh_treg_combine.cc (sh_treg_combine::try_optimize_cbranch):
+	Combine ccreg inversion and cbranch into inverted cbranch.
+
+2014-12-17  Vladimir Makarov  <vmakarov@redhat.com>
+
+	* lra-constraints.c (process_alt_operands): Remove non
+	allocatable hard regs when considering
+	ira_prohibited_class_mode_regs.
+
+2014-12-17  Jan Hubicka  <hubicka@ucw.cz>
+
+	* sreal.h (sreal::normalize): Implement inline.
+	(sreal::normalize_up): New function.
+	(sreal::normalize_down): New function.
+	* sreal.c (sreal::normalize): Remove.
+
+2014-12-17  James Greenhalgh  <james.greenhalgh@arm.com>
+
+	* config/aarch64/aarch64.md (generic_sched): Delete it.
+
+2014-12-17  Jan-Benedict Glaw  <jbglaw@lug-owl.de>
+
+	* config/msp430/msp430.c (msp430_asm_output_addr_const_extra): Fix
+	unused argument warning.
+
+2014-12-17  Pierre-Marie de Rodat  <derodat@adacore.com>
+
+	* dwarf2out.h (struct array_descr_info): Remove the base_decl field.
+	* dwarf2out.c (enum dw_scalar_form): New.
+	(struct loc_descr_context): New.
+	(add_scalar_info): New.
+	(add_bound_info): Add a context parameter.  Use add_scalar_info.
+	(loc_list_from_tree): Add a context parameter.  Handle PLACEHOLDER_EXPR
+	nodes for type-related expressions.  Likewise for base declarations.
+	(loc_descriptor_from_tree): Add a context parameter.
+	(subrange_type_die): Update calls to add_bound_info.
+	(tls_mem_loc_descriptor): Likewise.
+	(loc_list_for_address_of_addr_expr_of_indirect_ref): Add a context
+	parameter.  Update calls to loc_list_from_tree.
+	(add_subscript_info): Update calls to add_bound_info.
+	(gen_array_type_die): Update calls to loc_list_from_tree and to
+	add_bound_info.
+	(descr_info_loc): Remove.
+	(add_descr_info_field): Remove.
+	(gen_descr_array_type_die): Switch add_descr_info_field calls into
+	add_scalar_info/add_bound_info ones.
+	(gen_subprogram_die): Update calls to loc_list_from_tree.
+	(gen_variable_die): Likewise.
+
+2014-12-17  Pierre-Marie de Rodat  <derodat@adacore.com>
+
+	* dwarf2out.c (print_loc_descr): New.
+	(print_dw_val): New.
+	(print_attribute): New.
+	(print_loc_descr): New.
+	(print_die): Use print_dw_val.
+	(debug_dwarf_loc_descr): New.
+	* dwarf2out.h (debug_dwarf_loc_descr): New declaration.
+
+2014-12-17  Pierre-Marie de Rodat  <derodat@adacore.com>
+
+	* dwarf2out.c (gen_type_die_with_usage): Enable the array lang-hook
+	even when (dwarf_version < 3 && dwarf_strict).
+	(gen_descr_array_die): Do not output DW_AT_data_locationn,
+	DW_AT_associated, DW_AT_allocated and DW_AT_byte_stride DWARF
+	attributes when (dwarf_version < 3 && dwarf_strict).
+
+2014-12-17  Pierre-Marie de Rodat  <derodat@adacore.com>
+
+	* dwarf2out.h (enum array_descr_ordering): New.
+	(array_descr_dimen): Add a bounds_type structure field.
+	(struct array_descr_info): Add a field to hold index type information
+	and another one to hold ordering information.
+	* dwarf2out.c (gen_type_die_with_usage): Get the main variant before
+	invoking the array descriptor language hook.  Initialize the
+	array_descr_info structure before calling the lang-hook.
+	(gen_descr_array_type_die): Use gen_type_die if not processing the main
+	type variant.  Replace Fortran-specific code with generic one using
+	this new field.  Add a GNAT descriptive type, if any.  Output type
+	information for the array bound subrange, if any.
+
+2014-12-17  H.J. Lu  <hongjiu.lu@intel.com>
+	    Jakub Jelinek  <jakub@redhat.com>
+	    Uros Bizjak  <ubizjak@gmail.com>
+
+	PR target/61296
+	* config/i386/i386-opts.h (ix86_align_data): New enum.
+	* config/i386/i386.c (ix86_data_alignment): Return the ABI
+	alignment value for -malign-data=abi, the cachine line size
+	for -malign-data=cacheline and the older GCC compatible
+	alignment value for for -malign-data=compat.
+	* config/i386/i386.opt (malign-data=): New.
+	* doc/invoke.texi: Document -malign-data=.
+
+2014-12-17  Marek Polacek  <polacek@redhat.com>
+
+	PR middle-end/63568
+	* match.pd: Add (x & ~m) | (y & m) -> ((x ^ y) & m) ^ x pattern.
+
+2014-12-17  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/64322
+	* tree-vrp.c (extract_range_from_binary_expr_1): Attempt to derive
+	range for RSHIFT_EXPR even if vr0 range is not VR_RANGE or is symbolic.
+
+2014-12-17  Tobias Burnus  <burnus@net-b.de>
+
+	PR fortran/54687
+	* flag-types.h (gfc_init_local_real, gfc_fcoarray,
+	gfc_convert): New enums; moved from fortran/.
+
+2014-12-16  Jan Hubicka  <hubicka@ucw.cz>
+
+	* fibonacci_heap.h (min): Return m_data instead of non-existing data.
+
+2014-12-16  Jan Hubicka  <hubicka@ucw.cz>
+
+	* ipa-inline-analysis.c (will_be_nonconstant_predicate): Consider
+	return values of const calls as constants.
+	(estimate_function_body_sizes): Expect calls to have false predicates.
+
+2014-12-16  Jan Hubicka  <hubicka@ucw.cz>
+
+	* hwint.c (abs_hwi, absu_hwi): Move to ...
+	* hwint.h (abs_hwi, absu_hwi): ... here; make inline.
+
+2014-12-16  Marek Polacek  <polacek@redhat.com>
+
+	PR middle-end/64309
+	* match.pd: Add ((1 << A) & 1) != 0 -> A == 0 and
+	((1 << A) & 1) == 0 -> A != 0.
+
+2014-12-16  Richard Biener  <rguenther@suse.de>
+
+	* genmatch.c (parser::parser): Initialize capture_ids.
+	(parser::parse_pattern): Properly allocate capture_ids before
+	using them.  Set capture_ids to zero when its lifetime is
+	supposed to finish.
+	(parser::parse_simplify): Allocate capture_ids only if
+	required.
+
 2014-12-16  Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
 
-	Both config.h and system.h define ABI/API macros for system headers.
 	* sreal.c: Include math.h later.
 
 2014-12-16  Felix Yang  <felix.yang@huawei.com>

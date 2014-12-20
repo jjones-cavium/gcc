@@ -181,8 +181,10 @@ struct tune_params
   const struct prefetch_cost *const prefetch_costs;
   const int memmov_cost;
   const int issue_rate;
-  const int align;
   const unsigned int fuseable_ops;
+  const int function_align;
+  const int jump_align;
+  const int loop_align;
   const int int_reassoc_width;
   const int fp_reassoc_width;
   const int vec_reassoc_width;

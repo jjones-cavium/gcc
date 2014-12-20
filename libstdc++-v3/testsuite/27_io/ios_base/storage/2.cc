@@ -32,6 +32,9 @@
 // lots of swapping and with a large memory size, just timeout.
 // { dg-skip-if "" { lp64 } { "*" } { "" } } 
 
+// The library still throws the original definition of std::ios::failure
+// { dg-options "-D_GLIBCXX_USE_CXX11_ABI=0" }
+
 #include <sstream>
 #include <iostream>
 #include <limits>

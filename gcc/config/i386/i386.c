@@ -25466,7 +25466,12 @@ ix86_expand_call (rtx retval, rtx fnaddr, rtx callarg1,
 	}
     }
 
-  if (TARGET_64BIT && INTVAL (callarg2) >= 0)
+  /* Skip setting up RAX register for -mskip-rax-setup when there are no
+     parameters passed in vector registers.  */
+  if (TARGET_64BIT
+      && (INTVAL (callarg2) > 0
+	  || (INTVAL (callarg2) == 0
+	      && (TARGET_SSE || !flag_skip_rax_setup))))
     {
       rtx al = gen_rtx_REG (QImode, AX_REG);
       emit_move_insn (al, callarg2);
@@ -27196,8 +27201,7 @@ ix86_data_alignment (tree type, int align, bool opt)
      those compilers, ensure we don't decrease alignment from what we
      used to assume.  */
 
-  int max_align_compat
-    = optimize_size ? BITS_PER_WORD : MIN (256, MAX_OFILE_ALIGNMENT);
+  int max_align_compat = MIN (256, MAX_OFILE_ALIGNMENT);
 
   /* A data structure, equal or greater than the size of a cache line
      (64 bytes in the Pentium 4 and other recent Intel processors, including
@@ -27209,6 +27213,13 @@ ix86_data_alignment (tree type, int align, bool opt)
 
   if (max_align < BITS_PER_WORD)
     max_align = BITS_PER_WORD;
+
+  switch (ix86_align_data_type)
+    {
+    case ix86_align_data_type_abi: opt = false; break;
+    case ix86_align_data_type_compat: max_align = BITS_PER_WORD; break;
+    case ix86_align_data_type_cacheline: break;
+    }
 
   if (opt
       && AGGREGATE_TYPE_P (type)
