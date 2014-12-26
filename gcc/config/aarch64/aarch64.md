@@ -908,8 +908,13 @@
 	(match_operand:TI 1 "general_operand" ""))]
   ""
   "
-    if (GET_CODE (operands[0]) == MEM && operands[1] != const0_rtx)
+    if (GET_CODE (operands[0]) == MEM)
       operands[1] = force_reg (TImode, operands[1]);
+    if (REG_P (operands[0]) && operands[1] == const0_rtx)
+      {
+	aarch64_split_128bit_move (operands[0], operands[1]);
+	DONE;
+      }
   "
 )
 

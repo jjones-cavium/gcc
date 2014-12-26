@@ -1,5 +1,12 @@
 2014-12-25  Andrew Pinski  <apinski@cavium.com>
 
+	Bug #13756
+	* config/aarch64/aarch64.md (movti): Force even constant 0.
+	Split the loading of a constant 0.  Forcing stores of 0
+	to split.
+
+2014-12-25  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #13650
 	* config/aarch64/aarch64.c (copy_less4bytes_unaligned): New function.
 	(aarch64_expand_movmem): Use copy_less4bytes_unaligned for ThunderX.
