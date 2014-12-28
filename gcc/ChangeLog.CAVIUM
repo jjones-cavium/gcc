@@ -1,3 +1,10 @@
+2014-12-27  Joel Jones  <jjones@cavium.com>
+
+	Bug #12473
+	* tree-ssa-ifcombine.c (block_with_cond_and_maybe_one_statement_p): New function.
+	(ifcombine_ifandif): Use block_with_cond_and_maybe_one_statement_p instead of
+	just checking for gsi_one_before_end_p.
+
 2014-12-25  Andrew Pinski  <apinski@cavium.com>
 
 	Revert:

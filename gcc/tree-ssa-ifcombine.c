@@ -341,6 +341,19 @@ recognize_bits_test (gcond *cond, tree *name, tree *bits, bool inv)
 
   return true;
 }
+/* Return true if BB contains one or two non-debug, non-label statements,
+   false otherwise. */
+
+static bool
+block_with_cond_and_maybe_one_statement_p(basic_block bb)
+{
+  gimple_stmt_iterator first = gsi_start_nondebug_after_labels_bb (bb);
+  if (gsi_one_before_end_p (first))
+    return true;
+  gimple_stmt_iterator next_to_last = gsi_last_nondebug_bb (bb);
+  gsi_prev_nondebug (&next_to_last);
+  return (gsi_stmt (first) == gsi_stmt (next_to_last));
+}
 
 /* If-convert on a and pattern with a common else block.  The inner
    if is specified by its INNER_COND_BB, the outer by OUTER_COND_BB.
@@ -540,8 +553,9 @@ ifcombine_ifandif (basic_block inner_cond_bb, bool inner_inv,
 	  gimple_stmt_iterator gsi;
 	  if (!LOGICAL_OP_NON_SHORT_CIRCUIT)
 	    return false;
-	  /* Only do this optimization if the inner bb contains only the conditional. */
-	  if (!gsi_one_before_end_p (gsi_start_nondebug_after_labels_bb (inner_cond_bb)))
+	  /* Only do this optimization if the inner bb contains only the 
+	     conditional or optionally another statement. */
+	  if (!block_with_cond_and_maybe_one_statement_p(inner_cond_bb))
 	    return false;
 	  t1 = fold_build2_loc (gimple_location (inner_cond),
 				inner_cond_code,
@@ -561,8 +575,8 @@ ifcombine_ifandif (basic_block inner_cond_bb, bool inner_inv,
 	      result_inv = false;
 	    }
 	  gsi = gsi_for_stmt (inner_cond);
-	  t = force_gimple_operand_gsi_1 (&gsi, t, is_gimple_condexpr, NULL, true,
-					  GSI_SAME_STMT);
+	  t = force_gimple_operand_gsi_1 (&gsi, t, is_gimple_condexpr, NULL, 
+			                  true, GSI_SAME_STMT);
         }
       if (result_inv)
 	t = fold_build1 (TRUTH_NOT_EXPR, TREE_TYPE (t), t);
