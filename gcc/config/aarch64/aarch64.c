@@ -260,8 +260,8 @@ static const struct cpu_regmove_cost cortexa53_regmove_cost =
 static const struct cpu_regmove_cost thunderx_regmove_cost =
 {
   NAMED_PARAM (GP2GP, 2),
-  NAMED_PARAM (GP2FP, 2),
-  NAMED_PARAM (FP2GP, 6),
+  NAMED_PARAM (GP2FP, 10),
+  NAMED_PARAM (FP2GP, 10),
   NAMED_PARAM (FP2FP, 4)
 };
 

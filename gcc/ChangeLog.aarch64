@@ -1,3 +1,10 @@
+2014-12-29  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (thunderx_regmove_cost):
+	Change both GP2FP and FP2GP to 10 as the register
+	allocator is not good enough to have the GPRs spill
+	into FPRs just yet.
+
 2014-12-25  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13756
