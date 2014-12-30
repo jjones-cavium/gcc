@@ -1,3 +1,7 @@
+2014-12-29  Andrew Pinski  <apinski@cavium.com>
+
+	* config/mips/mips.c (mips_rtx_costs): Fix last merge.
+
 2014-12-27  Joel Jones  <jjones@cavium.com>
 
 	Bug #12473

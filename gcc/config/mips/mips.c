@@ -4347,6 +4347,11 @@ mips_rtx_costs (rtx x, int code, int outer_code, int opno ATTRIBUTE_UNUSED,
 
 	  return true;
 	}
+
+      /* The truncate of a sign/zero extend is already counted for
+         with the sign/zero extend.  */
+      if (outer_code == SIGN_EXTEND || outer_code == ZERO_EXTEND)
+	*total = 0;
       return false;
 
     case FLOAT:
@@ -4364,13 +4369,6 @@ mips_rtx_costs (rtx x, int code, int outer_code, int opno ATTRIBUTE_UNUSED,
 	  *total = mips_set_reg_reg_cost (GET_MODE (SET_DEST (x)));
 	  return true;
 	}
-      return false;
-
-    case TRUNCATE:
-      /* The truncate of a sign/zero extend is already counted for
-         with the sign/zero extend.  */
-      if (outer_code == SIGN_EXTEND || outer_code == ZERO_EXTEND)
-	*total = 0;
       return false;
 
     case IF_THEN_ELSE:
