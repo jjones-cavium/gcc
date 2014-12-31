@@ -3228,6 +3228,18 @@
   [(set_attr "type" "logics_reg")]
 )
 
+(define_insn "*and<mode>3_ze_swp_compare0"
+  [(set (reg:CC_ZESWP CC_REGNUM)
+        (compare:CC_ZESWP (match_operand:SHORT 0 "register_operand" "r")
+                          (const_int 0)))]
+  ""
+  {
+    operands[1] = GEN_INT (GET_MODE_MASK (<MODE>mode));
+    return "tst\\t%0, %1";
+  }
+  [(set_attr "type" "logics_reg")]
+)
+
 (define_insn "*and_<SHIFT:optab><mode>3nr_compare0"
   [(set (reg:CC_NZ CC_REGNUM)
 	(compare:CC_NZ

@@ -431,7 +431,7 @@ int f4194305(int a, int b, int c)
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 64" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 127" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 128" } } */
-/* 255: generates non-optimal uxtb;... */
+/* { dg-final { scan-assembler "tst\tx\[0-9\]+, 255" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 256" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 511" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 512" } } */
@@ -447,7 +447,7 @@ int f4194305(int a, int b, int c)
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 16384" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 32767" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 32768" } } */
-/* 65535: generates non-optimal uxth;... */
+/* { dg-final { scan-assembler "tst\tx\[0-9\]+, 65535" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 65536" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 131071" } } */
 /* { dg-final { scan-assembler "tst\tx\[0-9\]+, 131072" } } */

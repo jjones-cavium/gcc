@@ -1,3 +1,11 @@
+2014-12-31  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #12980
+	* config/aarch64/aarch64.md (*and<mode>3_ze_swp_compare0):
+	New pattern which generates tst instead of uxtb/uxth.
+	* testsuite/gcc.target/aarch64/tst_vs0.c: Modify the
+	the testcase according to the new pattern.
+
 2014-12-29  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.c (thunderx_regmove_cost):
