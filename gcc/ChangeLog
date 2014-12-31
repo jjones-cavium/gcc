@@ -16,6 +16,271 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2014-12-30  Uros Bizjak  <ubizjak@gmail.com>
+
+	* config/i386/i386.c (ix86_legitimize_address): Declare
+	"changed" as bool.
+	(ix86_expand_unary_operator): Declare "matching_memory" as bool.
+	(ix86_avoid_jump_mispredicts): Declare "isjump" as bool.
+
+2014-12-30  Uros Bizjak  <ubizjak@gmail.com>
+
+	* config/i386/i386.c (ix86_reassociation_width): Remove unneeded
+	variable "res".
+
+2014-12-30  Jan Hubicka  <hubicka@ucw.cz>
+
+	* ipa-inline-analysis.c (estimate_function_body_sizes): Do not
+	free node params when called late with early=true.
+
+2014-12-30  Uros Bizjak  <ubizjak@gmail.com>
+
+	* config/i386/i386.c (ix86_legitimize_address): Use std::swap.
+	(ix86_split_fp_branch): Ditto.
+	(ix86_expand_int_movcc): Ditto.
+	(ix86_expand_sse_compare): Ditto.
+
+2014-12-30  Jan Hubicka  <hubicka@ucw.cz>
+
+	* ipa-inline-analysis.c (edge_set_predicate): Reset size/time when
+	target is UNREACHABLE.
+	(evaluate_properties_for_edge): If call statemet is available, use it
+	to determine compile time constants.
+	(estimate_function_body_sizes): Enable predicates for early inliner.
+	(estimate_calls_size_and_time): Speedup.
+	(inline_merge_summary): Evaluate properties for early inliner, too.
+
+2014-12-29  Steve Ellcey  <sellcey@mips.com>
+
+	* config/mips/t-mti-linux (MULTILIB_EXCEPTIONS): Add exceptions
+	for mips32[r1] and mips64[r1] with -mnan=2008.
+	* config/mips/t-mti-elf (MULTILIB_EXCEPTIONS): Ditto.
+
+2014-12-27  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR target/64409
+	* config/i386/i386.c (ix86_function_type_abi): Issue an error
+	when ms_abi attribute is used with x32.
+
+2014-12-27  Anthony Green  <green@moxielogic.com>
+
+	* config/moxie/moxie-protos.h (moxie_offset_address_p): Define.
+	* config/moxie/constraints.md (B): Replace inline test with call
+	to moxie_offset_address_p.
+	* config/moxie/moxie.h (GO_IF_LEGITIMATE_ADDRESS): Limit offset
+	addressing to 16-bit offsets.
+	* config/moxie/moxie.c (moxie_asm_trampoline_template): Remove
+	nop, which is no longer needed for aligned write to trampoline.
+	(moxie_trampoline_init): Adjust for smaller trampoline.
+	(moxie_offset_address_p): New function.
+	* config/moxie/moxie.md (*movsi, *movhi, *movqi): Adjust length
+	attr for shorter ldo/sto instructions.
+	* config/moxie/predicates.md: Only allow REG+CONST_INT for offset
+	load/stores.
+
+2014-12-27  Jan hubicka  <hubicka@ucw.cz>
+
+	* ipa-inline.c (max_count_real, max_relbenefit_real,
+	half_int_min_real): Remove.
+	(cgraph_freq_base_rec, percent_rec): New.
+	(compute_uninlined_call_time, compute_inlined_call_time,
+	big_speedup_p, relative_time_benefit, edge_badness): Use sreals.
+	(update_edge_key): Update dumping.
+	(inline_small_functions): Speedup maintainance of the heap.
+	(ipa_inline): Initialize cgraph_freq_base_rec and
+	percent_rec.
+
+2014-12-27  Jan hubicka  <hubicka@ucw.cz>
+
+	* sreal.h (sreal::shift): Fix sanity check.
+
+2014-12-27  Uros Bizjak  <ubizjak@gmail.com>
+
+	* config/i386/mmx.md (*vec_extractv2sf_1): Do not emit unpckhps.
+	Emit movshdup for SSE3 and shufps otherwise.
+	(*vec_extractv2si_1): Do not emit punpckhdq and unpckhps.
+	Emit pshufd for SSE2 and shufps otherwise.
+
+2014-12-24  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/51244
+	* config/sh/sh.md (*mov_t_msb_neg): Convert split into insn_and_split.
+
+2014-12-24  Uros Bizjak  <ubizjak@gmail.com>
+
+	* gengtype.h (xasprintf): Remove declaration.
+	* gengtype.c (xasprintf): Remove.
+
+2014-12-24  Nick Clifton  <nickc@redhat.com>
+
+	PR target/64160
+	* config/msp430/msp430.md (addsi splitter): Do not split when the
+	destination partially overlaps the source.
+
+2014-12-24  Anthony Green  <green@moxielogic.com>
+
+	* config/moxie/moxie.opt (mul.x): New option.
+	* doc/invoke.texi (Moxie Options): Document -mmul.x.
+	* config/moxie/moxie.md (addsi3, mulsi3, subsi3, divsi3, udivs3):
+	Remove trailing ".l" from add, mul, sub, div and udiv
+	instructions.
+	(<mul>si3_highpart, <mul>sidi3): Add mul.x & umul.x instruction
+	support (high 32-bit result of multiply).
+	* config/moxie/moxie.c (moxie_option_override): Force availability
+	of mul.x instructions for moxiebox target.
+	* config/moxie/moxiebox.h (TARGET_MOXIEBOX): Define.
+
+2014-12-22  Zhouyi Zhou <yizhouzhou@ict.ac.cn>
+
+	* ira-build.c (ira_flattening): Add the current
+	object to OBJECTS_LIVE after traversing OBJECTS_LIVE.
+
+2014-12-23  Martin Liska  <mliska@suse.cz>
+
+	PR ipa/63851
+	PR ipa/63852
+	* ipa-icf.c (sem_function::merge): Ignore merge operation
+	for a thunk created from static chain.
+	* ipa-icf-gimple.c (func_checker::compatible_types_p): Verify that
+	types have same restrict flag.
+
+2014-12-22  John David Anglin  <danglin@gcc.gnu.org>
+
+	PR target/55023
+	* dse.c (scan_insn): Treat sibling call as though it does a wild read.
+
+2014-12-22  Bin Cheng  <bin.cheng@arm.com>
+
+	PR rtl-optimization/62151
+	* combine.c (try_combine): New local variables local_elim_i1
+	and local_elim_i0.  Set elim_i1 and elim_i0 using the local
+	version variables.  Distribute notes from i0notes or i1notes
+	using the local variables.
+
+2014-12-22  Martin Liska  <mliska@suse.cz>
+
+	* cgraphunit.c (symbol_table::process_new_functions): New inline_summaries
+	is used.
+	* ipa-cp.c (ipcp_cloning_candidate_p): Likewise.
+	(devirtualization_time_bonus): Likewise.
+	(estimate_local_effects): Likewise.
+	(ipcp_propagate_stage): Likewise.
+	* ipa-inline-analysis.c (evaluate_conditions_for_known_args): Likewise.
+	(evaluate_properties_for_edge): Likewise.
+	(inline_summary_alloc): Likewise.
+	(reset_inline_summary): New inline_summary argument is introduced.
+	(inline_summary_t::remove): New function.
+	(inline_summary_t::duplicate): Likewise.
+	(dump_inline_edge_summary): New inline_summaries is used.
+	(dump_inline_summary): Likewise.
+	(estimate_function_body_sizes): Likewise.
+	(compute_inline_parameters): Likewise.
+	(estimate_edge_devirt_benefit): Likewise.
+	(estimate_node_size_and_time): Likewise.
+	(inline_update_callee_summaries): Likewise.
+	(inline_merge_summary): Likewise.
+	(inline_update_overall_summary): Likewise.
+	(simple_edge_hints): Likewise.
+	(do_estimate_edge_time): Likewise.
+	(estimate_time_after_inlining): Likewise.
+	(estimate_size_after_inlining): Likewise.
+	(do_estimate_growth): Likewise.
+	(growth_likely_positive): Likewise.
+	(inline_generate_summary): Likewise.
+	(inline_read_section): Likewise.
+	(inline_read_summary): Likewise.
+	(inline_write_summary): Likewise.
+	(inline_free_summary): Likewise.
+	* ipa-inline-transform.c (clone_inlined_nodes): Likewise.
+	(inline_call): Likewise.
+	* ipa-inline.c (caller_growth_limits): Likewise.
+	(can_inline_edge_p): Likewise.
+	(want_early_inline_function_p): Likewise.
+	(compute_uninlined_call_time): Likewise.
+	(compute_inlined_call_time): Likewise.
+	(big_speedup_p): Likewise.
+	(want_inline_small_function_p): Likewise.
+	(edge_badness): Likewise.
+	(update_caller_keys): Likewise.
+	(update_callee_keys): Likewise.
+	(recursive_inlining): Likewise.
+	(inline_small_functions): Likewise.
+	(inline_to_all_callers): Likewise.
+	(dump_overall_stats): Likewise.
+	(early_inline_small_functions): Likewise.
+	* ipa-inline.h: New class inline_summary_t replaces
+	vec<inline_summary_t>.
+	* ipa-split.c (execute_split_functions): New inline_summaries is used.
+	* ipa.c (walk_polymorphic_call_targets): Likewise.
+	* tree-sra.c (ipa_sra_preliminary_function_checks): Likewise.
+
+2014-12-22  Martin Liska  <mliska@suse.cz>
+
+	* auto-profile.c: Include of symbol-summary.h is added.
+	* cgraph.c: Likewise.
+	* cgraphbuild.c: Likewise.
+	* cgraphclones.c: Likewise.
+	* cgraphunit.c: Likewise.
+	* ipa-cp.c: Likewise.
+	* ipa-devirt.c: Likewise.
+	* ipa-icf.c: Likewise.
+	* ipa-inline-analysis.c (evaluate_properties_for_edge): New
+	ipa_node_params_sum data structure is used.
+	(inline_node_duplication_hook): Likewise.
+	(estimate_function_body_sizes): Likewise.
+	(remap_edge_change_prob): Likewise.
+	(inline_merge_summary): Likewise.
+	* ipa-inline-transform.c: Include of symbol-summary.h is added.
+	* ipa-inline.c (early_inliner): New ipa_node_params_sum data structure
+	is used.
+	* ipa-polymorphic-call.c: Include of symbol-summary.h is added.
+	* ipa-profile.c: Include of symbol-summary.h is added.
+	* ipa-prop.c (ipa_propagate_indirect_call_infos): New ipa_node_params_sum
+	data structure is used.
+	(ipa_node_params::~ipa_node_params): New function.
+	(ipa_free_all_node_params): Destruction is simplified.
+	(ipa_node_removal_hook): Removed.
+	(ipa_add_new_function): Renamed from ipa_node_duplication_hook.
+	(ipa_node_params_t::duplicate): New function.
+	(ipa_register_cgraph_hooks): Few hooks are removed.
+	(ipa_unregister_cgraph_hooks): Likewise.
+	(ipa_prop_write_jump_functions): New ipa_node_params_sum is used.
+	* ipa-prop.h (struct ipa_node_params): Destructor introduced for
+	the structure.
+	(ipa_check_create_node_params): Vector for ipa_node_params is replaced
+	with function_summary.
+	* ipa-split.c: Include of symbol-summary.h is added.
+	* ipa-utils.c: Include of symbol-summary.h is added.
+	* ipa.c: Include of symbol-summary.h is added.
+	* omp-low.c: Include of symbol-summary.h is added.
+	* tree-inline.c: Include of symbol-summary.h is added.
+	* tree-sra.c: Include of symbol-summary.h is added.
+	* tree-ssa-pre.c: Include of symbol-summary.h is added.
+
+2014-12-22  Martin Liska  <mliska@suse.cz>
+
+	* cgraph.h (symbol_table::allocate_cgraph_symbol): Summary UID
+	is filled up.
+	* symbol-summary.h: New file.
+	* gengtype.c (open_base_files): Add symbol-summary.h.
+	* toplev.c (general_init): Call constructor of symbol_table.
+
+2014-12-17  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/55212
+	* config/sh/sh.md (*addsi3_compact): Add parentheses around &&
+	condition.  Add comments.
+
+2014-12-20  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	PR target/64358
+	* config/rs6000/rs6000.c (rs6000_split_logical_inner): Swap the
+	input operands if only the second is inverted.
+	* config/rs6000/rs6000.md (*boolc<mode>3_internal1 for BOOL_128):
+	Swap BOOL_REGS_OP1 and BOOL_REGS_OP2.  Correct arguments to
+	rs6000_split_logical.
+	(*boolc<mode>3_internal2 for TI2): Swap operands[1] and operands[2].
+
 2014-12-20  Martin Uecker <uecker@eecs.berkeley.edu>
 
 	* doc/invoke.texi: Document -Wdiscarded-array-qualifiers.
