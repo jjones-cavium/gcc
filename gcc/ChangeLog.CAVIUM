@@ -1,3 +1,9 @@
+2015-01-07  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #13830
+	* explow.c (convert_memory_address_addr_space_1): Handle HIGH
+	specially.
+
 2015-01-05  Manjunath Matti  <mmatti@caviumnetworks.com>
 	
 	Ported for Bug #11831

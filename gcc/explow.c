@@ -377,6 +377,12 @@ convert_memory_address_addr_space_1 (machine_mode to_mode ATTRIBUTE_UNUSED,
       return temp;
       break;
 
+    case HIGH:
+      return gen_rtx_HIGH (to_mode,
+			   convert_memory_address_addr_space_1
+			     (to_mode, XEXP (x, 0), as, true));
+      break;
+
     case CONST:
       return gen_rtx_CONST (to_mode,
 			    convert_memory_address_addr_space_1
