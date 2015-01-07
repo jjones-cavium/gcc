@@ -1,3 +1,11 @@
+2015-01-06  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #13529
+	* config/aarch64/aarch64.md (*and<mode>3_ze_nr_compare0):
+	Use CC_NZ mode instead of CC.
+	* config/aarch64/aarch64.c (aarch64_select_cc_mode): Add
+	ZERO_EXTRACT in case of CC_NZ. 
+
 2014-12-31  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Bug #12980

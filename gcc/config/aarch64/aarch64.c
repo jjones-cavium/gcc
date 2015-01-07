@@ -3677,7 +3677,7 @@ aarch64_select_cc_mode (RTX_CODE code, rtx x, rtx y)
       && y == const0_rtx
       && (code == EQ || code == NE || code == LT || code == GE)
       && (GET_CODE (x) == PLUS || GET_CODE (x) == MINUS || GET_CODE (x) == AND
-	  || GET_CODE (x) == NEG))
+	  || GET_CODE (x) == NEG) || GET_CODE (x) == ZERO_EXTRACT)
     return CC_NZmode;
 
   /* A compare with a shifted operand.  Because of canonicalization,

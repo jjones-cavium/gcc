@@ -3201,8 +3201,8 @@
 )
 
 (define_insn "*and<mode>3_ze_nr_compare0"
-  [(set (reg:CC CC_REGNUM)
-	(compare:CC
+  [(set (reg:CC_NZ CC_REGNUM)
+	(compare:CC_NZ
 	 (zero_extract:GPI  ; loc size pos
                   (match_operand:GPI 0 "register_operand" "r")
                   (match_operand:GPI 1 "const_int_operand" "n")
