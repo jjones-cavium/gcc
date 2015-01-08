@@ -1,5 +1,5 @@
 // go-gcc.cc -- Go frontend to gcc IR.
-// Copyright (C) 2011-2014 Free Software Foundation, Inc.
+// Copyright (C) 2011-2015 Free Software Foundation, Inc.
 // Contributed by Ian Lance Taylor, Google.
 
 // This file is part of GCC.
@@ -1656,6 +1656,7 @@ Gcc_backend::constructor_expression(Btype* btype,
   vec<constructor_elt, va_gc> *init;
   vec_alloc(init, vals.size());
 
+  tree sink = NULL_TREE;
   bool is_constant = true;
   tree field = TYPE_FIELDS(type_tree);
   for (std::vector<Bexpression*>::const_iterator p = vals.begin();
@@ -1669,6 +1670,17 @@ Gcc_backend::constructor_expression(Btype* btype,
           || TREE_TYPE(val) == error_mark_node)
         return this->error_expression();
 
+      if (int_size_in_bytes(TREE_TYPE(field)) == 0)
+	{
+	  // GIMPLE cannot represent indices of zero-sized types so
+	  // trying to construct a map with zero-sized keys might lead
+	  // to errors.  Instead, we evaluate each expression that
+	  // would have been added as a map element for its
+	  // side-effects and construct an empty map.
+	  append_to_statement_list(val, &sink);
+	  continue;
+	}
+
       constructor_elt empty = {NULL, NULL};
       constructor_elt* elt = init->quick_push(empty);
       elt->index = field;
@@ -1681,7 +1693,9 @@ Gcc_backend::constructor_expression(Btype* btype,
   tree ret = build_constructor(type_tree, init);
   if (is_constant)
     TREE_CONSTANT(ret) = 1;
-
+  if (sink != NULL_TREE)
+    ret = fold_build2_loc(location.gcc_location(), COMPOUND_EXPR,
+			  type_tree, sink, ret);
   return this->make_expression(ret);
 }
 
@@ -2522,7 +2536,7 @@ Gcc_backend::temporary_variable(Bfunction* function, Bblock* bblock,
       BIND_EXPR_VARS(bind_tree) = BLOCK_VARS(block_tree);
     }
 
-  if (init_tree != NULL_TREE)
+  if (this->type_size(btype) != 0 && init_tree != NULL_TREE)
     DECL_INITIAL(var) = fold_convert_loc(location.gcc_location(), type_tree,
                                          init_tree);
 
@@ -2532,6 +2546,13 @@ Gcc_backend::temporary_variable(Bfunction* function, Bblock* bblock,
   *pstatement = this->make_statement(build1_loc(location.gcc_location(),
                                                 DECL_EXPR,
 						void_type_node, var));
+
+  // Don't initialize VAR with BINIT, but still evaluate BINIT for
+  // its side effects.
+  if (this->type_size(btype) == 0 && init_tree != NULL_TREE)
+    *pstatement = this->compound_statement(this->expression_statement(binit),
+					   *pstatement);
+
   return new Bvariable(var);
 }
 

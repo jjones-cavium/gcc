@@ -1,5 +1,5 @@
 /* Definitions for c-common.c.
-   Copyright (C) 1987-2014 Free Software Foundation, Inc.
+   Copyright (C) 1987-2015 Free Software Foundation, Inc.
 
 This file is part of GCC.
 
@@ -1014,7 +1014,7 @@ extern tree builtin_type_for_size (int, bool);
 
 extern void c_common_mark_addressable_vec (tree);
 
-extern void warn_array_subscript_with_type_char (tree);
+extern void warn_array_subscript_with_type_char (location_t, tree);
 extern void warn_about_parentheses (location_t,
 				    enum tree_code,
 				    enum tree_code, tree,

@@ -1,5 +1,5 @@
 /* Internals of libgccjit: classes for recording calls made to the JIT API.
-   Copyright (C) 2013-2014 Free Software Foundation, Inc.
+   Copyright (C) 2013-2015 Free Software Foundation, Inc.
    Contributed by David Malcolm <dmalcolm@redhat.com>.
 
 This file is part of GCC.
@@ -30,6 +30,7 @@ along with GCC; see the file COPYING3.  If not see
 
 #include "jit-common.h"
 #include "jit-builtins.h"
+#include "jit-logging.h"
 #include "jit-recording.h"
 #include "jit-playback.h"
 
@@ -169,10 +170,13 @@ recording::playback_block (recording::block *b)
    gcc_jit_context_acquire and gcc_jit_context_new_child_context.  */
 
 recording::context::context (context *parent_ctxt)
-  : m_parent_ctxt (parent_ctxt),
+  : log_user (NULL),
+    m_parent_ctxt (parent_ctxt),
     m_error_count (0),
     m_first_error_str (NULL),
     m_owns_first_error_str (false),
+    m_last_error_str (NULL),
+    m_owns_last_error_str (false),
     m_mementos (),
     m_compound_types (),
     m_functions (),
@@ -195,6 +199,7 @@ recording::context::context (context *parent_ctxt)
       memcpy (m_bool_options,
 	      parent_ctxt->m_bool_options,
 	      sizeof (m_bool_options));
+      set_logger (parent_ctxt->get_logger ());
     }
   else
     {
@@ -211,6 +216,7 @@ recording::context::context (context *parent_ctxt)
 
 recording::context::~context ()
 {
+  JIT_LOG_SCOPE (get_logger ());
   int i;
   memento *m;
   FOR_EACH_VEC_ELT (m_mementos, i, m)
@@ -226,6 +232,10 @@ recording::context::~context ()
 
   if (m_owns_first_error_str)
     free (m_first_error_str);
+
+  if (m_owns_last_error_str)
+    if (m_last_error_str != m_first_error_str)
+      free (m_last_error_str);
 }
 
 /* Add the given mememto to the list of those tracked by this
@@ -245,6 +255,7 @@ recording::context::record (memento *m)
 void
 recording::context::replay_into (replayer *r)
 {
+  JIT_LOG_SCOPE (get_logger ());
   int i;
   memento *m;
 
@@ -302,6 +313,7 @@ recording::context::replay_into (replayer *r)
 void
 recording::context::disassociate_from_playback ()
 {
+  JIT_LOG_SCOPE (get_logger ());
   int i;
   memento *m;
 
@@ -904,6 +916,8 @@ recording::context::enable_dump (const char *dumpname,
 result *
 recording::context::compile ()
 {
+  JIT_LOG_SCOPE (get_logger ());
+
   validate ();
 
   if (errors_occurred ())
@@ -940,6 +954,8 @@ recording::context::add_error_va (location *loc, const char *fmt, va_list ap)
   const char *errmsg;
   bool has_ownership;
 
+  JIT_LOG_SCOPE (get_logger ());
+
   vasprintf (&malloced_msg, fmt, ap);
   if (malloced_msg)
     {
@@ -951,6 +967,8 @@ recording::context::add_error_va (location *loc, const char *fmt, va_list ap)
       errmsg = "out of memory generating error message";
       has_ownership = false;
     }
+  if (get_logger ())
+    get_logger ()->log ("error %i: %s", m_error_count, errmsg);
 
   const char *ctxt_progname =
     get_str_option (GCC_JIT_STR_OPTION_PROGNAME);
@@ -972,9 +990,12 @@ recording::context::add_error_va (location *loc, const char *fmt, va_list ap)
       m_first_error_str = const_cast <char *> (errmsg);
       m_owns_first_error_str = has_ownership;
     }
-  else
-    if (has_ownership)
-      free (malloced_msg);
+
+  if (m_owns_last_error_str)
+    if (m_last_error_str != m_first_error_str)
+      free (m_last_error_str);
+  m_last_error_str = const_cast <char *> (errmsg);
+  m_owns_last_error_str = has_ownership;
 
   m_error_count++;
 }
@@ -989,6 +1010,18 @@ const char *
 recording::context::get_first_error () const
 {
   return m_first_error_str;
+}
+
+/* Get the message for the last error that occurred on this context, or
+   NULL if no errors have occurred on it.
+
+   Implements the post-error-checking part of
+   gcc_jit_context_get_last_error.  */
+
+const char *
+recording::context::get_last_error () const
+{
+  return m_last_error_str;
 }
 
 /* Lazily generate and record a recording::type representing an opaque
@@ -1060,6 +1093,8 @@ recording::context::get_all_requested_dumps (vec <recording::requested_dump> *ou
 void
 recording::context::validate ()
 {
+  JIT_LOG_SCOPE (get_logger ());
+
   if (m_parent_ctxt)
     m_parent_ctxt->validate ();
 
@@ -2797,6 +2832,7 @@ static const char * const unary_op_strings[] = {
   "-", /* GCC_JIT_UNARY_OP_MINUS */
   "~", /* GCC_JIT_UNARY_OP_BITWISE_NEGATE */
   "!", /* GCC_JIT_UNARY_OP_LOGICAL_NEGATE */
+  "abs ", /* GCC_JIT_UNARY_OP_ABS */
 };
 
 recording::string *

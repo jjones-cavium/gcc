@@ -1,5 +1,5 @@
 /* Tail merging for gimple.
-   Copyright (C) 2011-2014 Free Software Foundation, Inc.
+   Copyright (C) 2011-2015 Free Software Foundation, Inc.
    Contributed by Tom de Vries (tom@codesourcery.com)
 
 This file is part of GCC.
@@ -231,7 +231,7 @@ along with GCC; see the file COPYING3.  If not see
 
 /* Describes a group of bbs with the same successors.  The successor bbs are
    cached in succs, and the successor edge flags are cached in succ_flags.
-   If a bb has the EDGE_TRUE/VALSE_VALUE flags swapped compared to succ_flags,
+   If a bb has the EDGE_TRUE/FALSE_VALUE flags swapped compared to succ_flags,
    it's marked in inverse.
    Additionally, the hash value for the struct is cached in hashval, and
    in_worklist indicates whether it's currently part of worklist.  */

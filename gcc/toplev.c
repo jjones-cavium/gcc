@@ -1,5 +1,5 @@
 /* Top level of GCC compilers (cc1, cc1plus, etc.)
-   Copyright (C) 1987-2014 Free Software Foundation, Inc.
+   Copyright (C) 1987-2015 Free Software Foundation, Inc.
 
 This file is part of GCC.
 
@@ -111,6 +111,13 @@ along with GCC; see the file COPYING3.  If not see
 #ifdef XCOFF_DEBUGGING_INFO
 #include "xcoffout.h"		/* Needed for external data
 				   declarations for e.g. AIX 4.x.  */
+#endif
+
+#ifndef HAVE_epilogue
+#define HAVE_epilogue 0
+#endif
+#ifndef HAVE_prologue
+#define HAVE_prologue 0
 #endif
 
 #include <new>
@@ -1634,6 +1641,11 @@ process_options (void)
   /* Save the current optimization options.  */
   optimization_default_node = build_optimization_node (&global_options);
   optimization_current_node = optimization_default_node;
+
+ /* Disable use caller save optimization if profiler is active or port
+    does not emit prologue and epilogue as RTL.  */
+  if (profile_flag || !HAVE_prologue || !HAVE_epilogue)
+    flag_ipa_ra = 0;
 }
 
 /* This function can be called multiple times to reinitialize the compiler

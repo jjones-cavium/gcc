@@ -1,5 +1,5 @@
 /* Internals of libgccjit: classes for playing back recorded API calls.
-   Copyright (C) 2013-2014 Free Software Foundation, Inc.
+   Copyright (C) 2013-2015 Free Software Foundation, Inc.
    Contributed by David Malcolm <dmalcolm@redhat.com>.
 
 This file is part of GCC.
@@ -35,7 +35,7 @@ namespace jit {
 
 namespace playback {
 
-class context
+class context : public log_user
 {
 public:
   context (::gcc::jit::recording::context *ctxt);

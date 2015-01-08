@@ -16,6 +16,343 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-01-08  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/63989
+	* params.def (PARAM_MAX_TRACKED_STRLENS): Increment default
+	from 1000 to 10000.
+	* tree-ssa-strlen.c (get_strinfo): Moved earlier.
+	(get_stridx): If we don't have a record for certain SSA_NAME,
+	but it is POINTER_PLUS_EXPR of some SSA_NAME we do with
+	constant offset, call get_stridx_plus_constant.
+	(get_stridx_plus_constant): New function.
+	(zero_length_string): Don't use get_stridx here.
+
+	PR target/55023
+	PR middle-end/64388
+	* dse.c (struct insn_info): Mention frame_read set also
+	before reload for tail calls on some targets.
+	(scan_insn): Revert 2014-12-22 change.  Set frame_read
+	also before reload for tail calls if
+	HARD_FRAME_POINTER_IS_ARG_POINTER.  Call add_wild_read
+	instead of add_non_frame_wild_read for non-const/memset
+	tail calls after reload.
+
+2015-01-08  Jason Merrill  <jason@redhat.com>
+
+	* ubsan.c (do_ubsan_in_current_function): New.
+	(pass_ubsan::gate): Use it.
+	* ubsan.h: Declare it.
+	* convert.c (convert_to_integer): Use it.
+
+2015-01-08  Jakub Jelinek  <jakub@redhat.com>
+
+	PR target/64338
+	* config/i386/i386.c (ix86_expand_int_movcc): Don't reverse
+	compare_code when it is unconditionally overwritten afterwards.
+	Use ix86_reverse_condition instead of reverse_condition.  Don't
+	change code if *reverse_condition* returned UNKNOWN and don't
+	swap ct/cf and negate diff in that case.
+
+2015-01-08  Mike Stump  <mikestump@comcast.net>
+
+	* tsan.c (pass_tsan::gate): Add no_sanitize_thread support.
+	(pass_tsan_O0::gate): Likewise.
+	* extend.texi (Function Attributes): Add no_sanitize_thread
+	documentation.
+
+2015-01-08  Thomas Schwinge  <thomas@codesourcery.com>
+
+	* builtins.def (DEF_GOMP_BUILTIN): Also consider flag_offload_abi
+	for registering builtins.
+	* config/i386/intelmic-mkoffload.c (prepare_target_image): Don't
+	add -fopenmp to the argv_obstack used when invoking
+	compile_for_target.
+
+	* config/i386/intelmic-mkoffload.c (compile_for_target): Always
+	add "-m32" or "-m64" to argv_obstack.
+	(generate_host_descr_file): Likewise, when invoking host_compiler.
+	(main): Always add "-m elf_i386" or "-m elf_x86_64" when invoking
+	ld.
+
+2015-01-08  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	* config/sh/sh-mem.cc: Use constant as second operand when emitting
+	tstsi_t insns.
+
+2015-01-08  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/55212
+	* config/sh/sh.md (*addsi3_compact): Emit reg-reg copy instead of
+	constant load if constant operand fits into I08.
+
+2015-01-08  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/64336
+	* tree.c (build2_stat): Fix up initialization of TREE_READONLY
+	and TREE_THIS_VOLATILE for MEM_REFs.
+	(build5_stat): Fix up initialization of TREE_READONLY and
+	TREE_THIS_VOLATILE for TARGET_MEM_REFs.
+
+2015-01-08  Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	PR target/64533
+	* config/sh/sh.md (*addsi3_compact): Use u constraint instead
+	of r for the second alternative of the destination operand.
+
+2015-01-07  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	PR target/36557
+	* config/rs6000/rs6000.md (*eqsi3_ext<mode>, *nesi3_ext<mode>): New.
+
+2015-01-07  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi ([-fvtable-verify]): Fix markup on option
+	keywords.
+	([-fivar-visibility], [-fvisibility]): Likewise.
+
+2015-01-07  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi: Fix incorrect uses of @samp markup throughout
+	the file where @code, @command, etc is more appropriate.
+
+2015-01-06  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi (RS/6000 and PowerPC Options): Tidy formatting
+	of -mrecip= documentation.
+
+2015-01-06  Michael Meissner  <meissner@linux.vnet.ibm.com>
+
+	PR target/64505
+	* config/rs6000/rs6000.c (rs6000_secondary_reload): Return the
+	correct reload handler if -m32 -mpowerpc64 is used.
+
+2015-01-06  Tom de Vries  <tom@codesourcery.com>
+
+	* tree-ssa-tail-merge.c: Fix typo in struct same_succ_def comment.
+
+2015-01-08  Christian Bruel  <christian.bruel@st.com>
+
+	PR target/64507
+	* config/sh/sh-mem.cc (sh_expand_cmpnstr): Check 0 length.
+
+2015-01-06  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR tree-optimization/63259
+	* tree-ssa-math-opts.c (pass_optimize_bswap::execute): Stop checking
+	if optab exists for 16bit byteswap.
+
+2015-01-06  Jakub Jelinek  <jakub@redhat.com>
+
+	* opts.c (common_handle_option): Add support for
+	-fno-sanitize=all and -f{,no-}sanitize-recover=all.
+	* doc/invoke.texi: Document -fno-sanitize=all,
+	-f{,no-}sanitize-recover=all.  Document that
+	-fsanitize=float-cast-overflow is not enabled
+	by -fsanitize=undefined.  Fix up documentation
+	of -f{,no-}sanitize-recover.
+
+2015-01-06  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* config.gcc: Add Visium support.
+	* configure.ac: Likewise.
+	* configure: Regenerate.
+	* doc/extend.texi (interrupt attribute): Add Visium.
+	* doc/invoke.texi: Document Visium options.
+	* doc/install.texi: Document Visium target.
+	* doc/md.texi: Document Visium constraints.
+	* common/config/visium: New directory.
+	* config/visium: Likewise.
+
+2015-01-05  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* simplify-rtx.c (simplify_binary_operation_1): Handle more cases
+	for the "(and X (ior (not X) Y) -> (and X Y)" transform.
+
+2015-01-05  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* combine.c (combine_validate_cost): Do not count the cost of a
+	split I2 twice.  Do not display it twice in the dump, either.
+
+2015-01-05  Sandra Loosemore  <sandra@codesourcery.com>
+
+	Revert parts of r219199.
+	* doc/invoke.texi ([-Wliteral-suffix]): Restore markup on
+	<inttypes.h>.
+	([-Wtraditional]): Restore markup on <limits.h>.
+
+2015-01-05  Trevor Saunders  <tsaunders@mozilla.com>
+
+	PR c++/31397
+	* doc/invoke.texi: Document -Wsuggest-override.
+
+2015-01-05  Radovan Obradovic  <radovan.obradovic@imgtec.com>
+
+	PR rtl-optimization/64287
+	* toplev.c (HAVE_epilogue, HAVE_prologue): Provide default.
+	(process_options): Disable flag_ipa_ra if profiling.
+
+2015-01-05  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* config/nds32/nds32-peephole2.md: Do not mention define_peephole.
+
+2015-01-05  Max Filippov  <jcmvbkbc@gmail.com>
+
+	* config/xtensa/xtensa.c (hwloop_optimize, hwloop_fail,
+	hwloop_pattern_reg, xtensa_doloop_hooks, xtensa_reorg_loops):
+	put under #if TARGET_LOOPS guard.
+
+2015-01-05  Uros Bizjak  <ubizjak@gmail.com>
+
+	* config/i386/i386.c (output_387_binary_op): Use std::swap.
+
+2015-01-05  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	* rtlanal.c (refers_to_regno_p): Change return value from int to bool.
+	* rtl.h (refers_to_regno_p): Add overload.
+	* cse.c: Use it.
+	* bt-load.c: Likewise.
+	* combine.c: Likewise.
+	* df-scan.c: Likewise.
+	* sched-deps.c: Likewise.
+	* config/s390/s390.c: Likewise.
+	* config/m32r/m32r.c: Likewise.
+	* config/rs6000/spe.md: Likewise.
+	* config/rs6000/rs6000.c: Likewise.
+	* config/pa/pa.c: Likewise.
+	* config/stormy16/stormy16.c: Likewise.
+	* config/cris/cris.c: Likewise.
+	* config/arc/arc.md: Likewise.
+	* config/arc/arc.c: Likewise.
+	* config/sh/sh.md: Likewise.
+	* config/sh/sh.c: Likewise.
+	* config/frv/frv.c: Likewise.
+
+2015-01-05  Jakub Jelinek  <jakub@redhat.com>
+
+	PR sanitizer/64265
+	* gimplify.c (gimplify_function_tree): Add TSAN_FUNC_EXIT internal
+	call as cleanup of the whole body.
+	* internal-fn.def (TSAN_FUNC_EXIT): New internal call.
+	* tsan.c (replace_func_exit): New function.
+	(instrument_func_exit): Moved earlier.
+	(instrument_memory_accesses): Adjust TSAN_FUNC_EXIT internal calls.
+	Call instrument_func_exit if no TSAN_FUNC_EXIT internal calls have
+	been found.
+	(tsan_pass): Don't call instrument_func_exit.
+	* internal-fn.c (expand_TSAN_FUNC_EXIT): New function.
+	* tree-inline.c (copy_bb): Drop TSAN_FUNC_EXIT internal calls during
+	inlining.
+
+	PR sanitizer/64344
+	* ubsan.h (ubsan_instrument_float_cast): Add ARG argument.
+	* ubsan.c (ubsan_instrument_float_cast): Add ARG argument, pass
+	it to libubsan handler instead of EXPR.  Fold comparisons earlier,
+	if the result is integer_zerop, return NULL_TREE.
+	* convert.c (convert_to_integer): Pass expr as ARG.
+
+	PR tree-optimization/64465
+	* tree-inline.c (redirect_all_calls): During inlining
+	clean up EH stmts and EH edges if redirect_call_stmt_to_callee
+	changed the stmt to a non-throwing call.
+
+2015-01-05  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi: Fix incorrect uses of @code, @option, @samp,
+	etc markup throughout the file.
+
+2015-01-05  Bernd Edlinger  <bernd.edlinger@hotmail.de>
+
+	Enable experimental TSAN support for Ada.
+	* tsan.c (instrument_expr): Handle VIEW_CONVERT_EXPR.
+
+2015-01-05  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/64494
+	* tree-ssa-loop-im.c (move_computations_dom_walker::before_dom): Also
+	clear SSA_NAME_ANTI_RANGE_P flag.
+
+2015-01-05  Marek Polacek  <polacek@redhat.com>
+
+	* doc/extend.texi (Arrays of Length Zero): Add missing comma.
+
+2015-01-05  Jakub Jelinek  <jakub@redhat.com>
+
+	Update copyright years.
+
+	* gcc.c (process_command): Update copyright notice dates.
+	* gcov-dump.c: Ditto.
+	* gcov.c: Ditto.
+	* doc/cpp.texi: Bump @copying's copyright year.
+	* doc/cppinternals.texi: Ditto.
+	* doc/gcc.texi: Ditto.
+	* doc/gccint.texi: Ditto.
+	* doc/gcov.texi: Ditto.
+	* doc/install.texi: Ditto.
+	* doc/invoke.texi: Ditto.
+
+	* auto-profile.c, auto-profile.h: Fix up Copyright line.
+
+2015-01-04  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi ([-fsized-deallocation]): Copy-edit to fix
+	verb tense, etc.
+	([-fvtable-verify], [-fvtv-debug]): Likewise.
+	([-Wabi]): Likewise.
+	([-fmessage-length]): Likewise.
+	([-Wsuggest-final-types], [-Wsuggest-final-methods]): Likewise.
+	([-Wno-discarded-qualifiers]): Likewise.
+	([-Wnodiscarded-array-qualifiers]): Likewise.
+	([-Wno-virtual-move-assign]): Likewise.
+	([-fsanitize=address], [-fsanitize=thread]): Likewise.
+	([-fsanitize=leak], [-fsanitize=undefined]): Likewise.
+	([-fsanitize=unreachable], [-fsanitize-recover]): Likewise.
+	([-fsanitize-undefined-trap-on-error]): Likewise.
+	([-floop-interchange]): Likewise.
+	([-ftree-coalesce-inlined-vars]): Likewise.
+	([-fvect-cost-model]): Likewise.
+	([-flto]): Likewise.
+	([--param]): Likewise.
+	(Spec Files): Likewise.
+	([-mstrict-align]): Likewise.
+	([-mfix-cortex-a53-835769]): Likewise.
+	([-march], [-mtune]): Likewise.
+	([-mpic-register]): Likewise.
+	([-munaligned-access]): Likewise.
+	([-msp8]): Likewise.
+	(EIND and Devices with more than 128 Ki Bytes of Flash): Likewise.
+	(AVR Built-in Macros): Likewise.
+	([-mpreferred-stack-boundary]): Likewise.
+	([-mtune-crtl]): Likewise.
+	([-mashf]): Likewise.
+	([-mmcu=]): Likewise.
+	([-minrt]): Likewise.
+	([-maltivec], [-maltivec=be], [-maltivec=le]): Likewise.
+	([-mupper-regs]): Likewise.
+	([-matomic-model]): Likewise.
+	([-mdiv]): Likewise.
+	([-mzdcbranch]): Likewise.
+	([-mdisable-callt]): Likewise.
+	([-msoft-float]): Likewise.
+	([-m8byte-align]): Likewise.
+	([-fstack-reuse]): Likewise.
+
+2015-01-03  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi ([-fprofile-generate], [-fprofile-use]):
+	Fix markup, light copy-editing.
+	([-fauto-profile]): Rewrite to fix formatting and content
+	problems.
+
+2015-01-03  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi ([-fisolate-erroneous-paths-dereference]):
+	Copy-edit description.
+	([-fisolate-erroneous-paths-attribute]): Likewise.
+	* common.opt (fisolate-erroneous-paths-dereference):
+	Copy-edit description.
+	(fisolate-erroneous-paths-attribute): Likewise.
+
 2015-01-03  Sandra Loosemore  <sandra@codesourcery.com>
 
 	* doc/invoke.texi ([-fsemantic-interposition]): Fix typos and
@@ -72,7 +409,7 @@
 	* config/pa/predicates.md (reg_before_reload_operand): Tighten
 	predicate to reject register index and LO_SUM DLT memory forms
 	after reload.
-	
+
 2015-01-02  Sandra Loosemore  <sandra@codesourcery.com>
 
 	* doc/invoke.texi (Option Summary): Fix spelling of

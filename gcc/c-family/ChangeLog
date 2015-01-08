@@ -1,3 +1,37 @@
+2015-01-08  Jason Merrill  <jason@redhat.com>
+
+	* c-ubsan.c (ubsan_maybe_instrument_array_ref): Use
+	do_ubsan_in_current_function.
+	(ubsan_maybe_instrument_reference_or_call): Likewise.
+	* c-ubsan.h: Declare it.
+
+2015-01-08  Mike Stump  <mikestump@comcast.net>
+
+	* c-common.c (c_common_attribute_table): Add no_sanitize_thread.
+
+2015-01-07  Marek Polacek  <polacek@redhat.com>
+
+	PR c/64440
+	* c-common.c (c_fully_fold_internal): Warn for division and modulo
+	if orig_op1 isn't INTEGER_CST, op1 is INTEGER_CST and is zero.
+
+2015-01-05  Trevor Saunders  <tsaunders@mozilla.com>
+
+	PR c++/31397
+	* c.opt (Wsuggest-override): New option.
+
+2015-01-05  Jakub Jelinek  <jakub@redhat.com>
+
+	Update copyright years.
+
+2015-01-05  Marek Polacek  <polacek@redhat.com>
+
+	PR c/64423
+	* c-common.c (warn_array_subscript_with_type_char): Add location_t
+	parameter.  Use it.
+	* c-common.h (warn_array_subscript_with_type_char): Update
+	declaration.
+
 2014-12-20  Edward Smith-Rowland  <3dw4rd@verizon.net>
 
 	* c-cppbuiltin.c (__cpp_sized_deallocation): Uncomment and move macro.
@@ -4521,7 +4555,7 @@
 	* c-common.c: Include gt-c-family-c-common.h.
 	* c-pragma.c: Include gt-c-family-c-pragma.h.
 
-Copyright (C) 2010-2014 Free Software Foundation, Inc.
+Copyright (C) 2010-2015 Free Software Foundation, Inc.
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
