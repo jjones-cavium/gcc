@@ -39,7 +39,7 @@
 
 (define_insn_reservation "thunderx_shift" 1
   (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "bfm,extend,shift_imm,shift_reg"))
+       (eq_attr "type" "bfm,extend,shift_imm,shift_reg,rbit,rev"))
   "thunderx_pipe0 | thunderx_pipe1")
 
 
@@ -129,15 +129,31 @@
        (eq_attr "type" "fconsts,fconstd"))
   "thunderx_pipe1")
 
-;; Moves between fp are 2 cycles including min/max/select/abs/neg
+;; Moves between fp are 2 cycles including min/max
 (define_insn_reservation "thunderx_fmov" 2
   (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "fmov,f_minmaxs,f_minmaxd,fcsel,ffarithd,ffariths"))
+       (eq_attr "type" "fmov,f_minmaxs,f_minmaxd"))
+  "thunderx_pipe1")
+
+;; ABS, and NEG are 1 cycle
+(define_insn_reservation "thunderx_fabs" 1
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "ffariths,ffarithd"))
+  "thunderx_pipe1")
+
+(define_insn_reservation "thunderx_fcsel" 3
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "fcsel"))
   "thunderx_pipe1")
 
 (define_insn_reservation "thunderx_fmovgpr" 2
   (and (eq_attr "tune" "thunderx")
        (eq_attr "type" "f_mrc, f_mcr"))
+  "thunderx_pipe1")
+
+(define_insn_reservation "thunderx_fcmp" 3
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "fcmps,fcmpd"))
   "thunderx_pipe1")
 
 (define_insn_reservation "thunderx_fmul" 6
@@ -168,13 +184,13 @@
 ;; The rounding conversion inside fp is 4 cycles
 (define_insn_reservation "thunderx_frint" 4
   (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "f_rints,f_rintd"))
+       (eq_attr "type" "f_cvt,f_rints,f_rintd"))
   "thunderx_pipe1")
 
 ;; Float to integer with a move from int to/from float is 6 cycles
 (define_insn_reservation "thunderx_f_cvt" 6
   (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "f_cvt,f_cvtf2i,f_cvti2f"))
+       (eq_attr "type" "f_cvtf2i,f_cvti2f"))
   "thunderx_pipe1")
 
 ;; FP/SIMD load/stores happen in pipe 0
@@ -225,6 +241,12 @@
 			neon_fp_compare_d_q, neon_move_q"))
   "thunderx_pipe1 + thunderx_simd, thunderx_simd")
 
+;; Thunder SIMD fabs/fneg instruction types - 1 cycle, implemented in the fp unit.
+
+(define_insn_reservation "thunderx_neon_abs" 1
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "neon_abs, neon_abs_q, neon_neg, neon_neg_q"))
+  "thunderx_pipe1")
 
 ;; Thunder simd simple/add instruction types - 4/5 cycles
 
