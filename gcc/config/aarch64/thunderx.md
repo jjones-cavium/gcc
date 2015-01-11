@@ -105,6 +105,11 @@
        (eq_attr "type" "store2"))
   "thunderx_pipe0 + thunderx_pipe1")
 
+;; Prefetch are single issued
+(define_insn_reservation "thunderx_prefetch" 1
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "prefetch"))
+  "thunderx_pipe0 + thunderx_pipe1")
 
 ;; loads (and load pairs) from L1 take 3 cycles in pipe 0
 (define_insn_reservation "thunderx_load" 3
@@ -259,6 +264,18 @@
 			neon_fp_minmax_s, neon_fp_minmax_d, neon_reduc_add, neon_cls, \
 			neon_qabs, neon_qneg, neon_fp_addsub_s, neon_fp_addsub_d"))
   "thunderx_pipe1 + thunderx_simd")
+
+;; 64bit TBL is emulated and takes 150 cycles
+(define_insn_reservation "thunderx_tbl" 150
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "neon_tbl1"))
+  "(thunderx_pipe1+thunderx_pipe0)*150")
+
+;; 128bit TBL is emulated and takes 300 cycles
+(define_insn_reservation "thunderx_tblq" 300
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "neon_tbl1_q"))
+  "(thunderx_pipe1+thunderx_pipe0)*300")
 
 ;; BIG NOTE: neon_add_long/neon_sub_long don't have a q form which is incorrect
 

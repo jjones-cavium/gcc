@@ -1,3 +1,14 @@
+2015-01-11  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #13924
+	More part of bug #13915
+	* config/aarch64/aarch64.md (prefetch): Change type
+	to prefetch.
+	* config/aarch64/thunderx.md (thunderx_prefetch):
+	New reservation.
+	(thunderx_tbl): New reservation.
+	(thunderx_tblq): New reservation.
+
 2015-01-10  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13917

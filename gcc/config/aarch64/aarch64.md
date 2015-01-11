@@ -394,7 +394,7 @@
 
     return pftype[INTVAL(operands[1])][locality];
   }
-  [(set_attr "type" "load1")]
+  [(set_attr "type" "prefetch")]
 )
 
 (define_insn "trap"
