@@ -33,6 +33,7 @@ Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
 #include "hashtab.h"
 #include "tree-pass.h"
 #include "timevar.h"
+#include "symtab.h"
 #include "expr.h"
 #include "recog.h"
 #include "cfgrtl.h"

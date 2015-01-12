@@ -1,3 +1,79 @@
+2015-01-11  Janus Weil  <janus@gcc.gnu.org>
+
+	PR fortran/63733
+	* gfortran.dg/typebound_operator_20.f90: New.
+
+2015-01-11  Janus Weil  <janus@gcc.gnu.org>
+
+	PR fortran/58023
+	* gfortran.dg/proc_ptr_comp_42.f90: New.
+
+2015-01-11  Janus Weil  <janus@gcc.gnu.org>
+
+	PR fortran/64508
+	* gfortran.dg/proc_ptr_comp_41.f90: New.
+
+2015-01-11  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* gcc.target/powerpc/recip-test.h (_ARCH_PPC64): Use __LP64__ instead.
+
+2015-01-10  Tobias Burnus  <burnus@net-b.de>
+
+	PR fortran/64522
+	* gfortran.dg/line_length_5.f90: Change dg-warning to dg-error
+	and add dg-excess-errors.
+	* gfortran.dg/line_length_6.f90: New.
+	* gfortran.dg/line_length_7.f90: New.
+	* gfortran.dg/line_length_8.f90: New.
+	* gfortran.dg/line_length_9.f90: New.
+	* gfortran.dg/line_length_10.f90: New.
+	* gfortran.dg/line_length_11.f90: New.
+
+2015-01-09  David Malcolm  <dmalcolm@redhat.com>
+
+	* jit.dg/test-threads.c (struct testcase): Move declaration
+	to jit.dg/all-non-failing-tests.h.
+	(testcases): Likewise.
+	* jit.dg/all-non-failing-tests.h (struct testcase): Move
+	declaration here from jit.dg/all-non-failing-tests.h.
+	(testcases): Likewise.
+	* jit.dg/test-combination.c (create_code): Eliminate spelling
+	out all of the testcases in favor of looping through the
+	"testcases" metadata.
+	(verify_code): Likewise.
+
+2015-01-09  Jakub Jelinek  <jakub@redhat.com>
+
+	PR rtl-optimization/64536
+	* gcc.dg/pr64536.c: New test.
+
+2015-01-09  David Malcolm  <dmalcolm@redhat.com>
+
+	* jit.dg/all-non-failing-tests.h: Add test-constants.c.
+	* jit.dg/test-combination.c (create_code): Likewise.
+	(verify_code): Likewise.
+	* jit.dg/test-constants.c: New test case.
+	* jit.dg/test-threads.c: Add test-constants.c.
+
+2015-01-09  Dimitris Papavasiliou  <dpapavas@gmail.com>
+
+	PR libobjc/51891
+	* objc.dg/gnu-api-2-class.m: Add a test case
+	for the above change.
+
+2015-01-09  Sebastian Huber  <sebastian.huber@embedded-brains.de>
+
+	* gcc.dg/typeof-2.c: Add checks for non-atomic types.
+
+2015-01-09  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64410
+	* g++.dg/vect/pr64410.cc: New testcase.
+
+2015-01-09  Martin Liska  <mliska@suse.cz>
+
+	* gcc.dg/ipa/ipa-icf-32.c: New test.
+
 2015-01-08  Bernd Edlinger  <bernd.edlinger@hotmail.de>
 
 	* c-c++-common/tsan/tsan_barrier.h: New.
