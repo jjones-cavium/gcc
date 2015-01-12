@@ -1,3 +1,9 @@
+2015-01-11  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	Bug #13645	
+	* ipa-inline.c (inline_small_functions): Swap the operands in
+	enum.
+
 2014-12-08  Andrew Pinski  <apinski@cavium.com>
 	    Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
