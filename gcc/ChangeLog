@@ -22,6 +22,182 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-01-12  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi ([-Wbad-function-cast]): Rewrite to avoid confusing
+	example.
+	
+2015-01-12  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/64563
+	* tree-vrp.c (vrp_evaluate_conditional): Check for VR_RANGE
+	instead of != VR_VARYING.
+
+	PR target/64513
+	* config/i386/i386.c (ix86_expand_prologue): Add
+	REG_FRAME_RELATED_EXPR to %rax and %r10 pushes.
+
+	PR tree-optimization/64454
+	* tree-vrp.c (simplify_div_or_mod_using_ranges): Optimize
+	op0 % op1 into op0 if op0 is in range [-op1 + 1, op1 - 1]
+	for signed or [0, op1 - 1] for unsigned modulo.
+	(simplify_stmt_using_ranges): Call simplify_div_or_mod_using_ranges
+	even if op1 does not satisfy integer_pow2p.
+
+	PR other/64370
+	* sreal.c (sreal::to_double): Use ldexp instead of scalbnl.
+
+2015-01-12  Jeff Law  <law@redhat.com>
+
+	PR target/64461
+	* config/m68k/m68k.md (truncsiqi2): Disable for TARGET_COLDFIRE.
+	(trunchiqi2, truncsihi2): Similarly.
+
+	* config/h8300/h8300.c (Fpa): Use RTX_FRAME_RELATED_P directly
+	rather than calling F.
+
+2015-01-12  Bernd Edlinger  <bernd.edlinger@hotmail.de>
+
+	* tsan.c (instrument_expr): Use force_gimple_operand.
+	Use may_be_nonaddressable_p instead of is_gimple_addressable.
+
+2015-01-12  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64530
+	* tree-loop-distribution.c (pg_add_dependence_edges): Shuffle
+	back dr1.
+
+2015-01-12  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/64357
+	* tree-cfg.c (gimple_can_merge_blocks_p): Protect simple
+	latches properly.
+
+2015-01-12  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/arm/arm.c (arm_cortex_a12_tune): Update entries to match
+	Cortex-A17 tuning parameters.
+	* config/arm/arm-cores.def (cortex-a12): Schedule for cortex-a17.
+
+2015-01-12  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/arm/arm-protos.h (tune_params): Add fuseable_ops field.
+	* config/arm/arm.c (arm_macro_fusion_p): New function.
+	(arm_macro_fusion_pair_p): Likewise.
+	(TARGET_SCHED_MACRO_FUSION_P): Define.
+	(TARGET_SCHED_MACRO_FUSION_PAIR_P): Likewise.
+	(ARM_FUSE_NOTHING): Likewise.
+	(ARM_FUSE_MOVW_MOVT): Likewise.
+	(arm_slowmul_tune, arm_fastmul_tune, arm_strongarm_tune,
+	arm_xscale_tune, arm_9e_tune, arm_v6t2_tune, arm_cortex_tune,
+	arm_cortex_a8_tune, arm_cortex_a7_tune, arm_cortex_a15_tune,
+	arm_cortex_a53_tune, arm_cortex_a57_tune, arm_cortex_a9_tune,
+	arm_cortex_a12_tune, arm_v7m_tune, arm_v6m_tune, arm_fa726te_tune
+	arm_cortex_a5_tune): Specify fuseable_ops value.
+
+2015-01-12  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR bootstrap/64561
+	* configure.ac (HAVE_LD_PIE_COPYRELOC): Update Linux/x86-64 linker
+	test for PIE with copy reloc.
+	* configure: Regenerated.
+
+2015-01-12  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/arm/arm.c (arm_load_tp): Use R0_REGNUM instead of constant 0
+	in gen_rtx_REG.
+	(arm_tls_descseq_addr): Likewise.
+	(arm_gen_movmemqi): Likewise.
+	(arm_expand_epilogue_apcs_frame): Likewise.
+	(arm_expand_epilogue): Likewise.
+	(arm_expand_prologue): Likewise.  Use R1_REGNUM instead of constant 1
+	in gen_rtx_REG.
+
+2015-01-12  Martin Liska  <mliska@suse.cz>
+
+	PR ipa/64550
+	* ipa-icf-gimple.c (func_checker::compare_memory_operand): Compare
+	volatility for correct operands.
+
+2015-01-12  Martin Liska  <mliska@suse.cz>
+
+	* ipa-icf.c (sem_function::equals_wpa): Add indirect_calls as indication
+	that a function is not leaf.
+	(sem_function::compare_polymorphic_p): Likewise.
+
+2015-01-12  Martin Liska  <mliska@suse.cz>
+
+	* ipa-icf.c (sem_function::equals_wpa): Add indirect_calls as indication
+	that a function is not leaf.
+	(sem_function::compare_polymorphic_p): Likewise.
+
+2015-01-12  Prathamesh Kulkarni  <prathamesh.kulkarni@linaro.org>
+
+	* config/visium/visium.c: Add includes hashtab.h, hash-set.h,
+	machmode.h, input.h, statistics.h, vec.h, double-int.h, real.h,
+	fixed-value.h, alias.h, symtab.h, tree-core.h, wide-int.h, inchash.h,
+	fold-const.h, tree-check.h.
+
+2015-01-12  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/63967
+	PR ipa/64425
+	* ipa-inline.c (compute_uninlined_call_time,
+	compute_inlined_call_time): Use counts for extra precision when
+	needed possible.
+	(big_speedup_p): Fix formating.
+	(RELATIVE_TIME_BENEFIT_RANGE): Remove.
+	(relative_time_benefit): Remove.
+	(edge_badness): Turn DECL_DISREGARD_INLINE_LIMITS into hint;
+	merge guessed and read profile paths.
+	(inline_small_functions): Count only !optimize_size functions into
+	initial size; be more lax about sanity check when profile is used;
+	be sure to update inlined function profile when profile is read.
+
+2015-01-12  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/63470
+	* ipa-inline-analysis.c (inline_edge_duplication_hook): Adjust
+	cost when edge becomes direct.
+	* ipa-prop.c (make_edge_direct): Do not adjust when speculation
+	is resolved or when introducing new speculation.
+
+2015-01-12  Chen Gang  <gang.chen.5i5j@gmail.com>
+
+	PR ipa/64551
+	PR ipa/64552
+	* ipa-icf.c (sem_function::equals_private): Use '&&' instead of
+	'||' to fix typo issue.
+
+	* gcc/tree.h (target_opts_for_fn): Check NULL_TREE since it can
+	accept and return NULL.
+
+2015-01-12  Martin Liska  <mliska@suse.cz>
+
+	* cgraph.c (cgraph_edge::remove_callee): Move function to header
+	file for being inlined.
+	(cgraph_set_edge_callee): Delete.
+	(cgraph_edge::redirect_callee): Move function to header file
+	for being inlined.
+	(cgraph_edge::make_direct): Use new function.
+	(cgraph_edge::dump_edge_flags): New function created from
+	static dump_edge_flags function.
+	(cgraph_node::dump): Use new function.
+	(cgraph_edge::verify_count_and_frequency): New function created
+	from verify_edge_count_and_frequency.
+	(cgraph_edge::verify_corresponds_to_fndecl): New function created
+	from verify_edge_corresponds_to_fndecl.
+	(verify_edge_corresponds_to_fndecl): Delete.
+	(cgraph_node::verify_node): Use new function.
+	* cgraph.h (cgraph_edge::set_callee): New function.
+	(cgraph_edge::dump_edge_flags): Likewise.
+	(cgraph_edge::verify_corresponds_to_fndecl): Likewise.
+
+2015-01-11  Jan Hubicka  <hubicka@ucw.cz>
+
+	* ipa-utils.c (estimate_function_body_sizes): Do not
+	free node params when called late with early=true.
+
 2015-01-11  James Greenhalgh  <james.greenhalgh@arm.com>
 
 	* doc/md.texi (Instruction Patterns): Rewrite text for

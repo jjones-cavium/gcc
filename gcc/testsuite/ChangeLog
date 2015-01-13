@@ -1,3 +1,109 @@
+2015-01-12  Jakub Jelinek  <jakub@redhat.com>
+
+	PR tree-optimization/64563
+	* gcc.dg/pr64563.c: New test.
+
+	PR target/64513
+	* gcc.target/i386/pr64513.c: New test.
+
+	PR tree-optimization/64454
+	* gcc.dg/pr64454.c: New test.
+
+	PR testsuite/64028
+	* gcc.dg/vect/no-section-anchors-vect-31.c: Add dg-add-options
+	bind_pic_locally.
+	* gcc.dg/vect/no-section-anchors-vect-34.c: Likewise.
+	* gcc.dg/vect/no-section-anchors-vect-36.c: Likewise.
+	* gcc.dg/vect/no-section-anchors-vect-64.c: Likewise.
+	* gcc.dg/vect/no-section-anchors-vect-65.c: Likewise.
+	* gcc.dg/vect/no-section-anchors-vect-68.c: Likewise.
+	* gcc.dg/vect/no-section-anchors-vect-69.c: Likewise.
+	* gcc.dg/vect/slp-25.c: Likewise.
+	* gcc.dg/vect/vect-109.c: Likewise.
+	* gcc.dg/vect/vect-13.c: Likewise.
+	* gcc.dg/vect/vect-17.c: Likewise.
+	* gcc.dg/vect/vect-18.c: Likewise.
+	* gcc.dg/vect/vect-19.c: Likewise.
+	* gcc.dg/vect/vect-20.c: Likewise.
+	* gcc.dg/vect/vect-21.c: Likewise.
+	* gcc.dg/vect/vect-22.c: Likewise.
+	* gcc.dg/vect/vect-27.c: Likewise.
+	* gcc.dg/vect/vect-29.c: Likewise.
+	* gcc.dg/vect/vect-2-big-array.c: Likewise.
+	* gcc.dg/vect/vect-2.c: Likewise.
+	* gcc.dg/vect/vect-3.c: Likewise.
+	* gcc.dg/vect/vect-4.c: Likewise.
+	* gcc.dg/vect/vect-5.c: Likewise.
+	* gcc.dg/vect/vect-72.c: Likewise.
+	* gcc.dg/vect/vect-73-big-array.c: Likewise.
+	* gcc.dg/vect/vect-73.c: Likewise.
+	* gcc.dg/vect/vect-77-global.c: Likewise.
+	* gcc.dg/vect/vect-78-global.c: Likewise.
+	* gcc.dg/vect/vect-7.c: Likewise.
+	* gcc.dg/vect/vect-86.c: Likewise.
+	* gcc.dg/vect/vect-align-1.c: Likewise.
+	* gcc.dg/vect/vect-align-3.c: Likewise.
+	* gcc.dg/vect/vect-all-big-array.c: Likewise.
+	* gcc.dg/vect/vect-all.c: Likewise.
+	* gcc.dg/vect/vect-multitypes-1.c: Likewise.
+	* gcc.dg/vect/vect-multitypes-4.c: Likewise.
+	* gcc.dg/vect/vect-peel-3.c: Likewise.
+	* gcc.dg/vect/vect-peel-4.c: Likewise.
+	* gcc.dg/vect/wrapv-vect-7.c: Likewise.
+
+2015-01-12  Jeff Law  <law@redhat.com>
+
+	PR target/64461
+	* gcc.target/m68k/pr64461.c: New test.
+
+2015-01-12  David Malcolm  <dmalcolm@redhat.com>
+
+	* jit.dg/test-array-as-pointer.c (create_code): Update call
+	to gcc_jit_context_new_global by setting "kind" to
+	GCC_JIT_GLOBAL_IMPORTED.
+	* jit.dg/test-error-array-as-pointer.c: Likewise.
+	* jit.dg/test-expressions.c (make_test_of_get_address): Likewise.
+	* jit.dg/test-fuzzer.c (make_random_global): Likewise, but
+	setting kind to GCC_JIT_GLOBAL_EXPORTED.
+	* jit.dg/test-using-global.c (the_global): Rename to...
+	(imported_global): ...this.
+	(create_code): Update to test the three kinds of global.
+	(verify_code): Likewise.
+
+2015-01-12  Marc Glisse  <marc.glisse@inria.fr>
+
+	PR testsuite/64427
+	* gcc.target/i386/pr64291-1.c: Limit to lp64 tarrget.  Avoid
+	undefined behavior.
+	* gcc.target/i386/pr64291-2.c: Updated.
+
+2015-01-12  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64530
+	* gfortran.dg/pr64530.f90: New testcase.
+
+2015-01-12  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/64357
+	* gcc.dg/torture/pr64357.c: New testcase.
+
+2015-01-12  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc.target/i386/nop-mcount.c: Properly place {} in target
+	selector.
+
+2015-01-12  Prathamesh Kulkarni  <prathamesh.kulkarni@linaro.org>
+	* gcc.dg/plugin/ggcplug.c: Include gcc-plugin.h after coretypes.h.
+
+2015-01-12  Martin Liska  <mliska@suse.cz>
+
+	* gcc.dg/ipa/PR64550.c: New test.
+
+2015-01-12  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/63470
+	* testsuite/g++.dg/ipa/pr63470.C: New testcase.
+
 2015-01-11  Janus Weil  <janus@gcc.gnu.org>
 
 	PR fortran/63733

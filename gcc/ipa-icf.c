@@ -340,7 +340,8 @@ sem_function::equals_wpa (sem_item *item,
 	return return_false_with_msg ("NULL argument type");
 
       /* Polymorphic comparison is executed just for non-leaf functions.  */
-      bool is_not_leaf = get_node ()->callees != NULL;
+      bool is_not_leaf = get_node ()->callees != NULL
+			 || get_node ()->indirect_calls != NULL;
 
       if (!func_checker::compatible_types_p (arg_types[i],
 					     m_compared_func->arg_types[i],
@@ -438,7 +439,7 @@ sem_function::equals_private (sem_item *item,
   cl_target_option *tar1 = target_opts_for_fn (decl);
   cl_target_option *tar2 = target_opts_for_fn (m_compared_func->decl);
 
-  if (tar1 != NULL || tar2 != NULL)
+  if (tar1 != NULL && tar2 != NULL)
     {
       if (!cl_target_option_eq (tar1, tar2))
 	{
@@ -884,7 +885,9 @@ bool
 sem_function::compare_polymorphic_p (void)
 {
   return get_node ()->callees != NULL
-	 || m_compared_func->get_node ()->callees != NULL;
+	 || get_node ()->indirect_calls != NULL
+	 || m_compared_func->get_node ()->callees != NULL
+	 || m_compared_func->get_node ()->indirect_calls != NULL;
 }
 
 /* For a given call graph NODE, the function constructs new
