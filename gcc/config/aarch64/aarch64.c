@@ -11172,6 +11172,7 @@ aarch64_operands_adjust_ok_for_ldpstp (rtx *operands, bool load,
   if (!MEM_P (mem_1) || aarch64_mem_pair_operand (mem_1, mode))
     return false;
 
+  /* The mems cannot be volatile.  */
   if (MEM_VOLATILE_P (mem_1) || MEM_VOLATILE_P (mem_2)
       || MEM_VOLATILE_P (mem_3) ||MEM_VOLATILE_P (mem_4))
     return false;

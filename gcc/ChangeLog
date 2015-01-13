@@ -22,6 +22,18 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-01-13  Richard Biener  <rguenther@suse.de>
+
+	PR lto/64373
+	* lto-streamer-out.c (tree_is_indexable): Guard for NULL
+	DECL_CONTEXT.
+
+2015-01-13  Andrew Pinski   <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_operands_ok_for_ldpstp): Reject
+	volatile mems.
+	(aarch64_operands_adjust_ok_for_ldpstp): Likewise.
+
 2015-01-13  Jakub Jelinek  <jakub@redhat.com>
 
 	PR middle-end/63974
