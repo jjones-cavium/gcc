@@ -22,6 +22,52 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-01-13  Jakub Jelinek  <jakub@redhat.com>
+
+	PR middle-end/63974
+	* cfgexpand.c (expand_computed_goto): Don't call
+	convert_memory_address here.
+
+2015-01-13  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64406
+	* tree-loop-distibution.c (pass_loop_distribution::execute):
+	Reset the SCEV hashtable if we distributed anything.
+
+2015-01-13  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64404
+	* tree-vect-stmts.c (vectorizable_load): Reject conflicting
+	SLP types for CSEd loads.
+
+2015-01-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR tree-optimization/64436
+	* tree-ssa-math-opts.c (find_bswap_or_nop_1): Move code performing the
+	merge of two symbolic numbers for a bitwise OR to ...
+	(perform_symbolic_merge): This. Also fix computation of the range and
+	end of the symbolic number corresponding to the result of a bitwise OR.
+
+2014-01-13  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64568
+	* tree-ssa-forwprop.c (pass_forwprop::execute): Properly
+	release defs of removed stmts, avoid splitting TARGET_MEM_REFs.
+
+2015-01-13  Chung-Ju Wu  <jasonwucj@gmail.com>
+
+	* config/nds32/nds32.c (nds32_legitimate_address_p): Consider
+	TARGET_CMODEL_LARGE and TARGET_CMODEL_MEDIUM cases.
+
+2015-01-13  Chung-Ju Wu  <jasonwucj@gmail.com>
+
+	* config/nds32/nds32.h (NDS32_SYMBOL_FLAG_RODATA): Define our own
+	target-specific symbol_ref flag.
+	(NDS32_SYMBOL_REF_RODATA_P): Define it to check if the symbol_ref
+	resides in rodata section.
+	* config/nds32/nds32.c (TARGET_ENCODE_SECTION_INFO): Define.
+	(nds32_encode_section_info): New function.
+
 2015-01-13  Chung-Ju Wu  <jasonwucj@gmail.com>
 
 	* config/nds32/nds32.md (call): Use pseudo instruction bal which

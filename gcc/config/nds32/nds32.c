@@ -1961,24 +1961,27 @@ nds32_legitimate_address_p (machine_mode mode, rtx x, bool strict)
       return nds32_address_register_rtx_p (x, strict);
 
     case SYMBOL_REF:
-
-      if (!TARGET_GP_DIRECT
+      /* (mem (symbol_ref A)) => [symbol_ref] */
+      /* If -mcmodel=large, the 'symbol_ref' is not a valid address
+         during or after LRA/reload phase.  */
+      if (TARGET_CMODEL_LARGE
+	  && (reload_completed
+	      || reload_in_progress
+	      || lra_in_progress))
+	return false;
+      /* If -mcmodel=medium and the symbol references to rodata section,
+         the 'symbol_ref' is not a valid address during or after
+         LRA/reload phase.  */
+      if (TARGET_CMODEL_MEDIUM
+	  && NDS32_SYMBOL_REF_RODATA_P (x)
 	  && (reload_completed
 	      || reload_in_progress
 	      || lra_in_progress))
 	return false;
 
-      /* (mem (symbol_ref A)) => [symbol_ref] */
-      return !currently_expanding_to_rtl;
+      return true;
 
     case CONST:
-
-      if (!TARGET_GP_DIRECT
-	  && (reload_completed
-	      || reload_in_progress
-	      || lra_in_progress))
-	return false;
-
       /* (mem (const (...)))
          => [ + const_addr ], where const_addr = symbol_ref + const_int */
       if (GET_CODE (XEXP (x, 0)) == PLUS)
@@ -1989,9 +1992,30 @@ nds32_legitimate_address_p (machine_mode mode, rtx x, bool strict)
 	  rtx op1 = XEXP (plus_op, 1);
 
 	  if (GET_CODE (op0) == SYMBOL_REF && CONST_INT_P (op1))
-	    return true;
-	  else
-	    return false;
+	    {
+	      /* Now we see the [ + const_addr ] pattern, but we need
+	         some further checking.  */
+	      /* If -mcmodel=large, the 'const_addr' is not a valid address
+	         during or after LRA/reload phase.  */
+	      if (TARGET_CMODEL_LARGE
+		  && (reload_completed
+		      || reload_in_progress
+		      || lra_in_progress))
+		return false;
+	      /* If -mcmodel=medium and the symbol references to rodata section,
+	         the 'const_addr' is not a valid address during or after
+	         LRA/reload phase.  */
+	      if (TARGET_CMODEL_MEDIUM
+		  && NDS32_SYMBOL_REF_RODATA_P (op0)
+		  && (reload_completed
+		      || reload_in_progress
+		      || lra_in_progress))
+		return false;
+
+	      /* At this point we can make sure 'const_addr' is a
+		 valid address.  */
+	      return true;
+	    }
 	}
 
 	return false;
@@ -2104,6 +2128,45 @@ nds32_address_cost (rtx address,
 		    bool speed)
 {
   return nds32_address_cost_impl (address, mode, as, speed);
+}
+
+
+/* Dividing the Output into Sections (Texts, Data, . . . ).  */
+
+/* If references to a symbol or a constant must be treated differently
+   depending on something about the variable or function named by the symbol
+   (such as what section it is in), we use this hook to store flags
+   in symbol_ref rtx.  */
+static void
+nds32_encode_section_info (tree decl, rtx rtl, int new_decl_p)
+{
+  default_encode_section_info (decl, rtl, new_decl_p);
+
+  /* For the memory rtx, if it references to rodata section, we can store
+     NDS32_SYMBOL_FLAG_RODATA flag into symbol_ref rtx so that the
+     nds32_legitimate_address_p() can determine how to treat such symbol_ref
+     based on -mcmodel=X and this information.  */
+  if (MEM_P (rtl) && MEM_READONLY_P (rtl))
+    {
+      rtx addr = XEXP (rtl, 0);
+
+      if (GET_CODE (addr) == SYMBOL_REF)
+	{
+	  /* For (mem (symbol_ref X)) case.  */
+	  SYMBOL_REF_FLAGS (addr) |= NDS32_SYMBOL_FLAG_RODATA;
+	}
+      else if (GET_CODE (addr) == CONST
+	       && GET_CODE (XEXP (addr, 0)) == PLUS)
+	{
+	  /* For (mem (const (plus (symbol_ref X) (const_int N)))) case.  */
+	  rtx plus_op = XEXP (addr, 0);
+	  rtx op0 = XEXP (plus_op, 0);
+	  rtx op1 = XEXP (plus_op, 1);
+
+	  if (GET_CODE (op0) == SYMBOL_REF && CONST_INT_P (op1))
+	    SYMBOL_REF_FLAGS (op0) |= NDS32_SYMBOL_FLAG_RODATA;
+	}
+    }
 }
 
 
@@ -3668,6 +3731,9 @@ nds32_target_alignment (rtx label)
 
 
 /* Dividing the Output into Sections (Texts, Data, . . . ).  */
+
+#undef TARGET_ENCODE_SECTION_INFO
+#define TARGET_ENCODE_SECTION_INFO nds32_encode_section_info
 
 
 /* Position Independent Code.  */
