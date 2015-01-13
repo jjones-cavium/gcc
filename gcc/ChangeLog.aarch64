@@ -1,3 +1,9 @@
+2015-01-12  Andrew Pinski  <apinski@cavium.com>
+
+	Part of bug #13926
+	* config/aarch64/aarch64.c (fusion_load_store): Check dest mode
+	instead of src mode.
+
 2015-01-11  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13924
