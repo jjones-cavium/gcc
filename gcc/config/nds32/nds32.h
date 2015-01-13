@@ -344,6 +344,19 @@ enum nds32_builtins
 #define TARGET_ISA_V3   (nds32_arch_option == ARCH_V3)
 #define TARGET_ISA_V3M  (nds32_arch_option == ARCH_V3M)
 
+#define TARGET_CMODEL_SMALL \
+   (nds32_cmodel_option == CMODEL_SMALL)
+#define TARGET_CMODEL_MEDIUM \
+   (nds32_cmodel_option == CMODEL_MEDIUM)
+#define TARGET_CMODEL_LARGE \
+   (nds32_cmodel_option == CMODEL_LARGE)
+
+/* When -mcmodel=small or -mcmodel=medium,
+   compiler may generate gp-base instruction directly.  */
+#define TARGET_GP_DIRECT \
+   (nds32_cmodel_option == CMODEL_SMALL\
+    || nds32_cmodel_option == CMODEL_MEDIUM)
+
 #define TARGET_SOFT_FLOAT 1
 #define TARGET_HARD_FLOAT 0
 
@@ -391,16 +404,21 @@ enum nds32_builtins
 #define ENDFILE_SPEC \
   " %{!mno-ctor-dtor:crtend1.o%s}"
 
-/* The TARGET_BIG_ENDIAN_DEFAULT is defined if we configure gcc
-   with --target=nds32be-* setting.
-   Check gcc/config.gcc for more information.
-   In addition, currently we only have elf toolchain,
-   where mgp-direct is always the default.  */
+/* The TARGET_BIG_ENDIAN_DEFAULT is defined if we
+   configure gcc with --target=nds32be-* setting.
+   Check gcc/config.gcc for more information.  */
 #ifdef TARGET_BIG_ENDIAN_DEFAULT
-#define MULTILIB_DEFAULTS { "mbig-endian", "mgp-direct" }
+#  define NDS32_ENDIAN_DEFAULT "mbig-endian"
 #else
-#define MULTILIB_DEFAULTS { "mlittle-endian", "mgp-direct" }
+#  define NDS32_ENDIAN_DEFAULT "mlittle-endian"
 #endif
+
+/* Currently we only have elf toolchain,
+   where -mcmodel=medium is always the default.  */
+#define NDS32_CMODEL_DEFAULT "mcmodel=medium"
+
+#define MULTILIB_DEFAULTS \
+  { NDS32_ENDIAN_DEFAULT, NDS32_CMODEL_DEFAULT }
 
 
 /* Run-time Target Specification.  */
