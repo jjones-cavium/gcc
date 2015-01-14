@@ -5723,6 +5723,10 @@ aarch64_rtx_costs (rtx x, int code, int outer ATTRIBUTE_UNUSED,
           if (GET_MODE (x) == CC_ZESWPmode && GET_CODE (op0) == ZERO_EXTEND)
             op0 = XEXP (op0, 0);
 
+          /* CC_NZmode supports zero extract for free.  */
+          if (GET_MODE (x) == CC_NZmode && GET_CODE (op0) == ZERO_EXTRACT)
+            op0 = XEXP (op0, 0);
+
           /* ANDS.  */
           if (GET_CODE (op0) == AND)
             {

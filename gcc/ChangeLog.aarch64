@@ -1,3 +1,9 @@
+2015-01-14  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #12982
+	* config/aarch64/aarch64.c (aarch64_rtx_costs):
+	CC_NZmode supports zero extract for free.
+
 2015-01-12  Andrew Pinski  <apinski@cavium.com>
 
 	Part of bug #13926
