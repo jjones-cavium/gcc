@@ -1,5 +1,10 @@
 2015-01-14  Andrew Pinski  <apinski@cavium.com>
 
+	* opts.c (default_options_table):
+	Turn on postreload-load pass at -O2 and above.
+
+2015-01-14  Andrew Pinski  <apinski@cavium.com>
+
 	Bug #13993
 	* postreload-load.c (pass_postreload_load::execute):
 	Don't call LOAD_EXTEND_OP for not scalar integer mode.
