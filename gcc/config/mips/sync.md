@@ -125,21 +125,6 @@
    (set_attr "sync_required_oldval" "4")
    (set_attr "sync_insn1_op2" "5")])
 
-<<<<<<< HEAD
-=======
-(define_insn "sync_add<mode>"
-  [(set (match_operand:GPR 0 "memory_operand" "+ZC,ZC")
-	(unspec_volatile:GPR
-          [(plus:GPR (match_dup 0)
-		     (match_operand:GPR 1 "arith_operand" "I,d"))]
-	  UNSPEC_SYNC_OLD_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "addiu,addu")
-   (set_attr "sync_mem" "0")
-   (set_attr "sync_insn1_op2" "1")])
-
->>>>>>> origin/upstream
 (define_expand "sync_<optab><mode>"
   [(set (match_operand:SHORT 0 "memory_operand")
 	(unspec_volatile:SHORT
@@ -382,127 +367,6 @@
    (set_attr "sync_exclusive_mask" "3")
    (set_attr "sync_insn1_op2" "4")])
 
-<<<<<<< HEAD
-=======
-(define_insn "sync_sub<mode>"
-  [(set (match_operand:GPR 0 "memory_operand" "+ZC")
-	(unspec_volatile:GPR
-          [(minus:GPR (match_dup 0)
-		      (match_operand:GPR 1 "register_operand" "d"))]
-	 UNSPEC_SYNC_OLD_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "subu")
-   (set_attr "sync_mem" "0")
-   (set_attr "sync_insn1_op2" "1")])
-
-;; Can be removed in favor of atomic_fetch_add below.
-(define_insn "sync_old_add<mode>"
-  [(set (match_operand:GPR 0 "register_operand" "=&d,&d")
-	(match_operand:GPR 1 "memory_operand" "+ZC,ZC"))
-   (set (match_dup 1)
-	(unspec_volatile:GPR
-          [(plus:GPR (match_dup 1)
-		     (match_operand:GPR 2 "arith_operand" "I,d"))]
-	 UNSPEC_SYNC_OLD_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "addiu,addu")
-   (set_attr "sync_oldval" "0")
-   (set_attr "sync_mem" "1")
-   (set_attr "sync_insn1_op2" "2")])
-
-(define_insn "sync_old_sub<mode>"
-  [(set (match_operand:GPR 0 "register_operand" "=&d")
-	(match_operand:GPR 1 "memory_operand" "+ZC"))
-   (set (match_dup 1)
-	(unspec_volatile:GPR
-          [(minus:GPR (match_dup 1)
-		      (match_operand:GPR 2 "register_operand" "d"))]
-	 UNSPEC_SYNC_OLD_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "subu")
-   (set_attr "sync_oldval" "0")
-   (set_attr "sync_mem" "1")
-   (set_attr "sync_insn1_op2" "2")])
-
-(define_insn "sync_new_add<mode>"
-  [(set (match_operand:GPR 0 "register_operand" "=&d,&d")
-        (plus:GPR (match_operand:GPR 1 "memory_operand" "+ZC,ZC")
-		  (match_operand:GPR 2 "arith_operand" "I,d")))
-   (set (match_dup 1)
-	(unspec_volatile:GPR
-	  [(plus:GPR (match_dup 1) (match_dup 2))]
-	 UNSPEC_SYNC_NEW_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "addiu,addu")
-   (set_attr "sync_oldval" "0")
-   (set_attr "sync_newval" "0")
-   (set_attr "sync_mem" "1")
-   (set_attr "sync_insn1_op2" "2")])
-
-(define_insn "sync_new_sub<mode>"
-  [(set (match_operand:GPR 0 "register_operand" "=&d")
-        (minus:GPR (match_operand:GPR 1 "memory_operand" "+ZC")
-		   (match_operand:GPR 2 "register_operand" "d")))
-   (set (match_dup 1)
-	(unspec_volatile:GPR
-	  [(minus:GPR (match_dup 1) (match_dup 2))]
-	 UNSPEC_SYNC_NEW_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "subu")
-   (set_attr "sync_oldval" "0")
-   (set_attr "sync_newval" "0")
-   (set_attr "sync_mem" "1")
-   (set_attr "sync_insn1_op2" "2")])
-
-(define_insn "sync_<optab><mode>"
-  [(set (match_operand:GPR 0 "memory_operand" "+ZC,ZC")
-	(unspec_volatile:GPR
-          [(fetchop_bit:GPR (match_operand:GPR 1 "uns_arith_operand" "K,d")
-			      (match_dup 0))]
-	 UNSPEC_SYNC_OLD_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "<immediate_insn>,<insn>")
-   (set_attr "sync_mem" "0")
-   (set_attr "sync_insn1_op2" "1")])
-
-(define_insn "sync_old_<optab><mode>"
-  [(set (match_operand:GPR 0 "register_operand" "=&d,&d")
-	(match_operand:GPR 1 "memory_operand" "+ZC,ZC"))
-   (set (match_dup 1)
-	(unspec_volatile:GPR
-          [(fetchop_bit:GPR (match_operand:GPR 2 "uns_arith_operand" "K,d")
-			    (match_dup 1))]
-	 UNSPEC_SYNC_OLD_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "<immediate_insn>,<insn>")
-   (set_attr "sync_oldval" "0")
-   (set_attr "sync_mem" "1")
-   (set_attr "sync_insn1_op2" "2")])
-
-(define_insn "sync_new_<optab><mode>"
-  [(set (match_operand:GPR 0 "register_operand" "=&d,&d")
-	(match_operand:GPR 1 "memory_operand" "+ZC,ZC"))
-   (set (match_dup 1)
-	(unspec_volatile:GPR
-          [(fetchop_bit:GPR (match_operand:GPR 2 "uns_arith_operand" "K,d")
-			    (match_dup 1))]
-	 UNSPEC_SYNC_NEW_OP))]
-  "GENERATE_LL_SC"
-  { return mips_output_sync_loop (insn, operands); }
-  [(set_attr "sync_insn1" "<immediate_insn>,<insn>")
-   (set_attr "sync_oldval" "0")
-   (set_attr "sync_newval" "0")
-   (set_attr "sync_mem" "1")
-   (set_attr "sync_insn1_op2" "2")])
->>>>>>> origin/upstream
-
 (define_insn "sync_nand<mode>"
   [(set (match_operand:GPR 0 "memory_operand" "+ZC,ZC")
 	(unspec_volatile:GPR [(match_operand:GPR 1 "uns_arith_operand" "K,d")]
@@ -682,7 +546,7 @@
 ;; XLP issues implicit sync for SWAP/LDADD, so no need for an explicit one.
 (define_insn "atomic_exchange<mode>_swap"
   [(set (match_operand:GPR 0 "register_operand" "=d")
-	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZC")]
+	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZR")]
 	 UNSPEC_ATOMIC_EXCHANGE))
    (set (match_dup 1)
 	(unspec_volatile:GPR [(match_operand:GPR 2 "register_operand" "0")]
@@ -693,7 +557,7 @@
 
 (define_insn "atomic_exchange<mode>_law"
   [(set (match_operand:GPR 0 "register_operand" "=d,d,d")
-	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZC,ZC,ZC")]
+	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZR,ZR,ZR")]
 	 UNSPEC_ATOMIC_EXCHANGE))
    (set (match_dup 1)
 	(unspec_volatile:GPR [(match_operand:GPR 2 "law_lac_las_operand" "d,J,YD")]
@@ -957,7 +821,7 @@
 ;; XLP issues implicit sync for SWAP/LDADD, so no need for an explicit one.
 (define_insn "atomic_fetch_add<mode>_ldadd"
   [(set (match_operand:GPR 0 "register_operand" "=d")
-	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZC")]
+	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZR")]
 	 UNSPEC_ATOMIC_FETCH_OP))
    (set (match_dup 1)
 	(unspec_volatile:GPR
@@ -971,7 +835,7 @@
 
 (define_insn "atomic_fetch_add<mode>_laa"
   [(set (match_operand:GPR 0 "register_operand" "=d,d,d")
-	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZC,ZC,ZC")]
+	(unspec_volatile:GPR [(match_operand:GPR 1 "mem_noofs_operand" "+ZR,ZR,ZR")]
 	 UNSPEC_ATOMIC_FETCH_OP))
    (set (match_dup 1)
 	(unspec_volatile:GPR
