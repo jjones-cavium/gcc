@@ -73,7 +73,7 @@ static htab_t htab_load;
 static int
 load_htab_eq (const void *x, const void *y)
 {
-  return rtx_equal_p (((const struct load *) x)->mem, (const_rtx) y);
+  return rtx_equal_p (XEXP (((const struct load *) x)->mem, 0), XEXP ((const_rtx) y, 0));
 }
 
 /* Compute hash value of mem expression X.  Used with htab_*_with_hash
@@ -83,7 +83,7 @@ static hashval_t
 load_rtx_hash (const void *x)
 {
   int do_not_record = 0;
-  return hash_rtx ((const_rtx) x, GET_MODE ((const_rtx) x), &do_not_record, NULL, false);
+  return hash_rtx (XEXP ((const_rtx) x, 0), GET_MODE (XEXP ((const_rtx) x, 0)), &do_not_record, NULL, false);
 }
 
 /* Compute has value for a load entry.  Used as the hash table's hash
@@ -279,8 +279,67 @@ pass_postreload_load::execute (function*)
 	  if (interesting_second_load (set, &load, insn))
 	    {
 	      rtx_insn *move;
+	      rtx movertx;
+	      rtx newrhs;
+	      machine_mode mem_mode, dest_mode;
+	      rtx src = (*load)->reg;
+	      rtx dest = SET_DEST (set);
+	      mem_mode = GET_MODE ((*load)->reg);
+	      dest_mode = GET_MODE (dest);
 
-	      move = as_a <rtx_insn *> (gen_move_insn (SET_DEST (set), (*load)->reg));
+	      if (dump_file)
+		{
+		  fputs ("Trying to replace this load:\n  ", dump_file);
+		  print_inline_rtx (dump_file, insn, 2);
+		  fputs ("\nFrom register:\n  ", dump_file);
+		  print_inline_rtx (dump_file, src, 2);
+		}
+	      if (dest_mode != mem_mode)
+		{
+		  rtx_code extend_op = UNKNOWN;
+		  if (GET_MODE_SIZE (dest_mode) > GET_MODE_SIZE (mem_mode))
+		    continue;
+		  if (!validate_subreg (dest_mode, mem_mode, src, 0))
+		    continue;
+#ifdef LOAD_EXTEND_OP
+		  extend_op = LOAD_EXTEND_OP (dest_mode);
+#endif
+		  if (extend_op == UNKNOWN)
+		    {
+		      newrhs = simplify_subreg (dest_mode, (*load)->reg, mem_mode, 0);
+	              if (!newrhs)
+			continue;
+		    }
+		  else if (GET_MODE_SIZE (word_mode) == GET_MODE_SIZE (dest_mode))
+		    {
+		      newrhs = gen_lowpart_if_possible (dest_mode, src);
+		      if (!newrhs)
+			continue;
+		    }
+		  else if (GET_MODE_SIZE (word_mode) > GET_MODE_SIZE (dest_mode))
+		    {
+		      src = gen_lowpart_if_possible (dest_mode, src);
+		      if (!src)
+			continue;
+		      dest = gen_lowpart_if_possible (word_mode, dest);
+		      if (!dest)
+			continue;
+		      newrhs = gen_rtx_fmt_e (extend_op, word_mode, src);
+		    }
+		  else
+		    continue;
+		}
+	      else
+		newrhs = src;
+	      movertx = gen_move_insn (dest, newrhs);
+	      move = as_a <rtx_insn *> (movertx);
+
+	      if (dump_file)
+		{
+		  fputs ("\n  with this move:\n  ", dump_file);
+		  print_inline_rtx (dump_file, move, 2);
+		  fputs ("\n\n", dump_file);
+		}
 	      /* Make sure we can generate a move.  */
 	      extract_insn (move);
 	      if (! constrain_operands (1, get_preferred_alternatives (insn, bb)))
@@ -291,11 +350,7 @@ pass_postreload_load::execute (function*)
 
 	      if (dump_file)
 		{
-		  fputs ("Replaced this load:\n  ", dump_file);
-		  print_inline_rtx (dump_file, insn, 2);
-		  fputs ("\n  with this move:\n  ", dump_file);
-		  print_inline_rtx (dump_file, move, 2);
-		  fputs ("\n\n", dump_file);
+		  fputs ("Happened.\n", dump_file);
 		}
 	    }
 	  else if (interesting_load (set))

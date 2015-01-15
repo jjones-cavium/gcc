@@ -1,3 +1,9 @@
+2015-01-14  Andrew Pinski  <apinski@cavium.com>
+
+	* postreload-load.c (load_htab_eq): Compare the addresses of the mem and not the mem itself.
+	(load_rtx_hash): Hash on the address and not the mem itself.
+	(pass_postreload_load::execute): Handle the replacement when the modes are different including size changes.
+
 2015-01-07  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13830
