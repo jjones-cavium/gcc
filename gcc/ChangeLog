@@ -22,6 +22,278 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-01-14  Marcos Diaz <marcos.diaz@tallertechnologies.com>
+
+	* common.opt: New option -fstack-protector-explicit.
+	* cfgexpand.c (SPCT_FLAG_EXPLICIT): New enum.
+	(stack_protect_decl_phase): Handle stack_protect attribute for
+	explicit stack protection requests.
+	(expand_used_vars): Similarly.
+	* doc/cpp.texi (__SSP_EXPLICIT__): Document predefined macro.
+	* doc/extend.texi: Add documentation for "stack_protect" attribute.
+	* doc/invoke.texi: Add documentation for -fstack-protector-explicit.
+
+2015-01-14  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/53988
+	* config/sh/sh-protos.h (sh_find_set_of_reg): Add option to ignore
+	reg-reg copies.
+	(sh_extending_set_of_reg): New struct.
+	(sh_find_extending_set_of_reg, sh_split_tst_subregs,
+	sh_remove_reg_dead_or_unused_notes): New Declarations.
+	* config/sh/sh.c (sh_remove_reg_dead_or_unused_notes,
+	sh_find_extending_set_of_reg, sh_split_tst_subregs,
+	sh_extending_set_of_reg::use_as_extended_reg): New functions.
+	* config/sh/sh.md (*tst<mode>_t_zero): Rename to *tst<mode>_t_subregs,
+	convert to insn_and_split and use new function sh_split_tst_subregs.
+
+2015-01-14  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* doc/invoke.texi (Option Summary): Reclassify -fuse-ld as a linker
+	option.
+	(Optimization Options): Move -fuse-ld documentation to...
+	(Link Options): ...here.
+
+2015-01-14  Matthew Fortune  <matthew.fortune@imgtec.com>
+
+	* config/mips/constraints.md (ZC): Add support for R6 LL/SC
+	offsets.
+	(ZD): Update to use ISA_HAS_9BIT_DISPLACEMENT.
+	* config/mips/mips.h (ISA_HAS_PREFETCH_9BIT): Rename to...
+	(ISA_HAS_9BIT_DISPLACEMENT): ... this. New macro.
+	* config/mips/sync.md (sync_compare_and_swap<mode>): Use ZC
+	instead of ZR for the memory operand of LL/SC.
+	(compare_and_swap_12, sync_add<mode>): Likewise.
+	(sync_<optab>_12, sync_old_<optab>_12): Likewise.
+	(sync_new_<optab>_12, sync_nand_12): Likewise.
+	(sync_old_nand_12, sync_new_nand_12): Likewise.
+	(sync_sub<mode>, sync_old_add<mode>): Likewise.
+	(sync_old_sub<mode>, sync_new_add<mode>): Likewise.
+	(sync_new_sub<mode>, sync_<optab><mode>): Likewise.
+	(sync_old_<optab><mode>, sync_new_<optab><mode>"): Likewise.
+	(sync_nand<mode>, sync_old_nand<mode>): Likewise.
+	(sync_new_nand<mode>, sync_lock_test_and_set<mode>): Likewise.
+	(test_and_set_12, atomic_compare_and_swap<mode>): Likewise.
+	(atomic_exchange<mode>_llsc, atomic_fetch_add<mode>_llsc): Likewise.
+	* doc/md.texi (ZC): Update description.
+
+2015-01-14  Andrew MacLeod  <amacleod@redhat.com>
+
+	* builtins.c (expand_builtin_atomic_exchange): Remove error when
+	memory model is CONSUME.
+	(expand_builtin_atomic_compare_exchange, expand_builtin_atomic_load,
+	expand_builtin_atomic_store): Change invalid memory model errors to
+	warnings.
+	(expand_builtin_atomic_clear): Change invalid model errors to warnings
+	and issue warning for CONSUME.
+
+2015-01-14  Aldy Hernandez  <aldyh@redhat.com>
+
+	* lto-cgraph: Update function comments for
+	lto_symtab_encoder_encode_*.
+
+2015-01-14  Ilya Verbin  <ilya.verbin@intel.com>
+
+	* Makefile.in (site.exp): Do not set ENABLE_LTO.
+
+2015-01-14  Ilya Verbin  <ilya.verbin@intel.com>
+
+	* cgraphunit.c (ipa_passes): Remove argument from ipa_write_summaries.
+	* lto-cgraph.c (select_what_to_stream): Remove argument, use
+	lto_stream_offload_p instead.
+	* lto-streamer.h (select_what_to_stream): Remove argument.
+	* passes.c (ipa_write_summaries): Likewise.
+	* tree-pass.h (ipa_write_summaries): Likewise.
+
+2015-01-14  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/59354
+	* tree-vect-slp.c (vect_build_slp_tree_1): Treat loads from
+	groups larger than the slp group size as having gaps.
+
+2015-01-14  Andrew MacLeod  <amacleod@redhat.com>
+
+	PR middle-end/59448
+	* builtins.c (get_memmodel): Promote consume to acquire always.
+
+2015-01-14  Ilya Tocar  <ilya.tocar@intel.com>
+
+	PR target/64386
+	* config/i386/i386.c (ix86_expand_sse_cmp): Handle V64QImode,
+	V32HImode. 
+
+2015-01-14  Ilya Tocar  <ilya.tocar@intel.com>
+
+	PR target/64393
+	* common/config/i386/i386-common.c (OPTION_MASK_ISA_AVX512VBMI_SET):
+	Enable AVX512BW.
+	(OPTION_MASK_ISA_AVX512BW_UNSET): Disable AVX512VBMI.
+	* config/i386/i386.c (ix86_hard_regno_mode_ok): Don't check
+	AVX512VBMI, as it implies AVX512BW.
+
+2015-01-14  Ilya Tocar  <ilya.tocar@intel.com>
+
+	PR target/64387
+	* config/i386/sse.md (vec_unpacks_hi_v8sf): Fix predicate.
+	(vec_unpacks_hi_v16sf): Ditto.
+
+2015-01-14  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/aarch64/arm_neon.h: Error out if AdvancedSIMD
+	is not available.
+
+2015-01-14  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* doc/invoke.texi (mapcs): Mention deprecation.
+	(mapcs-frame): Likewise.
+
+2015-01-14  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR target/64453
+	* config/arm/arm.c (callee_saved_reg_p): Define.
+	(arm_compute_save_reg0_reg12_mask): Use callee_saved_reg_p to check if
+	register is callee saved instead of !call_used_regs[reg].
+	(thumb1_compute_save_reg_mask): Likewise.
+
+2015-01-14  Hale Wang  <hale.wang@arm.com>
+
+	* config/arm/arm.c: Tune the max_cond_insns/branch_cost for
+	Cortex-M7.
+
+2015-01-14  Richard Biener  <rguenther@suse.de>
+
+	PR lto/64415
+	* tree-inline.c (insert_debug_decl_map): Check destination
+	function MAY_HAVE_DEBUG_STMTS.
+	(insert_init_debug_bind): Likewise.
+	(insert_init_stmt): Remove redundant check.
+	(remap_gimple_stmt): Drop debug stmts if the destination
+	function has var-tracking assignments disabled.
+
+2015-01-14  Martin Liska  <mliska@suse.cz>
+
+	* ipa-icf-gimple.c (func_checker::compare_operand): Add support for
+	IMAGPART_EXPR and REALPART_EXPR and fix BIT_FIELD_REF comparison.
+
+2015-01-14  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	PR target/64460
+	* config/arm/arm.md (*<arith_shift_insn>_multsi): Set 'shift' to 2.
+	(*<arith_shift_insn>_shiftsi): Set 'shift' attr to 3.
+
+2015-01-14  Matthew Fortune  <matthew.fortune@imgtec.com>
+
+	* config/mips/mips.h (MIPS_ISA_LEVEL_SPEC): Only infer an ISA
+	level from an ARCH; do not inject the default.
+	(MIPS_DEFAULT_ISA_LEVEL_SPEC): New macro split out from
+	MIPS_ISA_LEVEL_SPEC.
+	(MIPS_ISA_NAN2008_SPEC): Update comment.
+	(BASE_DRIVER_SELF_SPECS): Likewise.
+	* config/mips/elfoabi.h (DRIVER_SELF_SPECS): Add
+	MIPS_DEFAULT_ISA_LEVEL_SPEC.
+	* config/mips/mti-elf.h (DRIVER_SELF_SPECS): Likewise.
+	* config/mips/mti-linux.h (DRIVER_SELF_SPECS): Likewise.
+	* config/mips/sde.h (DRIVER_SELF_SPECS): Likewise.
+
+2015-01-14  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64493
+	PR tree-optimization/64495
+	* tree-vect-loop.c (vect_finalize_reduction): For double-reductions
+	assign the proper vectorized PHI to the inner loop exit PHIs.
+
+2015-01-14  Joey Ye  <joey.ye@arm.com>
+
+	* config/arm/arm.c (arm_compute_save_reg_mask):
+	Do not save lr in case of tail call.
+	* config/arm/thumb2.md (*thumb2_pop_single): New pattern.
+
+2015-01-13  Martin Uecker <uecker@eecs.berkeley.edu>
+
+	* tree-vrp.c (check_array_ref): Emit more warnings
+	for warn_array_bounds >= 2.
+	* common.opt: New option -Warray-bounds=.
+	* doc/invoke.texi: Document -Warray-bounds=.
+
+2015-01-14  Chung-Ju Wu  <jasonwucj@gmail.com>
+
+	* config/nds32/nds32.opt (mforce-fp-as-gp): Remove.
+	(mforbid-fp-as-gp): Remove.
+	(mex9): Remove.
+	* config/nds32/nds32-fp-as-gp.c (nds32_have_prologue_p): Remove.
+	(nds32_symbol_load_store_p): Remove.
+	(nds32_fp_as_gp_check_available): Clean up implementation.
+	* config/nds32/nds32.h (LINK_SPEC): Remove -mforce-as-gp and -mex9
+	cases.
+	* config/nds32/nds32.c (nds32_asm_file_start): No need to consider
+	fp-as-gp and ex9 cases.
+
+2015-01-13  Jan Hubicka  <hubicka@ucw.cz>
+
+	* tree-profile.c (init_ic_make_global_vars): Drop workaround
+	for bintuils bug 14342.
+	(init_ic_make_global_vars): Likewise.
+	(gimple_init_edge_profiler): Likewise.
+	(gimple_gen_ic_func_profiler): Likewise.
+
+2015-01-13  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* ipa-inline.c (inline_small_functions): Swap the operands in
+	enum.
+
+2015-01-13  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/64481
+	* ipa-inline-analysis.c (node_growth_cache): Remove.
+	(initialize_growth_caches): Do not initialize it.
+	(free_growth_caches): Do not free it.
+	(do_estimate_growth): Rename to ...
+	(estimate_growth): ... this one; drop growth cache code.
+	(growth_likely_positive): Always go the heuristics way.
+	* ipa-inline.c (can_inline_edge_p): Walk through aliases.
+	(reset_edge_caches): Do not reset node growth.
+	(heap_edge_removal_hook): Do not maintain cache.
+	(inline_small_functions): Likewise; strenghten sanity check.
+	(ipa_inline): Do not maintain caches.
+	* ipa-inline.h (node_growth_cache): Remove.
+	(do_estimate_growth): Remove to ...
+	(estimate_growth): this one; remove inline version.
+	(reset_node_growth_cache): Remove.
+
+2015-01-13  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/64565
+	* ipa-inline.c (inline_small_functions): Update callee keys after
+	resolving speculation
+	(inline_small_functions): Always check monotonicity of the queue.
+
+2015-01-13  Marek Polacek  <polacek@redhat.com>
+
+	PR middle-end/64391
+	* trans-mem.c (get_attrs_for): Return NULL_TREE if X is NULL_TREE.
+
+2015-01-13  Jakub Jelinek  <jakub@redhat.com>
+
+	PR rtl-optimization/64286
+	* ree.c (combine_reaching_defs): Move part of comment earlier,
+	remove !SCALAR_INT_MODE_P check.
+	(add_removable_extension): Don't add vector mode
+	extensions if all uses of the source register aren't the same
+	vector extensions.
+
+2015-01-13  Renlin Li  <renlin.li@arm.com>
+
+	* config/arm/arm.h (CLZ_DEFINED_VALUE_AT_ZERO): Return 2.
+	(CTZ_DEFINED_VALUE_AT_ZERO): Ditto.
+
+2015-01-13  Martin Liska  <mliska@suse.cz>
+
+	* ipa-icf.c (sem_function::equals_private): Call new functions
+	cl_target_option_print_diff and cl_optimization_print_diff.
+	* optc-save-gen.awk (cl_target_option_print_diff): New function.
+	(cl_optimization_print_diff): Likewise.
+	* opth-gen.awk: Likewise.
+
 2015-01-13  Richard Sandiford  <richard.sandiford@arm.com>
 
 	* config/aarch64/aarch64.md (subsi3, *subsi3_uxtw, subdi3)

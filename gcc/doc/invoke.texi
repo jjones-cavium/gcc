@@ -240,7 +240,7 @@ Objective-C and Objective-C++ Dialects}.
 @gccoptlist{-fsyntax-only  -fmax-errors=@var{n}  -Wpedantic @gol
 -pedantic-errors @gol
 -w  -Wextra  -Wall  -Waddress  -Waggregate-return  @gol
--Waggressive-loop-optimizations -Warray-bounds @gol
+-Waggressive-loop-optimizations -Warray-bounds -Warray-bounds=@var{n} @gol
 -Wbool-compare @gol
 -Wno-attributes -Wno-builtin-macro-redefined @gol
 -Wc90-c99-compat -Wc99-c11-compat @gol
@@ -428,8 +428,9 @@ Objective-C and Objective-C++ Dialects}.
 -fsel-sched-pipelining -fsel-sched-pipelining-outer-loops @gol
 -fsemantic-interposition @gol
 -fshrink-wrap -fsignaling-nans -fsingle-precision-constant @gol
--fsplit-ivs-in-unroller -fsplit-wide-types -fssa-phiopt -fstack-protector @gol
--fstack-protector-all -fstack-protector-strong -fstrict-aliasing @gol
+-fsplit-ivs-in-unroller -fsplit-wide-types -fssa-phiopt @gol
+-fstack-protector -fstack-protector-all -fstack-protector-strong @gol
+-fstack-protector-explicit -fstrict-aliasing @gol
 -fstrict-overflow -fthread-jumps -ftracer -ftree-bit-ccp @gol
 -fmerge-bitfields -ftree-builtin-call-dce -ftree-ccp -ftree-ch @gol
 -ftree-coalesce-inline-vars -ftree-coalesce-vars -ftree-copy-prop @gol
@@ -446,7 +447,7 @@ Objective-C and Objective-C++ Dialects}.
 -funit-at-a-time -funroll-all-loops -funroll-loops @gol
 -funsafe-loop-optimizations -funsafe-math-optimizations -funswitch-loops @gol
 -fipa-ra -fvariable-expansion-in-unroller -fvect-cost-model -fvpt @gol
--fweb -fwhole-program -fwpa -fuse-ld=@var{linker} -fuse-linker-plugin @gol
+-fweb -fwhole-program -fwpa -fuse-linker-plugin @gol
 --param @var{name}=@var{value}
 -O  -O0  -O1  -O2  -O3  -Os -Ofast -Og}
 
@@ -472,7 +473,7 @@ Objective-C and Objective-C++ Dialects}.
 
 @item Linker Options
 @xref{Link Options,,Options for Linking}.
-@gccoptlist{@var{object-file-name}  -l@var{library} @gol
+@gccoptlist{@var{object-file-name}  -fuse-ld=@var{linker} -l@var{library} @gol
 -nostartfiles  -nodefaultlibs  -nostdlib -pie -rdynamic @gol
 -s  -static -static-libgcc -static-libstdc++ @gol
 -static-libasan -static-libtsan -static-liblsan -static-libubsan @gol
@@ -3389,7 +3390,7 @@ Options} and @ref{Objective-C and Objective-C++ Dialect Options}.
 @option{-Wall} turns on the following warning flags:
 
 @gccoptlist{-Waddress   @gol
--Warray-bounds @r{(only with} @option{-O2}@r{)}  @gol
+-Warray-bounds=1 @r{(only with} @option{-O2}@r{)}  @gol
 -Wc++11-compat  -Wc++14-compat@gol
 -Wchar-subscripts  @gol
 -Wenum-compare @r{(in C/ObjC; this is on by default in C++)} @gol
@@ -4303,11 +4304,25 @@ Warn about overriding virtual functions that are not marked with the override
 keyword.
 
 @item -Warray-bounds
+@itemx -Warray-bounds=@var{n}
 @opindex Wno-array-bounds
 @opindex Warray-bounds
 This option is only active when @option{-ftree-vrp} is active
 (default for @option{-O2} and above). It warns about subscripts to arrays
 that are always out of bounds. This warning is enabled by @option{-Wall}.
+
+@table @gcctabopt
+@item -Warray-bounds=1
+This is the warning level of @option{-Warray-bounds} and is enabled
+by @option{-Wall}; higher levels are not, and must be explicitly requested.
+
+@item -Warray-bounds=2
+This warning level also warns about out of bounds access for
+arrays at the end of a struct and for arrays accessed through
+pointers. This warning level may give a larger number of
+false positives and is deactivated by default.
+@end table
+
 
 @item -Wbool-compare
 @opindex Wno-bool-compare
@@ -9331,14 +9346,6 @@ the comparison operation before register allocation is complete.
 
 Enabled at levels @option{-O}, @option{-O2}, @option{-O3}, @option{-Os}.
 
-@item -fuse-ld=bfd
-@opindex fuse-ld=bfd
-Use the @command{bfd} linker instead of the default linker.
-
-@item -fuse-ld=gold
-@opindex fuse-ld=gold
-Use the @command{gold} linker instead of the default linker.
-
 @item -fcprop-registers
 @opindex fcprop-registers
 After register allocation and post-register allocation instruction splitting,
@@ -9838,6 +9845,11 @@ Like @option{-fstack-protector} except that all functions are protected.
 Like @option{-fstack-protector} but includes additional functions to
 be protected --- those that have local array definitions, or have
 references to local frame addresses.
+
+@item -fstack-protector-explicit
+@opindex fstack-protector-explicit
+Like @option{-fstack-protector} but only protects those functions which
+have the @code{stack_protect} attribute
 
 @item -fsection-anchors
 @opindex fsection-anchors
@@ -10881,6 +10893,14 @@ to the linker.
 If any of these options is used, then the linker is not run, and
 object file names should not be used as arguments.  @xref{Overall
 Options}.
+
+@item -fuse-ld=bfd
+@opindex fuse-ld=bfd
+Use the @command{bfd} linker instead of the default linker.
+
+@item -fuse-ld=gold
+@opindex fuse-ld=gold
+Use the @command{gold} linker instead of the default linker.
 
 @cindex Libraries
 @item -l@var{library}
@@ -12821,10 +12841,11 @@ Standard for all functions, even if this is not strictly necessary for
 correct execution of the code.  Specifying @option{-fomit-frame-pointer}
 with this option causes the stack frames not to be generated for
 leaf functions.  The default is @option{-mno-apcs-frame}.
+This option is deprecated.
 
 @item -mapcs
 @opindex mapcs
-This is a synonym for @option{-mapcs-frame}.
+This is a synonym for @option{-mapcs-frame} and is deprecated.
 
 @ignore
 @c not currently implemented
