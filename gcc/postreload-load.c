@@ -302,7 +302,8 @@ pass_postreload_load::execute (function*)
 		  if (!validate_subreg (dest_mode, mem_mode, src, 0))
 		    continue;
 #ifdef LOAD_EXTEND_OP
-		  extend_op = LOAD_EXTEND_OP (dest_mode);
+		  if (SCALAR_INT_MODE_P (dest_mode))
+		    extend_op = LOAD_EXTEND_OP (dest_mode);
 #endif
 		  if (extend_op == UNKNOWN)
 		    {
