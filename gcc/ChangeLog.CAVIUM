@@ -1,3 +1,15 @@
+2015-01-16  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #13925
+	* match.pd (define_predicates): Add integer_pow2p.
+	Add pattern for folding of a ==/!= a p+ b to b ==/!= 0.
+	(unsigned_integral_valued_p): New match.
+	Add pattern for folding of a<<N ==/!= 0 to a&(-1>>N) ==/!= 0.
+	Add pattern for folding of a*N ==/!= 0 where N is a power of 2
+	to a&(-1<<N2) ==/!= 0 where N2 is log2 of N.
+	* testsuite/gcc.dg/tree-ssa/compare-shiftmult-1.c: New testcase.
+	* testsuite/gcc.dg/tree-ssa/compare_pointers-1.c: New testcase.
+
 2015-01-14  Andrew Pinski  <apinski@cavium.com>
 
 	* opts.c (default_options_table):

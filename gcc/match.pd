@@ -29,7 +29,8 @@ along with GCC; see the file COPYING3.  If not see
    integer_each_onep integer_truep
    real_zerop real_onep real_minus_onep
    CONSTANT_CLASS_P
-   tree_expr_nonnegative_p)
+   tree_expr_nonnegative_p
+   integer_pow2p)
 
 /* Operator lists.  */
 (define_operator_list tcc_comparison
@@ -88,6 +89,36 @@ along with GCC; see the file COPYING3.  If not see
  (mult @0 real_zerop@1)
  (if (!HONOR_NANS (type) && !HONOR_SIGNED_ZEROS (element_mode (type)))
   @1))
+
+/* Fold a ==/!= a p+ b to b ==/!= 0. */
+(for op (ne eq)
+ (simplify
+  (op:c @0 (pointer_plus @0 @1))
+  (op @1 { build_zero_cst (TREE_TYPE (@1)); })))
+
+(match unsigned_integral_valued_p
+ @0
+ (if (INTEGRAL_TYPE_P (type) && TYPE_UNSIGNED (type))))
+
+/* a<<N ==/!= 0 to a&(-1>>N) ==/!= 0 . */
+(for op (ne eq)
+ (simplify
+  (op (lshift unsigned_integral_valued_p@0 INTEGER_CST@1) integer_zerop@2)
+   (op (bit_and @0 (rshift { build_minus_one_cst (TREE_TYPE (@0)); }
+		    @1))
+       @2)))
+
+
+/* a*N ==/!= 0 where N is a power of 2 to a&(-1<<N2) ==/!= 0
+   where N2 is log2 of N. */
+(for op (ne eq)
+ (simplify
+  (op (mult:c unsigned_integral_valued_p@0 integer_pow2p@1) integer_zerop@2)
+  (with { tree n2 = build_int_cst (TREE_TYPE (@0),
+				   wi::exact_log2 (@1)); }
+   (op (bit_and @0 (rshift { build_minus_one_cst (TREE_TYPE (@0)); }
+		    { n2 ; }))
+        @2))))
 
 /* In IEEE floating point, x*1 is not equivalent to x for snans.
    Likewise for complex arithmetic with signed zeros.  */
