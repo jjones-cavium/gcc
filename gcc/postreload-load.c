@@ -23,21 +23,26 @@ Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
 #include "coretypes.h"
 #include "tm.h"
 #include "diagnostic-core.h"
+#include "hard-reg-set.h"
 #include "rtl.h"
+#include "hash-set.h"
 #include "obstack.h"
 #include "dominance.h"
 #include "cfg.h"
 #include "predict.h"
 #include "basic-block.h"
 #include "flags.h"
+#include "insn-config.h"
 #include "hashtab.h"
 #include "tree-pass.h"
 #include "timevar.h"
 #include "symtab.h"
+#include "tree-core.h"
 #include "expr.h"
 #include "recog.h"
 #include "cfgrtl.h"
 #include "tm_p.h"
+#include "function.h"
 
 /* This file implements some parts of the future enhancement discussed
    in the comment of the file postreload-gcse.  It is a local
@@ -252,13 +257,13 @@ public:
 /* This is the main function of the pass.  */
 
 unsigned int
-pass_postreload_load::execute (function*)
+pass_postreload_load::execute (function *f)
 {
   basic_block bb;
 
   init_alias_analysis ();
 
-  FOR_EACH_BB_FN (bb, cfun)
+  FOR_EACH_BB_FN (bb, f)
     {
       rtx_insn *insn;
 

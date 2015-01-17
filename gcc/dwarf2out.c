@@ -19603,6 +19603,7 @@ gen_producer_string (void)
       case OPT__sysroot_:
       case OPT_nostdinc:
       case OPT_nostdinc__:
+      case OPT_fpreprocessed:
 	/* Ignore these.  */
 	continue;
       default:
