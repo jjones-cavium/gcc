@@ -1,3 +1,8 @@
+2015-01-14  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_select_cc_mode):
+	Fix warning dealing with ZERO_EXTRACT.
+
 2015-01-14  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Bug #12982
