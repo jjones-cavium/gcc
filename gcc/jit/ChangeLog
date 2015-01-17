@@ -1,3 +1,26 @@
+2015-01-16  David Malcolm  <dmalcolm@redhat.com>
+
+	* Make-lang.in (lang_checks_parallelized): Add "check-jit".
+	(check_jit_parallelize): Set this to an arbitrary value (10).
+
+2015-01-16  Jakub Jelinek  <jakub@redhat.com>
+
+	* jit-builtins.h (DEF_FUNCTION_TYPE_VAR_5): Fix spelling of
+	last argument.
+	(DEF_FUNCTION_TYPE_VAR_8, DEF_FUNCTION_TYPE_VAR_12): Define and
+	undef afterwards.
+	* jit-builtins.c (DEF_FUNCTION_TYPE_VAR_8, DEF_FUNCTION_TYPE_VAR_12):
+	Likewise.
+
+2015-01-15  Richard Sandiford  <richard.sandiford@arm.com>
+
+	Update copyright years in docs/.
+
+2015-01-15  David Malcolm  <dmalcolm@redhat.com>
+
+	* libgccjit.c (gcc_jit_block_add_assignment_op): Check that the
+	lvalue and the rvalue are of compatible type.
+
 2015-01-13  David Malcolm  <dmalcolm@redhat.com>
 
 	* docs/cp/topics/contexts.rst (Debugging): Add

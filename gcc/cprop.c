@@ -41,11 +41,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "insn-config.h"
 #include "recog.h"
 #include "predict.h"
-#include "vec.h"
 #include "hashtab.h"
-#include "hash-set.h"
-#include "machmode.h"
-#include "input.h"
 #include "function.h"
 #include "dominance.h"
 #include "cfg.h"
@@ -54,6 +50,16 @@ along with GCC; see the file COPYING3.  If not see
 #include "lcm.h"
 #include "cfgcleanup.h"
 #include "basic-block.h"
+#include "statistics.h"
+#include "real.h"
+#include "fixed-value.h"
+#include "expmed.h"
+#include "dojump.h"
+#include "explow.h"
+#include "calls.h"
+#include "emit-rtl.h"
+#include "varasm.h"
+#include "stmt.h"
 #include "expr.h"
 #include "except.h"
 #include "params.h"
@@ -1183,10 +1189,12 @@ do_local_cprop (rtx x, rtx_insn *insn)
   rtx newreg = NULL, newcnst = NULL;
 
   /* Rule out USE instructions and ASM statements as we don't want to
-     change the hard registers mentioned.  */
+     change the hard registers mentioned, and don't change fixed hard
+     registers.  */
   if (REG_P (x)
       && (REGNO (x) >= FIRST_PSEUDO_REGISTER
           || (GET_CODE (PATTERN (insn)) != USE
+	      && !fixed_regs[REGNO (x)]
 	      && asm_noperands (PATTERN (insn)) < 0)))
     {
       cselib_val *val = cselib_lookup (x, GET_MODE (x), 0, VOIDmode);
