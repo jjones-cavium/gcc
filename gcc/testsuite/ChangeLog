@@ -1,3 +1,75 @@
+2015-01-15  Andrew Pinski  <apinski@cavium.com>
+	    Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	* gcc.target/aarch64/aapcs64/abitest.S (LABEL_TEST_FUNC_RETURN): Load
+	testfunc_ptr as 32bit for ILP32 and 64bit for LP64.
+
+2015-01-18  Andre Vehreschild  <vehre@gmx.de>
+
+	PR fortran/60255
+	* gfortran.dg/unlimited_polymorphic_2.f03: Removed error.
+	* gfortran.dg/unlimited_polymorphic_20.f03: New test.
+
+2015-01-18  Paul Thomas  <pault@gcc.gnu.org>
+
+	PR fortran/64578
+	* gfortran.dg/unlimited_polymorphic_21.f90: New test
+
+2015-01-18  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/64652
+	* gcc.target/sh/torture/pr64652.c: New.
+
+2015-01-18  Jan Hubicka  <hubicka@ucw.cz>
+
+	* gcc.dg/ipa/ipa-icf-32.c: Update template.
+	* c-c++-common/asan/instrument-with-calls-3.c: Likewise.
+	* c-c++-common/asan/instrument-with-calls-2.c: Likewise.
+	* c-c++-common/asan/instrument-with-calls-1.c: Likewise.
+	* c-c++-common/asan/kasan-recover-1.c: Likewise.
+	* c-c++-common/asan/kasan-recover-2.c: Likewise.
+
+2015-01-18  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/64378
+	* g++.dg/torture/pr64378.C: New testcase.
+
+2015-01-18  Paul Thomas  <pault@gcc.gnu.org>
+
+	PR fortran/57959
+	* gfortran.dg/block_13.f08: New test
+
+2015-01-18  Paul Thomas  <pault@gcc.gnu.org>
+
+	PR fortran/55901
+	* gfortran.dg/associate_1.f03: Allow test for character with
+	automatic length.
+
+2015-01-17  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* gcc.target/powerpc/ppc-fpconv-4.c: Skip for -mpowerpc64.
+	* gcc.target/powerpc/ppc-fpconv-8.c: Ditto.
+
+2015-01-17  Segher Boessenkool  <segher@kernel.crashing.org>
+
+	* gcc.dg/20020919-1.c: Use _ARCH_PPC64 to test for -mpowerpc64.
+
+2015-01-17  Paul Thomas  <pault@gcc.gnu.org>
+
+	PR fortran/64578
+	* gfortran.dg/unlimited_polymorphic_21.f90: New test
+
+2015-01-17  Andre Vehreschild  <vehre@gmx.de>
+
+	PR fortran/60357
+	* gfortran.dg/alloc_comp_assign_13.f08: New test.
+
+	PR fortran/61275
+	* gfortran.dg/alloc_comp_assign_14.f08: New test.
+
+	PR fortran/55932
+	* gfortran.dg/alloc_comp_initializer_4.f03: New test.
+
 2015-01-17  Andre Vehreschild  <vehre@gmx.de>
 
 	PR fortran/60334

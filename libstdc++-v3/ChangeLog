@@ -1,3 +1,23 @@
+2015-01-18  Jonathan Wakely  <jwakely@redhat.com>
+
+	PR libstdc++/64646
+	* include/bits/stl_algo.h (__is_permutation): Also test for reaching
+	end of the second range.
+	* testsuite/25_algorithms/is_permutation/64646.cc: New.
+
+2015-01-18  Jonathan Wakely  <jwakely@redhat.com>
+
+	* doc/xml/manual/status_cxx2011.xml: Remove note about offsetof.
+	* doc/html/manual/status.html: Regenerate.
+
+2015-01-18  Jonathan Wakely  <jwakely@redhat.com>
+
+	* include/bits/atomic_futex.h: Use mutex and condition_variable when
+	atomic int is not lock-free. Make member variables private.
+	* src/c++11/futex.cc: Likewise.
+
+	* src/c++11/futex.cc: Fix order of includes and preprocessor condition.
+
 2015-01-17  Jonathan Wakely  <jwakely@redhat.com>
 
 	PR libstdc++/64638
