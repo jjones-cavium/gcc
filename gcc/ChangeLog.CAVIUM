@@ -1,3 +1,7 @@
+2015-01-19  Andrew Pinski  <apinski@cavium.com>
+
+	* common.opt (freport-bug): Enable by default.
+
 2015-01-16  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13925

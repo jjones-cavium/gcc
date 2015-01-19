@@ -1155,7 +1155,7 @@ Common Report Var(flag_dump_noaddr)
 Suppress output of addresses in debugging dumps
 
 freport-bug
-Common Driver Var(flag_report_bug)
+Common Driver Var(flag_report_bug) Init(1)
 Collect and dump debug information into temporary file if ICE in C/C++
 compiler occured.
 
