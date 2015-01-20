@@ -1,3 +1,157 @@
+2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmlX.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmla.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmls.c: New file.
+
+2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vldX_dup.c: New file.
+
+2015-01-20  Jakub Jelinek  <jakub@redhat.com>
+
+	* gcc.dg/guality/pr49888.c (v): Add __attribute__((used)).
+
+	PR sanitizer/64632
+	* g++.dg/ubsan/pr64632.C: New test.
+
+	PR debug/64663
+	* gcc.dg/pr64663.c: New test.
+
+2015-01-20  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/64383
+	* g++.dg/warn/Wunused-var-23.C: New.
+
+2015-01-20  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/59937
+	* g++.dg/cpp0x/constexpr-59937-1.C: New.
+	* g++.dg/cpp0x/constexpr-59937-2.C: Likewise.
+
+2015-01-20  Richard Biener  <rguenther@suse.de>
+
+	PR ipa/64684
+	* gcc.dg/lto/pr64684_0.c: New testcase.
+	* gcc.dg/lto/pr64684_1.c: Likewise.
+	* gcc.dg/lto/pr64684_2.c: Likewise.
+	* gcc.dg/lto/pr64685_0.c: Likewise.
+	* gcc.dg/lto/pr64685_1.c: Likewise.
+
+2015-01-20  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/62241
+	* g++.dg/cpp1y/lambda-init12.C: New.
+
+2015-01-20  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/64410
+	* g++.dg/vect/pr64410.cc: Require vect_double.
+
+2015-01-20  Matthew Wahab  <matthew.wahab@arm.com>
+
+	PR target/64149
+	* gcc.target/arm/thumb1-far-farjump-3.c: Remove.
+
+2015-01-20  Igor Zamyatin  <igor.zamyatin@intel.com>
+
+	PR bootstrap/64676
+	Revert:
+	2014-01-19  Igor Zamyatin  <igor.zamyatin@intel.com>
+
+	PR rtl-optimization/64081
+	* gcc.dg/pr64081.c: New test.
+
+2015-01-19  David Malcolm  <dmalcolm@redhat.com>
+
+	* jit.dg/harness.h: Include <unistd.h>.
+	(CHECK_NO_ERRORS): New.
+	(verify_code): Wrap prototype in #ifndef TEST_COMPILING_TO_FILE.
+	(test_jit): Support new macro TEST_COMPILING_TO_FILE for exercising
+	gcc_jit_context_compile_to_file.
+	* jit.dg/jit.exp (fixed_host_execute): Fix the code for passing on
+	args to the spawned executable.
+	(jit-expand-vars): New function.
+	(jit-exe-params): New variable.
+	(dg-jit-set-exe-params): New function.
+	(jit-dg-test): Detect testcases that use
+	jit-verify-compile-to-file and call jit-setup-compile-to-file.
+	Set arguments of spawned process to jit-exe-params.
+	(jit-get-output-filename): New function.
+	(jit-setup-compile-to-file): New function.
+	(jit-verify-compile-to-file): New function.
+	(jit-run-executable): New function.
+	(jit-verify-executable): New function.
+	* jit.dg/test-compile-to-assembler.c: New testcase.
+	* jit.dg/test-compile-to-dynamic-library.c: New testcase.
+	* jit.dg/test-compile-to-executable.c: New testcase.
+	* jit.dg/test-compile-to-object.c: New testcase.
+
+2015-01-19  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/64652
+	* gcc.target/sh/torture/pr64652.c (test): Rename to test_0.
+	(test_1): New.
+
+2015-01-19  Martin Liska  <mliska@suse.cz>
+
+	* objc/compile/pr64668.m: New test.
+
+2015-01-19  David Malcolm  <dmalcolm@redhat.com>
+
+	* jit.dg/test-arith-overflow.c: Include stdbool.h.
+	(create_overflow_fn): Update comment to clarify that
+	the third param of the created function is a bool *, not
+	an int *.
+	(verify_int_overflow_fn): Convert param "expected_ovf" from
+	int to bool.  Update third param of "overflow_fn_type" from int *
+	to bool *.  Update local "actual_ovf" from int to bool.
+	(verify_uint_overflow_fn): Likewise.
+
+2015-01-19  Martin Liska  <mliska@suse.cz>
+
+	* gcc.dg/ipa/ipa-icf-33.c: New test.
+
+2015-01-19  Felix Yang  <felix.yang@huawei.com>
+	    Haijian Zhang  <z.zhanghaijian@huawei.com>
+
+	* gcc.target/aarch64/advsimd-intrinsics/compute-ref-data.h
+	(buffer_float64x2, buffer_pad_float64x2): New helper variables.
+	* gcc.target/aarch64/advsimd-intrinsics/arm-neon-ref.h (hfloat64_t,
+	result_float64x2, expected_hfloat64x2): New helper type, variable and
+	declaration.
+	(buffer_float64x2, buffer_pad_float64x2): New helper variables.
+	* gcc.target/aarch64/advsimd-intrinsics/vfma.c: Don't run on target
+	without the FMA feature and exclude test for vfmaq_f64 on arm*-*-*.
+	* gcc.target/aarch64/advsimd-intrinsics/vfms.c: Don't run on target
+	without the FMA feature and exclude test for vfmsq_f64 on arm*-*-*.
+	* gcc.target/aarch64/advsimd-intrinsics/vfma_n.c: Don't run on arm*-*-*
+	and target without the FMA feature.
+
+2015-01-19  Jiong Wang  <jiong.wang@arm.com>
+
+	* gcc.target/aarch64/pr64304.c: New testcase.
+
+2015-01-19  Igor Zamyatin  <igor.zamyatin@intel.com>
+
+	PR rtl-optimization/64081
+	* gcc.dg/pr64081.c: New test.
+
+2015-01-19  Tejas Belagod  <tejas.belagod@arm.com>
+
+	PR target/63971
+	* gcc.target/aarch64/test_frame_1.c: Expect only two loads of x30 (in
+	the epilogue).
+	* gcc.target/aarch64/test_frame_6.c: Likewise.
+	* gcc.target/aarch64/test_frame_2.c: Expect only one pair load of x30
+	and x19 (in the epilogue).
+	* gcc.target/aarch64/test_frame_4.c: Likewise.
+	* gcc.target/aarch64/test_frame_7.c: Likewise.
+
+2015-01-19  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	* gcc.target/i386/chkp-always_inline.c: New.
+
 2015-01-15  Andrew Pinski  <apinski@cavium.com>
 	    Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 

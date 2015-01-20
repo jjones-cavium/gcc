@@ -997,6 +997,28 @@
   DONE;
 })
 
+;; Pairwise Integer Max/Min operations.
+(define_insn "aarch64_<maxmin_uns>p<mode>"
+ [(set (match_operand:VDQ_BHSI 0 "register_operand" "=w")
+       (unspec:VDQ_BHSI [(match_operand:VDQ_BHSI 1 "register_operand" "w")
+			 (match_operand:VDQ_BHSI 2 "register_operand" "w")]
+			MAXMINV))]
+ "TARGET_SIMD"
+ "<maxmin_uns_op>p\t%0.<Vtype>, %1.<Vtype>, %2.<Vtype>"
+  [(set_attr "type" "neon_minmax<q>")]
+)
+
+;; Pairwise FP Max/Min operations.
+(define_insn "aarch64_<maxmin_uns>p<mode>"
+ [(set (match_operand:VDQF 0 "register_operand" "=w")
+       (unspec:VDQF [(match_operand:VDQF 1 "register_operand" "w")
+		     (match_operand:VDQF 2 "register_operand" "w")]
+		    FMAXMINV))]
+ "TARGET_SIMD"
+ "<maxmin_uns_op>p\t%0.<Vtype>, %1.<Vtype>, %2.<Vtype>"
+  [(set_attr "type" "neon_minmax<q>")]
+)
+
 ;; vec_concat gives a new vector with the low elements from operand 1, and
 ;; the high elements from operand 2.  That is to say, given op1 = { a, b }
 ;; op2 = { c, d }, vec_concat (op1, op2) = { a, b, c, d }.
@@ -1986,15 +2008,14 @@
 ;;     bif op0, op1, mask
 
 (define_insn "aarch64_simd_bsl<mode>_internal"
-  [(set (match_operand:VSDQ_I_DI 0 "register_operand"		"=w,w,w")
-	(ior:VSDQ_I_DI
+  [(set (match_operand:VSDQ_I_DI 0 "register_operand" "=w,w,w")
+	(xor:VSDQ_I_DI
 	   (and:VSDQ_I_DI
-	     (not:<V_cmp_result>
-	       (match_operand:<V_cmp_result> 1 "register_operand"	" 0,w,w"))
-	     (match_operand:VSDQ_I_DI 3 "register_operand"	" w,0,w"))
-	   (and:VSDQ_I_DI
-	     (match_dup:<V_cmp_result> 1)
-	     (match_operand:VSDQ_I_DI 2 "register_operand"	" w,w,0"))
+	     (xor:VSDQ_I_DI
+	       (match_operand:<V_cmp_result> 3 "register_operand" "w,0,w")
+	       (match_operand:VSDQ_I_DI 2 "register_operand" "w,w,0"))
+	     (match_operand:VSDQ_I_DI 1 "register_operand" "0,w,w"))
+	  (match_dup:<V_cmp_result> 3)
 	))]
   "TARGET_SIMD"
   "@
