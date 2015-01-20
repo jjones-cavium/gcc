@@ -5874,7 +5874,8 @@ simplify_subreg (machine_mode outermode, rtx op,
   if ((GET_CODE (op) == IOR || GET_CODE (op) == AND)
       && GET_MODE_SIZE (outermode) < GET_MODE_SIZE (innermode)
       && subreg_lowpart_offset (outermode, innermode) == byte
-      && SCALAR_INT_MODE_P (outermode))
+      && SCALAR_INT_MODE_P (outermode) 
+      && SCALAR_INT_MODE_P (innermode))
     {
       rtx op0 = XEXP (op, 0);
       rtx op1 = XEXP (op, 1);

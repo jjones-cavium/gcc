@@ -1,3 +1,9 @@
+2015-01-20  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #12597
+	* simplify-rtx.c (simplify_subreg): check if the
+	innermode is also a SCALAR_INT_MODE_P.
+
 2015-01-19  Andrew Pinski  <apinski@cavium.com>
 
 	* common.opt (freport-bug): Enable by default.
