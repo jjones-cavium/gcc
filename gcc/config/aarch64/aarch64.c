@@ -7162,8 +7162,8 @@ aarch64_classify_symbol (rtx x, rtx offset,
 	  if ((SYMBOL_REF_WEAK (x)
 	       && !(SYMBOL_REF_DECL (x)
 		    && DECL_COMDAT_GROUP (SYMBOL_REF_DECL (x))))
-	      || INTVAL (offset) < (HOST_WIDE_INT) -4294967263
-	      || INTVAL (offset) > (HOST_WIDE_INT) 4294967264)
+	      || INTVAL (offset) < (HOST_WIDE_INT) -4294967263LL
+	      || INTVAL (offset) > (HOST_WIDE_INT) 4294967264LL)
 	    return SYMBOL_FORCE_TO_MEM;
 	  return SYMBOL_SMALL_ABSOLUTE;
 
