@@ -1,3 +1,133 @@
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmull_n.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmull_lane.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmull.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmulh_n.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmulh_lane.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmulh.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmull_n.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmull_lane.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmull.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmul_n.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmul_lane.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmovn.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vXXXw.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vsubw.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vaddw.c: Use code from
+	vXXXw.inc.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vXXXl.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vsubl.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vaddl.c: Use code from
+	vXXXl.inc.
+
+2015-01-21  Renlin Li  <renlin.li@arm.com>
+
+	* g++.dg/tls/thread_local5.C: Skip when dejagnu wrapper is used.
+	* g++.dg/tls/thread_local5g.C: Likewise.
+	* g++.dg/tls/thread_local6g.C: Likewise.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vsXi_n.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vsli_n.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vsri_n.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlXl_n.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlal_n.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlsl_n.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlXl_lane.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlal_lane.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlsl_lane.c: New file.
+
+2015-01-21  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlXl.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlal.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vqdmlsl.c: New file.
+
+2015-01-20  Jeff Law  <law@redhat.com>
+
+	PR target/59946
+	* gcc.target/m68k/pr59946.c: New test.
+
+2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmlXl_n.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmlal_n.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmlsl_n.c: New file.
+
+2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmlXl_lane.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmlal_lane.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmlsl_lane.c: New file.
+
+2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmlXl.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmlal.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmlsl.c: New file.
+
+2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vshuffle.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vtrn.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vuzp.c: Use code from
+	vshuffle.inc.
+	* gcc.target/aarch64/advsimd-intrinsics/vzip.c: Use code from
+	vshuffle.inc.
+
+2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
+
+	* gcc.target/aarch64/advsimd-intrinsics/vmlX_lane.inc: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmla_lane.c: New file.
+	* gcc.target/aarch64/advsimd-intrinsics/vmls_lane.c: New file.
+
 2015-01-20  Christophe Lyon  <christophe.lyon@linaro.org>
 
 	* gcc.target/aarch64/advsimd-intrinsics/vmlX.inc: New file.
