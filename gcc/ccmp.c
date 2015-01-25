@@ -273,7 +273,6 @@ expand_ccmp_expr (gimple g, machine_mode mode)
     {
       enum insn_code icode;
       enum machine_mode cc_mode = CCmode;
-      tree lhs = gimple_assign_lhs (g);
 
 #ifdef SELECT_CC_MODE
       cc_mode = SELECT_CC_MODE (NE, tmp, const0_rtx);
