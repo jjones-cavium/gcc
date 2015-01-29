@@ -933,7 +933,7 @@ arm*-*-linux*)			# ARM GNU/Linux with ELF
 	    *-androideabi)
 		tmake_file="$tmake_file arm/t-linux-androideabi"
 		;;
-	    *-montavista-*)
+	    *-montavista*-*)
 		tmake_file="$tmake_file arm/t-montavista-linux-eabi"
 	    esac
   	    # The BPABI long long divmod functions return a 128-bit value in
@@ -1832,7 +1832,7 @@ mips64*-*-linux* | mipsisa64*-*-linux*)
 	tmake_file="${tmake_file} mips/t-linux64"
 	case ${target} in
 		# Octeon/MontaVista does not support MIPS16 or o32 ABI
-		mips64*-octeon-linux* | mips64*-montavista-linux*)
+		mips64*-octeon-linux* | mips64*-montavista*-linux*)
 			tm_defines="${tm_defines} MIPS_ABI_DEFAULT=ABI_64"
 			tm_file="${tm_file} mips/octeon.h mips/octeon-linux.h"
 			tmake_file="${tmake_file} mips/t-octeon-linux"
@@ -1868,7 +1868,7 @@ mips*-*-linux*)				# Linux MIPS, either endian.
 	case ${target} in
 	# Octeon/MontaVista does not support MIPS16 or o32 ABI and
 	# default to n64
-	mips*-octeon-linux* | mips*-montavista-linux*)
+	mips*-octeon-linux* | mips*-montavista*-linux*)
 		tm_file="${tm_file} mips/gnu-user64.h mips/linux64.h"
 		tmake_file="${tmake_file} mips/t-linux64"
 		tm_defines="${tm_defines} MIPS_ABI_DEFAULT=ABI_64"

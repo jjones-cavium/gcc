@@ -1,3 +1,9 @@
+2015-01-28  Andrew Pinski  <apinski@cavium.com>
+
+	* config.gcc (arm*-*-linux*): Recognize all of montavista vendor.
+	(mips64*-*-linux* | mipsisa64*-*-linux*): Likewise.
+	(mips*-*-linux*): Likewise.
+
 2014-12-19  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Bug #13677
