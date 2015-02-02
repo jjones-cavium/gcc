@@ -1,3 +1,17 @@
+2015-02-02  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #14170
+	* config/aarch64/aarch64-builtins.c (aarch64_init_simd_builtins):
+	Change the first argument type to size_type_node and add another
+	size_type_node.
+	(aarch64_simd_expand_builtin): Handle the new argument to
+	AARCH64_SIMD_BUILTIN_LANE_CHECK and don't ICE but rather
+	print sorry out when the first two arguments are not
+	integer constants.
+	* config/aarch64/arm_neon.h (__AARCH64_LANE_CHECK):
+	Pass the sizeof directly to __builtin_aarch64_im_lane_boundsi.
+	* testsuite/c-c++-common/torture/aarch64-vect-lane-1.c: New testcase.
+
 2015-02-02  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
 	#13927
