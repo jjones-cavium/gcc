@@ -1,4 +1,4 @@
-/* { dg-do compile } */
+/* { dg-do compile { target "aarch64*-*-*" } } */
 #include <arm_neon.h>
 int
 search_line_fast (uint32x2_t t)
