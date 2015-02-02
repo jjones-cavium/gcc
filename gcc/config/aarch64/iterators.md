@@ -97,6 +97,10 @@
 ;; All modes.
 (define_mode_iterator VALL [V8QI V16QI V4HI V8HI V2SI V4SI V2DI V2SF V4SF V2DF])
 
+(define_mode_iterator VALLL [V8QI V16QI V4HI V8HI V2SI V4SI V2DI V2SF V4SF V2DF TI TF])
+
+(define_mode_iterator VALLS [V8QI V16QI V4HI V8HI V2SI V4SI V2DI V2SF V4SF V2DF TI TF])
+
 ;; All vector modes and DI.
 (define_mode_iterator VALLDI [V8QI V16QI V4HI V8HI V2SI V4SI V2DI V2SF V4SF V2DF DI])
 
@@ -351,6 +355,13 @@
                          (DI   "1d") (DF    "1d")
                          (V2DI "2d") (V2SF "2s")
 			 (V4SF "4s") (V2DF "2d")])
+
+(define_mode_attr Vldst [(V8QI "d") (V16QI "q")
+                         (V4HI "d") (V8HI  "q")
+                         (V2SI "d") (V4SI  "q")
+                         (V2DI "q") (V2SF  "d")
+                         (V4SF "q") (V2DF  "q")
+                         (TI   "q") (TF    "q")])
 
 (define_mode_attr Vrevsuff [(V4HI "16") (V8HI "16") (V2SI "32")
                             (V4SI "32") (V2DI "64")])

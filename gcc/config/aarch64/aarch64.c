@@ -10521,11 +10521,17 @@ aarch64_expand_movmem (rtx *operands)
   return true;
 }
 
-
 /* Return true if the registers are ok for a pair load instruction. */
 bool
 aarch64_registers_ok_for_load_pair_peep (rtx op0, rtx op1)
 {
+
+  /* TI and TF modes are supported for floating point registers.  */
+  if (GET_MODE (op0) == TImode && GET_MODE (op1) == TImode
+      || GET_MODE (op0) == TFmode && GET_MODE (op1) == TFmode)
+    if (!FP_REGNUM_P (REGNO (op0)) || !FP_REGNUM_P (REGNO (op1)))
+      return 0;
+     
   return REG_P (op0) && REG_P (op1)
 	 && REGNO (op0) != REGNO (op1)
 	 && REGNO_REG_CLASS (REGNO (op0)) == REGNO_REG_CLASS (REGNO (op1));
@@ -10540,6 +10546,26 @@ aarch64_registers_ok_for_store_pair_peep (rtx op0, rtx op1)
   else if (op0 == const0_rtx && REG_P (op1) && REGNO (op1) <= 30)
     return 1;
   else if (op1 == const0_rtx && REG_P (op0) && REGNO (op0) <= 30)
+    return 1;
+  else 
+    return REG_P (op0) && REG_P (op1)
+	   && REGNO_REG_CLASS (REGNO (op0)) == REGNO_REG_CLASS (REGNO (op1));
+}
+
+/* Return true if the registers are ok for a Vector pair store instruction. */
+bool
+aarch64_registers_ok_for_vec_store_pair_peep (rtx op0, rtx op1)
+{
+  if (GET_MODE (op0) == TImode && GET_MODE (op1) == TImode
+      || GET_MODE (op0) == TFmode && GET_MODE (op1) == TFmode)
+    if (!FP_REGNUM_P (REGNO (op0)) || !FP_REGNUM_P (REGNO (op1)))
+      return 0;
+
+  if (op0 == const0_rtx && op1 == const0_rtx)
+    return 1;
+  else if (op0 == const0_rtx && REG_P (op1))
+    return 1;
+  else if (op1 == const0_rtx && REG_P (op0))
     return 1;
   else 
     return REG_P (op0) && REG_P (op1)
@@ -10645,6 +10671,17 @@ aarch64_mems_ok_for_pair_peep (rtx mem1, rtx mem2, rtx dependent_reg_rtx)
     return 0;
 
   if (dependent_reg_rtx != NULL_RTX && reg1 == REGNO (dependent_reg_rtx))
+    return 0;
+
+  /* Check whether the offsets are aligned for that particular modes.  */
+  if (offset1 % GET_MODE_SIZE (GET_MODE (mem1)) != 0
+      || offset2 % GET_MODE_SIZE (GET_MODE (mem1)) != 0)
+    return 0;
+
+  /* Check whether the offset is within specific range for ldp-stp. */
+  if ((offset1 || offset2) < - (GET_MODE_SIZE (GET_MODE (mem1)) * 0x40)
+      || (offset1 || offset2) > (GET_MODE_SIZE (GET_MODE (mem1)) * 0x40
+		    - GET_MODE_SIZE (GET_MODE (mem1))))
     return 0;
 
   /* The offset for the second addr must be size offset more than the first addr.  */
@@ -11090,7 +11127,13 @@ fusion_load_store (rtx_insn *insn, rtx *base, rtx *offset)
   dest = SET_DEST (x);
 
   if (GET_MODE (dest) != SImode && GET_MODE (dest) != DImode
-      && GET_MODE (dest) != SFmode && GET_MODE (dest) != DFmode)
+      && GET_MODE (dest) != SFmode && GET_MODE (dest) != DFmode
+      && GET_MODE (dest) != V8QImode && GET_MODE (dest) != V16QImode
+      && GET_MODE (dest) != V4HImode && GET_MODE (dest) != V8HImode
+      && GET_MODE (dest) != V2SImode && GET_MODE (dest) != V4SImode
+      && GET_MODE (dest) != V2DImode && GET_MODE (dest) != V2SFmode
+      && GET_MODE (dest) != V4SFmode && GET_MODE (dest) != V2DFmode
+      && GET_MODE (dest) != TImode && GET_MODE (dest) != TFmode)
     return SCHED_FUSION_NONE;
 
   if (GET_CODE (src) == SIGN_EXTEND)

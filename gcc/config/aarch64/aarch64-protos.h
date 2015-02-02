@@ -310,6 +310,7 @@ void aarch64_split_compare_and_swap (rtx op[]);
 void aarch64_split_atomic_op (enum rtx_code, rtx, rtx, rtx, rtx, rtx, rtx);
 bool aarch64_registers_ok_for_load_pair_peep (rtx, rtx);
 bool aarch64_registers_ok_for_store_pair_peep (rtx, rtx);
+bool aarch64_registers_ok_for_vec_store_pair_peep (rtx, rtx);
 bool aarch64_mems_ok_for_pair_peep (rtx, rtx, rtx);
 
 bool aarch64_gen_adjusted_ldpstp (rtx *, bool, enum machine_mode, RTX_CODE);

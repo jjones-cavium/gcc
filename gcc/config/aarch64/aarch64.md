@@ -1102,7 +1102,8 @@
 	(match_operand:GPI 1 "aarch64_mem_pair_operand" "Ump, Ump"))
    (set (match_operand:GPI 2 "register_operand" "=r,*w")
         (match_operand:GPI 3 "memory_operand" "m, m"))]
-  "aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
+  "aarch64_registers_ok_for_load_pair_peep (operands[0], operands[2])
+   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
   "@
    ldp\\t%<w>0, %<w>2, %1
    ldp\\t%<v>0, %<v>2, %1"
@@ -1117,7 +1118,8 @@
 	(match_operand:GPI 1 "aarch64_reg_or_zero" "rZ,*w"))
    (set (match_operand:GPI 2 "memory_operand" "=m, m")
         (match_operand:GPI 3 "aarch64_reg_or_zero" "rZ,*w"))]
-  "aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
+  "aarch64_registers_ok_for_store_pair_peep (operands[1], operands[3])
+   && aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)"
   "@
    stp\\t%<w>1, %<w>3, %0
    stp\\t%<v>1, %<v>3, %0"
@@ -1248,7 +1250,8 @@
 	(sign_extend:DI (match_operand:SI 1 "aarch64_mem_pair_operand" "Ump")))
    (set (match_operand:DI 2 "register_operand" "=r")
 	(sign_extend:DI (match_operand:SI 3 "memory_operand" "m")))]
-  "aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
+  "aarch64_operands_ok_for_ldpstp (operands, true, SImode)
+   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
   "ldpsw\\t%0, %2, %1"
   [(set_attr "type" "load2")]
 )
@@ -1268,7 +1271,8 @@
 	(zero_extend:DI (match_operand:SI 1 "aarch64_mem_pair_operand" "Ump")))
    (set (match_operand:DI 2 "register_operand" "=r")
 	(zero_extend:DI (match_operand:SI 3 "memory_operand" "m")))]
-  "aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
+  "aarch64_operands_ok_for_ldpstp (operands, true, SImode)
+   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
   "ldp\\t%w0, %w2, %1"
   [(set_attr "type" "load2")]
 )

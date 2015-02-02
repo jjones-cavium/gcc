@@ -1,3 +1,28 @@
+2015-02-02  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	#13927
+	* config/aarch64/aarch64-ldpstp.md (peephole2s to generate
+	ldp and stp instructions with SIMD registers): New.
+	(peephole2s to generate ldp and stp instructions in zero and sign
+	extend mode): Add extra conditions as per machine description file.
+	* config/aarch64/aarch64-protos.h
+	(aarch64_registers_ok_for_vec_store_pair_peep): New declaration.
+	* config/aarch64/aarch64-simd.md (load_pair<mode>): New Pattern.
+	(store_pair<mode>): Likewise.
+	* config/aarch64/aarch64.c (aarch64_registers_ok_for_load_pair_peep):
+	Allow only floating point registers for TI and TF modes.
+	(aarch64_registers_ok_for_vec_store_pair_peep): New function to check
+	whether the operands are okay for stp in SIMD registers.
+	(aarch64_mems_ok_for_pair_peep): Check whether the offsets are aligned
+	and also in specific range for particular modes.
+	(fusion_load_store): Don't perform Scheduling fusion foe vector modes
+	suitable for LDP and STP instructions on SIMD registers.
+	* config/aarch64/aarch64.md (load_pair<mode>, store_pair<mode>,
+	*load_pair_extendsidi2_aarch64, *load_pair_zero_extendsidi2_aarch64):
+	Add extra conditions to match the appropriate registers.
+	* config/aarch64/iterators.md (VALLL, VALLS): New mode iterators.
+	(Vldst): New mode attribute.
+
 2015-01-20  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #13663

@@ -63,6 +63,44 @@
 )
 
 (define_peephole2
+  [(set (match_operand:VALLL 0 "register_operand")
+	(match_operand:VALLL 1 "memory_operand"))
+   (set (match_operand:VALLS 2 "register_operand")
+	(match_operand:VALLS 3 "memory_operand"))]
+  "aarch64_registers_ok_for_load_pair_peep (operands[0], operands[2])
+   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
+  [(parallel [(set (match_dup 0) (match_dup 1))
+	      (set (match_dup 2) (match_dup 3))])]
+{
+  operands[0] = gen_lowpart_if_possible (TImode, operands[0]);
+  operands[1] = gen_lowpart_if_possible (TImode, operands[1]);
+  operands[2] = gen_lowpart_if_possible (TImode, operands[2]);
+  operands[3] = gen_lowpart_if_possible (TImode, operands[3]);
+  if (operands[0] == NULL_RTX || operands[1] == NULL_RTX
+      || operands[2] == NULL_RTX || operands[3] == NULL_RTX)
+     FAIL;
+})
+
+(define_peephole2
+  [(set (match_operand:VALLL 0 "memory_operand")
+	(match_operand:VALLL 1 "register_operand"))
+   (set (match_operand:VALLS 2 "memory_operand")
+	(match_operand:VALLS 3 "register_operand"))]
+  "aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)
+   && aarch64_registers_ok_for_vec_store_pair_peep (operands[1], operands[3])"
+  [(parallel [(set (match_dup 0) (match_dup 1))
+	      (set (match_dup 2) (match_dup 3))])]
+{
+  operands[0] = gen_lowpart_if_possible (TImode, operands[0]);
+  operands[1] = gen_lowpart_if_possible (TImode, operands[1]);
+  operands[2] = gen_lowpart_if_possible (TImode, operands[2]);
+  operands[3] = gen_lowpart_if_possible (TImode, operands[3]);
+  if (operands[0] == NULL_RTX || operands[1] == NULL_RTX
+      || operands[2] == NULL_RTX || operands[3] == NULL_RTX)
+     FAIL;
+})
+
+(define_peephole2
   [(set (match_operand:GPF 0 "register_operand")
 	(match_operand:GPF 1 "aarch64_mem_pair_operand"))
    (set (match_operand:GPF 2 "register_operand")
@@ -112,7 +150,8 @@
 	(sign_extend:DI (match_operand:SI 1 "aarch64_mem_pair_operand" "")))
    (set (match_operand:DI 2 "register_operand" "")
 	(sign_extend:DI (match_operand:SI 3 "memory_operand" "")))]
-  "aarch64_operands_ok_for_ldpstp (operands, true, SImode)"
+  "aarch64_operands_ok_for_ldpstp (operands, true, SImode)
+   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
   [(parallel [(set (match_dup 0) (sign_extend:DI (match_dup 1)))
 	      (set (match_dup 2) (sign_extend:DI (match_dup 3)))])]
 {
@@ -136,7 +175,8 @@
 	(zero_extend:DI (match_operand:SI 1 "aarch64_mem_pair_operand" "")))
    (set (match_operand:DI 2 "register_operand" "")
 	(zero_extend:DI (match_operand:SI 3 "memory_operand" "")))]
-  "aarch64_operands_ok_for_ldpstp (operands, true, SImode)"
+  "aarch64_operands_ok_for_ldpstp (operands, true, SImode)
+   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
   [(parallel [(set (match_dup 0) (zero_extend:DI (match_dup 1)))
 	      (set (match_dup 2) (zero_extend:DI (match_dup 3)))])]
 {

@@ -4945,3 +4945,27 @@
   "pmull2\\t%0.1q, %1.2d, %2.2d"
   [(set_attr "type" "neon_mul_d_long")]
 )
+
+;; ldp-stp
+
+(define_insn "load_pair<mode>"
+  [(set (match_operand:VALLL 0 "register_operand" "=w")
+	(match_operand:VALLL 1 "memory_operand" "m"))
+   (set (match_operand:VALLL 2 "register_operand" "=w")
+	(match_operand:VALLL 3 "memory_operand" "m"))]
+  "aarch64_registers_ok_for_load_pair_peep (operands[0], operands[2])
+   && aarch64_mems_ok_for_pair_peep (operands[1], operands[3], NULL_RTX)"
+  "ldp\\t%<Vldst>0, %<Vldst>2, %1"
+  [(set_attr "type" "neon_load1_2reg_q")]
+)
+
+(define_insn "store_pair<mode>"
+  [(set (match_operand:VALLL 0 "memory_operand" "=m")
+	(match_operand:VALLL 1 "register_operand" "w"))
+   (set (match_operand:VALLL 2 "memory_operand" "=m")
+	(match_operand:VALLL 3 "register_operand" "w"))]
+  "aarch64_mems_ok_for_pair_peep (operands[0], operands[2], NULL_RTX)
+   && aarch64_registers_ok_for_vec_store_pair_peep (operands[1], operands[3])"
+  "stp\\t%<Vldst>1, %<Vldst>3, %0"
+  [(set_attr "type" "neon_store1_2reg_q")]
+)

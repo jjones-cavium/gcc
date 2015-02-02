@@ -1,3 +1,9 @@
+2015-02-02  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	#13927
+	* gcc.target/aarch64/simd/ldp-stp.c: New testcase.
+	* gcc.target/aarch64/simd/stp.c: New testcase.
+
 2015-01-14  Andrew Pinski  <apinski@cavium.com>
 	    Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
