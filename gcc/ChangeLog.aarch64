@@ -1,3 +1,9 @@
+2015-02-07  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-builtins.c (aarch64_simd_expand_builtin):
+	Handle AARCH64_SIMD_BUILTIN_LANE_CHECK arguments better.
+	Use error rather than sorry.
+
 2015-02-02  Andrew Pinski  <apinski@cavium.com>
 
 	Bug #14170
