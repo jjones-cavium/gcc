@@ -1,3 +1,15 @@
+2015-02-09  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	Bug #13891
+	* config/aarch64/aarch64-protos.h
+	(aarch64_is_extend_from_extract_for_ashift): New declaration.
+	* config/aarch64/aarch64.c
+	(aarch64_is_extend_from_extract_for_ashift): Check to make sure 
+	it is valid compared to the ashift.
+	* config/aarch64/aarch64.md (*add_<optab><mode>_ashift) : Check
+	for the newly added ashift condition.
+	(*sub_<optab><mode>_ashift) : Likewise.
+
 2015-02-07  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64-builtins.c (aarch64_simd_expand_builtin):

@@ -754,6 +754,33 @@ aarch64_is_extend_from_extract (machine_mode mode, rtx mult_imm,
   return false;
 }
 
+/* Return true if the offsets to a zero/sign-extract operation
+   represent an expression that matches an extend operation.  The
+   operands represent the paramters from
+
+   (extract:MODE (ashift (reg) (ASHIFT_IMM)) (EXTRACT_IMM) (const_int 0)).  */
+bool
+aarch64_is_extend_from_extract_for_ashift (machine_mode mode, rtx ashift_imm,
+				rtx extract_imm)
+{
+  HOST_WIDE_INT ashift_val, extract_val;
+
+  if (! CONST_INT_P (ashift_imm) || ! CONST_INT_P (extract_imm))
+    return false;
+
+  ashift_val = INTVAL (ashift_imm);
+  extract_val = INTVAL (extract_imm);
+
+  if (extract_val > 8
+      && extract_val < GET_MODE_BITSIZE (mode)
+      && exact_log2 (extract_val & ~7) > 0
+      && (extract_val & 7) <= 4
+      && ashift_val <= 4)
+    return true;
+
+  return false;
+}
+
 /* Emit an insn that's a simple single-set.  Both the operands must be
    known to be valid.  */
 inline static rtx

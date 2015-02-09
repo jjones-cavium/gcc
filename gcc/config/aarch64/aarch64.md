@@ -1690,7 +1690,7 @@
                   (match_operand 3 "const_int_operand" "n")
                   (const_int 0))
                  (match_operand:GPI 4 "register_operand" "r")))]
-  ""
+  "aarch64_is_extend_from_extract_for_ashift (<MODE>mode, operands[2], operands[3])"
   "add\\t%<w>0, %<w>4, %<w>1, <su>xt%e3 %2"
   [(set_attr "type" "alu_ext")]
 )
@@ -2051,7 +2051,7 @@
                                (match_operand 2 "aarch64_imm3" "Ui3"))
                    (match_operand 3 "const_int_operand" "n")
                    (const_int 0))))]
-  ""
+  "aarch64_is_extend_from_extract_for_ashift (<MODE>mode, operands[2], operands[3])"
   "sub\\t%<w>0, %<w>4, %<w>1, <su>xt%e3 %2"
   [(set_attr "type" "alu_ext")]
 )
