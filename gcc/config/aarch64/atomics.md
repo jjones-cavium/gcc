@@ -60,7 +60,7 @@
       (match_operand:SI 4 "const_int_operand")  ;; mod_s
       (match_operand:SI 5 "const_int_operand")])] ;; mod_f
   ""
-  "cas%Q4%R4<atomic_sfx>\t%<w>0, %<w>3, %1"
+  "cas%Q4%r4<atomic_sfx>\t%<w>0, %<w>3, %1"
 )
 
 (define_insn_and_split "atomic_compare_and_swap<mode>_1"
@@ -243,7 +243,7 @@
           UNSPECV_ATOMIC_OP))
     (match_operand:SI 3 "const_int_operand")])]          ;; memory model
   "TARGET_LSE"
-  "ld<atomic_ldop_optab>%Q3%R3<atomic_sfx>\t%<w>2, %<w>0, %w1"
+  "ld<atomic_ldop_optab>%Q3%r3<atomic_sfx>\t%<w>2, %<w>0, %w1"
 )
 
 (define_insn_and_split "atomic_fetch_nand<mode>"
@@ -334,7 +334,7 @@
        (match_operand:SI 2 "const_int_operand")]			;; model
       UNSPECV_STL))]
   ""
-  "st%R2r<atomic_sfx>\t%<w>1, %0"
+  "st%r2r<atomic_sfx>\t%<w>1, %0"
 )
 
 (define_insn "aarch64_load_exclusive<mode>"
@@ -367,7 +367,7 @@
        (match_operand:SI 3 "const_int_operand")]
       UNSPECV_SX))]
   ""
-  "st%R3xr<atomic_sfx>\t%w0, %<w>2, %1";
+  "st%r3xr<atomic_sfx>\t%w0, %<w>2, %1";
 )
 
 (define_expand "mem_thread_fence"

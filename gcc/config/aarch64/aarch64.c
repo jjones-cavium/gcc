@@ -4474,9 +4474,9 @@ aarch64_print_operand (FILE *f, rtx x, char code)
       }
       break;
 
-    case 'R':
+    case 'r':
       {
-        /* Print "l" if memory model requires 'R'elease semantics */
+        /* Print "l" if memory model requires 'r'elease semantics */
         if (GET_CODE (x) != CONST_INT)
   	{
   	  output_operand_lossage ("invalid operand for '%%%c'", code);
