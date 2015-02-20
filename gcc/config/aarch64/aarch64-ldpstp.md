@@ -155,18 +155,14 @@
   [(parallel [(set (match_dup 0) (sign_extend:DI (match_dup 1)))
 	      (set (match_dup 2) (sign_extend:DI (match_dup 3)))])]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[1], &base, &offset_1);
   extract_base_offset_in_addr (operands[3], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[2];
-      operands[2] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[3];
-      operands[3] = tmp;
+      std::swap (operands[0], operands[2]);
+      std::swap (operands[1], operands[3]);
     }
 })
 
@@ -180,18 +176,14 @@
   [(parallel [(set (match_dup 0) (zero_extend:DI (match_dup 1)))
 	      (set (match_dup 2) (zero_extend:DI (match_dup 3)))])]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[1], &base, &offset_1);
   extract_base_offset_in_addr (operands[3], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[2];
-      operands[2] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[3];
-      operands[3] = tmp;
+      std::swap (operands[0], operands[2]);
+      std::swap (operands[1], operands[3]);
     }
 })
 
@@ -214,24 +206,16 @@
   "aarch64_operands_adjust_ok_for_ldpstp (operands, true, <MODE>mode)"
   [(const_int 0)]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[1], &base, &offset_1);
   extract_base_offset_in_addr (operands[3], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[6];
-      operands[6] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[7];
-      operands[7] = tmp;
-      tmp = operands[2];
-      operands[2] = operands[4];
-      operands[4] = tmp;
-      tmp = operands[3];
-      operands[3] = operands[5];
-      operands[5] = tmp;
+      std::swap (operands[0], operands[6]);
+      std::swap (operands[1], operands[7]);
+      std::swap (operands[2], operands[4]);
+      std::swap (operands[3], operands[5]);
     }
 
   if (aarch64_gen_adjusted_ldpstp (operands, true, <MODE>mode, UNKNOWN))
@@ -254,24 +238,16 @@
   "aarch64_operands_adjust_ok_for_ldpstp (operands, true, <MODE>mode)"
   [(const_int 0)]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[1], &base, &offset_1);
   extract_base_offset_in_addr (operands[3], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[6];
-      operands[6] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[7];
-      operands[7] = tmp;
-      tmp = operands[2];
-      operands[2] = operands[4];
-      operands[4] = tmp;
-      tmp = operands[3];
-      operands[3] = operands[5];
-      operands[5] = tmp;
+      std::swap (operands[0], operands[6]);
+      std::swap (operands[1], operands[7]);
+      std::swap (operands[2], operands[4]);
+      std::swap (operands[3], operands[5]);
     }
 
   if (aarch64_gen_adjusted_ldpstp (operands, true, <MODE>mode, UNKNOWN))
@@ -294,24 +270,16 @@
   "aarch64_operands_adjust_ok_for_ldpstp (operands, true, SImode)"
   [(const_int 0)]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[1], &base, &offset_1);
   extract_base_offset_in_addr (operands[3], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[6];
-      operands[6] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[7];
-      operands[7] = tmp;
-      tmp = operands[2];
-      operands[2] = operands[4];
-      operands[4] = tmp;
-      tmp = operands[3];
-      operands[3] = operands[5];
-      operands[5] = tmp;
+      std::swap (operands[0], operands[6]);
+      std::swap (operands[1], operands[7]);
+      std::swap (operands[2], operands[4]);
+      std::swap (operands[3], operands[5]);
     }
 
   if (aarch64_gen_adjusted_ldpstp (operands, true, SImode, SIGN_EXTEND))
@@ -334,24 +302,16 @@
   "aarch64_operands_adjust_ok_for_ldpstp (operands, true, SImode)"
   [(const_int 0)]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[1], &base, &offset_1);
   extract_base_offset_in_addr (operands[3], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[6];
-      operands[6] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[7];
-      operands[7] = tmp;
-      tmp = operands[2];
-      operands[2] = operands[4];
-      operands[4] = tmp;
-      tmp = operands[3];
-      operands[3] = operands[5];
-      operands[5] = tmp;
+      std::swap (operands[0], operands[6]);
+      std::swap (operands[1], operands[7]);
+      std::swap (operands[2], operands[4]);
+      std::swap (operands[3], operands[5]);
     }
 
   if (aarch64_gen_adjusted_ldpstp (operands, true, SImode, ZERO_EXTEND))
@@ -374,24 +334,16 @@
   "aarch64_operands_adjust_ok_for_ldpstp (operands, false, <MODE>mode)"
   [(const_int 0)]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[0], &base, &offset_1);
   extract_base_offset_in_addr (operands[2], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[6];
-      operands[6] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[7];
-      operands[7] = tmp;
-      tmp = operands[2];
-      operands[2] = operands[4];
-      operands[4] = tmp;
-      tmp = operands[3];
-      operands[3] = operands[5];
-      operands[5] = tmp;
+      std::swap (operands[0], operands[6]);
+      std::swap (operands[1], operands[7]);
+      std::swap (operands[2], operands[4]);
+      std::swap (operands[3], operands[5]);
     }
 
   if (aarch64_gen_adjusted_ldpstp (operands, false, <MODE>mode, UNKNOWN))
@@ -414,24 +366,16 @@
   "aarch64_operands_adjust_ok_for_ldpstp (operands, false, <MODE>mode)"
   [(const_int 0)]
 {
-  rtx base, offset_1, offset_2, tmp;
+  rtx base, offset_1, offset_2;
 
   extract_base_offset_in_addr (operands[0], &base, &offset_1);
   extract_base_offset_in_addr (operands[2], &base, &offset_2);
   if (INTVAL (offset_1) > INTVAL (offset_2))
     {
-      tmp = operands[0];
-      operands[0] = operands[6];
-      operands[6] = tmp;
-      tmp = operands[1];
-      operands[1] = operands[7];
-      operands[7] = tmp;
-      tmp = operands[2];
-      operands[2] = operands[4];
-      operands[4] = tmp;
-      tmp = operands[3];
-      operands[3] = operands[5];
-      operands[5] = tmp;
+      std::swap (operands[0], operands[6]);
+      std::swap (operands[1], operands[7]);
+      std::swap (operands[2], operands[4]);
+      std::swap (operands[3], operands[5]);
     }
 
   if (aarch64_gen_adjusted_ldpstp (operands, false, <MODE>mode, UNKNOWN))

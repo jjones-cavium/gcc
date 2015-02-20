@@ -328,10 +328,9 @@ ubsan_source_location (location_t loc)
   else
     {
       /* Fill in the values from LOC.  */
-      size_t len = strlen (xloc.file);
-      str = build_string (len + 1, xloc.file);
-      TREE_TYPE (str) = build_array_type (char_type_node,
-					  build_index_type (size_int (len)));
+      size_t len = strlen (xloc.file) + 1;
+      str = build_string (len, xloc.file);
+      TREE_TYPE (str) = build_array_type_nelts (char_type_node, len);
       TREE_READONLY (str) = 1;
       TREE_STATIC (str) = 1;
       str = build_fold_addr_expr (str);
@@ -388,7 +387,7 @@ ubsan_type_descriptor (tree type, enum ubsan_print_style pstyle)
   tree dtype = ubsan_get_type_descriptor_type ();
   tree type2 = type;
   const char *tname = NULL;
-  char *pretty_name;
+  pretty_printer pretty_name;
   unsigned char deref_depth = 0;
   unsigned short tkind, tinfo;
 
@@ -427,54 +426,58 @@ ubsan_type_descriptor (tree type, enum ubsan_print_style pstyle)
     /* We weren't able to determine the type name.  */
     tname = "<unknown>";
 
-  /* Decorate the type name with '', '*', "struct", or "union".  */
-  pretty_name = (char *) alloca (strlen (tname) + 16 + deref_depth);
   if (pstyle == UBSAN_PRINT_POINTER)
     {
-      int pos = sprintf (pretty_name, "'%s%s%s%s%s%s%s",
-			 TYPE_VOLATILE (type2) ? "volatile " : "",
-			 TYPE_READONLY (type2) ? "const " : "",
-			 TYPE_RESTRICT (type2) ? "restrict " : "",
-			 TYPE_ATOMIC (type2) ? "_Atomic " : "",
-			 TREE_CODE (type2) == RECORD_TYPE
-			 ? "struct "
-			 : TREE_CODE (type2) == UNION_TYPE
-			   ? "union " : "", tname,
-			 deref_depth == 0 ? "" : " ");
+      pp_printf (&pretty_name, "'%s%s%s%s%s%s%s",
+		 TYPE_VOLATILE (type2) ? "volatile " : "",
+		 TYPE_READONLY (type2) ? "const " : "",
+		 TYPE_RESTRICT (type2) ? "restrict " : "",
+		 TYPE_ATOMIC (type2) ? "_Atomic " : "",
+		 TREE_CODE (type2) == RECORD_TYPE
+		 ? "struct "
+		 : TREE_CODE (type2) == UNION_TYPE
+		   ? "union " : "", tname,
+		 deref_depth == 0 ? "" : " ");
       while (deref_depth-- > 0)
-        pretty_name[pos++] = '*';
-      pretty_name[pos++] = '\'';
-      pretty_name[pos] = '\0';
+	pp_star (&pretty_name);
+      pp_quote (&pretty_name);
     }
   else if (pstyle == UBSAN_PRINT_ARRAY)
     {
       /* Pretty print the array dimensions.  */
       gcc_assert (TREE_CODE (type) == ARRAY_TYPE);
       tree t = type;
-      int pos = sprintf (pretty_name, "'%s ", tname);
+      pp_printf (&pretty_name, "'%s ", tname);
       while (deref_depth-- > 0)
-        pretty_name[pos++] = '*';
+	pp_star (&pretty_name);
       while (TREE_CODE (t) == ARRAY_TYPE)
 	{
-	  pretty_name[pos++] = '[';
+	  pp_left_bracket (&pretty_name);
 	  tree dom = TYPE_DOMAIN (t);
 	  if (dom && TREE_CODE (TYPE_MAX_VALUE (dom)) == INTEGER_CST)
-	    pos += sprintf (&pretty_name[pos], HOST_WIDE_INT_PRINT_DEC,
+	    {
+	      if (tree_fits_uhwi_p (TYPE_MAX_VALUE (dom))
+		  && tree_to_uhwi (TYPE_MAX_VALUE (dom)) + 1 != 0)
+		pp_printf (&pretty_name, HOST_WIDE_INT_PRINT_DEC,
 			    tree_to_uhwi (TYPE_MAX_VALUE (dom)) + 1);
+	      else
+		pp_wide_int (&pretty_name,
+			     wi::add (wi::to_widest (TYPE_MAX_VALUE (dom)), 1),
+			     TYPE_SIGN (TREE_TYPE (dom)));
+	    }
 	  else
 	    /* ??? We can't determine the variable name; print VLA unspec.  */
-	    pretty_name[pos++] = '*';
-	  pretty_name[pos++] = ']';
+	    pp_star (&pretty_name);
+	  pp_right_bracket (&pretty_name);
 	  t = TREE_TYPE (t);
 	}
-      pretty_name[pos++] = '\'';
-      pretty_name[pos] = '\0';
+      pp_quote (&pretty_name);
 
-     /* Save the tree with stripped types.  */
-     type = t;
+      /* Save the tree with stripped types.  */
+      type = t;
     }
   else
-    sprintf (pretty_name, "'%s'", tname);
+    pp_printf (&pretty_name, "'%s'", tname);
 
   switch (TREE_CODE (type))
     {
@@ -500,6 +503,13 @@ ubsan_type_descriptor (tree type, enum ubsan_print_style pstyle)
   tinfo = get_ubsan_type_info_for_type (type);
 
   /* Create a new VAR_DECL of type descriptor.  */
+  const char *tmp = pp_formatted_text (&pretty_name);
+  size_t len = strlen (tmp) + 1;
+  tree str = build_string (len, tmp);
+  TREE_TYPE (str) = build_array_type_nelts (char_type_node, len);
+  TREE_READONLY (str) = 1;
+  TREE_STATIC (str) = 1;
+
   char tmp_name[32];
   static unsigned int type_var_id_num;
   ASM_GENERATE_INTERNAL_LABEL (tmp_name, "Lubsan_type", type_var_id_num++);
@@ -510,13 +520,12 @@ ubsan_type_descriptor (tree type, enum ubsan_print_style pstyle)
   DECL_ARTIFICIAL (decl) = 1;
   DECL_IGNORED_P (decl) = 1;
   DECL_EXTERNAL (decl) = 0;
+  DECL_SIZE (decl)
+    = size_binop (PLUS_EXPR, DECL_SIZE (decl), TYPE_SIZE (TREE_TYPE (str)));
+  DECL_SIZE_UNIT (decl)
+    = size_binop (PLUS_EXPR, DECL_SIZE_UNIT (decl),
+		  TYPE_SIZE_UNIT (TREE_TYPE (str)));
 
-  size_t len = strlen (pretty_name);
-  tree str = build_string (len + 1, pretty_name);
-  TREE_TYPE (str) = build_array_type (char_type_node,
-				      build_index_type (size_int (len)));
-  TREE_READONLY (str) = 1;
-  TREE_STATIC (str) = 1;
   tree ctor = build_constructor_va (dtype, 3, NULL_TREE,
 				    build_int_cst (short_unsigned_type_node,
 						   tkind), NULL_TREE,
@@ -911,6 +920,8 @@ ubsan_expand_null_ifn (gimple_stmt_iterator *gsip)
   return false;
 }
 
+#define OBJSZ_MAX_OFFSET (1024 * 16)
+
 /* Expand UBSAN_OBJECT_SIZE internal call.  */
 
 bool
@@ -932,6 +943,10 @@ ubsan_expand_objsize_ifn (gimple_stmt_iterator *gsi)
       || integer_all_onesp (size))
     /* Yes, __builtin_object_size couldn't determine the
        object size.  */;
+  else if (TREE_CODE (offset) == INTEGER_CST
+	   && wi::ges_p (wi::to_widest (offset), -OBJSZ_MAX_OFFSET)
+	   && wi::les_p (wi::to_widest (offset), -1))
+    /* The offset is in range [-16K, -1].  */;
   else
     {
       /* if (offset > objsize) */
@@ -943,8 +958,42 @@ ubsan_expand_objsize_ifn (gimple_stmt_iterator *gsi)
       gimple_set_location (g, loc);
       gsi_insert_after (&cond_insert_point, g, GSI_NEW_STMT);
 
+      /* If the offset is small enough, we don't need the second
+	 run-time check.  */
+      if (TREE_CODE (offset) == INTEGER_CST
+	  && wi::ges_p (wi::to_widest (offset), 0)
+	  && wi::les_p (wi::to_widest (offset), OBJSZ_MAX_OFFSET))
+	*gsi = gsi_after_labels (then_bb);
+      else
+	{
+	  /* Don't issue run-time error if (ptr > ptr + offset).  That
+	     may happen when computing a POINTER_PLUS_EXPR.  */
+	  basic_block then2_bb, fallthru2_bb;
+
+	  gimple_stmt_iterator gsi2 = gsi_after_labels (then_bb);
+	  cond_insert_point = create_cond_insert_point (&gsi2, false, false,
+							true, &then2_bb,
+							&fallthru2_bb);
+	  /* Convert the pointer to an integer type.  */
+	  tree p = make_ssa_name (pointer_sized_int_node);
+	  g = gimple_build_assign (p, NOP_EXPR, ptr);
+	  gimple_set_location (g, loc);
+	  gsi_insert_before (&cond_insert_point, g, GSI_NEW_STMT);
+	  p = gimple_assign_lhs (g);
+	  /* Compute ptr + offset.  */
+	  g = gimple_build_assign (make_ssa_name (pointer_sized_int_node),
+				   PLUS_EXPR, p, offset);
+	  gimple_set_location (g, loc);
+	  gsi_insert_after (&cond_insert_point, g, GSI_NEW_STMT);
+	  /* Now build the conditional and put it into the IR.  */
+	  g = gimple_build_cond (LE_EXPR, p, gimple_assign_lhs (g),
+				 NULL_TREE, NULL_TREE);
+	  gimple_set_location (g, loc);
+	  gsi_insert_after (&cond_insert_point, g, GSI_NEW_STMT);
+	  *gsi = gsi_after_labels (then2_bb);
+	}
+
       /* Generate __ubsan_handle_type_mismatch call.  */
-      *gsi = gsi_after_labels (then_bb);
       if (flag_sanitize_undefined_trap_on_error)
 	g = gimple_build_call (builtin_decl_explicit (BUILT_IN_TRAP), 0);
       else
@@ -978,7 +1027,7 @@ ubsan_expand_objsize_ifn (gimple_stmt_iterator *gsi)
   /* Get rid of the UBSAN_OBJECT_SIZE call from the IR.  */
   unlink_stmt_vdef (stmt);
   gsi_remove (&gsi_orig, true);
-  return gsi_end_p (*gsi);
+  return true;
 }
 
 /* Cached __ubsan_vptr_type_cache decl.  */
@@ -1139,7 +1188,7 @@ ubsan_expand_vptr_ifn (gimple_stmt_iterator *gsip)
   /* Get rid of the UBSAN_VPTR call from the IR.  */
   unlink_stmt_vdef (stmt);
   gsi_remove (&gsi, true);
-  return gsi_end_p (*gsip);
+  return true;
 }
 
 /* Instrument a memory reference.  BASE is the base of MEM, IS_LHS says
