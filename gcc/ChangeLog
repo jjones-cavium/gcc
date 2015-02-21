@@ -16,6 +16,83 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-02-20  Aldy Hernandez  <aldyh@redhat.com>
+
+	PR debug/58123
+	* gimplify.c (gimplify_expr): Prefer location of TRY_FINALLY_EXPR
+	over input_location.
+
+2015-02-20  Bernd Schmidt  <bernds@codesourcery.com>
+
+	* tree-streamer-in.c (unpack_ts_decl_common_value_fields,
+	unpack_ts_type_common_value_fields): If ACCEL_COMPILER,
+	restrict alignments to absolute_biggest_alignment.
+	* config/i386/i386.c (TARGET_ABSOLUTE_BIGGEST_ALIGNMENT):
+	Define.
+	* doc/tm.texi.in (TARGET_ABSOLUTE_BIGGEST_ALIGNMENT): Add.
+	* doc/tm.texi: Regenerate.
+	* target.def (absolute_biggest_alignment): New DEFHOOKPOD.
+
+2015-02-20  Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR target/64172
+	* ira-color.c (color_pass): Prevent splitting multi-register
+	pseudos.
+
+2015-02-20  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/65136
+	* tree-ssa-propagate.c: Include cfgloop.h.
+	(replace_phi_args_in): Avoid replacing loop latch edge PHI
+	arguments with constants.
+
+2015-02-20  Jakub Jelinek  <jakub@redhat.com>
+	    Martin Liska  <mliska@suse.cz>
+
+	PR target/63892
+	* ipa-icf.c (sem_function::merge): If DECL_COMDAT_GROUP (alias->decl),
+	don't try to create_thunk if stdarg_p.  If
+	!sem_item::target_supports_symbol_aliases_p (), similarly, and try to
+	redirect_callers if possible.
+	(sem_item_optimizer::execute): Call unregister_hooks here...
+	(ipa_icf_driver): ... instead of here.
+
+2015-02-20  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
+	* config/aarch64/aarch64.md (*aarch64_lshr_sisd_or_int_<mode>3):
+	Mark operand 0 as earlyclobber in 2nd alternative.
+	(1st define_split below *aarch64_lshr_sisd_or_int_<mode>3):
+	Write negated shift amount into QI lowpart operand 0 and use it
+	in the shift step.
+	(2nd define_split below *aarch64_lshr_sisd_or_int_<mode>3): Likewise.
+
+2015-02-20  Bernd Schmidt  <bernds@codesourcery.com>
+
+    	* cgraph.h (clone_function_name_1): Declare.
+    	* cgraphclones.c (clone_function_name_1): New function.
+    	(clone_function_name): Use it.
+    	* lto-partition.c: Include "stringpool.h".
+    	(must_not_rename, maybe_rewrite_identifier,
+    	validize_symbol_for_target): New static functions.
+    	(privatize_symbol_name): Use must_not_rename.
+    	(promote_symbol): Call validize_symbol_for_target.
+    	(lto_promote_cross_file_statics): Likewise.
+    	(lto_promote_statics_nonwpa): Likewise.
+
+2015-02-20  Georg-Johann Lay  <avr@gjlay.de>
+
+	PR target/64452
+	* config/avr/avr.md (pushhi_insn): New insn.
+	(push<mode>1): Push virtual regs in one chunk using pushhi1_insn.
+
+2015-02-20  Bernd Schmidt  <bernds@codesourcery.com>
+	    Jakub Jelinek  <jakub@redhat.com>
+
+	* tree-streamer.c (preload_common_nodes): Don't preload
+	TI_VA_LIST* for offloading.
+	* tree-stdarg.c (pass_stdarg::gate): Disable for ACCEL_COMPILER
+	in_lto_p.
+
 2015-02-19  John David Anglin  <danlgin@gcc.gnu.org>
 
 	* config/pa/pa.c (pa_emit_move_sequence): Always force
