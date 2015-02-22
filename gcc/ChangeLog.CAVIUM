@@ -1,3 +1,9 @@
+2015-02-22  Andrew Pinski  <apinski@cavium.com>
+
+	Bug #14396
+	* tree-ssa-merge-common-code.c (merge_code_bb):
+	Reset VR info on the lhs of the moved gimple.
+
 2015-01-24  Andrew Pinski  <apinski@cavium.com>
 
 	* ccmp.c (expand_ccmp_expr): Fix unused warning.

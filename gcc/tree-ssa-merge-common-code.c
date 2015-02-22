@@ -231,6 +231,28 @@ merge_code_bb (basic_block bb0, basic_block bb1, basic_block bb2)
       print_gimple_stmt (dump_file, stmt1, 0, 0);
       print_gimple_stmt (dump_file, stmt2, 0, 0);
     }
+
+
+   if (INTEGRAL_TYPE_P (TREE_TYPE (gimple_assign_lhs (stmt1))))
+     {
+       tree lhs = gimple_assign_lhs (stmt1);
+       /* Moving ASSIGN might change VR of lhs, e.g. when moving u_6
+          def-stmt in:
+          if (n_5 != 0)
+            goto <bb 3>;
+          else
+            goto <bb 4>;
+
+          <bb 3>:
+          # RANGE [0, 4294967294]
+          u_6 = n_5 + 4294967295;
+
+          <bb 4>:
+          # u_3 = PHI <u_6(3), 4294967295(2)>  */
+       SSA_NAME_RANGE_INFO (lhs) = NULL;
+       SSA_NAME_ANTI_RANGE_P (lhs) = 0;
+    }
+
   /* Move one of the statements to the end of the common basic block. */
   gsi_move_to_bb_end (&gsi1, bb0);
   /* Mark the vuses if there is any for renaming. */
