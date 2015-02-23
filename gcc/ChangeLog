@@ -1,3 +1,9 @@
+2015-02-23  Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
+
+	#14092
+	* ccmp.c (used_in_cond_stmt_p): Remove.
+	(expand_ccmp_expr): Use used_in_cond_stmt_p.
+
 2014-12-08  Andrew Pinski  <apinski@cavium.com>
 	    Naveen H.S  <Naveen.Hurugalawadi@caviumnetworks.com>
 
