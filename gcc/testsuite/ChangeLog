@@ -1,3 +1,56 @@
+2015-03-09  Jakub Jelinek  <jakub@redhat.com>
+
+	PR c/65120
+	* c-c++-common/pr49706.c: Adjust tests for not warning
+	about !!x == y or !b == y where b is boolean, and add
+	some further tests.
+	* c-c++-common/pr62199-2.c: Likewise.
+
+2015-03-09  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/65270
+	* gcc.dg/torture/pr65270-1.c: New testcase.
+	* gcc.dg/torture/pr65270-2.c: Likewise. 
+
+2015-03-09  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR tree-optimization/63743
+	* gcc.dg/pr63743.c: New test.
+
+2015-03-08  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR lto/65316
+	* g++.dg/lto/pr65316_0.C: New testcase.
+	* g++.dg/lto/pr65316_1.C: New testcase.
+
+2015-03-08  John David Anglin  <danglin@gcc.gnu.org>
+
+	PR target/62247
+	* g++.dg/abi/anon3.C: Skip failing scan-assembler checks on
+	hppa*-*-hpux*.
+	* g++.dg/abi/rtti3.C: Likewise.
+
+	* g++.dg/ipa/pr63621.C: Add dg-require-effective-target named_sections.
+
+	PR target/62251
+	* gfortran.dg/quad_2.f90: xfail hppa*-*-hpux*.
+
+	* gcc.dg/signbit-sa.c: Add dg-require-effective-target c99_runtime
+
+	* gcc.dg/ipa/pr64307.c: Add target c99_runtime.
+
+	* gcc.dg/ipa/ipa-icf-34.c: Add dg-require-alias.
+
+2015-03-08  Morin  <mikael@gcc.gnu.org>
+
+	PR fortran/60898
+	* gfortran.dg/entry_20.f90: New.
+
+2015-03-07  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/65153
+	* gcc.c-torture/compile/pr65153.c: New.
+
 2015-03-07  Oleg Endo  <olegendo@gcc.gnu.org>
 
 	PR target/65249

@@ -22,6 +22,116 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-03-10  Alan Modra  <amodra@gmail.com>
+
+	PR target/65286
+	* config.gcc (powerpc*-*-linux*): Arrange for powerpc64le-linux
+	to be single-arch by default.  Set cpu_is_64bit for powerpc64
+	given --with-cpu=native.
+	* config/rs6000/t-fprules: Do not set default MULTILIB vars.
+	* config/rs6000/t-linux (MULTIARCH_DIRNAME): Support powerpc64
+	and powerpc64le.
+	* config/rs6000/linux64.h (SUBSUBTARGET_OVERRIDE_OPTIONS): Test
+	rs6000_isa_flags rather than TARGET_64BIT.
+
+2015-03-09  Yoshinori Sato  <ysato@users.sourceforge.jp>
+	    Kaz Kojima  <kkojima@gcc.gnu.org>
+
+	* config/sh/t-linux (MULTILIB_EXCEPTIONS): Define for m2a cases.
+
+2015-03-09  Jakub Jelinek  <jakub@redhat.com>
+
+	PR lto/65361
+	* ipa-devirt.c (add_type_duplicate): Don't use DECL_CONTEXT
+	on a TREE_BINFO, instead use BINFO_TYPE.
+
+2015-03-09  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/65270
+	* tree-core.h (enum operand_equal_flag): Add OEP_ADDRESS_OF.
+	* fold-const.c (operand_equal_p): When recursing for ADDR_EXPRs
+	operand set OEP_ADDRESS_OF.  Clear it when recursing to non-bases
+	of that.  When comparing dereferences compare alignment.
+	When comparing MEM_REFs or TARGET_MEM_REFs compare dependence info.
+
+2015-03-08  Jan Hubicka  <hubicka@ucw.cz>
+
+	* ipa-inline-analysis.c (check_callers): Check
+	node->can_remove_if_no_direct_calls_and_refs_p.
+	(growth_likely_positive): Reorganize to call
+	can_remove_if_no_direct_calls_p later.
+	* cgraph.h (will_be_removed_from_program_if_no_direct_calls_p,
+	will_be_removed_from_program_if_no_direct_calls_p): Add 
+	will_inline parameter.
+	* cgraph.c (cgraph_node::can_remove_if_no_direct_calls_p,
+	cgraph_node::will_be_removed_from_program_if_no_direct_calls_p):
+	Handle inliner case correctly.
+
+2015-03-09  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR tree-optimization/63743
+	* cfgexpand.c (reorder_operands): Also reorder if only second operand
+	had its definition forwarded by TER.
+
+2015-03-08  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR lto/65316
+	* ipa-utils.h (types_odr_comparable): Add strict argument.
+	* ipa-devirt.c: Fix whitespace;
+	(odr_hasher): Remove.
+	(odr_name_hasher, odr_vtable_hasher): New hashers.
+	(can_be_name_hashed_p): New predicate.
+	(hash_type_name): remove.
+	(hash_odr_name): New.
+	(odr_name_hasher::hash): new.
+	(can_be_vtable_hashed_p): New.
+	(hash_odr_vtable): New.
+	(odr_vtable_hasher::hash): New.
+	(types_same_for_odr): Add strict parameter.
+	(types_odr_comparable): Likewise.
+	(odr_name_hasher::equal): New.
+	(odr_vtable_hasher::equal): New.
+	(odr_name_hasher::remove): New.
+	(odr_hash_type): Change to hash_table<odr_name_hasher>.
+	(odr_vtable_hash_type): New.
+	(odr_vtable_hash): New.
+	(odr_subtypes_equivalent_p): Do strict comparsion.
+	(add_type_duplicate): Merge type names; cleanup; avoid type
+	duplicates.
+	(register_odr_type): Initialize vtable hash.
+	(build_type_inheritance_graph): Likewise
+	(get_odr_type): Reorg to use two hashes.
+	(dump_possible_polymorphic_call_targets): Move sanity check after debug
+	output.
+	(ipa_devirt): Dump type_inheritance_graph.
+	(types_same_for_odr): Add strict mode.
+
+2015-03-05  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/65334
+	* cgraph.h (symtab_node): Add definition_alignment,
+	can_increase_alignment_p and increase_alignment.
+	* symtab.c (symtab_node::can_increase_alignment_p,
+	increase_alignment_1, symtab_node::increase_alignment,
+	symtab_node::definition_alignment): New.
+	* tree-vect-data-refs.c (vect_can_force_dr_alignment_p): Use
+	can_increase_alignment_p.
+	* tree-vectorizer.c (increase_alignment): Use increase_alignment.
+	* tree-vect-stmts.c (ensure_base_align): Likewise.
+	* varasm.c (function_section_1): Use definition_alignment.
+	(assemble_start_function): Likewise.
+	(emit_local): likewise.
+	(build_constant_desc): Likewsie.
+	(output_constant_def_contents): Likewise.
+	(place_block_symbol): Likewise.
+	(output_object_block): Likewise.
+
+2015-03-05  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/65316
+	* tree.c (free_lang_data_in_type): Be sure to keep BINFO_VTABLE
+	when outputting debug.
+
 2015-03-07  Marek Polacek  <polacek@redhat.com>
 	    Martin Uecker  <uecker@eecs.berkeley.edu>
 
@@ -90,6 +200,7 @@
 
 2015-03-05  Richard Henderson  <rth@redhat.com>
 
+	PR target/65121
 	* config/arm/arm.c (arm_function_in_section_p): Fix predicate to
 	correctly check weak symbol binding.
 
@@ -3690,6 +3801,7 @@
 
 2015-01-19  David Edelsohn  <dje.gcc@gmail.com>
 
+	PR target/59828
 	* config/rs6000/default64.h: Include rs6000-cpus.def.
 	(TARGET_DEFAULT) [LITTLE_ENDIAN]: Use ISA 2.7 (POWER8).
 	(TARGET_DEFAULT) [BIG_ENDIAN]: Use POWER4.
