@@ -1,5 +1,11 @@
 2015-03-17  Andrew Pinski  <apinski@cavium.com>
 
+	* testsuite/gcc.target/aarch64/atomic-comp-swap-release-acquire-2.c: Add -fno-ipa-icf
+	* testsuite/gcc.target/aarch64/atomic-op-consume-2.c: Fix for PR59448 consume workaround.
+	* testsuite/gcc.target/aarch64/atomic-op-imm-2.c: Likewise.  Include atomic-op-imm-1.c instead of a copy.
+
+2015-03-17  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64.c (aarch64_registers_ok_for_load_pair_peep):
 	Fix warning.
 	(aarch64_registers_ok_for_vec_store_pair_peep): Likewise.
