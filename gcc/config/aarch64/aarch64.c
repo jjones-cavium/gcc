@@ -10519,8 +10519,8 @@ aarch64_registers_ok_for_load_pair_peep (rtx op0, rtx op1)
 {
 
   /* TI and TF modes are supported for floating point registers.  */
-  if (GET_MODE (op0) == TImode && GET_MODE (op1) == TImode
-      || GET_MODE (op0) == TFmode && GET_MODE (op1) == TFmode)
+  if ((GET_MODE (op0) == TImode && GET_MODE (op1) == TImode)
+      || (GET_MODE (op0) == TFmode && GET_MODE (op1) == TFmode))
     if (!FP_REGNUM_P (REGNO (op0)) || !FP_REGNUM_P (REGNO (op1)))
       return 0;
      
@@ -10548,8 +10548,8 @@ aarch64_registers_ok_for_store_pair_peep (rtx op0, rtx op1)
 bool
 aarch64_registers_ok_for_vec_store_pair_peep (rtx op0, rtx op1)
 {
-  if (GET_MODE (op0) == TImode && GET_MODE (op1) == TImode
-      || GET_MODE (op0) == TFmode && GET_MODE (op1) == TFmode)
+  if ((GET_MODE (op0) == TImode && GET_MODE (op1) == TImode)
+      || (GET_MODE (op0) == TFmode && GET_MODE (op1) == TFmode))
     if (!FP_REGNUM_P (REGNO (op0)) || !FP_REGNUM_P (REGNO (op1)))
       return 0;
 
