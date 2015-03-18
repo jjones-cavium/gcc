@@ -788,6 +788,7 @@ struct cgraph_edge_hasher : ggc_hasher<cgraph_edge *>
   typedef gimple compare_type;
 
   static hashval_t hash (cgraph_edge *);
+  static hashval_t hash (gimple);
   static bool equal (cgraph_edge *, gimple);
 };
 
@@ -2715,9 +2716,6 @@ cgraph_node::has_gimple_body_p (void)
 #define FOR_EACH_FUNCTION_WITH_GIMPLE_BODY(node) \
    for ((node) = symtab->first_function_with_gimple_body (); (node); \
 	(node) = symtab->next_function_with_gimple_body (node))
-
-/* Create a new static variable of type TYPE.  */
-tree add_new_static_var (tree type);
 
 /* Uniquize all constants that appear in memory.
    Each constant in memory thus far output is recorded

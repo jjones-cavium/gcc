@@ -1597,7 +1597,7 @@ build_ref_for_offset (location_t loc, tree base, HOST_WIDE_INT offset,
   misalign = (misalign + offset) & (align - 1);
   if (misalign != 0)
     align = (misalign & -misalign);
-  if (align < TYPE_ALIGN (exp_type))
+  if (align != TYPE_ALIGN (exp_type))
     exp_type = build_aligned_type (exp_type, align);
 
   mem_ref = fold_build2_loc (loc, MEM_REF, exp_type, base, off);
@@ -5728,7 +5728,7 @@ ipa_sra_preliminary_function_checks (struct cgraph_node *node)
       return false;
     }
 
-  if ((DECL_COMDAT (node->decl) || DECL_EXTERNAL (node->decl))
+  if ((DECL_ONE_ONLY (node->decl) || DECL_EXTERNAL (node->decl))
       && inline_summaries->get (node)->size >= MAX_INLINE_INSNS_AUTO)
     {
       if (dump_file)
