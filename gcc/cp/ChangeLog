@@ -1,3 +1,25 @@
+2015-03-26  Mikhail Maltsev  <maltsevm@gmail.com>
+
+	PR c++/65154
+	* init.c (build_vec_init): Fix initializing aggregates
+	with empty init list.
+
+2015-03-26  Jason Merrill  <jason@redhat.com>
+
+	PR c++/65525
+	* constexpr.c (potential_constant_expression_1): Handle MEM_REF.
+
+2015-03-25  Marek Polacek  <polacek@redhat.com>
+
+	PR c++/65558
+	* name-lookup.c (handle_namespace_attrs): Ignore abi_tag attribute
+	on an anonymous namespace.
+
+2015-03-25  Marek Polacek  <polacek@redhat.com>
+
+	PR c++/61670
+	* class.c (remove_zero_width_bit_fields): Check for null DECL_SIZE.
+
 2015-03-24  Jason Merrill  <jason@redhat.com>
 
 	PR c++/65046
