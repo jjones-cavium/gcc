@@ -1,3 +1,7 @@
+2015-03-30  Manjunath Matti  <mmatti@caviumnetworks.com>
+
+	* gcc/config/rs6000/linux.h: Fix a typo.
+
 2015-03-17  Andrew Pinski  <apinski@cavium.com>
 
 	* testsuite/gcc.target/aarch64/atomic-comp-swap-release-acquire-2.c: Add -fno-ipa-icf
