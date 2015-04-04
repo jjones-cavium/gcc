@@ -849,6 +849,26 @@
   [(set_attr "type" "neon_ins<q>")]
 )
 
+(define_insn "aarch64_simd_vec_insert_<mode>"
+  [(set (match_operand:VALL 0 "register_operand" "=w")
+        (vec_merge:VALL
+	    (vec_duplicate:VALL
+		(vec_select:<VEL>
+		  (match_operand:VALL 1 "register_operand" "w")
+		  (parallel [(match_operand:SI 4 "immediate_operand")])))
+	    (match_operand:VALL 3 "register_operand" "0")
+	    (match_operand:SI 2 "immediate_operand" "i")))]
+  "TARGET_SIMD"
+  {
+    int elt = ENDIAN_LANE_N (<MODE>mode, exact_log2 (INTVAL (operands[2])));
+
+    operands[2] = GEN_INT ((HOST_WIDE_INT)1 << elt);
+    operands[4] = GEN_INT (ENDIAN_LANE_N (<MODE>mode, INTVAL (operands[4])));
+    return "ins\t%0.<Vetype>[%p2], %1.<Vetype>[%4]";
+  }
+  [(set_attr "type" "neon_ins<q>")]
+)
+
 (define_expand "vec_set<mode>"
   [(match_operand:VDQF 0 "register_operand" "+w")
    (match_operand:<VEL> 1 "register_operand" "w")
@@ -3893,7 +3913,64 @@
 
 ;; Patterns for vector struct loads and stores.
 
-(define_insn "aarch64_simd_ld2<mode>"
+
+(define_expand "aarch64_simd_ldN_<VSTRUCT:mode><VQ:mode>"
+ [(match_operand:VSTRUCT 0 "register_operand" "=w")
+  (match_operand:VQ 1 "aarch64_simd_struct_operand" "Utv")]
+  "TARGET_SIMD && AARCH64_TUNE_SLOWLDSTN && !BYTES_BIG_ENDIAN"
+{
+  const enum machine_mode structmode = <VSTRUCT:MODE>mode;
+  const int n = (structmode == OImode) ? 2 : ((structmode == CImode ? 3 : 4));
+  rtx tempregs[n];
+  rtx results[n];
+  int i;
+
+  const enum machine_mode mode = <VQ:MODE>mode;
+  int numelements = GET_MODE_NUNITS (mode);
+
+  int regsize = GET_MODE_SIZE (mode);
+  gcc_assert (regsize == 16 || regsize == 8);
+
+  for (i = 0; i < n; i++)
+    {
+      tempregs[i] = gen_reg_rtx (mode);
+      results[i] = gen_reg_rtx (mode);
+      emit_move_insn (tempregs[i], adjust_address (operands[1], mode, i * regsize));
+    }
+  int index = 0;
+  for (i = 0; i < numelements; i++)
+    {
+      rtx outindex = GEN_INT (1<<i);
+      for (int j = 0; j < n; j++)
+	{
+	  rtx insn;
+	  insn = gen_aarch64_simd_vec_insert_<VQ:mode> (results[j], tempregs [index/numelements], 
+						     outindex, results[j], GEN_INT (index%numelements));
+	  emit_insn (insn);
+	  index++;
+	}
+    }
+  for (i = 0; i < n; i++)
+    emit_move_insn (simplify_gen_subreg (mode, operands[0], GET_MODE (operands[0]), i * regsize),
+		    results[i]);
+  DONE;
+})
+
+(define_expand "aarch64_simd_ld2<mode>"
+  [(set (match_operand:OI 0 "register_operand" "=w")
+	(unspec:OI [(match_operand:OI 1 "aarch64_simd_struct_operand" "Utv")
+		    (unspec:VQ [(const_int 0)] UNSPEC_VSTRUCTDUMMY)]
+		   UNSPEC_LD2))]
+  "TARGET_SIMD"
+{
+  if (AARCH64_TUNE_SLOWLDSTN && !BYTES_BIG_ENDIAN)
+    {
+      emit_insn (gen_aarch64_simd_ldN_oi<mode> (operands[0], operands[1]));
+      DONE;
+    }
+})
+
+(define_insn "aarch64_simd_ld2<mode>_1"
   [(set (match_operand:OI 0 "register_operand" "=w")
 	(unspec:OI [(match_operand:OI 1 "aarch64_simd_struct_operand" "Utv")
 		    (unspec:VQ [(const_int 0)] UNSPEC_VSTRUCTDUMMY)]
@@ -3984,7 +4061,22 @@
   DONE;
 })
 
-(define_insn "aarch64_simd_ld3<mode>"
+
+(define_expand "aarch64_simd_ld3<mode>"
+  [(set (match_operand:CI 0 "register_operand" "=w")
+	(unspec:CI [(match_operand:CI 1 "aarch64_simd_struct_operand" "Utv")
+		    (unspec:VQ [(const_int 0)] UNSPEC_VSTRUCTDUMMY)]
+		   UNSPEC_LD3))]
+  "TARGET_SIMD"
+{
+  if (AARCH64_TUNE_SLOWLDSTN && !BYTES_BIG_ENDIAN)
+    {
+      emit_insn (gen_aarch64_simd_ldN_ci<mode> (operands[0], operands[1]));
+      DONE;
+    }
+})
+
+(define_insn "aarch64_simd_ld3<mode>_1"
   [(set (match_operand:CI 0 "register_operand" "=w")
 	(unspec:CI [(match_operand:CI 1 "aarch64_simd_struct_operand" "Utv")
 		    (unspec:VQ [(const_int 0)] UNSPEC_VSTRUCTDUMMY)]

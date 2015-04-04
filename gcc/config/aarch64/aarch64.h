@@ -203,6 +203,7 @@ extern unsigned aarch64_architecture_version;
 #define AARCH64_FL_SLOWMUL    (1 << 3)	/* A slow multiply core.  */
 #define AARCH64_FL_CRC        (1 << 4)	/* Has CRC.  */
 #define AARCH64_FL_LSE        (1 << 5)	/* Has LSE Atomic instructions.  */
+#define AARCH64_FL_SLOWLDSTN  (1 << 6)  /* Has a slow ldN/stN instruction. */
 
 /* Has FP and SIMD.  */
 #define AARCH64_FL_FPSIMD     (AARCH64_FL_FP | AARCH64_FL_SIMD)
@@ -224,6 +225,7 @@ extern unsigned long aarch64_isa_flags;
 /* Macros to test tuning flags.  */
 extern unsigned long aarch64_tune_flags;
 #define AARCH64_TUNE_SLOWMUL       (aarch64_tune_flags & AARCH64_FL_SLOWMUL)
+#define AARCH64_TUNE_SLOWLDSTN     (aarch64_tune_flags & AARCH64_FL_SLOWLDSTN)
 
 /* Crypto is an optional extension to AdvSIMD.  */
 #define TARGET_CRYPTO (TARGET_SIMD && AARCH64_ISA_CRYPTO)

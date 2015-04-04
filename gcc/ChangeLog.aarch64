@@ -1,3 +1,19 @@
+2015-05-23  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-cores.def (thunderx): Enable 
+	AARCH64_FL_SLOWLDSTN.
+	* config/aarch64/aarch64-simd.md (aarch64_simd_vec_insert_<mode>):
+	New instruction.
+	(aarch64_simd_ldN_<VSTRUCT:mode><VQ:mode>): New expand.
+	(aarch64_simd_ld2<mode>): Rename to ...
+	(aarch64_simd_ld2<mode>_1): This.
+	(aarch64_simd_ld2<mode>): New expand to handle slow case.
+	(aarch64_simd_ld3<mode>): Rename to ...
+	(aarch64_simd_ld3<mode>_1): This.
+	(aarch64_simd_ld3<mode>): New expand to handle slow case.
+	* config/aarch64/aarch64.h (AARCH64_FL_SLOWLDSTN): New define.
+	(AARCH64_TUNE_SLOWLDSTN): Likewise.
+
 2015-05-15  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/aarch64.c (aarch64_array_mode_supported_p):
