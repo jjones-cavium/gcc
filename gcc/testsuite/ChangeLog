@@ -1,3 +1,22 @@
+2015-04-04  Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR target/65647
+	* gcc.target/arm/pr65647.c: New.
+
+2015-04-03  Jan Hubicka  <hubicka@ucw.cz>
+
+	PR ipa/65655
+	* g++.dg/torture/pr65655.C: New testcase.
+
+2015-04-03  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/64085
+	* g++.dg/cpp1y/lambda-init13.C: New.
+
+2015-04-03  Marek Polacek  <polacek@redhat.com>
+
+	* g++.dg/cpp0x/pr57101.C: Use proper type for size_t.
+
 2015-04-02  Marek Polacek  <polacek@redhat.com>
 
 	PR c++/65642
