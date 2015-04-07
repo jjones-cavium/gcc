@@ -22,6 +22,44 @@
 	optimizing a case of multiplication.
 	(simplify_mult_ops_using_ranges): New.
 
+2015-04-06  Evandro Menezes  <e.menezes@samsung.com>
+
+	* doc/invoke.texi (AARCH64/mtune): Add exynos-m1 as an option.
+	* config/aarch64/aarch64-cores.def (exynos-m1): New core.
+	* config/aarch64/aarch64-tune.md: Regenerate.
+
+2015-04-06  Evandro Menezes  <e.menezes@samsung.com>
+
+	* doc/invoke.texi (ARM/mtune): Add "exynos-m1" as an option.
+	* config/arm/arm.c (arm_issue_rate): Specify "3" for "exynosm1".
+	* config/arm/arm-cores.def (exynos-m1): New core.
+	* config/arm/arm-tune.md: Regenerate.
+	* config/arm/arm-tables.opt: Add entry for "exynos-m1".
+	* config/arm/bpabi.h: Likewise.
+
+2015-04-06  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	* ipa-cp (set_single_call_flag): Remove too
+	restrictive assert.
+
+2015-04-06  Ilya Verbin  <ilya.verbin@intel.com>
+
+	* config/i386/intelmic-mkoffload.c (generate_host_descr_file): Call
+	GOMP_offload_unregister from the destructor.
+
+2015-04-06  Ilya Enkovich  <ilya.enkovich@intel.com>
+
+	* ipa-chkp.c (chkp_maybe_create_clone): Reset cdtor
+	flags for instrumentation thunk.
+	(chkp_produce_thunks): Likewise.
+
+2015-04-05  Martin Liska  <mliska@suse.cz>
+
+	PR ipa/65665
+	* ipa-icf.c (sem_function::equals_wpa): Verify that IPA CP
+	has computed data structure.
+	(sem_item_optimizer::update_hash_by_addr_refs): Likewise.
+
 2015-04-04  Jan Hubicka  <hubicka@ucw.cz>
 
 	* invoke.texi (inline-unit-growth): Increase growth to 20%
