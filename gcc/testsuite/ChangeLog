@@ -1,3 +1,8 @@
+2015-04-20  Alan Lawrence  <alan.lawrence@arm.com>
+
+	PR target/64134
+	* gcc.target/aarch64/vec_init_1.c: New test.
+
 2015-05-06  Christian Bruel  <christian.bruel@st.com>
 
 	PR target/66015
