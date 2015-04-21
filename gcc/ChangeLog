@@ -1,5 +1,11 @@
 2015-04-21  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
 
+	* config/aarch64/aarch64.md (*<NLOGICAL:optab>_one_cmplsidi3_ze):
+	New pattern.
+	(*xor_one_cmplsidi3_ze): Likewise.
+
+2015-04-21  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+
 	* common/config/aarch64/aarch64-common.c (AARCH64_CPU_NAME_LENGTH):
 	Increase to 128.
 	(aarch64_rewrite_selected_cpu): Do not chop off extensions starting
