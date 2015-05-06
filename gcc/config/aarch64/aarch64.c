@@ -6999,18 +6999,6 @@ aarch64_override_options (void)
 #endif
     }
 
-  /* If not opzimizing for size, set the default
-     alignment to what the target wants */
-  if (!optimize_size)
-    {
-      if (align_loops <= 0)
-	align_loops = aarch64_tune_params->loop_align;
-      if (align_jumps <= 0)
-	align_jumps = aarch64_tune_params->jump_align;
-      if (align_functions <= 0)
-	align_functions = aarch64_tune_params->function_align;
-    }
-
   aarch64_override_options_after_change ();
 }
 
@@ -7023,6 +7011,18 @@ aarch64_override_options_after_change (void)
     flag_omit_leaf_frame_pointer = false;
   else if (flag_omit_leaf_frame_pointer)
     flag_omit_frame_pointer = true;
+
+  /* If not optimizing for size, set the default
+     alignment to what the target wants */
+  if (!optimize_size)
+    {
+      if (align_loops <= 0)
+	align_loops = aarch64_tune_params->loop_align;
+      if (align_jumps <= 0)
+	align_jumps = aarch64_tune_params->jump_align;
+      if (align_functions <= 0)
+	align_functions = aarch64_tune_params->function_align;
+    }
 }
 
 static struct machine_function *
