@@ -1,3 +1,9 @@
+2015-05-15  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64.c (aarch64_array_mode_supported_p):
+	Renable for ThunderX.  Using LD1/LD2/LD3 is faster than using
+	TBL.
+
 2015-02-09  Manjunath Matti  <mmatti@caviumnetworks.com>
 
 	Bug #13891

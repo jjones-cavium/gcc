@@ -587,11 +587,6 @@ static bool
 aarch64_array_mode_supported_p (machine_mode mode,
 				unsigned HOST_WIDE_INT nelems)
 {
-  /* Disable the lane load/stores for ThunderX right now
-     Pass 1.x has bugs in its implementation and is much slower
-     than doing multiple loads. */
-  if (aarch64_tune_params == &thunderx_tunings)
-    return false;
   if (TARGET_SIMD
       && AARCH64_VALID_SIMD_QREG_MODE (mode)
       && (nelems >= 2 && nelems <= 4))
