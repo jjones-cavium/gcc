@@ -3944,8 +3944,18 @@
       for (int j = 0; j < n; j++)
 	{
 	  rtx insn;
-	  insn = gen_aarch64_simd_vec_insert_<VQ:mode> (results[j], tempregs [index/numelements], 
-						     outindex, results[j], GEN_INT (index%numelements));
+	  int regnum = index / numelements;
+	  int element = index % numelements;
+	  /* For the first element, use dup so we don't carry a depency
+	     and the compiler create a movi v, 0. */
+	  if (i)
+	    insn = gen_aarch64_simd_vec_insert_<VQ:mode> (results[j],
+							  tempregs [regnum], 
+							  outindex, results[j],
+							  GEN_INT (element));
+	  else
+	    insn = gen_aarch64_dup_lane<VQ:mode> (results[j], tempregs[regnum],
+						  GEN_INT (element));
 	  emit_insn (insn);
 	  index++;
 	}

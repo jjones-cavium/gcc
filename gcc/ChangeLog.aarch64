@@ -1,5 +1,12 @@
 2015-05-23  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/aarch64-simd.md
+	(aarch64_simd_ldN_<VSTRUCT:mode><VQ:mode>):
+	Emit dup for the first element of the struct load so it carries
+	no dependcies.
+
+2015-05-23  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-cores.def (thunderx): Enable 
 	AARCH64_FL_SLOWLDSTN.
 	* config/aarch64/aarch64-simd.md (aarch64_simd_vec_insert_<mode>):
