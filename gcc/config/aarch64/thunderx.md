@@ -234,16 +234,19 @@
 ;; SIMD/NEON (q forms take an extra cycle)
 
 ;; Thunder simd move instruction types - 2/3 cycles
+;; Thunder dup, ins is the same
 (define_insn_reservation "thunderx_neon_move" 2
   (and (eq_attr "tune" "thunderx")
        (eq_attr "type" "neon_logic, neon_bsl, neon_fp_compare_s, \
-			neon_fp_compare_d, neon_move"))
+			neon_fp_compare_d, neon_move, neon_dup, \
+			neon_ins"))
   "thunderx_pipe1 + thunderx_simd")
 
 (define_insn_reservation "thunderx_neon_move_q" 3
   (and (eq_attr "tune" "thunderx")
        (eq_attr "type" "neon_logic_q, neon_bsl_q, neon_fp_compare_s_q, \
-			neon_fp_compare_d_q, neon_move_q"))
+			neon_fp_compare_d_q, neon_move_q, neon_dup_q, \
+			neon_ins_q"))
   "thunderx_pipe1 + thunderx_simd, thunderx_simd")
 
 ;; Thunder SIMD fabs/fneg instruction types - 1 cycle, implemented in the fp unit.
@@ -265,18 +268,6 @@
 			neon_qabs, neon_qneg, neon_fp_addsub_s, neon_fp_addsub_d"))
   "thunderx_pipe1 + thunderx_simd")
 
-;; 64bit TBL is emulated and takes 150 cycles
-(define_insn_reservation "thunderx_tbl" 150
-  (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "neon_tbl1"))
-  "(thunderx_pipe1+thunderx_pipe0)*150")
-
-;; 128bit TBL is emulated and takes 300 cycles
-(define_insn_reservation "thunderx_tblq" 300
-  (and (eq_attr "tune" "thunderx")
-       (eq_attr "type" "neon_tbl1_q"))
-  "(thunderx_pipe1+thunderx_pipe0)*300")
-
 ;; BIG NOTE: neon_add_long/neon_sub_long don't have a q form which is incorrect
 
 (define_insn_reservation "thunderx_neon_add_q" 5
@@ -290,10 +281,34 @@
 			neon_add_long, neon_sub_long"))
   "thunderx_pipe1 + thunderx_simd, thunderx_simd")
 
+;; Multiplies are 6/7 cycles
+(define_insn_reservation "thunderx_neon_mult" 6
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "neon_fp_mul_s, neon_fp_mul_d, neon_fp_mla_s, neon_fp_mla_d"))
+  "thunderx_pipe1 + thunderx_simd")
+
+(define_insn_reservation "thunderx_neon_mult_q" 7
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "neon_fp_mul_s_q, neon_fp_mul_d_q, neon_fp_mla_s_q, neon_fp_mla_d_q"))
+  "thunderx_pipe1 + thunderx_simd, thunderx_simd")
+
 
 ;; Thunder 128bit SIMD reads the upper halve in cycle 2 and writes in the last cycle
-(define_bypass 2 "thunderx_neon_move_q" "thunderx_neon_move_q, thunderx_neon_add_q")
-(define_bypass 4 "thunderx_neon_add_q" "thunderx_neon_move_q, thunderx_neon_add_q")
+(define_bypass 2 "thunderx_neon_move_q" "thunderx_neon_move_q, thunderx_neon_add_q, thunderx_neon_mult_q")
+(define_bypass 4 "thunderx_neon_add_q" "thunderx_neon_move_q, thunderx_neon_add_q, thunderx_neon_mult_q")
+(define_bypass 6 "thunderx_neon_mult_q" "thunderx_neon_move_q, thunderx_neon_add_q, thunderx_neon_mult_q")
+
+;; 64bit TBL is emulated and takes 160 cycles
+(define_insn_reservation "thunderx_tbl" 160
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "neon_tbl1"))
+  "(thunderx_pipe1+thunderx_pipe0)*160")
+
+;; 128bit TBL is emulated and takes 320 cycles
+(define_insn_reservation "thunderx_tblq" 320
+  (and (eq_attr "tune" "thunderx")
+       (eq_attr "type" "neon_tbl1_q"))
+  "(thunderx_pipe1+thunderx_pipe0)*320")
 
 ;; Assume both pipes are needed for unknown and multiple-instruction
 ;; patterns.

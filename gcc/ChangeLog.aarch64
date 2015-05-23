@@ -1,5 +1,15 @@
 2015-05-23  Andrew Pinski  <apinski@cavium.com>
 
+	* config/aarch64/thunderx.md (thunderx_neon_move): Add
+	neon_dup and neon_ins.
+	(thunderx_neon_move_q): Add neon_dup_q and neon_ins_q.
+	(thunderx_neon_mult): New reservation.
+	(thunderx_neon_mult_q): New reservation.
+	(Bypasses): Add thunderx_neon_mult_q.
+	New bypass for thunderx_neon_mult_q.
+
+2015-05-23  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-simd.md
 	(aarch64_simd_ldN_<VSTRUCT:mode><VQ:mode>):
 	Emit dup for the first element of the struct load so it carries
