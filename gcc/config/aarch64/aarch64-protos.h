@@ -127,7 +127,8 @@ struct cpu_addrcost_table
   const int pre_modify;
   const int post_modify;
   const int register_offset;
-  const int register_extend;
+  const int register_zextend;
+  const int register_sextend;
   const int imm_offset;
 };
 

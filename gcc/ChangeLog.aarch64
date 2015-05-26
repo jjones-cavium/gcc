@@ -1,3 +1,16 @@
+2015-05-26  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-protos.h (struct cpu_addrcost_table):
+	Split register_extend into two different fields.
+	* config/aarch64/aarch64.c (generic_addrcost_table):
+	Update for the split.
+	(cortexa57_addrcost_table): Likewise.
+	(xgene1_addrcost_table): Likewise.
+	(thunderx_addrcost_table): New variable.
+	(thunderx_tunings): Use thunderx_addrcost_table.
+	(aarch64_address_cost): Handle
+	ADDRESS_REG_UXTW and ADDRESS_REG_SXTW seperately.
+
 2015-05-23  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/thunderx.md (thunderx_neon_move): Add
