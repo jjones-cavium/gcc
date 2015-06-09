@@ -219,6 +219,15 @@ along with GCC; see the file COPYING3.  If not see
 #define HAVE_BACKWARD_PREFETCH 0
 #endif
 
+/* In some cases prefetching for stores does not help some targets.
+   These processors have write buffers and prefetching for stores
+   causes the stores to stall until the cache line is in the
+   cache.  */
+#ifndef WRITE_PREFTCH_USEFUL
+#define WRITE_PREFTCH_USEFUL 1
+#endif
+
+
 /* In some cases we are only able to determine that there is a certain
    probability that the two accesses hit the same cache line.  In this
    case, we issue the prefetches for both of them if this probability
@@ -1038,6 +1047,14 @@ should_issue_prefetch_p (struct mem_ref *ref)
       return false;
     }
 
+  /* If we have write prefetches, don't emit them for some targets. */
+  if (!WRITE_PREFTCH_USEFUL && ref->write_p)
+    {
+      if (dump_file && (dump_flags & TDF_DETAILS))
+        fprintf (dump_file, "Ignoring write prefetches (target does not want them) %p\n", (void *) ref);
+      return false;
+    }
+
   return true;
 }
 
@@ -1082,7 +1099,12 @@ schedule_prefetches (struct mem_ref_group *groups, unsigned unroll_factor,
            prefetch.  Do not generate prefetch to avoid many redudant
            prefetches.  */
         if (ref->prefetch_mod / unroll_factor > PREFETCH_MOD_TO_UNROLL_FACTOR_RATIO)
-          continue;
+	  {
+	    if (dump_file && (dump_flags & TDF_DETAILS))
+	      fprintf (dump_file, "Ignoring %p because loop too far from being unrolled: prefetch_mod: %u unroll_factor: %u\n",
+		       (void *) ref, (unsigned)ref->prefetch_mod, (unsigned)unroll_factor);
+            continue;
+	  }
 
 	/* If we need to prefetch the reference each PREFETCH_MOD iterations,
 	   and we unroll the loop UNROLL_FACTOR times, we need to insert
@@ -1095,7 +1117,12 @@ schedule_prefetches (struct mem_ref_group *groups, unsigned unroll_factor,
 	/* If more than half of the prefetches would be lost anyway, do not
 	   issue the prefetch.  */
 	if (2 * remaining_prefetch_slots < prefetch_slots)
-	  continue;
+	  {
+	    if (dump_file && (dump_flags & TDF_DETAILS))
+	      fprintf (dump_file, "Ignoring %p because more thna half of the prefetches would be ignored\n",
+		       (void *) ref);
+            continue;
+	  }
 
 	ref->issue_prefetch_p = true;
 
@@ -1104,6 +1131,10 @@ schedule_prefetches (struct mem_ref_group *groups, unsigned unroll_factor,
 	remaining_prefetch_slots -= prefetch_slots;
 	any = true;
       }
+
+  if (!any)
+    if (dump_file && (dump_flags & TDF_DETAILS))
+      fprintf (dump_file, "Did not schedule any prefetches");
 
   return any;
 }
