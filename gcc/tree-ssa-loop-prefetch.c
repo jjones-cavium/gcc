@@ -223,8 +223,8 @@ along with GCC; see the file COPYING3.  If not see
    These processors have write buffers and prefetching for stores
    causes the stores to stall until the cache line is in the
    cache.  */
-#ifndef WRITE_PREFTCH_USEFUL
-#define WRITE_PREFTCH_USEFUL 1
+#ifndef WRITE_PREFETCH_USEFUL
+#define WRITE_PREFETCH_USEFUL 1
 #endif
 
 
@@ -301,6 +301,12 @@ struct mem_ref_group
 
 #ifndef PREFETCH_MAX_MEM_REFS_PER_LOOP
 #define PREFETCH_MAX_MEM_REFS_PER_LOOP 200
+#endif
+
+/* In some targets prefetches to the same cache line can be merged together,
+   so unrolling not by the mod should be ok. */
+#ifndef PREFETCHES_CAN_MERGE
+#define PREFETCHES_CAN_MERGE 0
 #endif
 
 /* The memory reference.  */
@@ -689,7 +695,9 @@ gather_memory_references (struct loop *loop, bool *no_other_refs, unsigned *ref_
 							    rhs, false, stmt);
 	    *ref_count += 1;
 	    }
-	  if (REFERENCE_CLASS_P (lhs))
+	  /* Don't record write references if prefetches are not going
+	     to be useful. */
+	  if (REFERENCE_CLASS_P (lhs) && WRITE_PREFETCH_USEFUL)
 	    {
 	    *no_other_refs &= gather_memory_references_ref (loop, &refs,
 							    lhs, true, stmt);
@@ -1044,14 +1052,6 @@ should_issue_prefetch_p (struct mem_ref *ref)
     {
       if (dump_file && (dump_flags & TDF_DETAILS))
         fprintf (dump_file, "Ignoring nontemporal store %p\n", (void *) ref);
-      return false;
-    }
-
-  /* If we have write prefetches, don't emit them for some targets. */
-  if (!WRITE_PREFTCH_USEFUL && ref->write_p)
-    {
-      if (dump_file && (dump_flags & TDF_DETAILS))
-        fprintf (dump_file, "Ignoring write prefetches (target does not want them) %p\n", (void *) ref);
       return false;
     }
 
@@ -1426,11 +1426,21 @@ determine_unroll_factor (struct loop *loop, struct mem_ref_group *refs,
   if (est_niter >= 0 && est_niter < (HOST_WIDE_INT) upper_bound)
     upper_bound = est_niter;
 
+  if (dump_file && (dump_flags & TDF_DETAILS))
+    fprintf (dump_file,
+	     "Estimated upper bounds for the loop while unrolling is %u.\n",
+	     upper_bound);
+
   if (upper_bound <= 1)
-    return 1;
+    {
+      if (dump_file && (dump_flags & TDF_DETAILS))
+        fprintf (dump_file, "Not unroll during to short upper bound.\n");
+      return 1;
+    }
 
   /* Choose the factor so that we may prefetch each cache just once,
-     but bound the unrolling by UPPER_BOUND.  */
+     but bound the unrolling by UPPER_BOUND. If prefetches can merge,
+     then unroll by the power2 of that is less than upper_bound. */
   factor = 1;
   for (agp = refs; agp; agp = agp->next)
     for (ref = agp->refs; ref; ref = ref->next)
@@ -1440,10 +1450,18 @@ determine_unroll_factor (struct loop *loop, struct mem_ref_group *refs,
 	  nfactor = least_common_multiple (mod_constraint, factor);
 	  if (nfactor <= upper_bound)
 	    factor = nfactor;
+	  else if (PREFETCHES_CAN_MERGE)
+	    factor = 1u << floor_log2 (upper_bound);
 	}
 
+   if (dump_file && (dump_flags & TDF_DETAILS))
+      fprintf (dump_file, "Unroll factor is %u.\n", factor);
   if (!should_unroll_loop_p (loop, desc, factor))
-    return 1;
+    {
+      if (dump_file && (dump_flags & TDF_DETAILS))
+        fprintf (dump_file, "Not unroll as should_unroll_loop return false.\n");
+      return 1;
+    }
 
   return factor;
 }

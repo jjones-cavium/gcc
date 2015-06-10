@@ -1,3 +1,17 @@
+2015-06-10  Andrew Pinski  <apinski@cavium.com>
+
+	* tree-ssa-loop-prefetch.c (WRITE_PREFTCH_USEFUL): Rename to ...
+	(WRITE_PREFETCH_USEFUL): This.
+	(PREFETCHES_CAN_MERGE): New define.
+	(gather_memory_references): Ignore writes if WRITE_PREFETCH_USEFUL
+	is false.
+	(should_issue_prefetch_p): Don't Return false for write
+	prefetches.
+	(determine_unroll_factor): Add debugging information on
+	unrolling factor.
+	If PREFETCHES_CAN_MERGE is true, use the upper_bound
+	if factor was greater than upper_bound.
+
 2015-06-09  Andrew Pinski  <apinski@cavium.com>
 
 	* tree-ssa-loop-prefetch.c (WRITE_PREFTCH_USEFUL): New define.
