@@ -1,3 +1,8 @@
+2015-06-14  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/thunderx.md (thunderx_neon_abs): Change
+	the latency to 2 based on the corrected information.
+
 2015-05-22  Jim Wilson  <jim.wilson@linaro.org>
 
 	PR target/66258

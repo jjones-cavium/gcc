@@ -249,9 +249,9 @@
 			neon_ins_q"))
   "thunderx_pipe1 + thunderx_simd, thunderx_simd")
 
-;; Thunder SIMD fabs/fneg instruction types - 1 cycle, implemented in the fp unit.
+;; Thunder SIMD fabs/fneg instruction types - 2 cycle, implemented in the fp unit.
 
-(define_insn_reservation "thunderx_neon_abs" 1
+(define_insn_reservation "thunderx_neon_abs" 2
   (and (eq_attr "tune" "thunderx")
        (eq_attr "type" "neon_abs, neon_abs_q, neon_neg, neon_neg_q"))
   "thunderx_pipe1")
