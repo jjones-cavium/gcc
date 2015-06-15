@@ -833,6 +833,10 @@ do {									     \
 
 /* To start with.  */
 #define BRANCH_COST(SPEED_P, PREDICTABLE_P) 2
+
+#define WRITE_PREFTECH_USEFUL aarch64_write_prefetch_useful ()
+#define PREFETCHES_CAN_MERGE aarch64_prefetches_can_merge ()
+
 
 
 /* Assembly output.  */

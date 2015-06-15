@@ -339,6 +339,8 @@ static const struct prefetch_cost generic_prefetch_costs = {
   0,
   0,
   64,
+  false,
+  true,
   false
 };
 
@@ -347,7 +349,9 @@ static const struct prefetch_cost thunderx_prefetch_costs = {
   32, /*L1D == 32k */
   16*1024, /* 16MB L2 */
   128, /* 128 byte cache line size */
-  true /* Enable sw prefetching at -O3 */
+  true, /* Enable sw prefetching at -O3 */
+  false, /* Write prefetching to L1 is not useful. */
+  true /* Prefetches will be merged so change the unrolling factor based on that. */
 };
 
 /* Generic costs for vector insn classes.  */
@@ -6648,6 +6652,21 @@ static int
 aarch64_sched_issue_rate (void)
 {
   return aarch64_tune_params->issue_rate;
+}
+
+/* Returns if write prefetches are useful.  */
+bool
+aarch64_write_prefetch_useful (void)
+{
+  return aarch64_tune_params->prefetch_costs->write_prefetch_useful;
+}
+
+/* Returns if prefetches can be merged so unroll based on the
+   bigger factor than just one.  */
+bool
+aarch64_prefetches_can_merge (void)
+{
+  return aarch64_tune_params->prefetch_costs->prefetches_can_merge;
 }
 
 static int

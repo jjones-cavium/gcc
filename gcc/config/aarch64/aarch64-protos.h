@@ -171,6 +171,8 @@ struct prefetch_cost
   const int l2_cache_size;
   const int cache_line_size;
   const bool prefetch_beneficial;
+  const bool write_prefetch_useful;
+  const bool prefetches_can_merge;
 };
 
 struct tune_params
@@ -191,6 +193,8 @@ struct tune_params
   const int vec_reassoc_width;
 };
 
+bool aarch64_write_prefetch_useful (void);
+bool aarch64_prefetches_can_merge (void);
 HOST_WIDE_INT aarch64_initial_elimination_offset (unsigned, unsigned);
 int aarch64_get_condition_code (rtx);
 bool aarch64_bitmask_imm (HOST_WIDE_INT val, machine_mode);

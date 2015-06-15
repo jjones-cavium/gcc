@@ -1,3 +1,18 @@
+2015-06-15  Andrew Pinski  <apinski@cavium.com>
+
+	* config/aarch64/aarch64-protos.h (prefetch_cost): Add write_prefetch_useful
+	and prefetches_can_merge fields.
+	(aarch64_write_prefetch_useful): New declaration.
+	(aarch64_prefetches_can_merge): Likewise.
+	* config/aarch64/aarch64.c (generic_prefetch_costs): Update
+	for write_prefetch_useful and prefetches_can_merge fields.
+	(thunderx_prefetch_costs): Set write_prefetch_useful to false
+	and prefetches_can_merge to true.
+	(aarch64_write_prefetch_useful): New function.
+	(aarch64_prefetches_can_merge): New function.
+	* config/aarch64/aarch64.h (WRITE_PREFTECH_USEFUL): Define.
+	(PREFETCHES_CAN_MERGE): Define.
+
 2015-06-14  Andrew Pinski  <apinski@cavium.com>
 
 	* config/aarch64/thunderx.md (thunderx_neon_abs): Change
