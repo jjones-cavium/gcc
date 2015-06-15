@@ -181,10 +181,10 @@
        (eq_attr "type" "fsqrts"))
   "thunderx_pipe1 + thunderx_divide, thunderx_divide*13")
 
-(define_insn_reservation "thunderx_fsqrtd" 28
+(define_insn_reservation "thunderx_fsqrtd" 31
   (and (eq_attr "tune" "thunderx")
        (eq_attr "type" "fsqrtd"))
-  "thunderx_pipe1 + thunderx_divide, thunderx_divide*31")
+  "thunderx_pipe1 + thunderx_divide, thunderx_divide*27")
 
 ;; The rounding conversion inside fp is 4 cycles
 (define_insn_reservation "thunderx_frint" 4
@@ -239,14 +239,14 @@
   (and (eq_attr "tune" "thunderx")
        (eq_attr "type" "neon_logic, neon_bsl, neon_fp_compare_s, \
 			neon_fp_compare_d, neon_move, neon_dup, \
-			neon_ins"))
+			neon_ins, neon_from_gp"))
   "thunderx_pipe1 + thunderx_simd")
 
 (define_insn_reservation "thunderx_neon_move_q" 3
   (and (eq_attr "tune" "thunderx")
        (eq_attr "type" "neon_logic_q, neon_bsl_q, neon_fp_compare_s_q, \
 			neon_fp_compare_d_q, neon_move_q, neon_dup_q, \
-			neon_ins_q"))
+			neon_ins_q, neon_from_gp_q"))
   "thunderx_pipe1 + thunderx_simd, thunderx_simd")
 
 ;; Thunder SIMD fabs/fneg instruction types - 2 cycle, implemented in the fp unit.
@@ -265,7 +265,8 @@
 			neon_add_halve, neon_sub_halve, neon_qadd, neon_compare, \
 			neon_compare_zero, neon_minmax, neon_abd, neon_add, neon_sub, \
 			neon_fp_minmax_s, neon_fp_minmax_d, neon_reduc_add, neon_cls, \
-			neon_qabs, neon_qneg, neon_fp_addsub_s, neon_fp_addsub_d"))
+			neon_qabs, neon_qneg, neon_fp_addsub_s, neon_fp_addsub_d, \
+			neon_arith_acc"))
   "thunderx_pipe1 + thunderx_simd")
 
 ;; BIG NOTE: neon_add_long/neon_sub_long don't have a q form which is incorrect
@@ -278,7 +279,8 @@
 			neon_compare_zero_q, neon_minmax_q, neon_abd_q, neon_add_q, neon_sub_q, \
 			neon_fp_minmax_s_q, neon_fp_minmax_d_q, neon_reduc_add_q, neon_cls_q, \
 			neon_qabs_q, neon_qneg_q, neon_fp_addsub_s_q, neon_fp_addsub_d_q, \
-			neon_add_long, neon_sub_long"))
+			neon_add_long, neon_sub_long, neon_fp_abd_s_q, neon_fp_abd_d_q, \
+			neon_arith_acc_q"))
   "thunderx_pipe1 + thunderx_simd, thunderx_simd")
 
 ;; Multiplies are 6/7 cycles

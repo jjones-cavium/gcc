@@ -1,5 +1,17 @@
 2015-06-15  Andrew Pinski  <apinski@cavium.com>
 
+	Fix more of FP/SIMD scheduling
+	* config/aarch64/thunderx.md (thunderx_fsqrtd):
+	Squart root takes 31 cycles, not 28 and has the unit for
+	27 extra cycles, not 31.
+	(thunderx_neon_move): Add neon_from_gp.
+	(thunderx_neon_move_q): Add neon_from_gp_q.
+	(thunderx_neon_add): Add neon_arith_acc.
+	(thunderx_neon_add_q): Add neon_fp_abd_s_q, neon_fp_abd_d_q,
+	and neon_arith_acc_q.
+
+2015-06-15  Andrew Pinski  <apinski@cavium.com>
+
 	* config/aarch64/aarch64-protos.h (prefetch_cost): Add write_prefetch_useful
 	and prefetches_can_merge fields.
 	(aarch64_write_prefetch_useful): New declaration.
